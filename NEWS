@@ -1,0 +1,20 @@
+
+        CHANGES IN spatstat.model VERSION 0.0-0.001
+
+OVERVIEW
+
+    o New package
+
+    o Package initialised at version 2.0-0.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o spatstat.model
+    The package 'spatstat.core' has been split into two packages called
+    'spatstat.model' and 'spatstat.model'. This package 'spatstat.model'
+    contains the code for model-fitting, model diagnostics, and formal inference.
+    The other package 'spatstat.explore' contains the code for exploratory
+    data analysis and nonparametric analysis of spatial data. 
+    See library(help=spatstat.model) for a list of all functions in this package.
+
+

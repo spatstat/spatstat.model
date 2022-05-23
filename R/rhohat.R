@@ -1,0 +1,85 @@
+#'
+#'  rhohat.R
+#'
+#'  $Revision: 1.107 $  $Date: 2022/05/22 01:39:21 $
+#'
+#'  Non-parametric estimation of a function rho(z) determining
+#'  the intensity function lambda(u) of a point process in terms of a
+#'  spatial covariate Z(u) through lambda(u) = rho(Z(u)).
+#'  More generally allows offsets etc.
+
+#' Copyright (c) Adrian Baddeley 2015-2022
+#' GNU Public Licence GPL >= 2.0
+
+#' Code for generic rhohat() and rhohat.ppp() 
+#' is now moved to spatstat.explore
+
+
+rhohat.ppm <- function(object, covariate, ...,
+                       weights=NULL,
+                       method=c("ratio", "reweight", "transform"),
+                       horvitz=FALSE,
+                       smoother=c("kernel", "local",
+                                  "decreasing", "increasing",
+                                  "piecewise"),
+                       subset=NULL,
+                       dimyx=NULL, eps=NULL,
+                       n=512, bw="nrd0", adjust=1, from=NULL, to=NULL, 
+                       bwref=bw, covname, confidence=0.95,
+                       positiveCI, breaks=NULL) {
+  callstring <- short.deparse(sys.call())
+  smoother <- match.arg(smoother)
+  method <- match.arg(method)
+  if(missing(positiveCI))
+    positiveCI <- (smoother == "local")
+  if(missing(covname)) 
+    covname <- sensiblevarname(short.deparse(substitute(covariate)), "X")
+  if(is.null(adjust))
+    adjust <- 1
+
+  if("baseline" %in% names(list(...)))
+    warning("Argument 'baseline' ignored: not available for rhohat.ppm")
+
+  ## validate model
+  model <- object
+  reference <- "model"
+  modelcall <- model$call
+
+  if(is.character(covariate) && length(covariate) == 1) {
+    covname <- covariate
+    switch(covname,
+           x={
+             covariate <- function(x,y) { x }
+           }, 
+           y={
+             covariate <- function(x,y) { y }
+           },
+           stop("Unrecognised covariate name")
+         )
+    covunits <- unitname(data.ppm(model))
+  } else {
+    covunits <- NULL
+  }
+
+  W <- Window(data.ppm(model))
+  if(!is.null(subset)) W <- W[subset, drop=FALSE]
+  areaW <- area(W)
+  
+  rhohatEngine(model, covariate, reference, areaW, ...,
+               weights=weights,
+               method=method,
+               horvitz=horvitz,
+               smoother=smoother,
+               resolution=list(dimyx=dimyx, eps=eps),
+               spatCovarArgs=list(clip.predict=FALSE),
+               n=n, bw=bw, adjust=adjust, from=from, to=to,
+               bwref=bwref, covname=covname, covunits=covunits,
+               confidence=confidence, positiveCI=positiveCI,
+               breaks=breaks,
+               modelcall=modelcall, callstring=callstring)
+}
+
+
+
+
+#' Code for rhohat infrastructure is now moved to spatstat.explore
