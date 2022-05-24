@@ -1,11 +1,13 @@
 
-        CHANGES IN spatstat.model VERSION 0.0-0.001
+        CHANGES IN spatstat.model VERSION 0.0-0.002
 
 OVERVIEW
 
     o New package
 
-    o Package initialised at version 2.0-0.
+    o Fixing up cross-references.
+    
+    o Package will be published at version 2.0-0.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

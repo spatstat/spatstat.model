@@ -80,7 +80,7 @@
   \code{\link{is.marked}} to determine whether a model is a marked
   point process. 
 
-  \code{\link[spatstat.core]{summary.ppm}} for detailed information about a
+  \code{\link[spatstat.model]{summary.ppm}} for detailed information about a
   fitted model.
 
   Model-fitting functions 

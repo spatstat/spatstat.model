@@ -80,7 +80,7 @@ and \ege
 
 }
 \seealso{
-  \code{\link{clusterkernel}}, \code{\link[spatstat.core]{kppm}},
+  \code{\link{clusterkernel}}, \code{\link[spatstat.model]{kppm}},
   \code{\link[spatstat.random]{rMatClust}}, \code{\link[spatstat.random]{rThomas}},
   \code{\link[spatstat.random]{rCauchy}},
   \code{\link[spatstat.random]{rVarGamma}}, \code{\link[spatstat.random]{rNeymanScott}}.

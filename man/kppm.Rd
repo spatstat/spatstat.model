@@ -458,7 +458,7 @@
   \code{\link{simulate.kppm}},
   \code{\link{update.kppm}},
   \code{\link{vcov.kppm}},
-  \code{\link[spatstat.core:methods.kppm]{methods.kppm}},
+  \code{\link[spatstat.model:methods.kppm]{methods.kppm}},
   \code{\link{as.ppm.kppm}},
   \code{\link{as.fv.kppm}},
   \code{\link{Kmodel.kppm}},

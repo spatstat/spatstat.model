@@ -34,7 +34,7 @@
   \spatstatAuthors.
 }
 \seealso{
-  \code{\link{clusterfield}}, \code{\link[spatstat.core]{kppm}}
+  \code{\link{clusterfield}}, \code{\link[spatstat.model]{kppm}}
 }
 \examples{
   fit <- kppm(redwood ~ x, "MatClust")

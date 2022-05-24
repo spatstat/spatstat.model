@@ -31,7 +31,7 @@
   It can be used in model formulas (for example in
   the model-fitting functions
   \code{\link[stats]{lm},\link[stats]{glm},\link[mgcv]{gam}} and 
-  \code{\link[spatstat.core]{ppm}}) to specify a
+  \code{\link[spatstat.model]{ppm}}) to specify a
   linear predictor which is a harmonic function.
 
   A function \eqn{f(x,y)} is harmonic if
@@ -45,8 +45,8 @@
   for fitting nonstationary spatial trend to point process models.
 }
 \seealso{
-  \code{\link[spatstat.core]{ppm}},
-  \code{\link[spatstat.core]{polynom}}
+  \code{\link[spatstat.model]{ppm}},
+  \code{\link[spatstat.model]{polynom}}
 }
 \examples{
    # inhomogeneous point pattern

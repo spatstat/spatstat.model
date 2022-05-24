@@ -40,8 +40,8 @@
   The definition of the interaction distance depends on the
   type of point process model. This help page explains the
   interaction distance for a Gibbs point process. For other kinds of
-  models, see \code{\link[spatstat.core]{reach.kppm}} and
-  \code{\link[spatstat.core]{reach.dppm}}.
+  models, see \code{\link[spatstat.model]{reach.kppm}} and
+  \code{\link[spatstat.model]{reach.dppm}}.
 
   For a Gibbs point process model, the interaction distance
   is the shortest distance \eqn{D} such that any two points in the
@@ -49,14 +49,14 @@
   interact with each other.
 
   For example, the interaction range of a Strauss process
-  (see \code{\link[spatstat.core]{Strauss}} or \code{\link{rStrauss}})
+  (see \code{\link[spatstat.model]{Strauss}} or \code{\link{rStrauss}})
   with parameters \eqn{\beta,\gamma,r}{beta,gamma,r} is equal to
   \eqn{r}, unless \eqn{\gamma=1}{gamma=1} in which case the model is
   Poisson and the interaction
   range is \eqn{0}.
   The interaction range of a Poisson process is zero.
   The interaction range of the Ord threshold process
-  (see \code{\link[spatstat.core]{OrdThresh}}) is infinite, since two points \emph{may}
+  (see \code{\link[spatstat.model]{OrdThresh}}) is infinite, since two points \emph{may}
   interact at any distance apart.
 
   The function \code{reach} is generic, with methods
@@ -65,7 +65,7 @@
     \item
     a fitted point process model
     (object of class \code{"ppm"}, usually obtained from the model-fitting
-    function \code{\link[spatstat.core]{ppm}});
+    function \code{\link[spatstat.model]{ppm}});
     \item
     an interpoint interaction structure (object of class
     \code{"interact"})
@@ -120,7 +120,7 @@
   Methods for \code{reach} are also defined for
   point process models of class \code{"kppm"} and \code{"dppm"}.
   Their technical definition is different from this one.
-  See \code{\link[spatstat.core]{reach.kppm}} and \code{\link[spatstat.core]{reach.dppm}}.
+  See \code{\link[spatstat.model]{reach.kppm}} and \code{\link[spatstat.model]{reach.dppm}}.
 }
 \seealso{
     \code{\link{ppm}},
@@ -141,7 +141,7 @@
 
     \code{\link[spatstat.random]{reach.rmhmodel}}
 
-    See \code{\link[spatstat.core]{reach.kppm}} and \code{\link[spatstat.core]{reach.dppm}}
+    See \code{\link[spatstat.model]{reach.kppm}} and \code{\link[spatstat.model]{reach.dppm}}
     for other types of point process models.
 }
 \examples{
