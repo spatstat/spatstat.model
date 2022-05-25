@@ -17,7 +17,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     and 'spatstat.model' (for modelling and formal inference).
 
     o spatstat.model
-    The package 'spatstat.model' contains the code for model-fitting,
+    The new package 'spatstat.model' contains the code for model-fitting,
     model diagnostics, and formal inference. Examples include 'ppm',
     'kppm', 'mppm', 'dppm', 'slrm', 'simulate.ppm', 'anova.ppm',
     'diagnose.ppm', 'residuals.ppm', 'leverage.ppm', 'addvar', 'parres', 
@@ -34,14 +34,12 @@ OVERVIEW
 
     o Internal improvements.
 
-
         CHANGES IN spatstat.core VERSION 2.4-4
 
 OVERVIEW
 
     o Bug fixes and minor improvements.
 
-BUG FIXES
 
         CHANGES IN spatstat.core VERSION 2.4-3
 
@@ -51,14 +49,11 @@ OVERVIEW
     
     o Bug fixes and minor improvements.
 
-BUG FIXES
-
         CHANGES IN spatstat.core VERSION 2.4-2
 
 OVERVIEW
 
     o Internal bug fixes.
-
 
         CHANGES IN spatstat.core VERSION 2.4-1
 
@@ -238,11 +233,13 @@ BUG FIXES
     Fixed.
 
     o simulate.dppm, simulate.detpointprocfamily
-    Crashed, rarely, with error message 'The dimension differs from the number of columns in index'.
+    Crashed, rarely, with error message 'The dimension differs from
+    the number of columns in index'.
     Fixed.
     
     o as.fv.kppm, as.fv.dppm
-    The default plot labels in 'as.fv(x)' implied that the model 'x' was inhomogeneous.
+    The default plot labels in 'as.fv(x)' implied that the model 'x'
+    was inhomogeneous.
     Fixed.
     
         CHANGES IN spatstat.core VERSION 2.3-1
