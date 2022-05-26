@@ -3,7 +3,7 @@
 ## Parametric statistical modelling of spatial data for the spatstat family
 
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.model)](http://cran.r-project.org/web/packages/spatstat.model) 
-[![GitHub R package version](https://img.shields.io/github/r-package/v/baddstats/spatstat.model)](https://github.com/baddstats/spatstat.model)
+[![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.model)](https://github.com/spatstat/spatstat.model)
 
 The original `spatstat` package has been split into
 several sub-packages (See [spatstat/spatstat](https://github.com/spatstat/spatstat))
