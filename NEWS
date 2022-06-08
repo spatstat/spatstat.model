@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 3.0-0
+        CHANGES IN spatstat.model VERSION 2.999-999.001
 
 OVERVIEW
 
@@ -7,7 +7,8 @@ OVERVIEW
 
     o Fixing up cross-references.
     
-    o Package initialised at version 3.0-0.
+    o Package will be initialised at version 3.0-0.
+      Versions less than 3 are developmental.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
