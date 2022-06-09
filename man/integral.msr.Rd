@@ -7,7 +7,7 @@
   Computes the integral (total value) of a measure over its domain.
 }
 \usage{
-\method{integral}{msr}(f, domain=NULL, \dots)
+\method{integral}{msr}(f, domain=NULL, weight=NULL, \dots)
 }
 \arguments{
   \item{f}{
@@ -18,12 +18,18 @@
     Optional window specifying the domain of integration.
     Alternatively a tessellation.
   }
+  \item{weight}{
+    Optional. A pixel image (object of class \code{"im"})
+    or a \code{function(x,y)} giving a numerical weight
+    to be applied to the integration.
+  }
   \item{\dots}{
     Ignored.
   }
 }
 \details{
-  The integral (total value of the measure over its domain) is calculated.
+  The integral (total value) of the measure over its domain is
+  calculated.
 
   If \code{domain} is a window (class \code{"owin"}) then the integration
   will be restricted to this window. If \code{domain} is a tessellation
@@ -33,6 +39,14 @@
   For a multitype measure \code{m}, use \code{\link{split.msr}}
   to separate the contributions for each type of point,
   as shown in the Examples.
+
+  If \code{weight} is given, it should be a pixel image or a function of
+  coordinates \eqn{x} and \eqn{y} returning numerical values.
+  Then each increment of the measure
+  will be multiplied by the corresponding value of \code{weight}.
+  Effectively, \code{weight} becomes the integrand, and 
+  the result is the integral of \code{weight} with respect to the
+  measure \code{f}.
 }
 \value{
   A numeric value, vector, or matrix.
@@ -72,6 +86,8 @@
    integral(rr, domain=square(0.5))
    ## integrals over the tiles of a tessellation
    integral(rr, domain=quadrats(cells, 2))
+
+   ## weighted integral
 }
 \author{
   \spatstatAuthors.

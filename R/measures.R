@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.97 $  $Date: 2022/05/23 02:33:06 $
+#  $Revision: 1.99 $  $Date: 2022/06/09 03:27:29 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!is.quad(qscheme))
@@ -210,16 +210,34 @@ split.msr <- function(x, f, drop=FALSE, ...) {
   return(result)
 }
 
-integral.msr <- function(f, domain=NULL, ...) {
+integral.msr <- function(f, domain=NULL, weight=NULL, ...) {
   stopifnot(inherits(f, "msr"))
   if(is.tess(domain)) {
-    result <- sapply(tiles(domain), integral.msr, f = f)
+    result <- sapply(tiles(domain), integral.msr, f = f, weight=weight)
     if(length(dim(result)) > 1) result <- t(result)
     return(result)
   }
   if(!is.null(domain)) 
     f <- f[domain]
   y <- with(f, "increment")
+  if(!is.null(weight)) {
+    qloc <- with(f, "qlocations")
+    W <- as.owin(qloc)
+    if(is.function(weight)) {
+      ## evaluate at quadrature points
+      weightq <- weight(qloc$x, qloc$y)
+    } else {
+      ## expect image, or coerce to image
+      if(!is.im(weight))
+        weight <- as.im(weight, W=W)
+      ## sample image at quadrature points
+      weightq <- weight[qloc, drop=FALSE]
+      weightq[is.na(weightq)] <- 0
+    }
+    ## apply weight to increments
+    y <- y * as.numeric(weightq)
+  }
+  ## integrate
   z <- if(is.matrix(y)) apply(y, 2, sum) else sum(y)
   return(z)
 }

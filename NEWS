@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 2.999-999.001
+        CHANGES IN spatstat.model VERSION 2.999-999.002
 
 OVERVIEW
 
@@ -9,6 +9,8 @@ OVERVIEW
     
     o Package will be initialised at version 3.0-0.
       Versions less than 3 are developmental.
+
+    o integral.msr accepts a weight function.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -28,6 +30,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     contains older news items from the defunct package 'spatstat.core'
     (for functions which are now in 'spatstat.model').
 
+    o integral.msr
+    New argument 'weight' specifies a weight (integrand) for the integration.
+    
 
         CHANGES IN spatstat.core VERSION 2.4-4.010
 
