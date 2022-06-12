@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.99 $  $Date: 2022/06/09 03:27:29 $
+#  $Revision: 1.100 $  $Date: 2022/06/12 03:35:08 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!is.quad(qscheme))
@@ -68,7 +68,7 @@ msr <- function(qscheme, discrete, density, check=TRUE) {
   }
 
   ##
-  ## Discretised measure (value of measure for each quadrature tile)
+  ## Increments of measure (value of measure for each quadrature tile)
   ## 
   val <- discretepad + wt * density
   if(is.matrix(density)) colnames(val) <- colnames(density)
@@ -798,3 +798,35 @@ unstack.msr <- function(x, ...) {
   return(as.solist(y))
 }
 
+measureWeighted <- function(m, w) {
+  verifyclass(m, "msr")
+  if(is.numeric(w)) return(w * m)
+  ## evaluate weight at quadrature locations
+  qloc <- with(m, qlocations)
+  if(is.im(w)) {
+    wq <- w[qloc, drop=FALSE]
+  } else if(is.function(w)) {
+    wq <- w(qloc$x, qloc$y)
+  } else stop("w should be a pixel image or a function(x,y)")
+  wq[is.na(wq)] <- 0
+  if(!is.numeric(wq))
+    stop("weights should be numeric", call.=FALSE)
+  ## apply weight to increments of measure 
+  wincr <- wq * with(m, increment)
+  wdisc <- wq * with(m, discrete)
+  wdens <- wq * with(m, density)
+  ## pack up
+  out <- list(loc      = qloc,
+              val      = wincr,
+              atoms    = with(m, is.atom),
+              discrete = wdisc,
+              density  = wdens,
+              wt       = with(m, qweights))
+  class(out) <- "msr"
+  ## update smooth density if it was present
+  if(!is.null(smo <- attr(m, "smoothdensity"))) {
+    sigma <- attr(smo, "sigma")
+    out <- augment.msr(out, sigma=sigma)
+  }
+  return(out)
+}

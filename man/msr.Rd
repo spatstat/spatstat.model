@@ -164,6 +164,7 @@
   \code{\link{split.msr}},
   \code{\link{Ops.msr}},
   \code{\link{measureVariation}},
+  \code{\link{measureWeighted}},
   \code{\link{measureContinuous}}.
 }
 \examples{

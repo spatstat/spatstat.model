@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 2.999-999.002
+        CHANGES IN spatstat.model VERSION 2.999-999.003
 
 OVERVIEW
 
@@ -11,6 +11,11 @@ OVERVIEW
       Versions less than 3 are developmental.
 
     o integral.msr accepts a weight function.
+
+NEW FUNCTIONS
+
+    o measureWeighted
+    Weighted version of a measure.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
