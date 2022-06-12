@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 2.999-999.003
+        CHANGES IN spatstat.model VERSION 2.999-999.004
 
 OVERVIEW
 
@@ -12,6 +12,10 @@ OVERVIEW
 
     o integral.msr accepts a weight function.
 
+    o Weighted version of a measure.
+    
+    o Bug fixes and minor improvements.
+    
 NEW FUNCTIONS
 
     o measureWeighted
@@ -37,7 +41,18 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o integral.msr
     New argument 'weight' specifies a weight (integrand) for the integration.
+
+BUG FIXES
+
+    o predict.ppm
+    Argument 'new.coef' was ignored in calculating the standard error when 'se=TRUE'.
+    Fixed.
     
+    o predict.ppm
+    Argument 'new.coef' was ignored in calculating the standard error
+    (and therefore the width of the interval) when 'type="count"'
+    and 'interval="confidence"' or 'interval="prediction"'.
+    Fixed.
 
         CHANGES IN spatstat.core VERSION 2.4-4.010
 

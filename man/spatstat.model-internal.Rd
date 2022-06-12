@@ -336,7 +336,7 @@ LurkEngine(object, type, cumulative, plot.sd,
            internal, checklength)
 mapInterVars(object, subs, mom)
 Mayer(fi, exponent)
-model.se.image(fit, W, \dots, what)
+model.se.image(fit, W, \dots, what, new.coef)
 modelFrameGam(formula, \dots)
 mpl.engine(Q, trend, interaction, \dots,
          covariates, subsetexpr, clipwin, covfunargs, correction,

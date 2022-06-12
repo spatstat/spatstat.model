@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.114 $	$Date: 2021/12/29 03:02:47 $
+#	$Revision: 1.115 $	$Date: 2022/06/12 04:40:18 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -30,10 +30,11 @@ predict.ppm <- local({
   ## confidence/prediction intervals for number of points
   predconfPois <- function(region, object, level,
                            what=c("estimate", "se",
-                             "confidence", "prediction")) {
+                                  "confidence", "prediction"),
+                           new.coef=NULL) {
     what <- match.arg(what)
     stopifnot(0 < level && level < 1)
-    lam <- predict(object, window=region)
+    lam <- predict(object, window=region, new.coef=new.coef)
     mu.hat <- integral.im(lam)
     if(what == "estimate") return(mu.hat)
     mo <- model.images(object, W=as.owin(lam))
@@ -41,7 +42,8 @@ predict.ppm <- local({
                         function(z, w) integral.im(eval.im(z * w)),
                         w = lam))
     ZL <- matrix(ZL, nrow=1)
-    var.muhat <- as.numeric(ZL %*% vcov(object) %*% t(ZL))
+    vc <- vcov(object, new.coef=new.coef)
+    var.muhat <- as.numeric(ZL %*% vc %*% t(ZL))
     sd.muhat <- sqrt(var.muhat)
     if(what == "se") return(sd.muhat)
     alpha2 <- (1-level)/2
@@ -188,25 +190,27 @@ predict.ppm <- local({
       ## point or interval estimate, optionally with SE
       if(is.null(window)) {
         ## domain of the original data
-        if(!seonly) est <- predconfPois(NULL, model, level, estimatename)
-        if(se) sem <- predconfPois(NULL, model, level, "se")
+        if(!seonly) est <- predconfPois(NULL, model, level, estimatename,
+                                        new.coef=new.coef)
+        if(se) sem <- predconfPois(NULL, model, level, "se", new.coef=new.coef)
       } else if(is.tess(window)) {
         ## quadrats
         tilz <- tiles(window)
         if(!seonly) {
           est <- lapply(tilz, predconfPois,
-                        object=model, level=level, what=estimatename)
+                        object=model, level=level, what=estimatename, new.coef=new.coef)
           est <- switch(interval,
                         none = unlist(est),
                         confidence =,
                         prediction = t(simplify2array(est)))
         }
         if(se) sem <- sapply(tilz, predconfPois,
-                             object=model, level=level, what="se")
+                             object=model, level=level, what="se", new.coef=new.coef)
       } else {
         ## window
-        if(!seonly) est <- predconfPois(window, model, level, estimatename)
-        if(se) sem <- predconfPois(window, model, level, "se")
+        if(!seonly) est <- predconfPois(window, model, level, estimatename,
+                                        new.coef=new.coef)
+        if(se) sem <- predconfPois(window, model, level, "se", new.coef=new.coef)
       }
       if(!se) return(est)
       if(seonly) return(sem)
@@ -489,7 +493,7 @@ predict.ppm <- local({
       ##
       if(needSE) {
         ## extract variance-covariance matrix of parameters
-        vc <- vcov(model)
+        vc <- vcov(model, new.coef=new.coef)
         ## compute model matrix
         fmla <- rhs.of.formula(formula(glmfit))
 #        mf <- model.frame(fmla, newdata, ..., na.action=na.pass)
@@ -672,19 +676,19 @@ predict.ppm <- local({
 #
 # compute pointwise uncertainty of fitted intensity
 #
-model.se.image <- function(fit, W=as.owin(fit), ..., what="sd") {
+model.se.image <- function(fit, W=as.owin(fit), ..., what="sd", new.coef=NULL) {
   if(!is.poisson.ppm(fit))
     stop("Only implemented for Poisson point process models", call.=FALSE)
   what <- pickoption("option", what,
                      c(sd="sd", var="var", cv="cv", CV="cv", ce="ce", CE="ce"))
   W <- as.mask(as.owin(W))
   # variance-covariance matrix of coefficients
-  vc <- vcov(fit)
+  vc <- vcov(fit, new.coef=new.coef)
   np <- dim(vc)[1]
   # extract sufficient statistic for each coefficient
   mm <- model.images(fit, W, ...)
   # compute fitted intensity 
-  lam <- predict(fit, locations=W)
+  lam <- predict(fit, locations=W, new.coef=new.coef)
   # initialise resulting image
   U <- as.im(W)
   U[] <- 0
