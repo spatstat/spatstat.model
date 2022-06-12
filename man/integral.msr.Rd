@@ -88,6 +88,7 @@
    integral(rr, domain=quadrats(cells, 2))
 
    ## weighted integral
+   integral(rr, weight=function(x,y){y})
 }
 \author{
   \spatstatAuthors.
