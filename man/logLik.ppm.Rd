@@ -150,7 +150,6 @@
   \spatstatAuthors.
 }
 \examples{
-  data(cells)
   fit <- ppm(cells, ~x)
   nobs(fit)
   logLik(fit)

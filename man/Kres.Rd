@@ -69,9 +69,8 @@
   Point process models: \code{\link{ppm}}.
 }
 \examples{
-    data(cells)
-    fit0 <- ppm(cells, ~1) # uniform Poisson
-    \testonly{    fit0 <- ppm(cells, ~1, nd=16)}
+    fit0 <- ppm(cells ~1) # uniform Poisson
+    \testonly{    fit0 <- ppm(cells ~1, nd=16)}
     K0 <- Kres(fit0)
     K0
     plot(K0)
@@ -79,8 +78,8 @@
     plot(K0, ires ~ r)
 # uniform Poisson is clearly not correct
 
-    fit1 <- ppm(cells, ~1, Strauss(0.08))
-    \testonly{fit1 <- ppm(cells, ~1, Strauss(0.08), nd=16)}
+    fit1 <- ppm(cells ~1, Strauss(0.08))
+    \testonly{fit1 <- ppm(cells ~1, Strauss(0.08), nd=16)}
     K1 <- Kres(fit1)
 
     if(interactive()) {

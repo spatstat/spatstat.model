@@ -86,7 +86,6 @@ Hybrid(...)
   Hybrid(fit, S=Softcore(0.5))
 
   # plot.fii only works if every component is a pairwise interaction
-  data(swedishpines)
   fit2 <- ppm(swedishpines, ~1, Hybrid(DG=DiggleGratton(2,10), S=Strauss(5)))
   plot(fitin(fit2))
   plot(fitin(fit2), separate=TRUE, mar.panel=rep(4,4))

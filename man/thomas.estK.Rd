@@ -144,9 +144,8 @@ thomas.estK(X, startpar=c(kappa=1,scale=1), lambda=NULL,
   \emph{Biometrics} \bold{63}, 252--258.
 }
 \author{
-  Rasmus Waagepetersen
-  \email{rw@math.auc.dk}
-  Adapted for \pkg{spatstat} by \adrian
+  \rasmus.
+  Adapted for \pkg{spatstat} by \adrian.
 }
 \seealso{
   \code{\link{kppm}},
@@ -157,7 +156,6 @@ thomas.estK(X, startpar=c(kappa=1,scale=1), lambda=NULL,
   \code{\link{rThomas}} to simulate the fitted model.
 }
 \examples{
-    data(redwood)
     u <- thomas.estK(redwood, c(kappa=10, scale=0.1))
     u
     plot(u)

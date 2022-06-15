@@ -54,11 +54,9 @@
   logLik(fit)
   logLik(fit, adjust=FALSE)
 }
-\author{\adrian
-  \email{adrian@maths.uwa.edu.au}
-  
-  and \rolf
-  
+\author{
+  \adrian
+  and \rolf.
 }
 \keyword{spatial}
 \keyword{models}

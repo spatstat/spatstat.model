@@ -59,15 +59,11 @@ is.hybrid(x)
   H <- Hybrid(Strauss(0.1), Geyer(0.2, 3))
   is.hybrid(H)
 
-  data(redwood)
   fit <- ppm(redwood, ~1, H)
   is.hybrid(fit)
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{models}

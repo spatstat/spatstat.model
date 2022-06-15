@@ -58,9 +58,7 @@
   \emph{Journal of the Royal Statistical Society, Series B}
   \bold{67}, 617--666.
 
-  Baddeley, A., Rubak, E. and Turner, R. (2015)
-  \emph{Spatial Point Patterns: Methodology and Applications with R}.
-  London: Chapman and Hall/CRC Press. 
+  \baddrubaturnbook
 }
 \author{
   \adrian, Ida-Maria Sintorn and Leanne Bischoff.

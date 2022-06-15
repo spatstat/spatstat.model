@@ -194,11 +194,8 @@ lgcp.estK(X, startpar=c(var=1,scale=1),
   \emph{Biometrics} \bold{63}, 252--258.
 }
 \author{
-  Rasmus Waagepetersen
-  \email{rw@math.auc.dk}.
-  Adapted for \pkg{spatstat} by \adrian
-  
-  
+  \rasmus.
+  Adapted for \pkg{spatstat} by \adrian.
   Further modifications by Rasmus Waagepetersen
   and Shen Guochun, and by \ege.
 }

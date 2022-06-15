@@ -174,7 +174,6 @@
    reach(AreaInter(r=1))
 
    # Fit the stationary area interaction process to Swedish Pines data
-   data(swedishpines)
    ppm(swedishpines ~1, AreaInter(r=7))
 
    # Fit the stationary area interaction process to `cells'

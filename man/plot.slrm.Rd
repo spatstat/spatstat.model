@@ -41,7 +41,6 @@
   \code{\link{plot.im}}
 }
 \examples{
-   data(copper)
    X <- copper$SouthPoints
    Y <- copper$SouthLines
    Z <- distmap(Y)
@@ -50,10 +49,7 @@
    plot(fit, type="link")
 }
 \author{\adrian
-  \email{adrian@maths.uwa.edu.au}
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{hplot}

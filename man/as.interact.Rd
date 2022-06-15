@@ -47,18 +47,14 @@ as.interact(object)
   interpoint interaction. This object can be printed and plotted.
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \seealso{
   \code{\link{fitin}},
   \code{\link{ppm}}.
 }
 \examples{
-   data(cells)
-   model <- ppm(cells, ~1, Strauss(0.07))
+   model <- ppm(cells ~1, Strauss(0.07))
    f <- as.interact(model)
    f
 }

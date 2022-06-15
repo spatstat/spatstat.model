@@ -149,11 +149,9 @@ matclust.estK(X, startpar=c(kappa=1,scale=1), lambda=NULL,
   inhomogeneous Neyman-Scott processes.
   \emph{Biometrics} \bold{63}, 252--258.
 }
-\author{Rasmus Waagepetersen
-  \email{rw@math.auc.dk}
-  Adapted for \pkg{spatstat} by \adrian
-  
-  
+\author{
+  \rasmus.
+  Adapted for \pkg{spatstat} by \adrian.
 }
 \seealso{
   \code{\link{kppm}},
@@ -164,7 +162,6 @@ matclust.estK(X, startpar=c(kappa=1,scale=1), lambda=NULL,
   \code{\link{rMatClust}} to simulate the fitted model.
 }
 \examples{
-    data(redwood)
     u <- matclust.estK(redwood, c(kappa=10, scale=0.1))
     u
     plot(u)

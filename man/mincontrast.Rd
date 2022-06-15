@@ -172,9 +172,9 @@ mincontrast(observed, theoretical, startpar, \dots,
   inhomogeneous Neyman-Scott processes.
   \emph{Biometrics} \bold{63}, 252--258.
 }  
-\author{Rasmus Waagepetersen
-  \email{rw@math.auc.dk},
-  adapted for \pkg{spatstat} by
+\author{
+  \rasmus.
+  Adapted for \pkg{spatstat} by
   \adrian.
 }
 \seealso{

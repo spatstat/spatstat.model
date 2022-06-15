@@ -51,10 +51,7 @@
   anova(fit0, fit1, test="Chi")
 }
 \author{\adrian
-  \email{adrian@maths.uwa.edu.au}
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{models}

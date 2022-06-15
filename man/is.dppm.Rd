@@ -9,10 +9,9 @@
 
 \value{A single logical value.}
 
-\author{\ege <rubak@math.aau.dk>,
-\adrian <Adrian.Baddeley@uwa.edu.au>
-and \rolf <r.turner@auckland.ac.nz>}
-
+\author{
+  \spatstatAuthors.
+}
 \keyword{spatial}
 \keyword{manip}
 \keyword{models}

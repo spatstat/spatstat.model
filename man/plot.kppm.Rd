@@ -75,7 +75,6 @@ Alternatively \code{what="all"} selects all available options.
   Null.
 }
 \examples{
-  data(redwood)
   fit <- kppm(redwood~1, "Thomas")
   plot(fit)
 }
@@ -84,13 +83,7 @@ Alternatively \code{what="all"} selects all available options.
   \code{\link{plot.ppm}},
 }
 \author{
-  \adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{models}

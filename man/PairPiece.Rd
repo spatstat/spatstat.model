@@ -83,7 +83,6 @@
 \examples{
    PairPiece(c(0.1,0.2))
    # prints a sensible description of itself
-   data(cells) 
 
    ppm(cells ~1, PairPiece(r = c(0.05, 0.1, 0.2)))
    # fit a stationary piecewise constant pairwise interaction process
@@ -97,10 +96,7 @@
   \emph{Statistics} \bold{17}, 429--433.
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{models}

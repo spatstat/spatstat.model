@@ -245,7 +245,6 @@ Gcom(object, r = NULL, breaks = NULL, ...,
   Model fitting: \code{\link{ppm}}.
 }
 \examples{
-    data(cells)
     fit0 <- ppm(cells, ~1) # uniform Poisson
     G0 <- Gcom(fit0)
     G0

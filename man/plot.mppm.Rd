@@ -59,9 +59,7 @@
   \code{\link{plot.listof}}
 }
 \references{
-  Baddeley, A., Rubak, E. and Turner, R. (2015)
-  \emph{Spatial Point Patterns: Methodology and Applications with R}.
-  London: Chapman and Hall/CRC Press. 
+  \baddrubaturnbook
 }
 \examples{
   # Synthetic data from known model

@@ -232,9 +232,7 @@
   Analysis of a designed experiment where the response is a spatial
   point pattern. In preparation.
 
-  Baddeley, A., Rubak, E. and Turner, R. (2015)
-  \emph{Spatial Point Patterns: Methodology and Applications with R}.
-  London: Chapman and Hall/CRC Press.
+  \baddrubaturnbook
 
   Bell, M. and Grunwald, G. (2004)
   Mixed models for the analysis of replicated spatial point patterns.

@@ -40,11 +40,9 @@
   fit <- slrm(X ~ x+y)
   coef(fit)
 }
-\author{\adrian
-  \email{adrian@maths.uwa.edu.au}
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{models}

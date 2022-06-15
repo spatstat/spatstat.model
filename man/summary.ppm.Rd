@@ -76,8 +76,7 @@
   s$trend$value
 
   # multitype pattern
-  # data(demopat)
-  # fit <- ppm(demopat, ~marks, Poisson())
+  # fit <- ppm(demopat ~marks, Poisson())
   # summary(fit)
 
   # model with external covariates
@@ -85,10 +84,7 @@
   summary(fitX)
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{methods}

@@ -58,7 +58,6 @@
   \code{\link{as.ppm.kppm}}.
 }
 \examples{
-  data(redwood)
   fit <- kppm(redwood ~ x, "MatClust")
   coef(fit)
   formula(fit)

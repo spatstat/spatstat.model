@@ -44,10 +44,7 @@
   plot(fitted(fit))
 }
 \author{\adrian
-  \email{adrian@maths.uwa.edu.au}
-  
-  and \rolf
-  
+  and \rolf.
 }
 \keyword{spatial}
 \keyword{models}

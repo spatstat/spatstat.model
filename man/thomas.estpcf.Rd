@@ -159,7 +159,6 @@ thomas.estpcf(X, startpar=c(kappa=1,scale=1), lambda=NULL,
   \code{\link{rThomas}} to simulate the fitted model.
 }
 \examples{
-    data(redwood)
     u <- thomas.estpcf(redwood, c(kappa=10, scale=0.1))
     u
     plot(u, legendpos="topright")

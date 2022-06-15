@@ -73,7 +73,6 @@
   fit <- slrm(X ~ x+y)
   plot(predict(fit))
 
-  data(copper)
   X <- copper$SouthPoints
   Y <- copper$SouthLines
   Z <- distmap(Y)
@@ -84,10 +83,7 @@
   pcnew <- predict(fitc, newdata=list(Z=Znew))
 }
 \author{\adrian
-  \email{adrian@maths.uwa.edu.au}
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{models}

@@ -82,9 +82,7 @@
   \emph{Australian and New Zealand Journal of Statistics}
   \bold{42}, 283--322.
 
-  Baddeley, A., Rubak, E. and Turner, R. (2015)
-  \emph{Spatial Point Patterns: Methodology and Applications with R}.
-  Chapman and Hall/CRC Press.
+  \baddrubaturnbook
 }
 \author{
   \spatstatAuthors.

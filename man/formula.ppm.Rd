@@ -42,8 +42,6 @@
 }
 \author{
   \adrian
-  
-  
 }
 \seealso{
   \code{\link{ppm}},  
@@ -63,7 +61,6 @@
   \code{\link{vcov.ppm}}.
 }
 \examples{
-  data(cells)
   fit <- ppm(cells, ~x)
   formula(fit)
   terms(fit)  

@@ -322,9 +322,7 @@
  \code{\link{rmhcontrol}}
 }
 \examples{
-    data(cells)
-
-    fit <- ppm(cells, ~1, Poisson())
+    fit <- ppm(cells ~1, Poisson())
     diagnose.ppm(fit)  # no suggestion of departure from stationarity
     if(interactive()) {
        qqplot.ppm(fit, 80)  # strong evidence of non-Poisson interaction
@@ -358,7 +356,7 @@
     X <- rpoispp(function(x,y){1000 * exp(-3*x)}, 1000)
     plot(X)
     # Inhomogeneous Poisson model
-    fit <- ppm(X, ~x, Poisson())
+    fit <- ppm(X ~x, Poisson())
     if(interactive()) {qqplot.ppm(fit, 100)}
     \testonly{qqplot.ppm(fit, 4)}
     # conclusion: fitted inhomogeneous Poisson model looks OK
@@ -374,10 +372,7 @@
 
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{models}

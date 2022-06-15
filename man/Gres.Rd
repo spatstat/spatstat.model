@@ -72,7 +72,6 @@
   \code{\link{ppm}}.
 }
 \examples{
-    data(cells)
     fit0 <- ppm(cells, ~1) # uniform Poisson
     G0 <- Gres(fit0)
     plot(G0)

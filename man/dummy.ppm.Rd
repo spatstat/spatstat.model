@@ -57,17 +57,13 @@
   \code{\link{ppm}}
 }
 \examples{
- data(cells)
  fit <- ppm(cells, ~1, Strauss(r=0.1))
  X <- dummy.ppm(fit)
  npoints(X)
  # this is the number of dummy points in the quadrature scheme
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{utilities}

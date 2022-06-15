@@ -195,9 +195,7 @@ lgcp.estpcf(X,
 \author{
   \adrian
   with modifications by Shen Guochun and 
-  Rasmus Waagepetersen
-  \email{rw@math.auc.dk}
-  and \ege.
+  \rasmus and \ege.
 }
 \seealso{
   \code{\link{lgcp.estK}} for alternative method of fitting LGCP.
@@ -215,7 +213,6 @@ lgcp.estpcf(X,
   \code{\link{pcf}} for the pair correlation function.
 }
 \examples{
-    data(redwood)
     u <- lgcp.estpcf(redwood, c(var=1, scale=0.1))
     u
     plot(u)

@@ -120,16 +120,9 @@ improve.kppm(object, type=c("quasi", "wclik1", "clik1"), rmax = NULL,
   coef(fit0)
   coef(fit1)
 }
-\author{Abdollah Jalilian
-  \email{jalilian@razi.ac.ir}
-%  \url{http://www.razi.ac.ir/ajalilian/}
-  and Rasmus Waagepetersen
-  \email{rw@math.aau.dk}
-  adapted for \pkg{spatstat} by \adrian
-  
-  
-  and \ege
-  
+\author{
+  \abdollah and \rasmus.
+  Adapted for \pkg{spatstat} by \adrian and \ege.
 }
 \keyword{spatial}
 \keyword{fit model}

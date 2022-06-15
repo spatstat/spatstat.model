@@ -69,8 +69,7 @@ which can then be fitted to point pattern data.
    }
    mySH <- Pairwise(strpot, "StraussHard process", list(r=0.7,h=0.05),
            c("interaction distance r", "hard core distance h"))
-   data(cells)
-   ppm(cells, ~ 1, mySH, correction="isotropic")
+   ppm(cells ~ 1, mySH, correction="isotropic")
 
    # Fiksel (1984) double exponential interaction
    # see Stoyan, Kendall, Mecke 1987 p 161
@@ -89,18 +88,14 @@ which can then be fitted to point pattern data.
                       c("interaction distance r",
                         "hard core distance h",
                         "exponential coefficient zeta"))
-   data(spruces)
-   fit <- ppm(unmark(spruces), ~1, Fiksel, rbord=3.5)
+   fit <- ppm(unmark(spruces) ~1, Fiksel, rbord=3.5)
    fit
    plot(fitin(fit), xlim=c(0,4))
    coef(fit)
    # corresponding values obtained by Fiksel (1984) were -1.9 and -6.0
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{models}

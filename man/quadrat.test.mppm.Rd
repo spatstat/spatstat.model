@@ -102,20 +102,12 @@
   quadrat.test(fit2, nx=2)
 }
 \references{
-  Baddeley, A., Rubak, E. and Turner, R. (2015)
-  \emph{Spatial Point Patterns: Methodology and Applications with R}.
-  London: Chapman and Hall/CRC Press. 
+  \baddrubaturnbook
 }
 \author{
   \adrian, Ida-Maria Sintorn and Leanne Bischoff.
   Implemented by 
-  \adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{htest}

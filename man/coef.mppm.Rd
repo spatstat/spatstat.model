@@ -92,9 +92,7 @@
     coef(fitran)
 }
 \references{
-  Baddeley, A., Rubak, E. and Turner, R. (2015)
-  \emph{Spatial Point Patterns: Methodology and Applications with R}.
-  London: Chapman and Hall/CRC Press. 
+  \baddrubaturnbook
 }
 \author{
   Adrian Baddeley, Ida-Maria Sintorn and Leanne Bischoff.

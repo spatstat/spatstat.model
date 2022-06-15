@@ -126,7 +126,6 @@
   Another fitted point process model (object of class \code{"ppm"}).
 }
 \examples{
-  data(nztrees)
   data(cells)
 
   # fit the stationary Poisson process
@@ -166,10 +165,7 @@
 
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{methods}

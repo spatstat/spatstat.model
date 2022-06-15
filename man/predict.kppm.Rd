@@ -48,15 +48,11 @@
   \code{\link{predict.ppm}}
 }
 \examples{
-  data(redwood)
   fit <- kppm(redwood ~ x, "Thomas")
   predict(fit)
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{models}

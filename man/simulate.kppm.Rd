@@ -119,9 +119,7 @@
   if(offline) reset.spatstat.options()
 }
 \references{
-  Baddeley, A., Rubak, E. and Turner, R. (2015)
-  \emph{Spatial Point Patterns: Methodology and Applications with R}.
-  Chapman and Hall/CRC Press.
+  \baddrubaturnbook
   
   \Moller, J., Syversveen, A. and Waagepetersen, R. (1998)
   Log Gaussian Cox Processes.

@@ -54,8 +54,6 @@
  \code{\link{ppm}}
 }
 \examples{
-    data(cells)
-
     poi <- ppm(cells, ~1, Poisson())
     coef(poi)
     # This is the log of the fitted intensity of the Poisson process
@@ -66,13 +64,9 @@
     # The two entries "(Intercept)" and "Interaction"
     # are respectively log(beta) and log(gamma)
     # in the usual notation for Strauss(beta, gamma, r)
-
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{models}

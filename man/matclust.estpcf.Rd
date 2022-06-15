@@ -152,8 +152,6 @@ matclust.estpcf(X, startpar=c(kappa=1,scale=1), lambda=NULL,
 }
 \author{
   \adrian
-  
-  
 }
 \seealso{
   \code{\link{kppm}},
@@ -166,7 +164,6 @@ matclust.estpcf(X, startpar=c(kappa=1,scale=1), lambda=NULL,
   \code{\link{rMatClust}} to simulate the fitted model.
 }
 \examples{
-    data(redwood)
     u <- matclust.estpcf(redwood, c(kappa=10, R=0.1))
     u
     plot(u, legendpos="topright")

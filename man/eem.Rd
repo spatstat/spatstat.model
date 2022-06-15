@@ -77,7 +77,6 @@
  \code{\link{ppm}}
 }
 \examples{
-    data(cells)
     fit <- ppm(cells ~x, Strauss(r=0.15))
     ee <- eem(fit)
     sum(ee)/area(Window(cells)) # should be about 1 if model is correct

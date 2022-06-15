@@ -53,17 +53,13 @@
   \code{\link{Kmodel.ppm}} for the method for Gibbs processes.
 }
 \examples{
-  data(redwood)
   fit <- kppm(redwood, ~x, "MatClust")
   K <- Kmodel(fit)
   K(c(0.1, 0.2))
   curve(K(x), from=0, to=0.25)
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{models}

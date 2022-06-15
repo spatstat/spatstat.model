@@ -1,6 +1,6 @@
 Package: spatstat.model
-Version: 2.999-999.005
-Date: 2022-06-12
+Version: 2.999-999.006
+Date: 2022-06-15
 Title: Parametric Statistical Modelling for the 'spatstat' Family
 Authors@R: c(person("Adrian", "Baddeley", 
                     role = c("aut", "cre"),
@@ -52,7 +52,7 @@ Authors@R: c(person("Adrian", "Baddeley",
 	            role = "ctb"))
 Maintainer: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>
 Depends: R (>= 3.5.0), spatstat.data (>= 2.1-0), spatstat.geom (>= 2.4-0.020), spatstat.random (>= 2.2-0), spatstat.explore (>= 0.0), stats, graphics, grDevices, utils, methods, nlme, rpart
-Imports: spatstat.utils (>= 2.3-1), spatstat.sparse (>= 2.0-0), mgcv, Matrix, abind, tensor, goftest (>= 1.2-2)
+Imports: spatstat.utils (>= 2.3-1.003), spatstat.sparse (>= 2.0-0), mgcv, Matrix, abind, tensor, goftest (>= 1.2-2)
 Suggests: sm, maptools (>= 0.9-9), gsl, locfit, spatial, RandomFields (>= 3.1.24.1), RandomFieldsUtils(>= 0.3.3.1), fftwtools (>= 0.9-8), nleqslv, spatstat.linnet (>= 2.0-0), spatstat (>= 2.3-3)
 Additional_repositories: https://spatstat.r-universe.dev
 Description: Functionality for exploratory data analysis and nonparametric analysis of

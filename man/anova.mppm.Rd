@@ -123,9 +123,7 @@
  # not significant
 }
 \references{
-  Baddeley, A., Rubak, E. and Turner, R. (2015)
-  \emph{Spatial Point Patterns: Methodology and Applications with R}.
-  London: Chapman and Hall/CRC Press. 
+  \baddrubaturnbook
 
   Baddeley, A., Turner, R. and Rubak, E. (2015)
   Adjusted composite likelihood ratio test for Gibbs point processes.
