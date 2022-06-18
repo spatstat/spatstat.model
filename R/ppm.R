@@ -1,5 +1,5 @@
 #
-#	$Revision: 1.59 $	$Date: 2022/01/04 05:30:06 $
+#	$Revision: 1.60 $	$Date: 2022/06/18 10:01:11 $
 #
 #    ppm()
 #          Fit a point process model to a two-dimensional point pattern
@@ -73,8 +73,10 @@ function(Q,
 	 correction="border",
 	 rbord = reach(interaction),
          use.gam=FALSE,
-         method = "mpl",
+         method = c("mpl", "logi", "VBlogi"),
          forcefit=FALSE,
+         improve.type = c("none", "ho", "enet"),
+         improve.args=list(),
          emend=project,
          project=FALSE,
          prior.mean = NULL,
@@ -96,26 +98,49 @@ function(Q,
 
   datalistname <- if(missing(covariates)) "data" else "covariates"
 
-  if(!(method %in% c("mpl", "ho", "logi", "VBlogi")))
-      stop(paste("Unrecognised fitting method", sQuote(method)))
-
   if(!missing(emend) && !missing(project) && emend != project)
-    stop("Conflicting options: emend != project")
-          
-  if(!is.null(prior.mean) | !is.null(prior.var)){
-      if(missing(method))
-          method <- "VBlogi"
-      if(method!="VBlogi")
-          stop("Prior specification only works with method ",
-               sQuote("VBlogi"))
-  }
-  if(method=="VBlogi"){
-      VB <- TRUE
-      method <- "logi"
-  } else{
-      VB <- FALSE
-  }
+    stop("Conflicting options given: emend != project")
 
+  ## Parse fitting method
+  method.given <- !missing(method)
+  improvetype.given <- !missing(improve.type)
+
+  method <- match.arg(method)
+  improve.type <- match.arg(improve.type)
+
+  if(!is.null(prior.mean) | !is.null(prior.var)){
+    if(!method.given) {
+      method <- "VBlogi"
+    } else if(method != "VBlogi") {
+      stop(paste("Prior specification only works with method",
+                 sQuote("VBlogi")))
+    }
+  }
+  
+  switch(method,
+         mpl = { },
+         logi = {
+           VB <- FALSE
+         },
+         VBlogi = {
+           method <- "logi"
+           VB <- TRUE
+         },
+         ho = {
+           ## old syntax
+           method <- "mpl"
+           if(!improvetype.given) {
+             warning(paste("Syntax 'method=\"ho\"' is deprecated;",
+                           "use 'improve.type=\"ho\"'"))
+             improve.type <- "ho"
+           } else if(improve.type != "ho") {
+             stop(paste("Old syntax 'method=\"ho\"' is inconsistent with",
+                        sQuote(paste("improve.type=", dQuote(improve.type)))))
+           }
+         },
+         stop(paste("Unrecognised option", sQuote(paste("method=", dQuote(method))))))
+             
+           
   if(is.sob(covariates) || is.function(covariates))
     stop(paste("The argument", sQuote(datalistname),
                "should not be a spatial object;",
@@ -207,75 +232,83 @@ function(Q,
       rbord <- 0
   }
 
-  if(method == "logi") {
-    fitLOGI <- logi.engine(Q=Q, trend=trend,
-                           interaction=interaction,
-                           covariates=covariates,
-                           covfunargs=covfunargs,
-                           subsetexpr=subsetexpr,
-                           clipwin=clipwin,
-                           correction=correction,
-                           rbord=rbord,
-                           use.gam=use.gam,
-                           forcefit=forcefit,
-                           nd = nd,
-                           gcontrol=gcontrol,
-                           callstring=callstring,
-                           prior.mean=prior.mean,
-                           prior.var=prior.var,
-                           VB=VB,
-                           ...)
-    fitLOGI$Qname <- Qname
-    fitLOGI$call <- cl
-    fitLOGI$callstring <- callstring
-    fitLOGI$callframe <- parent.frame()
-    if(emend && !valid.ppm(fitLOGI))
-      fitLOGI <- emend.ppm(fitLOGI)
-    return(fitLOGI)
+  ##..............  Fit model ...............................
+  switch(method,
+         logi = {
+           ## Fit by logistic composite likelihood
+           fit <- logi.engine(Q=Q, trend=trend,
+                              interaction=interaction,
+                              covariates=covariates,
+                              covfunargs=covfunargs,
+                              subsetexpr=subsetexpr,
+                              clipwin=clipwin,
+                              correction=correction,
+                              rbord=rbord,
+                              use.gam=use.gam,
+                              forcefit=forcefit,
+                              nd = nd,
+                              gcontrol=gcontrol,
+                              callstring=callstring,
+                              prior.mean=prior.mean,
+                              prior.var=prior.var,
+                              VB=VB,
+                              ...)
+         },
+         mpl = {
+           ## fit by maximum pseudolikelihood
+           fit <- mpl.engine(Q=Q, trend=trend,
+                             interaction=interaction,
+                             covariates=covariates,
+                             covfunargs=covfunargs,
+                             subsetexpr=subsetexpr,
+                             clipwin=clipwin,
+                             correction=correction,
+                             rbord=rbord,
+                             use.gam=use.gam,
+                             forcefit=forcefit,
+                             nd = nd,
+                             eps = eps, 
+                             gcontrol=gcontrol,
+                             callstring=callstring,
+                             ...)
+         },
+         stop(paste("Internal error - method =", sQuote(method)))
+         )
+
+  ## Fill in model details
+  fit$Qname <- Qname
+  if(!is.ppm(fit)) {
+    ## internal use only - returns some other data
+    return(fit)
   }
-  
-  # fit by maximum pseudolikelihood
-  fitMPL <- mpl.engine(Q=Q, trend=trend,
-                       interaction=interaction,
-                       covariates=covariates,
-                       covfunargs=covfunargs,
-                       subsetexpr=subsetexpr,
-                       clipwin=clipwin,
-                       correction=correction,
-                       rbord=rbord,
-                       use.gam=use.gam,
-                       forcefit=forcefit,
-                       nd = nd,
-                       eps = eps, 
-                       gcontrol=gcontrol,
-                       callstring=callstring,
-                       ...)
-  fitMPL$Qname <- Qname
+  fit$call <- cl
+  fit$callstring <- callstring
+  fit$callframe <- parent.frame()
 
-  if(!is.ppm(fitMPL)) {
-    # internal use only - returns some other data
-    return(fitMPL)
-  }
-  
-  fitMPL$call <- cl
-  fitMPL$callstring <- callstring
-  fitMPL$callframe <- parent.frame()
+  ## Detect invalid coefficients
+  if(emend && !valid.ppm(fit))
+    fit <- emend.ppm(fit)
 
-  if(emend && !valid.ppm(fitMPL))
-    fitMPL <- emend.ppm(fitMPL)
-  
-  if(method == "mpl" || is.poisson.ppm(fitMPL))
-    return(fitMPL)
+  ##..............  Improve fit ...............................
+  switch(improve.type,
+         none = {
+           fit$improve.type <- "none"
+         },
+         ho = {
+           fit <- do.call(ho.engine,
+                          resolve.defaults(list(quote(fit),
+                                                nsim=nsim, nrmh=nrmh, start=start,
+                                                control=control, verb=verb),
+                                           improve.args))
+         },
+         enet = {
+           fit <- do.call(enet.engine,
+                          append(list(quote(fit)), improve.args))
+         })
 
-  fitHO <- ho.engine(fitMPL, nsim=nsim, nrmh=nrmh, start=start,
-                     control=control, verb=verb)
-
-  if(is.null(fitHO))
-    return(fitMPL)
+  if(emend && !valid.ppm(fit))
+    fit <- emend.ppm(fit)
   
-  if(emend && !valid.ppm(fitHO))
-    fitHO <- emend.ppm(fitHO)
-  
-  return(fitHO)
+  return(fit)
 }
 

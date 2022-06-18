@@ -2,7 +2,7 @@
 #
 #    hierpair.family.R
 #
-#    $Revision: 1.12 $	$Date: 2020/11/16 01:32:06 $
+#    $Revision: 1.13 $	$Date: 2022/06/18 10:39:32 $
 #
 #    The family of hierarchical pairwise interactions
 #
@@ -247,13 +247,11 @@ return(V)
     modelX <- model
   } else {
     verifyclass(X, "ppp")
-    modelX <- update(model, X, method="mpl")
+    modelX <- update(model, X, improve.type="none")
   }
 
-  # find data points which do not contribute to pseudolikelihood
-  mplsubset <- getglmdata(modelX)$.mpl.SUBSET
-  mpldata   <- is.data(quad.ppm(modelX))
-  contribute <- mplsubset[mpldata]
+  # determine which data points contribute to pseudolikelihood
+  contribute <- getppmdatasubset(modelX)
 
   Xin  <- X[contribute]
   Xout <- X[!contribute]

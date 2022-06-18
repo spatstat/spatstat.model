@@ -3,7 +3,7 @@
 #
 # calculate sufficient statistic
 #
-#  $Revision: 1.17 $  $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.18 $  $Date: 2022/06/18 10:31:11 $
 #
 #
 
@@ -41,14 +41,12 @@ suffstat.generic <- function(model, X=NULL, callstring="suffstat.generic") {
     modelX <- model
   } else {
     verifyclass(X, "ppp")
-    # refit the model to determine which points are used in pseudolikelihood
-    modelX <- update(model, X, method="mpl")
+    # refit the model to new data (only to determine which data points are used)
+    modelX <- update(model, X, improve.type="none")
   }
   
-  # find data points which do not contribute to pseudolikelihood
-  mplsubset <- getglmdata(modelX)$.mpl.SUBSET
-  mpldata   <- is.data(quad.ppm(modelX))
-  contribute <- mplsubset[mpldata]
+  # determine which data points contribute to pseudolikelihood
+  contribute <- getppmdatasubset(modelX)
 
   if(!any(contribute)) 
     # result is zero vector

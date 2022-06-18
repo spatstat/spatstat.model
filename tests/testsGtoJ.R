@@ -12,18 +12,19 @@ ALWAYS   <- TRUE
 cat(paste("--------- Executing",
           if(FULLTEST) "** ALL **" else "**RESTRICTED** subset of",
           "test code -----------\n"))
-#       
-#        tests/hobjects.R
-#
-#   Validity of methods for ppm(... method="ho")
-#
+#'       
+#'        tests/hobjects.R
+#'
+#'   Validity of methods for ppm(... method="ho")
+#'
+#'   $Revision: 1.4 $ $Date: 2022/06/18 10:14:44 $
 
 
 if(FULLTEST) {
 local({
   set.seed(42)
-  fit  <- ppm(cells ~1,         Strauss(0.1), method="ho", nsim=10)
-  fitx <- ppm(cells ~offset(x), Strauss(0.1), method="ho", nsim=10)
+  fit  <- ppm(cells ~1,         Strauss(0.1), improve.type="ho", nsim=10)
+  fitx <- ppm(cells ~offset(x), Strauss(0.1), improve.type="ho", nsim=10)
 
   a  <- AIC(fit)
   ax <- AIC(fitx)

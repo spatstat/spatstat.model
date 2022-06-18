@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.121 $ $Date: 2020/12/19 05:25:06 $
+#  $Revision: 1.122 $ $Date: 2022/06/18 10:00:47 $
 #
 
 leverage <- function(model, ...) {
@@ -130,13 +130,19 @@ ppmInfluenceEngine <- function(fit,
   fitmethod <- fit$method
   logi <- (fitmethod == "logi")
   pseudo <- (fitmethod == "mpl")
-  if(!logi && !pseudo) {
-    warning(paste("Model was fitted with method =", dQuote(fitmethod),
+
+  #' detect 'improved' fits
+  improv <- fit$improve.type %orifnull% "none"
+  if((!logi && !pseudo) || improv != "none") {
+    info <- c(if(!logi && !pseudo) paste("method =", dQuote(fitname)) else NULL,
+              if(improv != "none") paste("improve.type =", dQuote(improv)) else NULL)
+    fitblurb <- paste(info, collapse=" and ")
+    warning(paste("Model was fitted with", fitblurb,
                   "but is treated as having been fitted by maximum",
 		  if(fit.is.poisson) "likelihood" else "pseudolikelihood",
 		  "for leverage/influence calculation"),
 	    call.=FALSE)
-    pseudo <- TRUE
+    if(!logi && !pseudo) pseudo <- TRUE
   }
 
   ## Detect presence of irregular parameters

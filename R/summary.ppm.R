@@ -84,6 +84,7 @@ summary.ppm <- local({
     ######  Fitting algorithm ########################################
 
     y$method <- x$method
+    y$improve.type <- x$improve.type %orifnull% "none"
 
     y$VB <- x$internal$VB
     
@@ -355,14 +356,27 @@ print.summary.ppm <- function(x, ...) {
                  "maximum posterior density (variational Bayes approximation)"
                }
              },
-             ho="Huang-Ogata method (approximate maximum likelihood)",
              paste("unrecognised method", sQuote(x$method)))
+
+  improv <- x$improve.type 
+  switch(improv,
+         none = { },
+         ho = {
+           methodchosen <- paste("Huang-Ogata approximate maximum likelihood,",
+                                 "starting from",
+                                 methodchosen,
+                                 "fit")
+         },
+         enet = {
+           methodchosen <- paste("Regularized", methodchosen)
+         })
+         
   splat("Fitting method:", methodchosen)
   howfitted <- switch(fitter,
                       exact= "analytically",
                       gam  = "using gam()",
                       glm  = "using glm()",
-                      ho   = NULL,
+                      ho   = NULL, # legacy
                       paste("using unrecognised fitter", sQuote(fitter)))
   if(!is.null(howfitted)) splat("Model was fitted", howfitted)
   if(fitter %in% c("glm", "gam")) {

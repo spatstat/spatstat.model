@@ -4,17 +4,21 @@
 #'    (and multitype counterparts)
 #'
 #'    resolve.lambda
+#'    resolve.lambdacross
 #'    resolve.reciplambda
-#'    resolve.lambda.cross
 #'    validate.weights
 #'    updateData
 #'
 #' $Revision: 1.13 $ $Date: 2022/05/27 05:57:20 $
 
-resolve.lambda <- function(X, lambda=NULL, ...,
-                           sigma=NULL, varcov=NULL,
-                           leaveoneout=TRUE, update=TRUE,
-                           check=TRUE) {
+resolve.lambda <- function(X, lambda=NULL, ...) {
+  UseMethod("resolve.lambda")
+}
+
+resolve.lambda.ppp <- function(X, lambda=NULL, ...,
+                               sigma=NULL, varcov=NULL,
+                               leaveoneout=TRUE, update=TRUE,
+                               check=TRUE) {
   dangerous <- "lambda"
   danger <- TRUE
   if(npoints(X) == 0) {
@@ -53,11 +57,15 @@ resolve.lambda <- function(X, lambda=NULL, ...,
               dangerous=if(danger) dangerous else NULL))
 }
 
-resolve.reciplambda <- function(X, lambda=NULL, reciplambda=NULL,
-                                ...,
-                                sigma=NULL, varcov=NULL,
-                                leaveoneout=TRUE, update=TRUE,
-                                check=TRUE) {
+resolve.reciplambda <- function(X, lambda=NULL, reciplambda=NULL, ...) {
+  UseMethod("resolve.reciplambda")
+}
+
+resolve.reciplambda.ppp <- function(X, lambda=NULL, reciplambda=NULL,
+                                    ...,
+                                    sigma=NULL, varcov=NULL,
+                                    leaveoneout=TRUE, update=TRUE,
+                                    check=TRUE) {
   dangerous <- c("lambda", "reciplambda")
   danger <- TRUE
   if(npoints(X) == 0) {
@@ -119,16 +127,20 @@ resolve.reciplambda <- function(X, lambda=NULL, reciplambda=NULL,
               dangerous=if(danger) dangerous else NULL))
 }
 
+resolve.lambdacross <- function(X, I, J,
+                                lambdaI=NULL, lambdaJ=NULL, ...) {
+  UseMethod("resolve.lambdacross")
+}
 
-resolve.lambda.cross <- function(X, I, J,
-                                 lambdaI=NULL, lambdaJ=NULL,
-                                 ...,
-                                 lambdaX=NULL,
-                                 sigma=NULL, varcov=NULL,
-                                 leaveoneout=TRUE, update=TRUE,
-                                 lambdaIJ=NULL,
-                                 Iexplain="points satisfying condition I",
-                                 Jexplain="points satisfying condition J") {
+resolve.lambdacross.ppp <- function(X, I, J,
+                                    lambdaI=NULL, lambdaJ=NULL,
+                                    ...,
+                                    lambdaX=NULL,
+                                    sigma=NULL, varcov=NULL,
+                                    leaveoneout=TRUE, update=TRUE,
+                                    lambdaIJ=NULL,
+                                    Iexplain="points satisfying condition I",
+                                    Jexplain="points satisfying condition J") {
   dangerous <- c("lambdaI", "lambdaJ")
   dangerI <- dangerJ <- TRUE
   XI <- X[I]

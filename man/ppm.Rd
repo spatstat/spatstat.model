@@ -372,10 +372,15 @@
   # Compare Maximum Pseudolikelihood, Huang-Ogata and Variational Bayes fits:
   if(online) ppm(swedishpines ~ 1, Strauss(9))
 
-  ppm(swedishpines ~ 1, Strauss(9), method="ho",
+  ppm(swedishpines ~ 1, Strauss(9), method="VBlogi")
+
+  ppm(swedishpines ~ 1, Strauss(9), improve.type="ho",
       nsim=if(!online) 8 else 99)
 
-  ppm(swedishpines ~ 1, Strauss(9), method="VBlogi")
+  # Elastic net fit:
+  if(require(glmnet)) {
+    ppm(swedishpines ~ x+y, Strauss(9), improve.type="enet")
+  }
 
  # COVARIATES
  #

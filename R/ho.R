@@ -63,8 +63,7 @@ ho.engine <- function(model, ..., nsim=100, nrmh=1e5,
   newmodel <- model
   newmodel$coef <- theta
   newmodel$coef.orig <- theta0
-  newmodel$method <- "ho"
-  newmodel$fitter <- "ho"
+  newmodel$improve.type <- "ho"
   newmodel$fisher <- svar
   newmodel$varcov <- Vinverse
   # recompute fitted interaction

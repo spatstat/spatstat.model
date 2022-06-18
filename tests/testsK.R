@@ -244,7 +244,7 @@ reset.spatstat.options()
 #'
 #'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.42 $  $Date: 2022/05/23 03:42:49 $
+#'   $Revision: 1.43 $  $Date: 2022/06/17 01:47:08 $
 #'
 #'   Assumes 'EveryStart.R' was run
 
@@ -301,12 +301,12 @@ if(FULLTEST) {
                            correction="none")
     a <- localLcross.inhom(Amacrine, from="off", to="on", lambdaX=Zed,
                            correction="translate")
-    #' cases of resolve.lambda.cross
-    h <- resolve.lambda.cross(Amacrine, moff, !moff, lambdaX=fat)
-    h <- resolve.lambda.cross(Amacrine, moff, !moff, lambdaX=fat, update=FALSE)
-    h <- resolve.lambda.cross(Amacrine, moff, !moff,
+    #' cases of resolve.lambdacross
+    h <- resolve.lambdacross(Amacrine, moff, !moff, lambdaX=fat)
+    h <- resolve.lambdacross(Amacrine, moff, !moff, lambdaX=fat, update=FALSE)
+    h <- resolve.lambdacross(Amacrine, moff, !moff,
                               lambdaI=fat, lambdaJ=fat)
-    h <- resolve.lambda.cross(Amacrine, moff, !moff,
+    h <- resolve.lambdacross(Amacrine, moff, !moff,
                               lambdaI=fat, lambdaJ=fat,
                               update=FALSE)
     #' lohboot

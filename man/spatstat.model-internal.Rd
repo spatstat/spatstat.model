@@ -31,6 +31,7 @@
 \alias{dppmFixIntensity}
 \alias{DPPSaddle}
 \alias{DPPSaddlePairwise}
+\alias{enet.engine}
 \alias{equalpairs}          
 \alias{evalInteraction}
 \alias{evalInterEngine}
@@ -254,6 +255,7 @@ dppmFixIntensity(DPP, lambda, po)
 dppmFixAlgorithm(algorithm, changealgorithm, clusters, startpar)
 DPPSaddle(beta, fi)
 DPPSaddlePairwise(beta, fi)
+enet.engine(model, \dots, standardize, lambda, alpha, adaptive) 
 equalpairs(U, X, marked=FALSE)
 evalInteraction(X,P,E,interaction,correction,splitInf,\dots,
                 precomputed,savecomputed)
@@ -386,7 +388,8 @@ PPMmodelmatrix(object, data, \dots, subset, Q, keepNA, irregular,
                splitInf)
 \method{ppm}{default}(Q, trend, interaction,
        \dots, covariates, data, covfunargs, subset, clipwin,
-       correction, rbord, use.gam, method, forcefit, emend, project,
+       correction, rbord, use.gam, method, forcefit,
+       improve.type, improve.args, emend, project,
        prior.mean, prior.var,
        nd, eps, gcontrol, nsim, nrmh, start, control,
        verb, callstring)

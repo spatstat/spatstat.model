@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 2.999-999.007
+        CHANGES IN spatstat.model VERSION 2.999-999.008
 
 OVERVIEW
 
@@ -8,6 +8,10 @@ OVERVIEW
     o Package will be initialised at version 3.0-0.
       Versions less than 3 are developmental.
 
+    o We thank Achmad Choiruddin and Suman Rakshit for contributions.
+    
+    o Regularized model-fitting.
+    
     o integral.msr accepts a weight function.
 
     o Weighted version of a measure.
@@ -37,6 +41,17 @@ SIGNIFICANT USER-VISIBLE CHANGES
     contains older news items from the defunct package 'spatstat.core'
     (for functions which are now in 'spatstat.model').
 
+    o ppm
+    New argument 'improve.type'.
+    Option 'method="ho"' is replaced by 'improve.type="ho"'.
+
+    o ppm
+    Now supports regularized model-fitting when 'improve.type="enet"'.
+
+    o ppm
+    Huang-Ogata approximate maximum likelihood can be applied to logistic fits
+    by setting 'method="logi"' and 'improve.type="ho"'.
+    
     o integral.msr
     New argument 'weight' specifies a weight (integrand) for the integration.
 

@@ -21,8 +21,10 @@
        correction="border",
        rbord=reach(interaction),
        use.gam=FALSE,
-       method="mpl",
+       method=c("mpl", "logi", "VBlogi"),
        forcefit=FALSE,
+       improve.type = c("none", "ho", "enet"),
+       improve.args=list(),
        emend=project,
        project=FALSE,
        prior.mean = NULL,
@@ -44,8 +46,10 @@
        correction="border",
        rbord=reach(interaction),
        use.gam=FALSE,
-       method="mpl",
+       method=c("mpl", "logi", "VBlogi"),
        forcefit=FALSE,
+       improve.type = c("none", "ho", "enet"),
+       improve.args=list(),
        emend=project,
        project=FALSE,
        prior.mean = NULL,
@@ -121,18 +125,30 @@
     using \code{gam} instead of \code{\link{glm}}.
   }
   \item{method}{
-    The method used to fit the model. Options are 
-    \code{"mpl"} for the method of Maximum PseudoLikelihood,
-    \code{"logi"} for the Logistic Likelihood method,
-    \code{"VBlogi"} for the Variational Bayes Logistic Likelihood method,
-    and \code{"ho"} for the Huang-Ogata approximate maximum likelihood
-    method.
+    String (partially matched) specifying the method used to fit the
+    model. Options are 
+    \code{"mpl"} for the method of Maximum PseudoLikelihood (the default),
+    \code{"logi"} for the Logistic Likelihood method and
+    \code{"VBlogi"} for the Variational Bayes Logistic Likelihood method.
   }
   \item{forcefit}{
     Logical flag for internal use.
     If \code{forcefit=FALSE}, some trivial models will be
     fitted by a shortcut. If \code{forcefit=TRUE},
     the generic fitting method will always be used. 
+  }
+  \item{improve.type}{
+    String (partially matched) specifying a method for improving the
+    initial fit. 
+    If \code{improve.type = "none"} (the default), no improvement is
+    performed. If \code{improve.type="ho"}, the Huang-Ogata approximate
+    maximum likelihood method is used. If \code{improve.type="enet"},
+    the model coefficients are re-estimated using a regularized version
+    of the composite likelihood.
+  }
+  \item{improve.args}{
+    Arguments used to control the algorithm
+    for improving the initial fit. See Details.
   }
   \item{emend,project}{
     (These are equivalent: \code{project} is an older name for
@@ -168,19 +184,19 @@
   }
   \item{nsim}{
     Number of simulated realisations
-    to generate (for \code{method="ho"})
+    to generate (for \code{improve.type="ho"})
   }
   \item{nrmh}{
     Number of Metropolis-Hastings iterations
-    for each simulated realisation (for \code{method="ho"})
+    for each simulated realisation (for \code{improve.type="ho"})
   }
   \item{start,control}{
     Arguments passed to \code{\link{rmh}} controlling the behaviour
-    of the Metropolis-Hastings algorithm (for \code{method="ho"})
+    of the Metropolis-Hastings algorithm (for \code{improve.type="ho"})
   }
   \item{verb}{
     Logical flag indicating whether to print progress reports
-    (for \code{method="ho"})
+    (for \code{improve.type="ho"})
   }
   \item{callstring}{
     Internal use only.
@@ -444,20 +460,33 @@
 	  Gaussian with mean vector \code{prior.mean} and variance-covariance
 	  matrix \code{prior.var}.	  
 	}
-	\item{method="ho":}{
-	  the model will be fitted
+      }
+      Note that \code{method='logi'} and \code{method='VBlogi'}
+      involve randomisation, so that the results are
+      subject to random variation.
+
+      After this initial fit, there are several ways to improve the fit:
+      \itemize{
+	\item{improve.type="none":}{
+	  No further improvement is performed.
+	}
+	\item{improve.type="ho":}{
+	  the model will be re-fitted
 	  by applying the approximate maximum likelihood
 	  method of Huang and Ogata (1999). See below.
 	  The Huang-Ogata method is slower than the other options,
 	  but has better statistical properties.
+	  This method involves randomisation, so the results are subject
+	  to random variation.
+	}
+	\item{improve.type="enet":}{
+	  The model will be re-fitted using a regularized version of the
+	  composite likelihood. See below.
 	}
       }
-      Note that \code{method='logi'}, \code{method='VBlogi'} and
-      \code{method='ho'} involve randomisation, so that the results are
-      subject to random variation.
     }
     \item{Huang-Ogata method:}{
-      If \code{method="ho"} then the model will be fitted using
+      If \code{improve.type="ho"} then the model will be fitted using
       the Huang-Ogata (1999) approximate maximum likelihood method.
       First the model is fitted by maximum pseudolikelihood as
       described above, yielding an initial estimate of the parameter
@@ -483,6 +512,10 @@
       \code{list(n.start=N)} where \code{N} is the number of points
       in the data point pattern.
     }
+    \item{Regularization:}{
+      This requires the package \pkg{glmnet}. 
+      \bold{Details to be written.}
+   }
     \item{Edge correction}{
       Edge correction should be applied to the sufficient statistics
       of the model, to reduce bias.

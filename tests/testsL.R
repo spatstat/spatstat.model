@@ -41,7 +41,7 @@ local({
 #'
 #'   leverage and influence for Gibbs models
 #' 
-#'   $Revision: 1.34 $ $Date: 2021/04/17 04:25:26 $
+#'   $Revision: 1.35 $ $Date: 2022/06/18 10:15:17 $
 #' 
 
 if(FULLTEST) {
@@ -308,7 +308,7 @@ local({
   #'
   if(FULLTEST) {
     set.seed(452)
-    foo <- ppm(Cells ~ 1, Strauss(0.15), method="ho", nsim=5)
+    foo <- ppm(Cells ~ 1, Strauss(0.15), improve.type="ho", nsim=5)
     aa <- Everything(foo)
 
     #' Gradient and Hessian obtained by symbolic differentiation

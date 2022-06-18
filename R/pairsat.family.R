@@ -227,13 +227,11 @@ suffstat = function(model, X=NULL, callstring="pairsat.family$suffstat") {
     modelX <- model
   } else {
     verifyclass(X, "ppp")
-    modelX <- update(model, X, method="mpl")
+    modelX <- update(model, X, improve.type="none")
   }
 
-  # find data points which do not contribute to pseudolikelihood
-  mplsubset <- getglmdata(modelX)$.mpl.SUBSET
-  mpldata   <- is.data(quad.ppm(modelX))
-  contribute <- mplsubset[mpldata]
+  # determine which data points contribute to pseudolikelihood
+  contribute <- getppmdatasubset(modelX)
   
   Empty <- X[integer(0)]
   mom <- partialModelMatrix(X, Empty, model, "suffstat", halfway=TRUE)

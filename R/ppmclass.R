@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.151 $	$Date: 2022/05/23 02:16:57 $
+#	$Revision: 2.152 $	$Date: 2022/06/18 10:00:59 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -300,33 +300,31 @@ getglmfit <- function(object) {
 getglmdata <- function(object, drop=FALSE) {
   verifyclass(object, "ppm")
   gd <- object$internal$glmdata
-  if(!drop) return(gd)
+  if(!drop || is.null(gd)) return(gd)
   return(gd[getglmsubset(object), , drop=FALSE])
 }
 
 getglmsubset <- function(object) {
   gd <- object$internal$glmdata
-  if(object$method=="logi")
-    return(gd$.logi.ok)
-  return(gd$.mpl.SUBSET)
+  if(is.null(gd)) return(NULL)
+  if(object$method=="logi") gd$.logi.ok else gd$.mpl.SUBSET
 }
 
 getppmdatasubset <- function(object) {
-  # Equivalent to getglmsubset(object)[is.data(quad.ppm(object))]
-  # but also works for models fitted exactly, etc
-  #
-  if(object$method %in% c("mpl", "ho")) {
-    sub <- getglmsubset(object)
-    if(!is.null(sub)) {
-      Z <- is.data(quad.ppm(object))
-      return(sub[Z])
-    }
+  ## Equivalent to getglmsubset(object)[is.data(quad.ppm(object))]
+  ## but also works for models fitted exactly, etc
+  ##
+  sub <- getglmsubset(object)
+  if(!is.null(sub)) {
+    Z <- is.data(quad.ppm(object))
+    subZ <- sub[Z]
+  } else {
+    X <- data.ppm(object)
+    subZ <- if(object$correction == "border") {
+              (bdist.points(X) >= object$rbord)
+            } else rep(TRUE, npoints(X))
   }
-  X <- data.ppm(object)
-  sub <- if(object$correction == "border") {
-    (bdist.points(X) >= object$rbord)
-  } else rep(TRUE, npoints(X))
-  return(sub)
+  return(subZ)
 }
 
 
