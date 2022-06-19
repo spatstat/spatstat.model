@@ -6,7 +6,6 @@
 \alias{affine.msr}
 \alias{areadelta2}
 \alias{as.isf}
-\alias{as.ppm.rppm}
 \alias{augment.msr}
 \alias{bigvaluerule}
 \alias{blankcoefnames}
@@ -79,6 +78,7 @@
 \alias{is.multitype.msr}    
 \alias{is.multitype.slrm}    
 \alias{is.poisson.mppm}
+\alias{is.poisson.rppm}
 \alias{Kpcf.kppm}
 \alias{Kmodel.slrm}
 \alias{killinteraction}
@@ -223,7 +223,6 @@ adaptcoef(new.coef, fitcoef, drop)
 \method{affine}{msr}(X, mat, vec, \dots)
 areadelta2(X, r, \dots, sparseOK)
 as.isf(object)
-\method{as.ppm}{rppm}(object)
 augment.msr(x, \dots, sigma, recompute)
 blankcoefnames(x)
 bt.frame(Q, trend, interaction, \dots, covariates,
@@ -300,12 +299,15 @@ intermaker(f, blank)
 is.interact(x)
 \method{is.marked}{mppm}(X, \dots)
 \method{is.marked}{msr}(X, \dots)
+\method{is.marked}{rppm}(X, \dots)
 \method{is.marked}{slrm}(X, \dots)
 is.mppm(x)
 \method{is.multitype}{mppm}(X, \dots)
 \method{is.multitype}{msr}(X, \dots)
+\method{is.multitype}{rppm}(X, \dots)
 \method{is.multitype}{slrm}(X, \dots)
 \method{is.poisson}{mppm}(x)
+\method{is.poisson}{rppm}(x)
 Kpcf.kppm(model, what)
 \method{Kmodel}{slrm}(model, \dots)
 killinteraction(model)

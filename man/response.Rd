@@ -6,6 +6,7 @@
 \alias{response.dppm}
 \alias{response.kppm}
 \alias{response.slrm}
+\alias{response.rppm}
 \alias{response.mppm}
 \title{
   Extract the Values of the Response from a Fitted Model
@@ -13,6 +14,7 @@
 \description{
   Given a fitted model (of any kind)
   extract the values of the response variable.
+  For a point process model, the observed point pattern is extracted.
 }
 \usage{
 response(object)
@@ -29,6 +31,8 @@ response(object)
 
 \method{response}{slrm}(object)
 
+\method{response}{rppm}(object)
+
 \method{response}{mppm}(object)
 }
 \arguments{
@@ -39,7 +43,8 @@ response(object)
     \code{"ppm"},
     \code{"kppm"},
     \code{"dppm"},
-    \code{"slrm"} or
+    \code{"slrm"}, 
+    \code{"rppm"}, or
     \code{"mppm"}
     or some other class).
   }
@@ -54,7 +59,7 @@ response(object)
   \code{"ppm"},
   \code{"kppm"},
   \code{"dppm"},
-  \code{"slrm"} or \code{"lppm"},
+  \code{"slrm"}, \code{"lppm"} or \code{"rppm"},
   the original data point pattern is extracted.
 
   For a fitted point process model of class \code{"mppm"},
@@ -67,8 +72,9 @@ response(object)
   For
   \code{response.ppm},
   \code{response.kppm},
-  \code{response.dppm}
-  and \code{response.slrm}
+  \code{response.dppm},
+  \code{response.slrm}
+  and \code{response.rppm},
   a two-dimensional spatial point pattern (class \code{"ppp"}).
 
   For \code{response.mppm}, a list of

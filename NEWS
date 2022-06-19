@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 2.999-999.008
+        CHANGES IN spatstat.model VERSION 2.999-999.009
 
 OVERVIEW
 
@@ -15,6 +15,10 @@ OVERVIEW
     o integral.msr accepts a weight function.
 
     o Weighted version of a measure.
+
+    o Residuals for recursively-partitioned models.
+
+    o Residuals for any estimate of intensity.
     
     o Bug fixes and minor improvements.
     
@@ -22,6 +26,13 @@ NEW FUNCTIONS
 
     o measureWeighted
     Weighted version of a measure.
+
+    o residuals.rppm
+    Residual measure for a recursively-partitioned point process model.
+
+    o residualMeasure
+    Residual measure given an observed point pattern
+    and an estimate of its intensity.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

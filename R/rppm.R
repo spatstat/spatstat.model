@@ -3,7 +3,7 @@
 #' 
 #'  Recursive Partitioning for Point Process Models
 #'
-#'  $Revision: 1.16 $  $Date: 2022/06/16 08:03:28 $
+#'  $Revision: 1.22 $  $Date: 2022/06/19 03:56:40 $
 
 rppm <- function(..., rpargs=list()) {
   ## do the equivalent of ppm(...)
@@ -124,6 +124,24 @@ predict.rppm <- function(object, ...) {
 }
     
 fitted.rppm <- function(object, ...) {
-  predict(object, locations=data.ppm(object$pfit))
+  predict(object, locations=response(object))
 }
 
+response.rppm <- function(object) {
+  data.ppm(as.ppm(object))
+}
+
+is.poisson.rppm <- function(x) { is.poisson(as.ppm(x)) }
+
+is.marked.rppm <- function(X, ...) { is.marked(as.ppm(X)) }
+
+is.multitype.rppm <- function(X, ...) { is.multitype(as.ppm(X)) }
+
+residuals.rppm <- function(object,
+                           type=c("raw", "inverse", "Pearson"),
+                           ...) {
+  type <- match.arg(type)
+  Q <- quad.ppm(as.ppm(object))
+  lambda <- predict(object)
+  residualMeasure(Q, lambda, type)
+}

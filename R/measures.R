@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.100 $  $Date: 2022/06/12 03:35:08 $
+#  $Revision: 1.105 $  $Date: 2022/06/19 04:08:19 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!is.quad(qscheme))
@@ -830,3 +830,36 @@ measureWeighted <- function(m, w) {
   }
   return(out)
 }
+
+residualMeasure <- function(Q, lambda,
+                            type = c("raw", "inverse", "Pearson", "pearson"),
+                            ...) {
+  if(is.ppp(Q)) Q <- quadscheme(Q, ...)
+  if(!is.quad(Q))
+    stop("Argument Q should be a point pattern or quadrature scheme")
+  type <- match.arg(type)
+  P <- union.quad(Q)
+  Lambda <- if(is.im(lambda)) {
+              lambda[P, drop=FALSE]
+            } else {
+              sapply(lambda, "[", i=unmark(P), drop=FALSE)
+            }
+  switch(type,
+         raw = {
+           disc <- 1
+           dens <- -Lambda
+         },
+         inverse = {
+           disc <- (Lambda > 0) * 1 # sic. To retain dimensions
+           dens <- -1
+         },
+         pearson = ,
+         Pearson = {
+           sqrl <- sqrt(Lambda)
+           disc <- ifelse(Lambda > 0, 1/sqrl, 0)
+           dens <- -sqrl
+         })
+  result <- msr(Q, disc, dens)
+  return(result)
+}
+  
