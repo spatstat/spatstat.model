@@ -40,7 +40,9 @@
        epsilon=0.01,
        covfunargs=NULL,
        use.gam=FALSE,
-       nd=NULL, eps=NULL)
+       nd=NULL, eps=NULL,
+       ppm.improve.type=c("none", "ho", "enet"),
+       ppm.improve.args=list())
 
 \method{kppm}{quad}(X,
        trend = ~1,
@@ -62,7 +64,9 @@
        epsilon=0.01,
        covfunargs=NULL,
        use.gam=FALSE,
-       nd=NULL, eps=NULL)
+       nd=NULL, eps=NULL,
+       ppm.improve.type=c("none", "ho", "enet"),
+       ppm.improve.args=list())
 }
 \arguments{
   \item{X}{
@@ -168,6 +172,11 @@
   }
   \item{covfunargs,use.gam,nd,eps}{
     Arguments passed to \code{\link{ppm}} when fitting the intensity.
+  }
+  \item{ppm.improve.type,ppm.improve.args}{
+    Arguments controlling the initial fit of the trend.
+    Passed to \code{\link{ppm}} as the arguments
+    \code{improve.type} and \code{improve.args} respectively.
   }
 }
 \details{

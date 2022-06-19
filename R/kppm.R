@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.209 $ $Date: 2022/04/01 03:05:01 $
+# $Revision: 1.210 $ $Date: 2022/06/19 09:09:31 $
 #
 
 
@@ -79,7 +79,9 @@ kppm.ppp <- kppm.quad <-
            epsilon=0.01,
            covfunargs=NULL,
            use.gam=FALSE,
-           nd=NULL, eps=NULL) {
+           nd=NULL, eps=NULL,
+           ppm.improve.type = c("none", "ho", "enet"),
+           ppm.improve.args=list()) {
   cl <- match.call()
   callstring <- paste(short.deparse(sys.call()), collapse="")
   Xname <- short.deparse(substitute(X))
@@ -125,7 +127,8 @@ kppm.ppp <- kppm.quad <-
   }
   po <- ppm(Q=X, trend=trend, covariates=covariates,
             forcefit=TRUE, rename.intercept=FALSE,
-            covfunargs=covfunargs, use.gam=use.gam, nd=nd, eps=eps)
+            covfunargs=covfunargs, use.gam=use.gam, nd=nd, eps=eps,
+            improve.type=ppm.improve.type, improve.args=ppm.improve.args)
   XX <- if(isquad) X$data else X
   
            
