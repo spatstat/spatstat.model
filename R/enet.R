@@ -10,7 +10,7 @@
 #'  Copyright (c) Achmad Choiruddin, Suman Rakshit and Adrian Baddeley 2022
 #'  GNU Public Licence >= 2.0
 #' 
-#'  $Revision: 1.14 $ $Date: 2022/06/20 06:23:10 $
+#'  $Revision: 1.15 $ $Date: 2022/06/20 07:50:42 $
 
 
 enet.engine <-function(model, ...,
@@ -102,8 +102,11 @@ enet.engine <-function(model, ...,
                  function(beta) {
                    eta <- mm %*% beta + off
                    v <- switch(CL, mpl = exp(eta), logi = log(1+exp(eta)))
-                   loglike <- sum(wts * (yy * eta - v)) 
-                   bic <- -2*loglike + (sum(beta != 0) - has.intercept) * log(nX)
+                   loglike <- sum(wts * (yy * eta - v))
+                   beta.strip <-
+                     if(has.intercept) beta[-intercept.position] else beta
+                   p <- sum(beta.strip != 0)
+                   bic <- -2*loglike + p * log(nX)
                    return(c(loglike=loglike, bic=bic))
                  })
   jopt <- which.min(stuff["bic", ])
