@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 2.999-999.010
+        CHANGES IN spatstat.model VERSION 2.999-999.011
 
 OVERVIEW
 
@@ -78,7 +78,8 @@ SIGNIFICANT USER-VISIBLE CHANGES
 BUG FIXES
 
     o predict.ppm
-    Argument 'new.coef' was ignored in calculating the standard error when 'se=TRUE'.
+    Argument 'new.coef' was ignored in the calculation of the standard error
+    when 'se=TRUE'.
     Fixed.
     
     o predict.ppm

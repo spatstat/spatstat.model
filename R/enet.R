@@ -10,7 +10,7 @@
 #'  Copyright (c) Achmad Choiruddin, Suman Rakshit and Adrian Baddeley 2022
 #'  GNU Public Licence >= 2.0
 #' 
-#'  $Revision: 1.13 $ $Date: 2022/06/18 10:18:30 $
+#'  $Revision: 1.14 $ $Date: 2022/06/20 06:23:10 $
 
 
 enet.engine <-function(model, ...,
@@ -98,13 +98,12 @@ enet.engine <-function(model, ...,
                             beta.estimates[ii >= intercept.position, , drop=FALSE])
   }
   ## Tuning parameter selection
-  sumwt <- sum(wts)
   stuff <- apply(beta.estimates, 2,
                  function(beta) {
                    eta <- mm %*% beta + off
                    v <- switch(CL, mpl = exp(eta), logi = log(1+exp(eta)))
                    loglike <- sum(wts * (yy * eta - v)) 
-                   bic <- -2*loglike + (sum(beta != 0) - has.intercept) * sumwt
+                   bic <- -2*loglike + (sum(beta != 0) - has.intercept) * log(nX)
                    return(c(loglike=loglike, bic=bic))
                  })
   jopt <- which.min(stuff["bic", ])
