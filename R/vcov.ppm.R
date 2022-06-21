@@ -3,7 +3,7 @@
 ## and Fisher information matrix
 ## for ppm objects
 ##
-##  $Revision: 1.137 $  $Date: 2022/05/23 02:33:06 $
+##  $Revision: 1.138 $  $Date: 2022/06/21 02:19:56 $
 ##
 
 vcov.ppm <- local({
@@ -46,7 +46,17 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
 
   ## No vcov for Variational Bayes
   if(!is.null(object$internal$VB))
-      stop("Variance calculations currently not possible for variational Bayes fit.")
+    stop("Variance calculations currently not possible for variational Bayes fit.")
+  if(identical(object$improve.type, "enet")) {
+    switch(gam.action,
+           warn = warning(paste("Variance calculations ignore the fact that",
+                                "the model was updated using elastic net")),
+           fatal = stop(paste("Variance calculations are",
+                              "currently not possible for",
+                              "models updated using elastic net")),
+           silent = { })
+  }
+  
   ## no parameters, no variance
   if(length(coef(object)) == 0) {
     result <- switch(what,

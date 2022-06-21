@@ -1,7 +1,7 @@
 #
 #   anova.ppm.R
 #
-#  $Revision: 1.28 $   $Date: 2020/01/30 05:05:52 $
+#  $Revision: 1.30 $   $Date: 2022/06/21 02:42:45 $
 #
 
 anova.ppm <- local({
@@ -38,6 +38,20 @@ anova.ppm <- local({
     gibbs <- !pois
     ## any models fitted by ippm?
     newton <- any(sapply(objex, inherits, what="ippm"))
+
+    ## models fitted using 'ho' or 'enet' ?
+    improv <- lapply(objex, getElement, name="improve.type")
+    improv[sapply(improv, is.null)] <- "none"
+    improv <- unlist(improv)
+    
+    ## enet ignored
+    if(warn && any(e <- (improv == "enet"))) {
+      ne <- sum(e)
+      warning(paste("Analysis of deviance ignores the fact that",
+                    if(length(e) == 1L) "the" else ne,
+                    ngettext(ne, "model was", "models were"),
+                    "fitted using improve.type='enet'"))
+    }
     
     if(gibbs && !is.null(test) && test == "Rao")
       stop("Score test is only implemented for Poisson models",
@@ -75,6 +89,12 @@ anova.ppm <- local({
       stop(paste("Not implemented for models fitted by method=",
                  sQuote(fitmethod)))
     logi <- (fitmethod == "logi")
+    ## improvements 'ho', 'enet'
+    fitimprov <- unique(improv)
+    if(warn && length(fitimprov) > 1)
+      warning(paste("Models were fitted by different 'improve.type' settings",
+                    commasep(sQuote(fitimprov)),
+                    " - calculation ignores this"))
 
     refitargs <- list()
     fitz <- NULL

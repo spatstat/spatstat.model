@@ -139,7 +139,7 @@ ppmInfluenceEngine <- function(fit,
     fitblurb <- paste(info, collapse=" and ")
     warning(paste("Model was fitted with", fitblurb,
                   "but is treated as having been fitted by maximum",
-		  if(fit.is.poisson) "likelihood" else "pseudolikelihood",
+		  if(fit.is.poisson) "likelihood" else if(pseudo) "pseudolikelihood" else "logistic likelihood",
 		  "for leverage/influence calculation"),
 	    call.=FALSE)
     if(!logi && !pseudo) pseudo <- TRUE
