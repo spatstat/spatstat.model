@@ -56,7 +56,7 @@ local({
 #
 # Basic tests of mppm
 #
-# $Revision: 1.21 $ $Date: 2021/12/29 08:25:48 $
+# $Revision: 1.23 $ $Date: 2022/07/08 04:55:13 $
 # 
 
 if(!FULLTEST)
@@ -76,12 +76,13 @@ local({
 # currently invalid  
 #  fit3 <- mppm(Points ~ group, simba,
 #               hyperframe(po=Poisson(), pie=PairPiece(c(0.05,0.1))),
-#        iformula=~I((group=="control") * po) + I((group=="treatment") * pie))
+#        iformula=~I((group=="control") * po) + I((group=="treatment") * pie))  
+
   fit1
   fit2
   fit2w
 #  fit3
-
+  
   if(FULLTEST) {
     ## run summary.mppm which currently sits in spatstat-internal.Rd
     summary(fit1)
@@ -94,7 +95,7 @@ local({
   vcov(fit1)
   vcov(fit2)
 #  vcov(fit3)
-
+  
   if(FULLTEST) {
     fit4 <- mppm(Points ~ group, simba, hyperframe(str=Strauss(0.1)), iformula=~str/group)
     fit4
@@ -102,6 +103,14 @@ local({
     vcov(fit4)
     fit0 <- mppm(Points ~ group, simba)
     anova(fit0, fit4, test="Chi")
+    ## [bug from Fernando Milesi]
+    fit5 <- mppm(Wat ~ id,
+               data=hyperframe(Wat=waterstriders),
+               interaction=StraussHard(4.5, 1.5),
+               iformula=~Interaction:id)
+    fit5
+    summary(fit5)
+    vcov(fit5)
   }
   
   ## test subfits algorithm
@@ -110,12 +119,14 @@ local({
     s2 <- subfits(fit2)
     #  s3 <- subfits(fit3)
     s4 <- subfits(fit4)
+    s5 <- subfits(fit5)
     
     ## validity of results of subfits()
     p1 <- solapply(s1, predict)
     p2 <- solapply(s2, predict)
     #  p3 <- solapply(s3, predict)
     p4 <- solapply(s4, predict)
+    p5 <- solapply(s5, predict)
   }
 })
 
