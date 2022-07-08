@@ -1,6 +1,6 @@
 #
 #
-#  $Revision: 1.55 $   $Date: 2021/12/29 07:50:25 $
+#  $Revision: 1.56 $   $Date: 2022/07/08 00:59:33 $
 #
 #
 
@@ -149,7 +149,7 @@ subfits.new <- local({
     fake.version <- list(major=spv$major,
                          minor=spv$minor,
                          release=spv$patchlevel,
-                         date="$Date: 2021/12/29 07:50:25 $")
+                         date="$Date: 2022/07/08 00:59:33 $")
     fake.call <- call("cannot.update", Q=NULL, trend=trend,
                       interaction=NULL, covariates=NULL,
                       correction=object$Info$correction,
@@ -587,7 +587,8 @@ mapInterVars <- function(object, subs=subfits(object), mom=model.matrix(object))
   activeinter <- active.interactions(object)
   #'     Determine which canonical variables of full model are active in each row
   mats <- split.data.frame(mom, object$Fit$moadf$id)
-  activevars <- sapply(mats, function(df) { apply(df != 0, 2, any) })
+  activevars <- sapply(mats,
+                       function(df) { apply(df != 0, 2, any, na.rm=TRUE) })
   activevars <- if(ncol(mom) > 1) t(activevars) else matrix(activevars, ncol=1)
   if(ncol(activevars) != ncol(mom)) warning("Internal error: activevars columns do not match canonical variables")
   if(nrow(activevars) != length(mats)) warning("Internal error: activevars rows do not match hyperframe rows")

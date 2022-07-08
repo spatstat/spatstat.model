@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 2.999-999.013
+        CHANGES IN spatstat.model VERSION 2.999-999.014
 
 OVERVIEW
 
@@ -88,6 +88,9 @@ BUG FIXES
     and 'interval="confidence"' or 'interval="prediction"'.
     Fixed.
 
+    o vcov.mppm
+    Crashed with a message about 'subscript out of bounds', for some models.
+    Fixed.
         CHANGES IN spatstat.core VERSION 2.4-4.010
 
 OVERVIEW

@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.103 $   $Date: 2022/05/23 02:33:06 $
+#  $Revision: 1.105 $   $Date: 2022/07/08 01:09:38 $
 #
 
 mppm <- local({
@@ -703,6 +703,10 @@ model.matrix.mppm <- function(object, ..., keepNA=TRUE, separate=FALSE) {
     df <- df[ok, , drop=FALSE]
   }
 
+  ## remove NaN
+  if(any(isnan <- is.nan(mm)))
+     mm[isnan] <- 0
+  
   ## get standard attributes of model matrix
   ctr <- attr(mm, "contrasts")
   if(is.null(ctr) && !is.null(ctr <- FIT[["contrasts"]]))
