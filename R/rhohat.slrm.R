@@ -1,7 +1,7 @@
 #'
 #'      rhohat.slrm.R
 #'
-#'   $Revision: 1.4 $ $Date: 2022/05/23 02:33:06 $
+#'   $Revision: 1.5 $ $Date: 2022/07/08 13:39:13 $
 #' 
 
 rhohat.slrm <- function(object, covariate, ...,
@@ -10,6 +10,7 @@ rhohat.slrm <- function(object, covariate, ...,
                         horvitz=FALSE,
                         smoother=c("kernel", "local",
                                    "decreasing", "increasing",
+                                   "mountain", "valley",
                                    "piecewise"),
                         subset=NULL,
                         n=512, bw="nrd0", adjust=1, from=NULL, to=NULL, 

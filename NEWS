@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 2.999-999.015
+        CHANGES IN spatstat.model VERSION 2.999-999.016
 
 OVERVIEW
 
@@ -19,6 +19,8 @@ OVERVIEW
     o Residuals for recursively-partitioned models.
 
     o Residuals for any estimate of intensity.
+
+    o U-shaped curves in 'rhohat'.
     
     o Bug fixes and minor improvements.
     
@@ -74,6 +76,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o integral.msr
     New argument 'weight' specifies a weight (integrand) for the integration.
+
+    o rhohat.ppm, rhohat.slrm
+    New options 'smoother="mountain"' and 'smoother="valley"'
+    for estimating a unimodal function (U-shaped curve).
 
 BUG FIXES
 
