@@ -57,14 +57,15 @@
     a \code{function(x,y)} providing the weights.
   }
   \item{method}{
-    Character string determining the smoothing method. See Details.
+    Character string determining the estimation method. See Details.
   }
   \item{horvitz}{
     Logical value indicating whether to use Horvitz-Thompson weights.
     See Details.
   }
   \item{smoother}{
-    Character string determining the smoothing algorithm. See Details.
+    Character string determining the smoothing algorithm
+    and the type of curve that will be estimated. See Details.
   }
   \item{subset}{
     Optional. A spatial window (object of class \code{"owin"})
@@ -170,24 +171,62 @@
   The argument \code{smoother} selects the type of estimation technique.
   \itemize{
     \item
-    If \code{smoother="kernel"} (the default) or \code{smoother="local"}, 
-    the nonparametric estimator is a \emph{smoothing estimator}
-    of \eqn{\rho(z)}{rho(z)}, effectively a kind of density estimator
-    (Baddeley et al, 2012).
+    If \code{smoother="kernel"} (the default),
+    the nonparametric estimator is a \emph{kernel smoothing estimator}
+    of \eqn{\rho(z)}{rho(z)} (Guan, 2008; Baddeley et al, 2012).
+    The estimated function \eqn{\rho(z)}{rho(z)} will be
+    a smooth function of \eqn{z} which takes nonnegative values.
+    Confidence bands are also computed, assuming a Poisson point process.
+    See the section on \emph{Smooth estimates}.
+    \item
+    If \code{smoother="local"}, 
+    the nonparametric estimator is a \emph{local regression estimator}
+    of \eqn{\rho(z)}{rho(z)} (Baddeley et al, 2012) obtained using
+    local likelihood.
     The estimated function \eqn{\rho(z)}{rho(z)} will be
     a smooth function of \eqn{z}.
     Confidence bands are also computed, assuming a Poisson point process.
     See the section on \emph{Smooth estimates}.
     \item
-    If \code{smoother="increasing"} or \code{smoother="decreasing"},
-    we use the \emph{nonparametric maximum likelihood estimator}
+    If \code{smoother="increasing"}, we assume that
+    \eqn{\rho(z)}{rho(z)} is an increasing function of \eqn{z},
+    and use the \emph{nonparametric maximum likelihood estimator}
     of \eqn{\rho(z)}{rho(z)} described by Sager (1982).
-    This assumes that
-    \eqn{\rho(z)}{rho(z)} is either an increasing function of \eqn{z},
-    or a decreasing function of \eqn{z}.
-    The estimated function will be a step function,
-    increasing or decreasing as a function of \eqn{z}.
+    The estimated function will be a step function, that is increasing
+    as a function of \eqn{z}. Confidence bands are not computed.
     See the section on \emph{Monotone estimates}.
+    \item
+    If \code{smoother="decreasing"}, we assume that
+    \eqn{\rho(z)}{rho(z)} is a decreasing function of \eqn{z},
+    and use the \emph{nonparametric maximum likelihood estimator}
+    of \eqn{\rho(z)}{rho(z)} described by Sager (1982).
+    The estimated function will be a step function, that is decreasing
+    as a function of \eqn{z}. Confidence bands are not computed.
+    See the section on \emph{Monotone estimates}.
+    \item
+    If \code{smoother="mountain"}, we assume that
+    \eqn{\rho(z)}{rho(z)} is a function with an inverted U shape,
+    with a single peak at a value \eqn{z_0}{z0}, so that
+    \eqn{\rho(z)}{rho(z)} is an increasing function of \eqn{z} 
+    for \eqn{z < z_0}{z < z0} and a decreasing function of \eqn{z}
+    for \eqn{z > z_0}{z > z0}.
+    We compute the \emph{nonparametric maximum likelihood estimator}.
+    The estimated function will be a step function, which is 
+    increasing and then decreasing as a function of \eqn{z}.
+    Confidence bands are not computed.
+    See the section on \emph{Unimodal estimates}.
+    \item
+    If \code{smoother="valley"}, we assume that
+    \eqn{\rho(z)}{rho(z)} is a function with a U shape,
+    with a single minimum at a value \eqn{z_0}{z0}, so that
+    \eqn{\rho(z)}{rho(z)} is a decreasing function of \eqn{z} 
+    for \eqn{z < z_0}{z < z0} and an increasing function of \eqn{z}
+    for \eqn{z > z_0}{z > z0}.
+    We compute the \emph{nonparametric maximum likelihood estimator}.
+    The estimated function will be a step function, which is 
+    decreasing and then increasing as a function of \eqn{z}.
+    Confidence bands are not computed.
+    See the section on \emph{Unimodal estimates}.
     \item
     If \code{smoother="piecewise"}, the estimate of
     \eqn{\rho(z)}{rho(z)} is piecewise constant.
@@ -200,7 +239,8 @@
     values is simply the average intensity
     (number of points per unit area) in the relevant sub-region.
   }
-  See Baddeley (2018) for a comparison of these estimation techniques.
+  See Baddeley (2018) for a comparison of these estimation techniques
+  (except for \code{"mountain"} and \code{"valley"}).
   
   If the argument \code{weights} is present, then the contribution
   from each data point \code{X[i]} to the estimate of \eqn{\rho}{rho} is
@@ -333,6 +373,31 @@
 
   Confidence intervals are not available
   for the monotone estimators.
+}
+\section{Unimodal estimators}{
+  If \code{smoother="valley"} then we estimate a U-shaped function.
+  A function \eqn{\rho(z)}{rho(z)} is U-shaped if it is
+  decreasing when \eqn{z < z_0}{z < z0} and
+  increasing when \eqn{z > z_0}{z > z0}, where \eqn{z_0}{z0} is
+  called the critical value. The nonparametric maximum likelihood
+  estimate of such a function can be computed by profiling over \eqn{z_0}{z0}. 
+  The algorithm considers all possible candidate values of the critical value 
+  \eqn{z_0}{z0}, and estimates the function \eqn{\rho(z)}{rho(z)}
+  separately on the left and right of \eqn{z_0}{z0} using the monotone
+  estimators described above. These function estimates are combined into
+  a single function, and the Poisson point process likelihood is
+  computed. The optimal value of \eqn{z_0}{z0}
+  is the one which maximises the Poisson point process likelihood.
+
+  If \code{smoother="mountain"}  then we estimate a function which has
+  an inverted U shape. A function \eqn{\rho(z)}{rho(z)} is
+  inverted-U-shaped if it is
+  increasing when \eqn{z < z_0}{z < z0} and
+  decreasing when \eqn{z > z_0}{z > z0}. The nonparametric maximum likelihood
+  estimate of such a function can be computed by profiling over
+  \eqn{z_0}{z0} using the same technique \emph{mutatis mutandis}.
+
+  Confidence intervals are not available for the unimodal estimators.
 }
 \value{
   A function value table (object of class \code{"fv"})
