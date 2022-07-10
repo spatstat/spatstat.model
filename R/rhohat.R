@@ -1,7 +1,7 @@
 #'
 #'  rhohat.R
 #'
-#'  $Revision: 1.108 $  $Date: 2022/07/08 13:21:12 $
+#'  $Revision: 1.110 $  $Date: 2022/07/10 10:28:15 $
 #'
 #'  Non-parametric estimation of a function rho(z) determining
 #'  the intensity function lambda(u) of a point process in terms of a
@@ -58,6 +58,8 @@ rhohat.ppm <- function(object, covariate, ...,
            stop("Unrecognised covariate name")
          )
     covunits <- unitname(data.ppm(model))
+  } else if(inherits(covariate, "distfun")) {
+    covunits <- unitname(covariate)
   } else {
     covunits <- NULL
   }

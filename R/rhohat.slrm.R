@@ -1,7 +1,7 @@
 #'
 #'      rhohat.slrm.R
 #'
-#'   $Revision: 1.5 $ $Date: 2022/07/08 13:39:13 $
+#'   $Revision: 1.6 $ $Date: 2022/07/10 10:11:45 $
 #' 
 
 rhohat.slrm <- function(object, covariate, ...,
@@ -50,6 +50,8 @@ rhohat.slrm <- function(object, covariate, ...,
            stop("Unrecognised covariate name")
          )
     covunits <- unitname(response(model))
+  } else if(inherits(covariate, "distfun")) {
+    covunits <- unitname(covariate)
   } else {
     covunits <- NULL
   }
