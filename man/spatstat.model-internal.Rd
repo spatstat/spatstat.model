@@ -463,7 +463,7 @@ slrmInfluence(model, what, \dots)
           modelname, covname, dataname, subset, clip.predict) 
 \method{spatialCovariateEvidence}{slrm}(model, covariate, \dots, lambdatype,
           jitter, jitterfactor,
-          modelname, covname, dataname, subset) 
+          modelname, covname, dataname, subset, raster.action) 
 spatialCovariateUnderModel(model, covariate, \dots)
 \method{spatialCovariateUnderModel}{ppm}(model, covariate, \dots)
 \method{spatialCovariateUnderModel}{kppm}(model, covariate, \dots)

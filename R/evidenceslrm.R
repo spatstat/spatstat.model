@@ -3,23 +3,31 @@
 #'
 #'   method for 'spatialCovariateEvidence' for class 'slrm'
 #'
-#'   $Revision: 1.6 $ $Date: 2022/05/20 10:13:08 $
+#'   $Revision: 1.8 $ $Date: 2022/07/18 04:31:45 $
 
 spatialCovariateEvidence.slrm <- function(model, covariate, ...,
                            lambdatype=c("probabilities", "intensity"),
                            jitter=TRUE, jitterfactor=1,
                            modelname=NULL, covname=NULL,
-                           dataname=NULL, subset=NULL) {
+                           dataname=NULL, subset=NULL,
+                           raster.action=c("warn", "fatal", "ignore")) {
   lambdatype <- match.arg(lambdatype)
-  #' trap misuse
-  badargs <- intersect(c("eps", "dimyx"), names(list(...)))
-  nbad <- length(badargs)
-  if(nbad > 0)
-    warning(paste(ngettext(nbad, "Argument", "Arguments"),
-                  commasep(sQuote(badargs)),
-                  ngettext(nbad, "is", "are"),
-                  "ignored by rhohat.slrm"),
-            call.=FALSE)
+  raster.action <- match.arg(raster.action)
+  if(raster.action != "ignore") {
+    #' change of resolution is not supported
+    raster.args <- intersect(c("eps", "dimyx"), names(list(...)))
+    nra <- length(raster.args)
+    if(nra > 0) {
+      problem <- paste(ngettext(nra, "Argument", "Arguments"),
+                       commasep(sQuote(raster.args)),
+                       ngettext(nra, "implies", "imply"),
+                       "a change of spatial resolution, which is not supported")
+      switch(raster.action,
+             warn = warning(paste(problem, "-- ignored"), call.=FALSE),
+             fatal = stop(problem),
+             ignore = {})
+    }
+  }
   #' evaluate covariate values at presence pixels and all pixels
   #' determine names
   if(is.null(modelname))

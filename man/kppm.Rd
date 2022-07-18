@@ -110,7 +110,7 @@
     or \code{"palm"} for Palm likelihood.
     Partially matched.
   }
-  \item{improve.type}{
+\item{improve.type}{
     Method for updating the initial estimate of the trend.
     Initially the trend is estimated as if the process
     is an inhomogeneous Poisson process.
@@ -362,9 +362,7 @@
       must be installed in order to use this option.
     }    
   }
-  Fitting the LGCP model requires the \pkg{RandomFields} package,
-  except in the default case where the exponential covariance
-  is assumed.
+
 }
 \section{Optimization algorithm}{
   The following details allow greater control over the fitting
@@ -422,6 +420,11 @@
   }
 }
 \section{Log-Gaussian Cox Models}{
+  Fitting a log-Gaussian Cox process model
+  requires the \pkg{RandomFields} package,
+  except in the default case where the exponential covariance
+  is assumed.
+
   To fit a log-Gaussian Cox model with non-exponential covariance,
   specify \code{clusters="LGCP"} and use additional arguments
   to specify the covariance structure. These additional arguments can
