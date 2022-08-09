@@ -1,7 +1,7 @@
 #'
 #'      rhohat.slrm.R
 #'
-#'   $Revision: 1.6 $ $Date: 2022/07/10 10:11:45 $
+#'   $Revision: 1.7 $ $Date: 2022/08/09 02:01:53 $
 #' 
 
 rhohat.slrm <- function(object, covariate, ...,
@@ -13,6 +13,7 @@ rhohat.slrm <- function(object, covariate, ...,
                                    "mountain", "valley",
                                    "piecewise"),
                         subset=NULL,
+                        jitter=TRUE, jitterfactor=1, interpolate=TRUE,
                         n=512, bw="nrd0", adjust=1, from=NULL, to=NULL, 
                         bwref=bw, covname, confidence=0.95,
                         positiveCI, breaks=NULL) {
@@ -61,7 +62,11 @@ rhohat.slrm <- function(object, covariate, ...,
   areaW <- area(W)
   
   rhohatEngine(model, covariate, reference, areaW, ...,
-               spatCovarArgs=list(lambdatype="intensity"),
+               spatCovarArgs=list(lambdatype="intensity",
+                                  clip.predict=FALSE,
+                                  jitter=jitter,
+                                  jitterfactor=jitterfactor,
+                                  interpolate=interpolate),
                weights=weights,
                method=method,
                horvitz=horvitz,

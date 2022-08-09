@@ -9,7 +9,7 @@
 #'    validate.weights
 #'    updateData
 #'
-#' $Revision: 1.13 $ $Date: 2022/05/27 05:57:20 $
+#' $Revision: 1.14 $ $Date: 2022/07/30 02:00:29 $
 
 resolve.lambda <- function(X, lambda=NULL, ...) {
   UseMethod("resolve.lambda")
@@ -40,8 +40,12 @@ resolve.lambda.ppp <- function(X, lambda=NULL, ...,
     check.nvector(lambda, npoints(X), vname="lambda")
   } else if(inherits(lambda, c("ppm", "kppm", "dppm", "slrm"))) {
     model <- lambda
-    if(!update || inherits(model, "slrm")) {
-      ## use intensity of model
+    if(inherits(model, "slrm")) {
+      #' predict.slrm has different syntax, 
+      #' and does not support leave-one-out prediction
+      lambda <- predict(model)[X]
+    } else if(!update) {
+      ## use intensity of original model
       lambda <- predict(model, locations=X, type="trend")
     } else {
       model <- updateData(model, X)
@@ -107,7 +111,11 @@ resolve.reciplambda.ppp <- function(X, lambda=NULL, reciplambda=NULL,
       if(check) validate.weights(lambda)
     } else if(inherits(lambda, c("ppm", "kppm", "dppm", "slrm"))) {
       model <- lambda
-      if(!update || inherits(model, "slrm")) {
+      if(inherits(model, "slrm")) {
+        #' predict.slrm has different syntax, 
+        #' and does not support leave-one-out prediction
+        lambda <- predict(model)[X]
+      } else if(!update) {
         ## use intensity of model
         lambda <- predict(model, locations=X, type="trend")
       } else {
@@ -202,8 +210,14 @@ resolve.lambdacross.ppp <- function(X, I, J,
     } else if(inherits(lambdaX, c("ppm", "kppm", "dppm", "slrm"))) {
       ## point process model provides intensity
       model <- lambdaX
-      if(!update || inherits(model, "slrm")) {
-        ## just use intensity of fitted model
+      if(inherits(model, "slrm")) {
+        #' predict.slrm has different syntax, 
+        #' and does not support leave-one-out prediction
+        Lambda <- predict(model)
+        lambdaI <- Lambda[XI]
+        lambdaJ <- Lambda[XJ]
+      } else if(!update) {
+        ## use intensity of original fitted model
         lambdaI <- predict(model, locations=XI, type="trend")
         lambdaJ <- predict(model, locations=XJ, type="trend")
       } else {
@@ -239,8 +253,12 @@ resolve.lambdacross.ppp <- function(X, I, J,
     } else if(inherits(lambdaI, c("ppm", "kppm", "dppm", "slrm"))) {
       ## point process model provides intensity
       model <- lambdaI
-      if(!update || inherits(model, "slrm")) {
-        ## just use intensity of fitted model
+      if(inherits(model, "slrm")) {
+        #' predict.slrm has different syntax, 
+        #' and does not support leave-one-out prediction
+        lambdaI <- predict(model)[XI]
+      } else if(!update) {
+        ## use intensity of original fitted model
         lambdaI <- predict(model, locations=XI, type="trend")
       } else {
         ## re-fit model to data X
@@ -270,8 +288,12 @@ resolve.lambdacross.ppp <- function(X, I, J,
     } else if(inherits(lambdaJ, c("ppm", "kppm", "dppm", "slrm"))) {
       ## point process model provides intensity
       model <- lambdaJ
-      if(!update || inherits(model, "slrm")) {
-        ## just use intensity of fitted model
+      if(inherits(model, "slrm")) {
+        #' predict.slrm has different syntax, 
+        #' and does not support leave-one-out prediction
+        lambdaJ <- predict(model)[XJ]
+      } else if(!update) {
+        ## use intensity of original fitted model
         lambdaJ <- predict(model, locations=XJ, type="trend")
       } else {
         ## re-fit model to data X
