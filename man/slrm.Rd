@@ -187,7 +187,7 @@ if(offline <- !interactive()) op <- spatstat.options(npixel=32)
      slrm(X ~ Z)
      slrm(X ~ Z, dataAtPoints=list(Z=nncross(X,Y,what="dist")))
 
-     mur <- murchison
+     mur <- solapply(murchison, rescale, s=1000, unitname="km")
      mur$dfault <- distfun(mur$faults)
      slrm(gold ~ dfault, data=mur)
      slrm(gold ~ dfault + greenstone, data=mur)

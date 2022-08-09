@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.214 $ $Date: 2022/07/12 02:26:24 $
+# $Revision: 1.215 $ $Date: 2022/08/09 03:30:35 $
 #
 
 
@@ -1760,6 +1760,10 @@ update.kppm <- function(object, ..., evaluate=TRUE, envir=environment(terms(obje
   }
   #'
   return(out)
+}
+
+updateData.kppm <- function(model, X, ...) {
+  update(model, X=X)
 }
 
 

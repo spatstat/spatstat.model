@@ -1,7 +1,7 @@
 #'
 #'     dppm.R
 #'
-#'     $Revision: 1.16 $   $Date: 2022/02/21 02:23:49 $
+#'     $Revision: 1.17 $   $Date: 2022/08/09 03:38:00 $
 
 dppm <-
   function(formula, family, data=NULL,
@@ -173,4 +173,8 @@ dppmFixAlgorithm <- function(algorithm, changealgorithm, clusters, startpar){
     }
   }
   return(list(algorithm = algorithm, lower = lower, upper = upper))
+}
+
+updateData.dppm <- function(model, X, ...) {
+  update.kppm(model, X=X)
 }

@@ -2,7 +2,7 @@
 #  update.ppm.R
 #
 #
-#  $Revision: 1.63 $    $Date: 2022/01/19 09:03:47 $
+#  $Revision: 1.64 $    $Date: 2022/08/09 03:40:45 $
 #
 #
 #
@@ -377,4 +377,19 @@ damaged.ppm <- function(object) {
   }
   badQ <- is.null(Q) || !(inherits(Q, c("ppp", "quad", "formula")))
   return(badQ)
+}
+
+updateData <- function(model, X, ...) {
+  UseMethod("updateData")
+}
+
+updateData.ppm <- function(model, X, ..., warn=TRUE) {
+  ## wrapper to refit the 'model' to new data 'X'
+  if(is.marked(X) && !is.multitype(X)) {
+    if(warn) warning("Marks were ignored when re-fitting the model,",
+                     "because they were not a factor",
+                     call.=FALSE)
+    X <- unmark(X)
+  }
+  update(model, Q=X)
 }

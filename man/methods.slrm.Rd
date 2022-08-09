@@ -15,12 +15,12 @@
 }
 \usage{
 \method{formula}{slrm}(x, \dots)
-\method{print}{slrm}(x, ...)
-\method{summary}{slrm}(object, ...)
+\method{print}{slrm}(x, \dots)
+\method{summary}{slrm}(object, \dots)
 \method{terms}{slrm}(x, \dots)
 \method{labels}{slrm}(object, \dots)
 \method{deviance}{slrm}(object, \dots)
-\method{update}{slrm}(object, \dots, evaluate = TRUE, env = parent.frame())
+\method{update}{slrm}(object, fmla, \dots, evaluate = TRUE, env = parent.frame())
 }
 \arguments{
   \item{x,object}{
@@ -29,6 +29,9 @@
   }
   \item{\dots}{
     Arguments passed to other methods.
+  }
+  \item{fmla}{
+    Optional. A formula, to replace the formula of the model.
   }
   \item{evaluate}{
     Logical value. If \code{TRUE}, evaluate the updated call to

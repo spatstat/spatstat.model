@@ -7,9 +7,9 @@
 #'    resolve.lambdacross
 #'    resolve.reciplambda
 #'    validate.weights
-#'    updateData
+#'    updateData (generic)
 #'
-#' $Revision: 1.14 $ $Date: 2022/07/30 02:00:29 $
+#' $Revision: 1.18 $ $Date: 2022/08/09 06:46:50 $
 
 resolve.lambda <- function(X, lambda=NULL, ...) {
   UseMethod("resolve.lambda")
@@ -39,18 +39,19 @@ resolve.lambda.ppp <- function(X, lambda=NULL, ...,
   } else if(is.numeric(lambda) && is.vector(as.numeric(lambda))) {
     check.nvector(lambda, npoints(X), vname="lambda")
   } else if(inherits(lambda, c("ppm", "kppm", "dppm", "slrm"))) {
+    ## model provides intensity
     model <- lambda
+    if(update) {
+      model <- updateData(model, X)
+      danger <- FALSE
+    }
     if(inherits(model, "slrm")) {
       #' predict.slrm has different syntax, 
       #' and does not support leave-one-out prediction
       lambda <- predict(model)[X]
-    } else if(!update) {
-      ## use intensity of original model
-      lambda <- predict(model, locations=X, type="trend")
     } else {
-      model <- updateData(model, X)
       lambda <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
-      danger <- FALSE
+
     }
   } else stop(paste(sQuote("lambda"),
                     "should be a vector, a pixel image,",
@@ -110,18 +111,18 @@ resolve.reciplambda.ppp <- function(X, lambda=NULL, reciplambda=NULL,
       check.nvector(lambda, npoints(X), vname="lambda")
       if(check) validate.weights(lambda)
     } else if(inherits(lambda, c("ppm", "kppm", "dppm", "slrm"))) {
+      ## model provides intensity
       model <- lambda
+      if(update) {
+        model <- updateData(model, X)
+        danger <- FALSE
+      }
       if(inherits(model, "slrm")) {
         #' predict.slrm has different syntax, 
         #' and does not support leave-one-out prediction
         lambda <- predict(model)[X]
-      } else if(!update) {
-        ## use intensity of model
-        lambda <- predict(model, locations=X, type="trend")
       } else {
-        model <- updateData(model, X)
         lambda <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
-        danger <- FALSE
       }
       if(check) validate.weights(lambda, how="model prediction")
     } else stop(paste(sQuote("lambda"),
@@ -210,24 +211,22 @@ resolve.lambdacross.ppp <- function(X, I, J,
     } else if(inherits(lambdaX, c("ppm", "kppm", "dppm", "slrm"))) {
       ## point process model provides intensity
       model <- lambdaX
+      if(update) {
+        model <- update(model, X)
+        dangerI <- dangerJ <- FALSE
+        dangerous <- "lambdaIJ"
+      }
       if(inherits(model, "slrm")) {
         #' predict.slrm has different syntax, 
         #' and does not support leave-one-out prediction
         Lambda <- predict(model)
         lambdaI <- Lambda[XI]
         lambdaJ <- Lambda[XJ]
-      } else if(!update) {
-        ## use intensity of original fitted model
-        lambdaI <- predict(model, locations=XI, type="trend")
-        lambdaJ <- predict(model, locations=XJ, type="trend")
       } else {
         ## re-fit model to data X
-        model <- updateData(model, X)
         lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
         lambdaI <- lambdaX[I]
         lambdaJ <- lambdaX[J]
-        dangerI <- dangerJ <- FALSE
-        dangerous <- "lambdaIJ"
       }
     } else stop(paste("Argument lambdaX is not understood:",
                       "it should be a numeric vector,",
@@ -253,20 +252,18 @@ resolve.lambdacross.ppp <- function(X, I, J,
     } else if(inherits(lambdaI, c("ppm", "kppm", "dppm", "slrm"))) {
       ## point process model provides intensity
       model <- lambdaI
+      if(update) {
+        model <- updateData(model, X)
+        dangerI <- FALSE
+        dangerous <- setdiff(dangerous, "lambdaI")
+      }
       if(inherits(model, "slrm")) {
         #' predict.slrm has different syntax, 
         #' and does not support leave-one-out prediction
         lambdaI <- predict(model)[XI]
-      } else if(!update) {
-        ## use intensity of original fitted model
-        lambdaI <- predict(model, locations=XI, type="trend")
       } else {
-        ## re-fit model to data X
-        model <- updateData(model, X)
         lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
         lambdaI <- lambdaX[I]
-        dangerI <- FALSE
-        dangerous <- setdiff(dangerous, "lambdaI")
       }
     } else stop(paste(sQuote("lambdaI"), "should be a vector or an image"))
     
@@ -288,20 +285,18 @@ resolve.lambdacross.ppp <- function(X, I, J,
     } else if(inherits(lambdaJ, c("ppm", "kppm", "dppm", "slrm"))) {
       ## point process model provides intensity
       model <- lambdaJ
+      if(update) {
+        model <- updateData(model, X)
+        dangerJ <- FALSE
+        dangerous <- setdiff(dangerous, "lambdaJ")
+      }
       if(inherits(model, "slrm")) {
         #' predict.slrm has different syntax, 
         #' and does not support leave-one-out prediction
         lambdaJ <- predict(model)[XJ]
-      } else if(!update) {
-        ## use intensity of original fitted model
-        lambdaJ <- predict(model, locations=XJ, type="trend")
       } else {
-        ## re-fit model to data X
-        model <- updateData(model, X)
         lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
         lambdaJ <- lambdaX[J]
-        dangerJ <- FALSE
-        dangerous <- setdiff(dangerous, "lambdaJ")
       }
     } else 
       stop(paste(sQuote("lambdaJ"), "should be a vector or an image"))
@@ -346,27 +341,34 @@ validate.weights <- function(x, recip=FALSE, how = NULL,
   return(TRUE)
 }
 
-updateData <- function(model, X, warn=TRUE) {
-  ## refit 'model' to new data 'X'
-  if(is.marked(X) && !is.multitype(X)) {
-    if(warn) warning("Marks were ignored when re-fitting the model,",
-                     "because they were not a factor",
-                     call.=FALSE)
-    X <- unmark(X)
-  }
-  if(inherits(model, "ppm")) {
-    result <- update(model, Q=X)
-  } else if(inherits(model, "kppm")) {
-    result <- update(model, X=X)
-  } else if(inherits(model, "dppm")) {
-    result <- update.kppm(model, X=X)
-  } else if(inherits(model, "slrm")) {
-    if(warn)
-      warning(paste("Updating an slrm by changing the point pattern",
-                    "is not yet supported; the model was not updated"),
-              call.=FALSE)
-    result <- model
-  } else stop("Unrecognised class of model")
-  return(result)
+updateData <- function(model, X, ...) {
+  UseMethod("updateData")
 }
 
+updateData.default <- function(model, X, ..., warn=TRUE) {
+  ## for some bizarre reason, method dispatch often fails for this function
+  ## so we do it by hand as a backup
+  if(warn) warning("Reached 'updateData.default'", call.=FALSE)
+  if(inherits(model, c("ppm", "kppm", "dppm", "slrm"))) {
+    if(inherits(model, "ppm")) {
+      model <- updateData.ppm(model, X)
+    } else if(inherits(model, "kppm")) {
+      model <- updateData.kppm(model, X)
+    } else if(inherits(model, "dppm")) {
+      model <- updateData.dppm(model, X)
+    } else if(inherits(model, "slrm")) {
+      model <- updateData.slrm(model, X)
+    }
+  } else if(inherits(model, "lppm")) {
+    if(requireNamespace("spatstat.linnet")) {
+      model <- spatstat.linnet::updateData.lppm(model, X)
+    } else
+      if(warn)
+        warning("Model was not updated; this requires a recent version of spatstat.linnet", call.=FALSE)
+  } else
+    if(warn)
+      warning("Unrecognised kind of 'model'; no update performed",
+              call.=FALSE)
+  return(model)
+}
+  

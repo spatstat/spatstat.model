@@ -202,6 +202,10 @@
 \alias{unitname<-.msr}
 \alias{update.ippm}
 \alias{update.msr}
+\alias{updateData.ppm}
+\alias{updateData.kppm}
+\alias{updateData.dppm}
+\alias{updateData.slrm}
 \alias{varcountEngine}
 \alias{versionstring.interact}
 \alias{versionstring.ppm}
@@ -486,7 +490,11 @@ tweak.coefs(model, new.coef)
 \method{unitname}{msr}(x) 
 \method{unitname}{msr}(x) <- value 
 \method{update}{ippm}(object, \dots, envir) 
-\method{update}{msr}(object, \dots) 
+\method{update}{msr}(object, \dots)
+\method{updateData}{ppm}(model, X, \dots, warn)
+\method{updateData}{kppm}(model, X, \dots)
+\method{updateData}{dppm}(model, X, \dots)
+\method{updateData}{slrm}(model, X, \dots)
 varcountEngine(g, B, lambdaB, f, R, what)
 versionstring.interact(object)
 versionstring.ppm(object)

@@ -3,7 +3,7 @@
 #
 #  Spatial Logistic Regression
 #
-#  $Revision: 1.61 $   $Date: 2022/05/23 02:23:55 $
+#  $Revision: 1.62 $   $Date: 2022/08/09 03:41:33 $
 #
 
 slrm <- function(formula, ..., data=NULL, offset=TRUE, link="logit",
@@ -631,15 +631,31 @@ model.images.slrm <- function(object, ...) {
   return(as.solist(result))
 }
 
-update.slrm <- function(object, ..., evaluate=TRUE, env=parent.frame()) {
-  e <- update.default(object, ..., evaluate=FALSE)
-  if(evaluate) {
-    if(!missing(env)) environment(e$formula) <- env
-    e <- eval(e, envir=env)
+update.slrm <- function(object, fmla, ..., evaluate=TRUE, env=parent.frame()) {
+  z <- getCall(object)
+  extras <- match.call(expand.dots = FALSE)$...
+  if(!missing(fmla)) 
+    z$formula <- update(formula(object), fmla)
+  if(!missing(env))
+    environment(z$formula) <- env
+  if(length(extras)) {
+    existing <- !is.na(match(names(extras), names(z)))
+    for(a in names(extras)[existing]) z[[a]] <- extras[[a]]
+    if (any(!existing)) {
+      z <- c(as.list(z), extras[!existing])
+      z <- as.call(z)
+    }
   }
-  return(e)
+  if(evaluate) eval(z, envir=env) else z
 }
 
+updateData.slrm <- function(model, X, ...) {
+  covlist <- model$Data$covlist
+  Yname <- model$CallInfo$responsename
+  newdata <- append(covlist, setNames(list(X), Yname))
+  update(model, data=newdata)
+}
+  
 anova.slrm <- local({
 
   anova.slrm <- function(object, ..., test=NULL) {
