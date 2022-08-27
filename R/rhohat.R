@@ -1,7 +1,7 @@
 #'
 #'  rhohat.R
 #'
-#'  $Revision: 1.111 $  $Date: 2022/08/09 02:01:37 $
+#'  $Revision: 1.113 $  $Date: 2022/08/27 05:59:54 $
 #'
 #'  Non-parametric estimation of a function rho(z) determining
 #'  the intensity function lambda(u) of a point process in terms of a
@@ -24,6 +24,7 @@ rhohat.ppm <- function(object, covariate, ...,
                                   "mountain", "valley",
                                   "piecewise"),
                        subset=NULL,
+                       do.CI=TRUE,
                        jitter=TRUE, jitterfactor=1, interpolate=TRUE,
                        dimyx=NULL, eps=NULL,
                        n=512, bw="nrd0", adjust=1, from=NULL, to=NULL, 
@@ -70,6 +71,8 @@ rhohat.ppm <- function(object, covariate, ...,
   areaW <- area(W)
   
   rhohatEngine(model, covariate, reference, areaW, ...,
+               subset=subset,
+               do.CI=do.CI,
                weights=weights,
                method=method,
                horvitz=horvitz,

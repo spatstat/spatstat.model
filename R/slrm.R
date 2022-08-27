@@ -3,7 +3,7 @@
 #
 #  Spatial Logistic Regression
 #
-#  $Revision: 1.62 $   $Date: 2022/08/09 03:41:33 $
+#  $Revision: 1.63 $   $Date: 2022/08/11 03:53:48 $
 #
 
 slrm <- function(formula, ..., data=NULL, offset=TRUE, link="logit",
@@ -308,6 +308,7 @@ slrAssemblePixelData <- local({
       df <- cbind(df[ok, ], logpixelarea=log(pixelarea[ok]))
       serial <- serial[ok]
     }
+    #' map rows of data frame to pixels
     attr(df, "serial") <- serial
     #' map original data points to pixels
     Yrowcol <- attr(PY, "map")
@@ -650,7 +651,7 @@ update.slrm <- function(object, fmla, ..., evaluate=TRUE, env=parent.frame()) {
 }
 
 updateData.slrm <- function(model, X, ...) {
-  covlist <- model$Data$covlist
+  covlist <- model$Data$covariates
   Yname <- model$CallInfo$responsename
   newdata <- append(covlist, setNames(list(X), Yname))
   update(model, data=newdata)

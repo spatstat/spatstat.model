@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 2.999-999.022
+        CHANGES IN spatstat.model VERSION 2.999-999.024
 
 OVERVIEW
 
@@ -88,6 +88,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o rhohat.ppm, rhohat.slrm
     New arguments 'jitter', 'jitterfactor', 'interpolate' allow greater
     control over the calculation.
+    
+    o rhohat.ppm, rhohat.slrm
+    New argument 'do.CI' specifies whether to calculate confidence bands.
     
 BUG FIXES
 
