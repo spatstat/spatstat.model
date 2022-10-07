@@ -216,7 +216,7 @@
   
   and \rolf .
   New code for stationary Gibbs point processes was generously contributed by
-  \ege and Jean-Francois Coeurjolly.
+  \ege and Jean-\Francois Coeurjolly.
   New code for generic Gibbs process written by \adrian.
   New code for logistic method contributed by \ege.
 }
