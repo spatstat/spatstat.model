@@ -7,7 +7,7 @@
 
   Efiksel.c
 
-  $Revision: 1.4 $     $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.6 $     $Date: 2022/10/22 10:09:51 $
 
   C implementation of 'eval' for Fiksel interaction (non-hardcore part)
 
@@ -18,17 +18,22 @@
 
 */
 
-double sqrt(), exp();
+double sqrt(double x);
+double exp(double x);
 
-void Efiksel(nnsource, xsource, ysource, 
-	     nntarget, xtarget, ytarget, 
-	     rrmax, kkappa, values) 
-/* inputs */
-     int *nnsource, *nntarget;
-     double *xsource, *ysource, *xtarget, *ytarget, *rrmax, *kkappa;
-     /* output */
-     double *values;
-{
+void Efiksel(
+  /* inputs */
+  int *nnsource, 
+  double *xsource,
+  double *ysource,
+  int *nntarget,
+  double *xtarget,
+  double *ytarget,
+  double *rrmax,
+  double *kkappa,
+  /* output */
+  double *values
+) {
   int nsource, ntarget, maxchunk, j, i, ileft;
   double xsourcej, ysourcej, xleft, dx, dy, dx2, d2;
   double rmax, r2max, r2maxpluseps, kappa, total;

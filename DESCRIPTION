@@ -1,23 +1,23 @@
 Package: spatstat.model
-Version: 2.999-999.025
-Date: 2022-10-07
+Version: 2.999-999.026
+Date: 2022-10-23
 Title: Parametric Statistical Modelling for the 'spatstat' Family
 Authors@R: c(person("Adrian", "Baddeley", 
-                    role = c("aut", "cre"),
+                    role = c("aut", "cre", "cph"),
        	            email = "Adrian.Baddeley@curtin.edu.au",
 		    comment = c(ORCID="0000-0001-9499-8382")),
 	     person("Rolf", "Turner", 
-                    role = "aut",
+                    role = c("aut", "cph"),
  	            email="r.turner@auckland.ac.nz",
 		    comment=c(ORCID="0000-0001-5521-5218")),
 	     person("Ege",   "Rubak", 
-                    role = "aut",
+                    role = c("aut", "cph"),
 		    email = "rubak@math.aau.dk",
 		    comment=c(ORCID="0000-0002-6675-533X")),
 	     person("Kasper", "Klitgaard Berthelsen",
 	            role = "ctb"),
 	     person("Achmad", "Choiruddin",
-	            role = "ctb"),
+	            role = c("ctb", "cph")),
 	     person("Jean-Francois", "Coeurjolly",
 	            role = "ctb"),
 	     person("Ottmar", "Cronie",
@@ -43,7 +43,7 @@ Authors@R: c(person("Adrian", "Baddeley",
 	     person("Tuomas", "Rajala",
 	            role = "ctb"),
 	     person("Suman", "Rakshit",
-	            role = "ctb"),
+	            role = c("ctb", "cph")),
 	     person("Dominic", "Schuhmacher",
 	            role = "ctb"),
 	     person("Rasmus", "Plenge Waagepetersen",

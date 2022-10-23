@@ -9,7 +9,7 @@
 
   Ediggatsti.c
 
-  $Revision: 1.4 $     $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.5 $     $Date: 2022/10/21 10:43:01 $
 
   C implementation of 'eval' for DiggleGatesStibbard interaction 
 
@@ -20,17 +20,20 @@
 
 */
 
-void Ediggatsti(nnsource, xsource, ysource, idsource, 
-		nntarget, xtarget, ytarget, idtarget, 
-		rrho, values) 
-     /* inputs */
-     int *nnsource, *nntarget;
-     double *xsource, *ysource, *xtarget, *ytarget;
-     int *idsource, *idtarget;
-     double *rrho;
-     /* output */
-     double *values;
-{
+void Ediggatsti(
+  /* inputs */
+  int   *nnsource, /* query points */
+  double *xsource,
+  double *ysource,
+  int   *idsource,
+  int   *nntarget, /* data points */
+  double *xtarget,
+  double *ytarget,
+  int   *idtarget,
+  double *rrho,    /* model parameter */
+  /* output */
+  double *values
+) {
   int nsource, ntarget, maxchunk, j, i, ileft, idsourcej;
   double xsourcej, ysourcej, xleft, dx, dy, dx2, d2;
   double rho, rho2, rho2pluseps, coef, product;

@@ -116,9 +116,96 @@ local({
 ##
 ##  Check validity of update.ppm
 ##
-##  $Revision: 1.7 $ $Date: 2020/11/02 07:07:42 $
+##  $Revision: 1.8 $ $Date: 2022/10/23 01:19:19 $
 
 local({
+  if(ALWAYS) {
+    require(spatstat.utils)
+    h <- function(m1, m2) {
+      mc <- short.deparse(sys.call())
+      cat(paste(mc, "\t... "))
+      m1name <- short.deparse(substitute(m1))
+      m2name <- short.deparse(substitute(m2))
+      if(!identical(names(coef(m1)), names(coef(m2))))
+        stop(paste("Differing results for", m1name, "and", m2name,
+                   "in updateppm.R"),
+             call.=FALSE)
+      cat("OK\n")
+    }
+    
+    X <- redwood[c(TRUE,FALSE)]
+    Y <- redwood[c(FALSE,TRUE)]
+    fit0f <- ppm(X ~ 1, nd=8)
+    fit0p <- ppm(X, ~1, nd=8)
+    fitxf <- ppm(X ~ x, nd=8)
+    fitxp <- ppm(X, ~x, nd=8)
+
+    cat("Basic consistency ...\n")
+    h(fit0f, fit0p)
+    h(fitxf, fitxp)
+  
+    cat("\nTest correct handling of model formulas ...\n")
+    h(update(fitxf, Y), fitxf)
+    h(update(fitxf, Q=Y), fitxf)
+    h(update(fitxf, Y~x), fitxf)
+    h(update(fitxf, Q=Y~x), fitxf)
+    h(update(fitxf, ~x), fitxf)
+  }
+
+  if(FULLTEST) {
+    h(update(fitxf, Y~1), fit0f)
+    h(update(fitxf, ~1), fit0f)
+    h(update(fit0f, Y~x), fitxf)
+    h(update(fit0f, ~x), fitxf)
+
+    h(update(fitxp, Y), fitxp)
+    h(update(fitxp, Q=Y), fitxp)
+    h(update(fitxp, Y~x), fitxp)
+    h(update(fitxp, Q=Y~x), fitxp)
+    h(update(fitxp, ~x), fitxp)
+
+    h(update(fitxp, Y~1), fit0p)
+    h(update(fitxp, ~1), fit0p)
+    h(update(fit0p, Y~x), fitxp)
+    h(update(fit0p, ~x), fitxp)
+  }
+
+  if(ALWAYS) {
+    cat("\nTest scope handling for left hand side ...\n")
+    X <- Y
+    h(update(fitxf), fitxf)
+  }
+
+  if(ALWAYS) {
+    cat("\nTest scope handling for right hand side ...\n")
+    Z <- distmap(X)
+    fitZf <- ppm(X ~ Z)
+    fitZp <- ppm(X, ~ Z)
+    h(update(fitxf, X ~ Z), fitZf)
+  }
+  if(FULLTEST) {
+    h(update(fitxp, X ~ Z), fitZp)
+    h(update(fitxf, . ~ Z), fitZf)
+    h(update(fitZf, . ~ x), fitxf)
+    h(update(fitZf, . ~ . - Z), fit0f)
+    h(update(fitxp, . ~ Z), fitZp)
+    h(update(fitZp, . ~ . - Z), fit0p)
+    h(update(fit0p, . ~ . + Z), fitZp)
+    h(update(fitZf, . ~ . ), fitZf)
+    h(update(fitZp, . ~ . ), fitZp)
+  }
+  if(ALWAYS) {
+    cat("\nTest use of internal data ...\n")
+    h(update(fitZf, ~ x, use.internal=TRUE), fitxf)
+    fitsin <- update(fitZf, X~sin(Z))
+    h(update(fitZf, ~ sin(Z), use.internal=TRUE), fitsin)
+  }
+  if(FULLTEST) {
+    cat("\nTest step() ... ")
+    fut <- ppm(X ~ Z + x + y, nd=8)
+    fut0 <- step(fut, trace=0)
+    cat("OK\n")
+  }
   
 })
 #

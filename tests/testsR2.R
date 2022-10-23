@@ -17,11 +17,22 @@ cat(paste("--------- Executing",
 #
 # test decisions about expansion of simulation window
 #
-#  $Revision: 1.8 $  $Date: 2022/01/05 02:06:32 $
+#  $Revision: 1.9 $  $Date: 2022/10/23 01:17:33 $
 #
 
 local({
   if(FULLTEST) {
+    ## check expansion in rmhmodel.ppm
+    fit <- ppm(cells ~x)
+    mod <- rmhmodel(fit)
+    is.expandable(mod)
+    wsim <- as.rectangle(mod$trend)
+    ## work around changes in 'unitname'
+    wcel <- as.owin(cells)
+    unitname(wcel) <- unitname(cells)
+    ## test
+    if(!identical(wsim, wcel))
+      stop("Expansion occurred improperly in rmhmodel.ppm")
   }
 })
 
@@ -173,12 +184,28 @@ print(m)
 #  Test that rmhmodel.ppm and rmhmodel.default
 #  work on Hybrid interaction models
 #
-#   $Revision: 1.5 $  $Date: 2020/05/01 05:29:42 $
+#   $Revision: 1.6 $  $Date: 2022/10/23 01:17:56 $
 #
 
 if(ALWAYS) { # involves C code
 local({
     
+    ## ......... rmhmodel.ppm .......................
+    fit1 <- ppm(redwood ~1,
+                Hybrid(A=Strauss(0.02), B=Geyer(0.1, 2), C=Geyer(0.15, 1)))
+    m1 <- rmhmodel(fit1)
+    m1
+    reach(m1)
+
+    ## Test of handling 'IsOffset' 
+    fit2 <- ppm(cells ~1, Hybrid(H=Hardcore(0.05), G=Geyer(0.15, 2)))
+    m2 <- rmhmodel(fit2)
+    ## also test C code for hybrid interaction with hard core
+    fakecells <- rmh(fit2, nrep=1e4)
+
+    ## Test of handling Poisson components
+    fit3 <- ppm(cells ~1, Hybrid(P=Poisson(), S=Strauss(0.05)))
+    X3 <- rmh(fit3, control=list(nrep=1e3,expand=1), verbose=FALSE)
 
 
 })
@@ -307,18 +334,13 @@ reset.spatstat.options()
 #'
 #'   Test the rmh interactive debugger
 #' 
-#'   $Revision: 1.10 $  $Date: 2020/05/01 05:29:42 $
+#'   $Revision: 1.11 $  $Date: 2022/10/23 01:19:00 $
 
 if(ALWAYS) { # may depend on platform
 local({
   R <- 0.1
-  ## define a model and prepare to simulate
-  W <- Window(amacrine)
-  t1 <- as.im(function(x,y){exp(8.2+0.22*x)}, W)
-  t2 <- as.im(function(x,y){exp(8.3+0.22*x)}, W)
-  model <- rmhmodel(cif="strauss",
-                    trend=solist(off=t1, on=t2),
-                    par=list(gamma=0.47, r=R, beta=c(off=1, on=1)))
+  ## fit a model and prepare to simulate
+  model <- ppm(amacrine ~ marks + x, Strauss(R))
   siminfo <- rmh(model, preponly=TRUE)
   Wsim <- siminfo$control$internal$w.sim
   Wclip <- siminfo$control$internal$w.clip

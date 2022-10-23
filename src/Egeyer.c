@@ -7,7 +7,7 @@
 
   Egeyer.c
 
-  $Revision: 1.7 $     $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.9 $     $Date: 2022/10/22 10:09:51 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -25,17 +25,23 @@
 
 */
 
-double sqrt();
+double sqrt(double x);
 
-void Egeyer(nnquad, xquad, yquad, quadtodata,
-	    nndata, xdata, ydata, tdata,
-	    rrmax, ssat, result) 
-/* inputs */
-     int *nnquad, *nndata, *quadtodata, *tdata;
-     double *xquad, *yquad, *xdata, *ydata, *rrmax, *ssat;
-     /* output */
-     double *result;
-{
+void Egeyer(
+  /* inputs */
+  int *nnquad,
+  double *xquad,
+  double *yquad,
+  int *quadtodata,
+  int *nndata,
+  double *xdata,
+  double *ydata,
+  int *tdata,
+  double *rrmax,
+  double *ssat,
+  /* output */
+  double *result
+) {
   int nquad, ndata, maxchunk, j, i, ileft, dataindex, isdata;
   double xquadj, yquadj, rmax, sat, r2max, r2maxpluseps, xleft, dx, dy, dx2, d2;
   double tbefore, tafter, satbefore, satafter, delta, totalchange;

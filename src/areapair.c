@@ -2,7 +2,7 @@
 
   areapair.c
 
-  $Revision: 1.7 $     $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.8 $     $Date: 2022/10/20 10:57:43 $
 
   Specialised code for the second order conditional intensity
   of the area-interaction process
@@ -19,15 +19,18 @@
 
 /* computes area of b(A, r) \int b(B, r) \setminus \bigcup_i b(X[i], r) */
 
-void delta2area(xa, ya, xb, yb, 
-		nother, xother, yother,
-		radius, epsilon, pixcount) 
-     double *xa, *ya, *xb, *yb;
-     int *nother;
-     double *xother, *yother;
-     double *radius, *epsilon;
-     int *pixcount;
-{ 
+void delta2area(
+  double *xa,
+  double *ya,
+  double *xb,
+  double *yb,
+  int *nother,
+  double *xother,
+  double *yother,
+  double *radius,
+  double *epsilon,
+  int *pixcount
+) { 
   int Ni, Nj, Nk, i, j, k, count, covered;
   double xA, yA, xB, yB, r, eps, r2;
   double xmin, xmax, ymin, ymax, xi, yj;

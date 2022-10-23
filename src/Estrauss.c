@@ -6,7 +6,7 @@
 
   Estrauss.c
 
-  $Revision: 1.6 $     $Date: 2020/11/30 10:58:22 $
+  $Revision: 1.8 $     $Date: 2022/10/22 10:09:51 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -22,17 +22,20 @@
 
 */
 
-double sqrt();
+double sqrt(double x);
 
-void Ccrosspaircounts(nnsource, xsource, ysource, 
-		     nntarget, xtarget, ytarget, 
-		     rrmax, counts) 
-/* inputs */
-     int *nnsource, *nntarget;
-     double *xsource, *ysource, *xtarget, *ytarget, *rrmax;
-     /* output */
-     int *counts;
-{
+void Ccrosspaircounts(
+  /* inputs */
+  int *nnsource,
+  double *xsource,
+  double *ysource,
+  int *nntarget,
+  double *xtarget,
+  double *ytarget,
+  double *rrmax,
+  /* output */
+  int *counts
+) {
   int nsource, ntarget, maxchunk, j, i, ileft, counted;
   double xsourcej, ysourcej, rmax, r2max, r2maxpluseps, xleft, dx, dy, dx2, d2;
 
@@ -80,14 +83,15 @@ void Ccrosspaircounts(nnsource, xsource, ysource,
 
 /* count for each i the number of j closer than distance r */
 
-void Cclosepaircounts(nxy, x, y, rmaxi, counts) 
-     /* inputs */
-     int *nxy;         /* number of (x,y) points */
-     double *x, *y;    /* (x,y) coordinates */
-     double *rmaxi;    /* maximum distance */
-     /* output VECTOR, assumed initialised to 0 */
-     int *counts;
-{
+void Cclosepaircounts(
+  /* inputs */
+  int *nxy,         /* number of (x,y) points */
+  double *x,
+  double *y,        /* (x,y) coordinates */
+  double *rmaxi,    /* maximum distance */
+  /* output VECTOR, assumed initialised to 0 */
+  int *counts
+) {
   int n, maxchunk, i, j;
   double xi, yi, rmax, r2max, dx, dy, a;
 

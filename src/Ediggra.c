@@ -7,7 +7,7 @@
 
   Ediggra.c
 
-  $Revision: 1.8 $     $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.10 $     $Date: 2022/10/22 10:09:51 $
 
   C implementation of 'eval' for DiggleGratton interaction (exponentiated)
 
@@ -18,19 +18,26 @@
 
 */
 
-double sqrt();
+double sqrt(double x);
 
-void Ediggra(nnsource, xsource, ysource, idsource, 
-	     nntarget, xtarget, ytarget, idtarget, 
-	     ddelta, rrho, values) 
-     /* inputs */
-     int *nnsource, *nntarget;
-     double *xsource, *ysource, *xtarget, *ytarget;
-     int *idsource, *idtarget;
-     double *ddelta, *rrho;
-     /* output */
-     double *values;
-{
+void Ediggra(
+  /* inputs */
+  /* query points */
+  int *nnsource,  
+  double *xsource,
+  double *ysource,
+  int *idsource,
+  /* data points */
+  int *nntarget,  
+  double *xtarget,
+  double *ytarget,
+  int *idtarget,
+  /* model parameters */
+  double *ddelta, 
+  double *rrho,
+  /* output */
+  double *values
+) {
   int nsource, ntarget, maxchunk, j, i, ileft, idsourcej;
   double xsourcej, ysourcej, xleft, dx, dy, dx2, d2;
   double delta, rho, delta2, rho2, rho2pluseps, rhominusdelta;
@@ -97,18 +104,22 @@ void Ediggra(nnsource, xsource, ysource, idsource,
 
 /* 'split' version separating hard core terms from others */
 
-void ESdiggra(nnsource, xsource, ysource, idsource, 
-	      nntarget, xtarget, ytarget, idtarget, 
-	      ddelta, rrho, positive, hardcore) 
-     /* inputs */
-     int *nnsource, *nntarget;
-     double *xsource, *ysource, *xtarget, *ytarget;
-     int *idsource, *idtarget;
-     double *ddelta, *rrho;
-     /* output */
-     double *positive;
-     int *hardcore;
-{
+void ESdiggra(
+  /* inputs */
+  int *nnsource,
+  double *xsource,
+  double *ysource,
+  int *idsource,
+  int *nntarget,
+  double *xtarget,
+  double *ytarget,
+  int *idtarget,
+  double *ddelta,
+  double *rrho,
+  /* output */
+  double *positive,
+  int *hardcore
+) {
   int nsource, ntarget, maxchunk, j, i, ileft, idsourcej;
   double xsourcej, ysourcej, xleft, dx, dy, dx2, d2;
   double delta, rho, delta2, rho2, rho2pluseps, rhominusdelta;
