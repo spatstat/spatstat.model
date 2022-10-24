@@ -150,7 +150,7 @@
     \code{\link[stats]{optim}}
     (renamed as the argument \code{method} to \code{\link[stats]{optim}})
     with default \code{"Nelder-Mead"}.
-    If \code{method="adapcl"}) the argument is passed to the
+    If \code{method="adapcl"} the argument is passed to the
     equation solver \code{\link[nleqslv]{nleqslv}}
     (renamed as the argument \code{method} to \code{\link[nleqslv]{nleqslv}})
     with default \code{"Bryden"}.
@@ -310,25 +310,29 @@
 	\sum_{i,j} w(x_i, x_j) \log \lambda_P(x_j \mid x_i; \theta)
 	- \int_D w(x_i, u) \lambda_P(u \mid x_i; \theta) {\rm d} u
       }{
-	sum[i,j] w(x[i], x[j]) log(lambdaP(x[j] | x[i]; theta)
+	sum[i,j] w(x[i], x[j]) log(lambdaP(x[j] | x[i]; theta))
 	- integral[D] w(x[i], u) lambdaP(u | x[i]; theta) du
       }
       with the same notation as above. Here
-      \eqn{\lambda_P(u|v;\theta}{lambdaP(u|v;theta)} is the Palm intensity of
+      \eqn{\lambda_P(u|v;\theta)}{lambdaP(u|v;theta)} is the Palm intensity of
       the model at location \eqn{u} given there is a point at \eqn{v}.
 
       The optimisation is performed by the generic
       optimisation algorithm \code{\link[stats]{optim}}.
     }
-   \item{Adaptive Composite likelihood:}{
+    \item{Adaptive Composite likelihood:}{
       If \code{method = "cladap"} the clustering parameters of the
       model will be fitted by solving the adaptive second order 
       composite likelihood estimating equation (Lavancier et al, 2021).
       The estimating function is
       \deqn{
-	\sum_{u, v} w(\epsilon \frac{| g(0; \theta) - 1 |}{g(\|u-v\|; \theta)-1}) 
-	\frac{\nabla_\theta g(\|u-v\|;\theta)}{g(\|u-v\|;\theta)} - 
-	\int_D \int_D w(\epsilon \frac{M(u,v; \theta)} \nabla_\theta g(\|u-v\|; \theta) 
+	\sum_{u, v}
+	w(\epsilon \frac{| g(0; \theta) - 1 |}{g(\|u-v\|; \theta)-1})
+  	\frac{\nabla_\theta g(\|u-v\|;\theta)}{g(\|u-v\|;\theta)}
+	- 
+	\int_D \int_D
+	w(\epsilon \frac{ | g(u,v; \theta) - 1|}{g(\|u-v\|; \theta)-1})
+	\nabla_\theta g(\|u-v\|; \theta) 
 	\rho(u) \rho(v)\, du\, dv
       }{
 	\sum[u,v] w(epsilon |g(0; theta)-1|/(g(||u-v||; theta)-1)) 
@@ -355,14 +359,57 @@
       \eqn{
 	w(d) = 1(\|d\| \le 1) \exp(1/(r^2-1))}{w(d) = 1(||d|| \le 1)
 	exp(1/(d^2-1))
-      }.
+      }
       The estimating equation is solved using the
       nonlinear equation solver \code{\link[nleqslv]{nleqslv}}
       from the package \pkg{nleqslv}. The package \pkg{nleqslv}
       must be installed in order to use this option.
-    }    
+    }   
   }
+}
+\section{Cluster parameters for Neyman-Scott models}{
+  For Neyman-Scott models, the fitting procedure searches
+  for the best-fitting values of the parameters
+  that control the intensity of parents and the physical scale
+  of the clusters. (Any parameters that control the shape of the clusters
+  must be specified separately and are assumed to be fixed.)
 
+  The fitted object \code{fit} contains the fitted cluster parameters as
+  the element \code{fit$par} in the format described below.
+  Initial estimates for these cluster
+  parameters can be specified using the argument \code{startpar} in the
+  same format.
+  
+  The cluster parameters will be stored in a \emph{named} numeric vector
+  \code{par} of length 2. The first value is always \code{kappa},
+  the intensity of parents (cluster centres).
+  The format is as follows:
+  \itemize{
+    \item
+    for \code{clusters="Thomas"},
+    a vector \code{c(kappa, sigma2)} where
+    \code{sigma2} is the square of the cluster standard deviation;
+    \item
+    for \code{clusters="MatClust"},
+    a vector \code{c(kappa, R)} where
+    \code{R} is the radius of the cluster;
+    \item
+    for \code{clusters="Cauchy"},
+    a vector \code{c(kappa, eta2)} where
+    \code{eta2 = code{4 * scale^2}}
+    where \code{scale} is the scale parameter for the model
+    as used in \code{\link{rCauchy}};
+    \item
+    for \code{clusters="VarGamma"},
+    a vector \code{c(kappa, eta)} where
+    \code{eta} is equivalent to the
+    scale parameter \code{omega} used in  \code{\link{rVarGamma}}.
+  }
+  
+  For \code{clusters="VarGamma"} it will be necessary to specify
+  the shape parameter \code{nu} as described in the help for
+  \code{\link{rVarGamma}}. This is specified separately as an argument
+  \code{nu} in the call to \code{kppm}.
 }
 \section{Optimization algorithm}{
   The following details allow greater control over the fitting

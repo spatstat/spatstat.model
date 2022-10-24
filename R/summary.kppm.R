@@ -1,7 +1,7 @@
 #'
 #'       summary.kppm.R
 #'
-#'   $Revision: 1.37 $  $Date: 2022/02/21 02:24:17 $
+#'   $Revision: 1.38 $  $Date: 2022/10/23 07:37:37 $
 #' 
 
 summary.kppm <- function(object, ..., quick=FALSE) {
@@ -83,15 +83,25 @@ print.summary.kppm <- function(x, ...) {
   Fit <- x$Fit
   
   if(waxlyrical('gory', terselevel)) {
+    fittedby <- "Fitted by"
     switch(Fit$method,
            mincon = {
-             splat("Fitted by minimum contrast")
+             splat(fittedby, "minimum contrast")
              splat("\tSummary statistic:", Fit$StatName)
              print(Fit$mcfit)
            },
            clik  =,
            clik2 = {
-             splat("Fitted by maximum second order composite likelihood")
+             splat(fittedby, "maximum second order composite likelihood")
+             splat("\trmax =", Fit$rmax)
+             if(!is.null(wtf <- Fit$weightfun)) {
+               a <- attr(wtf, "selfprint") %orifnull% pasteFormula(wtf)
+               splat("\tweight function:", a)
+             }
+             printStatus(x$optim.status)
+           },
+           palm = {
+             splat(fittedby, "maximum Palm likelihood")
              splat("\trmax =", Fit$rmax)
              if(!is.null(wtf <- Fit$weightfun)) {
                a <- attr(wtf, "selfprint") %orifnull% pasteFormula(wtf)
@@ -106,15 +116,6 @@ print.summary.kppm <- function(x, ...) {
                a <- attr(wtf, "selfprint") %orifnull% pasteFormula(wtf)
                splat("\tweight function:", a)
              }
-           },
-           palm = {
-             splat("Fitted by maximum Palm likelihood")
-             splat("\trmax =", Fit$rmax)
-             if(!is.null(wtf <- Fit$weightfun)) {
-               a <- attr(wtf, "selfprint") %orifnull% pasteFormula(wtf)
-               splat("\tweight function:", a)
-             }
-             printStatus(x$optim.status)
            },
            warning(paste("Unrecognised fitting method", sQuote(Fit$method)))
            )

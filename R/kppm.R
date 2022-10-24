@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.215 $ $Date: 2022/08/09 03:30:35 $
+# $Revision: 1.216 $ $Date: 2022/10/23 07:37:48 $
 #
 
 
@@ -1459,14 +1459,15 @@ print.kppm <- print.dppm <- function(x, ...) {
   }
 
   if(waxlyrical('gory', terselevel)) {
+    fittedby <- "Fitted by"
     switch(x$Fit$method,
            mincon = {
-             splat("Fitted by minimum contrast")
+             splat(fittedby, "minimum contrast")
              splat("\tSummary statistic:", x$Fit$StatName)
            },
            clik  =,
            clik2 = {
-             splat("Fitted by maximum second order composite likelihood")
+             splat(fittedby, "maximum second order composite likelihood")
              splat("\trmax =", x$Fit$rmax)
              if(!is.null(wtf <- x$Fit$weightfun)) {
                a <- attr(wtf, "selfprint") %orifnull% pasteFormula(wtf)
@@ -1474,7 +1475,7 @@ print.kppm <- print.dppm <- function(x, ...) {
              }
            },
            palm = {
-             splat("Fitted by maximum Palm likelihood")
+             splat(fittedby, "maximum Palm likelihood")
              splat("\trmax =", x$Fit$rmax)
              if(!is.null(wtf <- x$Fit$weightfun)) {
                a <- attr(wtf, "selfprint") %orifnull% pasteFormula(wtf)

@@ -1,12 +1,9 @@
 
-        CHANGES IN spatstat.model VERSION 2.999-999.026
+        CHANGES IN spatstat.model VERSION 3.0-0
 
 OVERVIEW
 
     o New package
-
-    o Package will be initialised at version 3.0-0.
-      Versions less than 3 are developmental.
 
     o We thank Achmad Choiruddin and Suman Rakshit for contributions.
     
