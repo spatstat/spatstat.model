@@ -143,18 +143,15 @@
   fit <- ppm(cells ~ x, Strauss(0.1), correction="periodic")
   fit
   coef(fit)
-  # pred <- predict(fit)
+  \donttest{
+    pred <- predict(fit)
+  }
   pred <- predict(fit, ngrid=20, type="trend")
   if(interactive()) {
   plot(fit)
   }  
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
-}
+\author{\adrian and \rolf.}
 \keyword{spatial}
 \keyword{attribute}
  

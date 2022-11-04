@@ -80,17 +80,16 @@ which can then be fitted to point pattern data.
    Strauss(r=0.1)
    # prints a sensible description of itself
 
-   # ppm(cells ~1, Strauss(r=0.07))
-   # fit the stationary Strauss process to `cells'
+   \donttest{
+     ppm(cells ~1, Strauss(r=0.07))
+     # fit the stationary Strauss process to `cells'
+   }
 
    ppm(cells ~polynom(x,y,3), Strauss(r=0.07))
    # fit a nonstationary Strauss process with log-cubic polynomial trend
 }
 \author{\adrian
-  
-  
-  and \rolf
-  
+  and \rolf.
 }
 \keyword{spatial}
 \keyword{models}

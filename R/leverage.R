@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.122 $ $Date: 2022/06/18 10:00:47 $
+#  $Revision: 1.123 $ $Date: 2022/11/03 11:08:33 $
 #
 
 leverage <- function(model, ...) {
@@ -975,8 +975,8 @@ persp.leverage.ppm <- function(x, ..., what=c("smooth", "nearest"),
   if(is.null(y)) return(invisible(NULL))
   if(is.im(y)) return(persp(y, main=main, ..., zlab=zlab))
   pa <- par(ask=TRUE)
+  on.exit(par(pa))
   lapply(y, persp, main=main, ..., zlab=zlab)
-  par(pa)
   return(invisible(NULL))
 }
   

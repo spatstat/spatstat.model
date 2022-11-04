@@ -47,8 +47,10 @@
   \code{\link{predict.ppm}}
 }
 \examples{
- # m <- ppm(cells ~1, Strauss(0.05))
- # m
+ \donttest{
+   m <- ppm(cells ~1, Strauss(0.05))
+   m
+  }
 }
 \author{\adrian
   

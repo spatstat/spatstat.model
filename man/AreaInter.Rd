@@ -181,7 +181,9 @@
    # eta=0 indicates hard core process.
 
    # Fit a nonstationary area interaction with log-cubic polynomial trend
-   #   ppm(swedishpines ~polynom(x/10,y/10,3), AreaInter(r=7))
+   \donttest{
+     ppm(swedishpines ~polynom(x/10,y/10,3), AreaInter(r=7))
+   }
 
    \testonly{spatstat.options(op)}
 }

@@ -73,9 +73,11 @@ which can then be fitted to point pattern data.
    ppm(cells ~1, DiggleGatesStibbard(0.05))
    # fit the stationary D-G-S process to `cells'
 
-   # ppm(cells ~ polynom(x,y,3), DiggleGatesStibbard(0.05))
-   # fit a nonstationary D-G-S process
-   # with log-cubic polynomial trend
+   \donttest{
+     ppm(cells ~ polynom(x,y,3), DiggleGatesStibbard(0.05))
+     # fit a nonstationary D-G-S process
+     # with log-cubic polynomial trend
+   }
 }
 \author{
   \spatstatAuthors

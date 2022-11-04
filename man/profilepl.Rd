@@ -198,10 +198,12 @@ profilepl(s, f, \dots, aic=FALSE, rbord=NULL, verbose = TRUE, fast=TRUE)
     ## more information 
     summary(pg)
 
+    \donttest{
     # multitype pattern with a common interaction radius
-    # RR <- data.frame(R=seq(0.03,0.05,by=0.01))
-    # MS <- function(R) { MultiStrauss(radii=diag(c(R,R))) }
-    # pm <- profilepl(RR, MS, amacrine ~marks)
+    RR <- data.frame(R=seq(0.03,0.05,by=0.01))
+    MS <- function(R) { MultiStrauss(radii=diag(c(R,R))) }
+    pm <- profilepl(RR, MS, amacrine ~marks)
+    }
 
 }
 \references{

@@ -83,8 +83,10 @@ which can then be fitted to point pattern data.
    ppm(X ~1, MultiStrauss(r))
    # fit the stationary multitype Strauss process to `amacrine'
 
-   # ppm(X ~polynom(x,y,3), MultiStrauss(r, c("off","on")))
-   # fit a nonstationary multitype Strauss process with log-cubic trend
+   \donttest{
+     ppm(X ~polynom(x,y,3), MultiStrauss(r, c("off","on")))
+     # fit a nonstationary multitype Strauss process with log-cubic trend
+   }
 }
 \section{Warnings}{
   In order that \code{\link{ppm}} can fit the multitype Strauss
@@ -100,12 +102,6 @@ which can then be fitted to point pattern data.
   \code{MultiStrauss(types=NULL, radii)}.
   The new code attempts to handle the old syntax as well.
 }
-\author{\adrian
-  
-  ,
-  \rolf
-  
-  and \ege
-}
+\author{\spatstatAuthors.}
 \keyword{spatial}
 \keyword{models}

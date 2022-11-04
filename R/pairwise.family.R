@@ -2,7 +2,7 @@
 #
 #    pairwise.family.S
 #
-#    $Revision: 1.74 $	$Date: 2022/03/09 01:54:53 $
+#    $Revision: 1.75 $	$Date: 2022/11/03 11:08:33 $
 #
 #    The pairwise interaction family of point process models
 #

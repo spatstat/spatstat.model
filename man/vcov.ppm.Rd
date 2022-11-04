@@ -191,13 +191,13 @@
 }
 \examples{
   X <- rpoispp(42)
-  fit <- ppm(X, ~ x + y)
+  fit <- ppm(X ~ x + y)
   vcov(fit)
   vcov(fit, what="Fish")
 
   # example of singular system
   m <- ppm(demopat ~polynom(x,y,2))
-  \dontrun{
+  \donttest{
     try(v <- vcov(m))
   }
   # rescale x, y coordinates to range [0,1] x [0,1] approximately
@@ -212,13 +212,11 @@
 }
 \author{
   Original code for Poisson point process was written by
-  \adrian 
-  
-  and \rolf .
+  \adrian and \rolf.
   New code for stationary Gibbs point processes was generously contributed by
   \ege and Jean-\Francois Coeurjolly.
   New code for generic Gibbs process written by \adrian.
-  New code for logistic method contributed by \ege.
+  New code for logistic method written by \ege.
 }
 \seealso{
   \code{\link{vcov}} for the generic,

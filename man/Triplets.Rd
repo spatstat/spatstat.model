@@ -87,14 +87,13 @@ which can then be fitted to point pattern data.
    ppm(cells ~1, Triplets(r=0.2))
    # fit the stationary Triplets process to `cells'
 
-   # ppm(cells ~polynom(x,y,3), Triplets(r=0.2))
-   # fit a nonstationary Triplets process with log-cubic polynomial trend
+   \donttest{
+     ppm(cells ~polynom(x,y,3), Triplets(r=0.2))
+     # fit a nonstationary Triplets process with log-cubic polynomial trend
+   }
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{models}

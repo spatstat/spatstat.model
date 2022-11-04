@@ -111,14 +111,13 @@
    ppm(cells ~1, SatPiece(c(0.07, 0.1, 0.13), 2))
    # fit a stationary piecewise constant Saturated pairwise interaction process
 
-   # ppm(cells ~polynom(x,y,3), SatPiece(c(0.07, 0.1, 0.13), 2))
-   # nonstationary process with log-cubic polynomial trend
+   \donttest{
+     ppm(cells ~polynom(x,y,3), SatPiece(c(0.07, 0.1, 0.13), 2))
+     # nonstationary process with log-cubic polynomial trend
+   }
 }
 \author{\adrian
-  
-  
   and \rolf
-  
   in collaboration with Hao Wang and Jeff Picka
 }
 \keyword{spatial}

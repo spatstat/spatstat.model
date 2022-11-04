@@ -334,13 +334,14 @@
        qqplot.ppm(fit, 4, type="pearson")
     }
 
-    # capture the plot coordinates
-    # mypreciousdata <- qqplot.ppm(fit, type="pearson")
-    # mypreciousdata <- qqplot.ppm(fit, 4, type="pearson")
-    # plot(mypreciousdata)
-
-    ##     use the idiom .Last.value if you forgot to assign them
-    mypreciousdata <- .Last.value
+    \donttest{
+      # capture the plot coordinates
+      mypreciousdata <- qqplot.ppm(fit, 4, type="pearson")
+      ## or use the idiom .Last.value if you forgot to assign them
+      qqplot.ppm(fit, 4, type="pearson")
+      mypreciousdata <- .Last.value
+      plot(mypreciousdata)
+    }
 
     ######################################################
     # Q-Q plots based on fixed n

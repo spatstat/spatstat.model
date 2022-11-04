@@ -3,7 +3,7 @@
 #
 # Test statistics from Berman (1986)
 #
-#  $Revision: 1.24 $  $Date: 2022/05/22 02:23:18 $
+#  $Revision: 1.25 $  $Date: 2022/11/03 11:08:33 $
 #
 #
 

@@ -3,7 +3,7 @@
 #
 #  Huang-Ogata method 
 #
-#  $Revision: 1.17 $ $Date: 2016/03/15 07:42:26 $
+#  $Revision: 1.18 $ $Date: 2022/11/03 11:08:33 $
 #
 
 ho.engine <- function(model, ..., nsim=100, nrmh=1e5,

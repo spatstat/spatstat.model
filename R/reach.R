@@ -1,7 +1,7 @@
 #
 #   reach.R
 #
-#  $Revision: 1.9 $   $Date: 2022/01/04 05:30:06 $
+#  $Revision: 1.10 $   $Date: 2022/11/03 11:08:33 $
 #
 
 ## The generic 'reach' is now in spatstat.random

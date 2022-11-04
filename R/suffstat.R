@@ -3,7 +3,7 @@
 #
 # calculate sufficient statistic
 #
-#  $Revision: 1.18 $  $Date: 2022/06/18 10:31:11 $
+#  $Revision: 1.19 $  $Date: 2022/11/03 11:08:33 $
 #
 #
 

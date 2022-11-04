@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.216 $ $Date: 2022/10/23 07:37:48 $
+# $Revision: 1.217 $ $Date: 2022/11/03 11:08:33 $
 #
 
 
@@ -1597,7 +1597,10 @@ plot.kppm <- local({
       }
     }
     pause <- pause && (length(what) > 1)
-    if(pause) opa <- par(ask=TRUE)
+    if(pause) {
+       opa <- par(ask=TRUE)
+       on.exit(par(opa))
+    }
     for(style in what)
       switch(style,
              intensity={
@@ -1613,7 +1616,6 @@ plot.kppm <- local({
                plotem(clusterfield(x, locations = loc, verbose=FALSE), ...,
                       dmain=c(xname, "Fitted cluster"))
              })
-    if(pause) par(opa)
     return(invisible(NULL))
   }
 

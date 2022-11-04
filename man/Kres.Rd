@@ -89,8 +89,10 @@
     }
 
 # How to make envelopes
-    # E <- envelope(fit1, Kres, model=fit1, nsim=19)
-    # plot(E)
+    \donttest{
+      E <- envelope(fit1, Kres, model=fit1, nsim=19)
+      plot(E)
+    }
 
 # For computational efficiency
     Kc <- Kcom(fit1)

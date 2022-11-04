@@ -3,7 +3,7 @@
 #
 # engine of plot method for ppm
 #
-# $Revision: 1.22 $  $Date: 2020/12/19 05:25:06 $
+# $Revision: 1.23 $  $Date: 2022/11/04 10:46:08 $
 #
 #
 
@@ -52,10 +52,10 @@ plot.plotppm <- function(x,data=NULL,trend=TRUE,cif=TRUE,se=TRUE,
   }
   
   # start plotting
-  if(pause)
+  if(pause) {
     oldpar <- par(ask = TRUE)
-  on.exit(if(pause) par(oldpar))
-
+    on.exit(par(oldpar))
+  }
   
   for(ttt in surftypes) {
     xs <- x[[ttt]]
