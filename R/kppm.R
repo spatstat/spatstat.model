@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.217 $ $Date: 2022/11/03 11:08:33 $
+# $Revision: 1.218 $ $Date: 2022/11/06 07:29:32 $
 #
 
 
@@ -384,7 +384,6 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
     algorithm <- alg$algorithm
   }
 
-  dots <- info$resolveshape(...)
   #' determine initial values of parameters
   startpar <- info$checkpar(startpar, native=TRUE)
   #' code to compute the theoretical summary function of the model
@@ -392,6 +391,10 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
   #' explanatory text
   desc <- paste("minimum contrast fit of", info$descname)
 
+  #' determine shape parameters if any
+  dots <- info$resolveshape(...)
+  margs <- dots$margs
+  
 
   #'
   mcargs <- resolve.defaults(list(observed=Stat,
@@ -561,6 +564,7 @@ kppmComLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE,
     shapemodel <- do.call(resolveshape, clustargs)$covmodel
   } else shapemodel <- NULL
   pcfunargs <- shapemodel
+  margs <- pcfunargs$margs
   # determine starting parameter values
   startpar <- selfstart(X)
   
@@ -836,6 +840,7 @@ kppmPalmLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE, 
     shapemodel <- do.call(resolveshape, clustargs)$covmodel
   } else shapemodel <- NULL
   pcfunargs <- shapemodel
+  margs <- pcfunargs$margs
   # determine starting parameter values
   startpar <- selfstart(X)
   

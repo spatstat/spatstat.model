@@ -1,4 +1,16 @@
 
+        CHANGES IN spatstat.model VERSION 3.0-3
+
+OVERVIEW
+
+    o Palm intensity diagnostic.
+
+NEW FUNCTIONS
+
+    o palmdiagnose, plot.palmdiag
+    Palm intensity diagnostic plot for cluster process models
+    proposed by Tanaka, Ogata and Stoyan.
+
         CHANGES IN spatstat.model VERSION 3.0-2
 
 OVERVIEW
