@@ -6,7 +6,7 @@
 ## Copyright (c) Adrian Baddeley 2022
 ## GNU Public Licence >= 2.0
 ##
-##  $Revision: 1.2 $ $Date: 2022/11/06 09:14:21 $
+##  $Revision: 1.3 $ $Date: 2022/11/09 08:40:30 $
 
 palmdiagnose <- function(object, ..., breaks=30, trim=30, rmax=Inf) {
   if(missing(object)) {
@@ -99,7 +99,7 @@ palmdiagnose <- function(object, ..., breaks=30, trim=30, rmax=Inf) {
 
 plot.palmdiag <- function(x, ..., style=c("intervals", "dots", "bands"),
                           args.dots=list(pch=16), args.intervals=list(),
-                          main) {
+                          xlim=NULL, main) {
   if(missing(main))
     main <- short.deparse(substitute(x))
   style <- match.arg(style)
@@ -111,13 +111,17 @@ plot.palmdiag <- function(x, ..., style=c("intervals", "dots", "bands"),
          intervals = {
            fitnames <- attr(x, "fitnames")
            fmla <- as.formula(paste("cbind", paren(paste(fitnames, collapse=", ")), "~ r"))
+           if(is.null(xlim)) xlim <- attr(x, "alim")
+           rvals <- getElement(x, name=fvnames(x, ".x"))
+           xsub <- x[inside.range(rvals, xlim), ]
            z <- do.call(plot.fv,
                         resolve.defaults(list(quote(x)),
                                          list(fmla,
                                               shade=NULL,
                                               main=main),
                                          list(...),
-                                         list(ylim=range(x, na.rm=TRUE))
+                                         list(xlim=xlim,
+                                              ylim=range(xsub, na.rm=TRUE))
                                          ))
            b <- attr(x, "breaks")
            rmid <- (b[-1] + b[-length(b)])/2

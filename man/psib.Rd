@@ -33,7 +33,8 @@
   suggesting strong clustering.
 
   This concept was proposed in Baddeley, Rubak and Turner (2015, page 479)
-  and Baddeley (2017).
+  and Baddeley (2017). It was shown in Baddeley et al (2022) that
+  the sibling probability is directly related to the strength of clustering.
 }
 \value{
   A single number.
@@ -44,12 +45,18 @@
   \emph{Spatial Statistics} \bold{22}, 261--295.
 
   \baddrubaturnbook
+
+  Baddeley, A., Davies, T.M., Hazelton, M.L., Rakshit, S. and Turner, R. 
+  (2022)
+  Fundamental problems in fitting spatial cluster process models.
+  \emph{Spatial Statistics} \bold{52}, 100709.
+  DOI: \code{10.1016/j.spasta.2022.100709}
 }
 \author{
   \adrian.
 }
 \seealso{
-  \code{\link{kppm}}
+  \code{\link{kppm}}, \code{\link{panysib}}
 }
 \examples{
   fit <- kppm(redwood ~1, "Thomas")

@@ -8,7 +8,7 @@
   of the number of points in a nominated set \code{B}.
 }
 \usage{
-varcount(model, B=Window(model), \dots, dimyx = NULL)
+varcount(model, B=Window(model), \dots, dimyx = NULL, relative=FALSE)
 }
 \arguments{
   \item{model}{
@@ -31,19 +31,28 @@ varcount(model, B=Window(model), \dots, dimyx = NULL)
     Spatial resolution for the calculations.
     Argument passed to \code{\link{as.mask}}.
   }
+  \item{relative}{
+    Logical value specifying whether to divide the variance
+    by the mean value.
+  }
 }
 \details{
-  This command calculates the variance of the number of points
+  The function \code{varcount} calculates the variance of the number of points
   falling in a specified window \code{B} according to the \code{model}.
   It can also calculate the variance of a sum of weights attached
   to each random point.
 
+  If \code{relative=FALSE} (the default), the result is the variance.
+  If \code{relative=TRUE}, the result is the variance divided by the
+  mean, which is the overdispersion index (equal to 1 if the number of
+  points has a Poisson distribution).
+  
   The \code{model} should be a fitted point process model
   (object of class \code{"ppm"}, \code{"kppm"} or \code{"dppm"}).
 
   \itemize{
     \item{
-      If \code{B} is a window, this command calculates the variance
+      If \code{B} is a window, \code{varcount} calculates the variance
       of the number of points falling in \code{B}, according to the
       fitted \code{model}.
 
@@ -53,7 +62,7 @@ varcount(model, B=Window(model), \dots, dimyx = NULL)
     }
     \item{
       If \code{B} is a pixel image,
-      this command calculates the variance of
+      \code{varcount} calculates the variance of
       \eqn{T = \sum_i B(x_i)}{T = sum[i] B(x[i])},
       the sum of the values of \code{B} over all random points
       falling in the domain of the image.
@@ -65,7 +74,7 @@ varcount(model, B=Window(model), \dots, dimyx = NULL)
     }
     \item{
       If \code{B} is a \code{function(x,y)} or \code{function(x,y,...)}
-      this command calculates the variance of
+      then \code{varcount} calculates the variance of
       \eqn{T = \sum_i B(x_i)}{T = sum[i] B(x[i])},
       the sum of the values of \code{B} over all random points
       falling inside the window \code{W=as.owin(model)}, the window

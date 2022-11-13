@@ -3,10 +3,11 @@
 #'
 #'   Variance of N(B)
 #'
-#'  $Revision: 1.15 $  $Date: 2021/08/12 09:28:12 $
+#'  $Revision: 1.18 $  $Date: 2022/11/08 04:21:32 $
 #'
 
-varcount <- function(model, B=Window(model), ..., dimyx=NULL) {
+varcount <- function(model, B=Window(model), ..., dimyx=NULL, relative=FALSE) {
+  if(is.null(B)) B <- Window(model)
   stopifnot(is.owin(B) || is.im(B) || is.function(B))
   if(is.owin(B)) {
     f <- NULL
@@ -36,6 +37,8 @@ varcount <- function(model, B=Window(model), ..., dimyx=NULL) {
           V <- integral((lambdaB * f)^2)
         }
         v <- E + V * excess
+        if(relative)
+          v <- V/E
         if(is.finite(v)) 
           return(v)
       }
@@ -45,6 +48,10 @@ varcount <- function(model, B=Window(model), ..., dimyx=NULL) {
   if(!is.function(g))
     stop("Pair correlation function is not available")
   v <- varcountEngine(g, B, lambdaB, f, R=R)
+  if(relative) {
+    E <- if(is.null(f)) integral(lambdaB) else integral(lambdaB * f)
+    v <- v/E
+  }
   return(v)
 }
 

@@ -3,9 +3,8 @@ c#'
 #'
 #'  Functions for estimation by minimum contrast
 #'
-#'  $Revision: 1.122 $ $Date: 2022/03/22 00:52:06 $
+#'  $Revision: 1.123 $ $Date: 2022/11/13 06:45:30 $
 #' 
-
 
 ##################  base ################################
 
@@ -58,6 +57,17 @@ mincontrast <- local({
       if(length(theo) != nrvals)
         stop("theoretical function did not return the correct number of values")
       
+      ## experimental
+      if(!is.null(adjustment)) {
+        theo <- adjustment$fun(theo=theo, par=par,
+                               auxdata=adjustment$auxdata, ...)
+        if(!is.vector(theo) || !is.numeric(theo))
+	  stop("adjustment did not return a numeric vector")
+        if(length(theo) != nrvals)
+          stop("adjustment did not return the correct number of values")
+      }
+      ## experimental
+      if(is.function(transfo)) theo <- transfo(theo)
 
       ## integrand of discrepancy 
       discrep <- (abs(theo^qq - obsq))^pp
@@ -67,11 +77,65 @@ mincontrast <- local({
       ## rescaled integral of discrepancy
       value <- mean(discrep)
       
+      ## penalty
+      if(is.function(penalty)) {
+        straf <- do.call(penalty, append(list(par), penal.args))
+        value <- value + tau * straf
+      }
+      ## debugger (can also be activated by spatstat.options(mincon.trace))
+      if(isTRUE(TRACE)) {
+        cat("Parameters:", fill=TRUE)
+        print(par)
+        splat("Discrepancy value:", value)
+      }
+      if(is.environment(saveplace)) {
+        h <- get("h", envir=saveplace)
+        hplus <- as.data.frame(append(par, list(value=value)))
+        h <- rbind(h, hplus)
+        assign("h", h, envir=saveplace)
+      }
 
       return(value)
     })
   }
 
+  optionalGridSearch <- function(startpar, fn, objargs, pspace, verbose=FALSE) {
+    nhalfgrid <- as.integer(pspace$nhalfgrid %orifnull% 0)
+    check.1.integer(nhalfgrid)
+    if(nhalfgrid <= 0) return(startpar)
+    searchratio <- pspace$searchratio %orifnull% 2
+    check.1.real(searchratio)
+    stopifnot(searchratio > 1)
+    ra <- searchratio^((1:nhalfgrid)/nhalfgrid)
+    ra <- c(rev(1/ra), 1, ra)
+    nra <- length(ra)
+    if(length(startpar) != 2)
+      stop(paste("startpar has length",
+                 paste0(length(startpar), ";"),
+                 "expecting 2"))
+    values <- matrix(-Inf, nra, nra)
+    stapa <- startpar
+    for(i in seq_along(ra)) {
+      stapa[[1L]] <- startpar[[1L]] * ra[i]
+      for(j in seq_along(ra)) {
+        stapa[[2L]] <- startpar[[1L]] * ra[j]
+        values[i,j] <- as.numeric(do.call(fn, list(par=stapa, objargs=objargs)))
+      }
+    }
+    bestpos <- which.min(values)
+    ibest <- row(values)[bestpos]
+    jbest <- col(values)[bestpos]
+    bestpar <- stapa
+    bestpar[[1L]] <- startpar[[1L]] * ra[ibest]
+    bestpar[[2L]] <- startpar[[2L]] * ra[jbest]
+    if(verbose) {
+      splat("Initial starting parameters:")
+      print(startpar)
+      splat("Modified starting parameters after search:")
+      print(bestpar)
+    }
+    return(bestpar)
+  } 
 
   mincontrast <- function(observed, theoretical, startpar,
                           ...,
@@ -85,7 +149,6 @@ mincontrast <- local({
     verifyclass(observed, "fv")
     action.bad.values <- match.arg(action.bad.values)
 
-    
     stopifnot(is.function(theoretical))
     if(!any("par" %in% names(formals(theoretical))))
       stop(paste("Theoretical function does not include an argument called",
@@ -188,6 +251,35 @@ mincontrast <- local({
                   call.=FALSE)
     }
     
+    ## debugging
+    TRACE <- pspace$trace %orifnull% spatstat.options("mincon.trace")
+    if(SAVE <- isTRUE(pspace$save)) {
+      saveplace <- new.env()
+      assign("h", NULL, envir=saveplace)
+    } else saveplace <- NULL
+    ## adjustment of theoretical summary function
+    adjustment <- pspace$adjustment
+    if(!is.null(adjustment)) {
+      check.named.list(adjustment, c("fun", "auxdata"))
+      stopifnot(is.function(adjustment$fun))
+    }
+    ## penalty for parameter value
+    penalty    <- pspace$penalty
+    penal.args <- pspace$penal.args
+    tau     <- pspace$tau %orifnull% 1
+    if(!is.null(penalty)) stopifnot(is.function(penalty))
+    ## experimental: custom transformation of summary function 
+    transfo <- pspace$transfo
+    if(is.function(transfo)) {
+      obs <- try(transfo(obs))
+      if(inherits(obs, "try-error"))
+        stop("Transformation of observed summary function failed", call.=FALSE)
+      if(length(obs) != length(rvals))
+        stop(paste("Transformation of observed summary function values",
+                   "changed length",
+                   paren(paste(length(rvals), "to", length(obs)))),
+             call.=FALSE)
+    } else transfo <- NULL
 
     ## pack data into a list
     objargs <- list(theoretical = theoretical,
@@ -198,12 +290,28 @@ mincontrast <- local({
                     pp          = ctrl$p,
                     rmin        = rmin,
                     rmax        = rmax,
+		    adjustment  = adjustment,
+                    penalty     = penalty,
+                    penal.args  = penal.args,
+                    tau         = tau,
+                    transfo     = transfo,
+                    saveplace   = saveplace,
+                    TRACE       = TRACE,
                     BIGVALUE    = 1)
     ## determine a suitable large number to replace Inf values of objective
     objargs$BIGVALUE <- bigvaluerule(contrast.objective,
                                      objargs,
                                      startpar, ...)
     
+    ## secret option to evaluate the contrast objective at a specific point
+    if(!is.null(evalpar <- list(...)$evalpar)) {
+      value <- contrast.objective(evalpar, objargs, ...)
+      return(value)
+    }
+    ## experimental code to improve starting value
+    startpar <- optionalGridSearch(startpar,
+                                   fn=contrast.objective, objargs=objargs,
+                                   pspace=pspace)
 
     ## ................... optimization algorithm control parameters .......................
     if(stabilize) {
@@ -235,6 +343,15 @@ mincontrast <- local({
     fitfv <- bind.fv(observed[sub, ],
                      data.frame(fit=fittheo),
                      label, desc)
+    if(!is.null(adjustment)) {
+      adjtheo <- adjustment$fun(theo=fittheo,
+      	                        par=minimum$par,
+				auxdata=adjustment$auxdata, ...)
+      fitfv <- bind.fv(fitfv,
+                       data.frame(adjfit=adjtheo),
+		       "%s[adjfit](r)",
+		       paste("adjusted", desc))
+    }				
     result <- list(par      = minimum$par,
                    fit      = fitfv,
                    opt      = minimum,
@@ -246,12 +363,12 @@ mincontrast <- local({
                    dotargs  = list(...),
                    pspace   = pspace)
     class(result) <- c("minconfit", class(result))
+    if(SAVE) attr(result, "h") <- get("h", envir=saveplace)
     return(result)
   }
 
   mincontrast
 })
-
 
 print.minconfit <- function(x, ...) {
   terselevel <- spatstat.options('terse')

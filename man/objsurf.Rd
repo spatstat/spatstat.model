@@ -15,9 +15,11 @@
 objsurf(x, \dots)
 
 \method{objsurf}{dppm}(x, ..., ngrid = 32, xlim=NULL, ylim=NULL,
+                               enclose=FALSE,
                                ratio = 1.5, verbose = TRUE)
 
 \method{objsurf}{kppm}(x, ..., ngrid = 32, xlim=NULL, ylim=NULL,
+                               enclose=FALSE,
                                ratio = 1.5, verbose = TRUE)
 
 \method{objsurf}{minconfit}(x, ..., ngrid = 32, xlim=NULL, ylim=NULL,
@@ -41,11 +43,14 @@ objsurf(x, \dots)
     Optional. Numeric vectors of length 2, specifying the
     limits for the two parameters to be considered.
   }
+  \item{enclose}{
+    Logical value specifying whether the default values of
+    \code{xlim} and \code{ylim} should enclose the history of all
+    function evaluations. See Details.
+  }
   \item{ratio}{
-    Number greater than 1 determining the range of parameter values
-    to be considered. If the optimal parameter value is \code{opt}
-    then the objective function will be evaluated for
-    values between \code{opt/ratio} and \code{opt * ratio}.
+    Number greater than 1 determining the default ranges of parameter
+    values. See Details.
   }
   \item{verbose}{
     Logical value indicating whether to print progress reports.
@@ -75,6 +80,23 @@ objsurf(x, \dots)
   }
   The result is an object of class \code{"objsurf"} which can be
   printed and plotted: see \code{\link{methods.objsurf}}.
+
+  The range of parameter values to be considered is determined by
+  \code{xlim} and \code{ylim}. 
+  The default values of \code{xlim} and \code{ylim} are
+  chosen as follows.
+  \itemize{
+    \item if \code{enclose=FALSE} (the default), 
+    the default values of \code{xlim} and \code{ylim} are
+    the ranges from \code{opt/ratio} to \code{opt * ratio}
+    where \code{opt} is the optimal parameter value on the surface.
+    \item 
+    If \code{enclose=TRUE}, 
+    and if \code{x} contains a trajectory
+    (history of function evaluations),
+    then \code{xlim} and \code{ylim} will be the ranges
+    of parameter values examined in the trajectory.
+  }
 }
 \value{
   An object of class \code{"objsurf"} which can be

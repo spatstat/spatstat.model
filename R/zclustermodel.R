@@ -120,3 +120,5 @@ reach.zclustermodel <- function(x, ..., epsilon) {
   thresh <- if(missing(epsilon)) NULL else epsilon
   2 * clusterradius(x, ..., thresh=thresh)
 }
+
+is.poissonclusterprocess.zclustermodel <- function(model) { TRUE }

@@ -1,7 +1,7 @@
 #'
 #'       summary.kppm.R
 #'
-#'   $Revision: 1.38 $  $Date: 2022/10/23 07:37:37 $
+#'   $Revision: 1.40 $  $Date: 2022/11/13 08:35:45 $
 #' 
 
 summary.kppm <- function(object, ..., quick=FALSE) {
@@ -53,14 +53,73 @@ summary.kppm <- function(object, ..., quick=FALSE) {
     }
   }
 
-  #' sibling probability
-  if(object$isPCP) result$psib <- mean(psib(object))
-  #' overdispersion index
-  win <- as.owin(object, from="points")
-  vac <- varcount(object, B=win)
-  Lam <- integral(predict(object, window=win))
-  result$odi <- vac/Lam
-  #'
+  if(object$isPCP) {
+    #' ---------- information from cluster parameters paper -------------
+    #' sibling probability
+    result$psib <- mean(psib(object))
+    #' overdispersion index
+    win <- as.owin(object, from="points")
+    vac <- varcount(object, B=win)
+    Lam <- integral(predict(object, window=win))
+    result$odi <- vac/Lam
+    #' detect penalised fit
+    result$penalised <- !is.null(Fit$pspace$penalty)
+    #' optimization trace
+    result$trace <- attr(object, "h")
+    #' spatial persistence (over window)
+    g <- pcfmodel(object)
+    d <- diameter(win)
+    result$persist <- (g(d)-1)/(g(0)-1)
+    result$ispo <- poisson.fits.better(object)
+    #' bounds on distance from Poisson and mixed Poisson
+    aW <- area(win)
+    if(is.stationary(object)) {
+      lambda <- object$lambda
+      mu <- object$mu
+      EN <- lambda * aW
+    } else {
+      EN <- Lam # integral of intensity
+      mu <- max(object$mu)
+    }
+    #' first bound
+    tvbound1 <- 2 * EN * (1-exp(-mu))
+    rules <- spatstatClusterModelInfo(object$clusters)
+    newpar <- object$clustpar
+    oldpar <- rules$checkpar(newpar, native=TRUE, strict=FALSE)
+    if(all(oldpar > 0)) {
+      scal <- newpar[["scale"]]
+      kappa <- newpar[["kappa"]]
+      result$phi <- phinew <- g(0) - 1
+      A10 <- phinew * kappa * scal^2
+      h10 <- rules$kernel(oldpar, 0)
+      #' second and third bounds
+      tvbound2 <- phinew * EN^2 * (1 + scal^2/(aW * A10))
+      tvbound3 <- phinew * EN^2 * (1 + h10/A10)
+      #' fourth (new) bound
+      tvbound4 <- EN * sqrt(phinew)
+      #' save bounds
+      result$tvbound1 <- tvbound1
+      result$tvbound2 <- tvbound2
+      result$tvbound3 <- tvbound3
+      result$tvbound4 <- tvbound4
+      result$tvbound <- min(1, tvbound1, tvbound2, tvbound3, tvbound4)
+      if(is.stationary(object)) {
+        #' characteristics of nonempty clusters
+        em <- exp(-mu)
+        result$kappa1 <- kappa * (1-em)
+        result$mu1 <- mu/(1-em)
+        result$kappa2 <- kappa * (1 - em - mu * em)
+        result$eta <- kappa/(lambda + kappa)
+        result$panysib <- 1-em
+        ## distance to mixed Poisson
+        A1d <- (g(d)-1) * kappa * scal^2
+        tvbmix <- EN * (phinew/A10) * sqrt(2 * (A10 - A1d))
+        result$tvbmix <- min(1, tvbmix)
+      }
+    }
+    ## -----------------------------------------------------
+  }
+  
   class(result) <- "summary.kppm"
   return(result)
 }
@@ -84,6 +143,9 @@ print.summary.kppm <- function(x, ...) {
   
   if(waxlyrical('gory', terselevel)) {
     fittedby <- "Fitted by"
+    #' detect whether fit used a penalty
+    if(isTRUE(x$penalised))
+      fittedby <- "Fitted by penalised"
     switch(Fit$method,
            mincon = {
              splat(fittedby, "minimum contrast")
@@ -119,6 +181,11 @@ print.summary.kppm <- function(x, ...) {
            },
            warning(paste("Unrecognised fitting method", sQuote(Fit$method)))
            )
+    #' optimization trace
+    if(!is.null(x$trace)) {
+      parbreak()
+      splat("[Includes history of evaluations of objective function]")
+    }
   }
 
   # ............... trend .........................
@@ -196,7 +263,48 @@ print.summary.kppm <- function(x, ...) {
             signif(odi, digits))
   }
   
-
+  #' cluster strength 
+  if(!is.null(phi <- x$phi))
+      splat("Cluster strength:", signif(phi, digits))
+  #' spatial persistence (over window)
+  if(!is.null(x$persist)) {
+    parbreak()
+    splat("Spatial persistence index (over window):", signif(x$persist, digits))
+  }
+  #' bound on total-variation distance from Poisson
+  if(!is.null(x$tvbound)) {
+    parbreak()
+    splat("Bound on distance from Poisson process (over window):",
+          signif(x$tvbound, digits))
+    if(!is.null(x$tvbound1) && !is.null(x$tvbound2)
+       && !is.null(x$tvbound3) && !is.null(x$tvbound4)) {
+      tvb <- as.numeric(x[c("tvbound1", "tvbound2", "tvbound3", "tvbound4")])
+      splat("\t = min", paren(paste(c(1, signif(tvb, digits)), collapse=", ")))
+    }
+  }
+  if(!is.null(x$tvbmix)) {
+    parbreak()
+    splat("Bound on distance from MIXED Poisson process (over window):",
+          signif(x$tvbmix, digits))
+  }
+  #'
+  if(!is.null(x$kappa1)) {
+    parbreak()
+    splat("Intensity of parents of nonempty clusters:",
+          signif(x$kappa1, digits))
+    splat("Mean number of offspring in a nonempty cluster:",
+          signif(x$mu1, digits))
+    splat("Intensity of parents of clusters of more than one offspring point:",
+          signif(x$kappa2, digits))
+    splat("Ratio of parents to parents-plus-offspring:", signif(x$eta, digits),
+          "(where 1 = Poisson process)")
+    splat("Probability that a typical point belongs to a nontrivial cluster:",
+          signif(x$panysib, digits))
+  }
+  if(isTRUE(x$ispo)) {
+    parbreak()
+    splat(">>> The Poisson process is a better fit <<< ")
+  }
   #'
   invisible(NULL)
 }

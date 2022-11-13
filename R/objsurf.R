@@ -3,9 +3,8 @@
 #
 #  surface of the objective function for an M-estimator
 #
-#  $Revision: 1.32 $ $Date: 2021/10/31 08:52:52 $
+#  $Revision: 1.33 $ $Date: 2022/11/13 07:08:49 $
 #
-
 
 objsurf <- function(x, ...) {
   UseMethod("objsurf")
@@ -14,8 +13,27 @@ objsurf <- function(x, ...) {
 objsurf.kppm <- objsurf.dppm <- function(x, ...,
                                          ngrid=32,
                                          xlim=NULL, ylim=NULL,
+                                         enclose=FALSE,
                                          ratio=1.5,
                                          verbose=TRUE) {
+  ## history of function evaluations
+  h <- attr(x, "h") 
+  if(!is.null(h)) {
+    dotargs <- list(...)
+    if(!is.null(parmap <- dotargs$parmap)) {
+      ## transform to new parametrisation
+      tran <- parmap[[1]]
+      tranpars <- as.data.frame(t(apply(h, 1, tran)))
+      h <- cbind(tranpars, value=h$value)
+    }
+    if(enclose) {
+      ## determine xlim, ylim to enclose the history
+      if(is.null(xlim)) xlim <- range(h[,1])
+      if(is.null(ylim)) ylim <- range(h[,2])
+    }
+    class(h) <- unique(c("traj", class(h)))
+  }
+  ## objective function surface
   Fit <- x$Fit
   switch(Fit$method,
          mincon = {
@@ -25,7 +43,7 @@ objsurf.kppm <- objsurf.dppm <- function(x, ...,
          },
          palm = ,
          clik2 = {
-           optpar  <- x$par
+           optpar  <- x$par.canon %orifnull% x$par
            objfun  <- Fit$objfun
            objargs <- Fit$objargs
            result  <- objsurfEngine(objfun, optpar, objargs, ...,
@@ -36,12 +54,14 @@ objsurf.kppm <- objsurf.dppm <- function(x, ...,
          stop(paste("Unrecognised fitting method", dQuote(Fit$method)),
               call.=FALSE)
          )
+  ## history of function evaluations
+  attr(result, "h") <- h
   return(result)
 }
 
 objsurf.minconfit <- function(x, ..., ngrid=32, xlim=NULL, ylim=NULL,
                               ratio=1.5, verbose=TRUE) {
-  optpar  <- x$par
+  optpar  <- x$par.canon %orifnull% x$par
   objfun  <- x$objfun
   objargs <- x$objargs
   dotargs <- x$dotargs
@@ -57,12 +77,16 @@ objsurfEngine <- function(objfun, optpar, objargs,
                           ...,
                           dotargs=list(),
                           objname="objective", 
+                          new.objargs=list(),
+                          parmap = NULL,
                           ngrid=32,
                           xlim=NULL, ylim=NULL,
                           ratio=1.5, verbose=TRUE) {
   trap.extra.arguments(...)
   if(!is.function(objfun))
     stop("Object is in an outdated format and needs to be re-fitted")
+  if(length(new.objargs))
+    objargs <- resolve.defaults(new.objargs, objargs)
   npar    <- length(optpar)
   if(npar != 2)
     stop("Only implemented for functions of 2 arguments")
@@ -70,12 +94,33 @@ objsurfEngine <- function(objfun, optpar, objargs,
   ratio <- ensure2vector(ratio)
   ngrid <- ensure2vector(ngrid)
   stopifnot(all(ratio > 1))
+  if(is.null(parmap)) {
+    ## use original parameters
     if(is.null(xlim)) xlim <- optpar[1] * c(1/ratio[1], ratio[1])
     if(is.null(ylim)) ylim <- optpar[2] * c(1/ratio[2], ratio[2])
     xgrid <- seq(xlim[1], xlim[2], length=ngrid[1])
     ygrid <- seq(ylim[1], ylim[2], length=ngrid[2])
     pargrid <- expand.grid(xgrid, ygrid)
     colnames(pargrid) <- names(optpar)
+  } else {
+    if(!(length(parmap) == 2 && all(sapply(parmap, is.function))))
+      stop("parmap should be a list of 2 functions")
+    tran <- parmap[[1]]
+    invtran <- parmap[[2]]
+    ## transformed parameters
+    Toptpar <- tran(optpar) 
+    if(is.null(xlim)) xlim <- Toptpar[1] * c(1/ratio[1], ratio[1])
+    if(is.null(ylim)) ylim <- Toptpar[2] * c(1/ratio[2], ratio[2])
+    xgrid <- seq(xlim[1], xlim[2], length=ngrid[1])
+    ygrid <- seq(ylim[1], ylim[2], length=ngrid[2])
+    Tpargrid <- expand.grid(xgrid, ygrid)
+    colnames(Tpargrid) <- names(Toptpar)
+    ## inverse transform
+    pargrid <- t(apply(Tpargrid, 1, invtran))
+    colnames(pargrid) <- names(optpar)
+    ## finally overwrite optimal values
+    optpar <- Toptpar
+  }
   # evaluate objective function
   if(verbose) cat(paste("Evaluating", nrow(pargrid), "function values..."))
   values <- do.call(apply,
@@ -97,6 +142,8 @@ print.objsurf <- function(x, ...) {
   cat("Parameter limits:\n")
   cat(paste("\t", paste0(nama[1L], ":"), prange(signif(range(x$x), 4)), "\n"))
   cat(paste("\t", paste0(nama[2L], ":"), prange(signif(range(x$y), 4)), "\n"))
+  if(!is.null(attr(x, "h")))
+    splat("[Includes history of evaluations of objective function]")
   invisible(NULL)
 }
 
@@ -106,6 +153,7 @@ summary.objsurf <- function(object, ...) {
             objrange=range(object$z),
             optpar=as.list(attr(object, "optpar")),
             objname=attr(object, "objname")
+            , trace=attr(object, "h") # may be NULL
             )
   class(y) <- c("summary.objsurf", class(y))
   return(y)
@@ -122,10 +170,11 @@ print.summary.objsurf <- function(x, ...) {
     cat(paste("\t", paste0(nama[2L], ":"), prange(yrange), "\n"))
     cat("Selected parameter values (optpar):\n")
     cat(paste("\t", paste(nama, "=", optpar, collapse=", "), "\n"))
+    if(!is.null(trace))
+      splat("[Includes history of evaluations of objective function]")
   })
   return(invisible(NULL))
 }
-
 
 
 image.objsurf <- plot.objsurf <- function(x, ...) {
@@ -143,7 +192,13 @@ image.objsurf <- plot.objsurf <- function(x, ...) {
   return(invisible(NULL))
 }
 
-
+lines.objsurf <- function(x, ..., directed=FALSE) {
+  sx <- summary(x)
+  if(!is.null(h <- sx[["trace"]])) {
+    lines(h, ..., directed=directed)
+  } else message("No trajectory data")
+  return(invisible(NULL))
+}
 
 contour.objsurf <- function(x, ...) {
   xname <- short.deparse(substitute(x))

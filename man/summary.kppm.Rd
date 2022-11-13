@@ -66,6 +66,12 @@
   \item{callstring}{character string representing the original call to
     \code{\link{kppm}}}
 }
+\references{
+  Baddeley, A., Davies, T.M., Hazelton, M.L., Rakshit, S. and Turner,
+  R. (2022) Fundamental problems in fitting spatial cluster
+  process models. \emph{Spatial Statistics} \bold{52}, 100709.
+  DOI: \code{10.1016/j.spasta.2022.100709}
+}
 \examples{
  fit <- kppm(redwood ~ 1, "Thomas")
  summary(fit)

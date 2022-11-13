@@ -10,7 +10,8 @@
 \usage{
 \method{plot}{palmdiag}(x, \dots,
           style = c("intervals", "dots", "bands"),
-          args.dots = list(pch = 16), args.intervals = list(), main)
+          args.dots = list(pch = 16), args.intervals = list(),
+          xlim=NULL, main)
 }
 \arguments{
   \item{x}{
@@ -32,6 +33,8 @@
     Arguments passed to \code{\link[graphics]{segments}}
     when \code{style="intervals"}.
   }
+  \item{xlim}{Optional range of distances plotted along the horizontal
+    axis. A numeric vector of length 2.}
   \item{main}{Optional main title for plot.}
 }
 \details{

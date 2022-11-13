@@ -1,4 +1,51 @@
 
+        CHANGES IN spatstat.model VERSION 3.1-0
+
+OVERVIEW
+
+    o Penalised model-fitting for Poisson cluster process models.
+
+    o Index of the strength of clustering in a Poisson cluster process model.
+    
+    o Probability of having any siblings.
+
+    o More information is printed about Poisson cluster process models.
+    
+    o Minor improvements.
+
+NEW CLASSES
+
+    o traj
+    Trajectory (history of function evaluations) in a model that was fitted by optimisation.
+    
+NEW FUNCTIONS
+
+    o panysib
+    Probability that a point in a cluster process has any siblings.
+
+    o is.poissonclusterprocess
+    Detects whether a given model is a Poisson cluster process.
+
+    o traj, print.traj, plot.traj, lines.traj
+    Extract, print and plot the trajectory of function evaluations.
+
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o kppm
+    New argument 'penalised' supports penalised model-fitting with a penalty against
+    extremely large or small values of the cluster scale.
+
+    o print.kppm, summary.kppm
+    Additional characteristics of the fitted model are reported,
+    including the cluster strength 'phi' and the sibling probability.
+
+    o varcount
+    New argument 'relative' (supports calculation of the overdispersion index).
+
+    o plot.palmdiag
+    Improved calculation of y axis limits.
+    
         CHANGES IN spatstat.model VERSION 3.0-3
 
 OVERVIEW

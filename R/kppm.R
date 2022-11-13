@@ -3,11 +3,8 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.218 $ $Date: 2022/11/06 07:29:32 $
+# $Revision: 1.223 $ $Date: 2022/11/13 08:03:09 $
 #
-
-
-
 
 kppm <- function(X, ...) {
   UseMethod("kppm")
@@ -67,6 +64,7 @@ kppm.ppp <- kppm.quad <-
            covariates = data,
            subset, 
            method = c("mincon", "clik2", "palm", "adapcl"),
+           penalised = FALSE,
            improve.type = c("none", "clik1", "wclik1", "quasi"),
            improve.args = list(),
            weightfun=NULL,
@@ -131,6 +129,22 @@ kppm.ppp <- kppm.quad <-
             improve.type=ppm.improve.type, improve.args=ppm.improve.args)
   XX <- if(isquad) X$data else X
   
+  if(is.character(weightfun)) {
+    RmaxW <- (rmax %orifnull% rmax.rule("K", Window(XX), intensity(XX))) / 2
+    switch(weightfun,
+           threshold = {
+             weightfun <- function(d) { as.integer(d <= RmaxW) }
+             attr(weightfun, "selfprint") <-
+               paste0("Indicator(distance <= ", RmaxW, ")")
+           },
+           taper = {
+             weightfun <- function(d) { pmin(1, RmaxW/d)^2 }
+             attr(weightfun, "selfprint") <-
+               paste0("min(1, ", RmaxW, "/d)^2")
+           },
+           stop(paste("Unrecognised option", sQuote(weightfun), "for weightfun"))
+           )
+  }
            
   ## default weight function
   if(is.null(weightfun))
@@ -156,16 +170,19 @@ kppm.ppp <- kppm.quad <-
                              statistic=statistic,
                              statargs=statargs, rmax=rmax,
                              algorithm=algorithm,
+                             penalised = penalised,
                              ...),
          clik2   = kppmComLik(X=XX, Xname=Xname, po=po, clusters=clusters,
                              control=control, stabilize=stabilize,
                              weightfun=weightfun, 
                              rmax=rmax, algorithm=algorithm,
+                             penalised = penalised,
                              ...),
          palm   = kppmPalmLik(X=XX, Xname=Xname, po=po, clusters=clusters,
                              control=control, stabilize=stabilize,
                              weightfun=weightfun, 
                              rmax=rmax, algorithm=algorithm,
+                             penalised = penalised,
                              ...),
          adapcl   = kppmCLadap(X=XX, Xname=Xname, po=po, clusters=clusters,
                              control=control, epsilon=epsilon, 
@@ -188,6 +205,7 @@ kppm.ppp <- kppm.quad <-
                    append(list(object = out, type = improve.type),
                           improve.args))
   
+  if(!is.null(h)) class(h) <- unique(c("traj", class(h)))
 
   attr(out, "h") <- h
   return(out)
@@ -199,9 +217,15 @@ kppm.ppp <- kppm.quad <-
 
 kppmMinCon <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE, statistic, statargs,
                        algorithm="Nelder-Mead", DPP=NULL, ...,
+                       penalised = FALSE,
                        pspace=NULL) {
   # Minimum contrast fit
   stationary <- is.stationary(po)
+  pspace <- do.call(make.pspace,
+                    resolve.defaults(
+                      list(penalised=penalised, fitmethod="mincon", clusters=clusters),
+                      as.list(pspace),
+                      list(...)))
   # compute intensity
   if(stationary) {
     lambda <- summary(po)$trend$value
@@ -256,12 +280,16 @@ kppmMinCon <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE, s
                 lambda     = lambda,
                 mu         = mcfit$mu,
                 par        = mcfit$par,
+                par.canon  = mcfit$par.canon,
                 clustpar   = mcfit$clustpar,
                 clustargs  = mcfit$clustargs,
                 modelpar   = mcfit$modelpar,
                 covmodel   = mcfit$covmodel,
                 Fit        = Fit)
   }
+  h <- attr(mcfit, "h")
+  if(!is.null(h)) class(h) <- unique(c("traj", class(h)))
+  attr(out, "h") <- h
   return(out)
 }
 
@@ -279,7 +307,7 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
   info <- spatstatClusterModelInfo(clusters)
   if(verbose) splat("Retrieved cluster model information")
   ## Determine model type
-  isPCP <- info$isPCP
+  isPCP <- isTRUE(info$isPCP)
   isDPP <- inherits(clusters, "detpointprocfamily")
 
   ## resolve algorithm parameters
@@ -395,6 +423,93 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
   dots <- info$resolveshape(...)
   margs <- dots$margs
   
+  #' ............ permit negative parameter values .........................
+  strict <- !isFALSE(pspace$strict)
+  sargs <- if(strict) list() else list(strict=FALSE)
+  
+  #' ............ adjust K function or pair correlation function ...........
+  do.adjust <- isTRUE(pspace$adjusted)
+  if(do.adjust) {
+    if(verbose) splat("Applying kppm adjustment")
+    W <- Window(X)
+    delta <- if(is.null(rmax)) NULL else rmax/4096
+    ## pack up precomputed information needed for adjustment
+    adjdata <- list(paircorr = info[["pcf"]],
+                    pairWcdf = distcdf(W, delta=delta),
+		    tohuman  = NULL)
+    adjfun <- function(theo, par, auxdata, ..., margs=NULL) {
+      with(auxdata, {
+        if(!is.null(tohuman))
+	  par <- tohuman(par, ..., margs=margs)
+        a <- as.numeric(stieltjes(paircorr, pairWcdf, par=par, ..., margs=margs))
+	return(theo/a)
+      })
+    }
+    pspace$adjustment <- list(fun=adjfun, auxdata=adjdata)
+  } 
+
+  #' parameter vector corresponding to Poisson process
+  if(isDPP) {
+    poispar <- NULL
+  } else if(isPCP) {
+    if(!("kappa" %in% names(startpar)))
+      stop("Internal error: startpar does not include 'kappa'")
+    poispar <- startpar
+    poispar[["kappa"]] <- Inf
+  } else {
+    #' LGCP
+    if(!("sigma2" %in% names(startpar)))
+      stop("Internal error: startpar does not include 'sigma2'")
+    poispar <- startpar
+    poispar[["sigma2"]] <- .Machine$double.eps # i.e. 0
+  }
+  
+  #' ............ use canonical parameters .........................
+  usecanonical <- isTRUE(pspace$canonical)
+  if(usecanonical) {
+    if(verbose) splat("Converting to canonical parameters")
+     tocanonical <- info$tocanonical
+     tohuman <- info$tohuman
+     if(is.null(tocanonical) || is.null(tohuman)) {
+       warning("Canonical parameters are not yet supported for this model")
+       usecanonical <- FALSE
+     } 
+
+  }
+  startpar.human <- startpar
+  poispar.human <- poispar
+  if(usecanonical) {
+    htheo <- theoret
+    startpar <- tocanonical(startpar, margs=margs)
+    if(!is.null(poispar)) poispar <- tocanonical(poispar, margs=margs)
+    theoret <- function(par, ...) { htheo(tohuman(par, ...), ...) }
+    if(do.adjust)
+      pspace$adjustment$auxdata$tohuman <- tohuman
+  }
+  #' ............ penalty .........................
+  penalty    <- pspace$penalty
+  penal.args <- pspace$penal.args
+  tau        <- pspace$tau %orifnull% 1
+  if(is.function(penalty)) {
+    # penalised optimisation
+    if(usecanonical) {
+      penalty.human <- penalty
+      penalty <- function(par, ...) { penalty.human(tohuman(par, ...), ...) }
+    }
+    ## data-dependent arguments in penalty
+    if(is.function(penal.args)) 
+      penal.args <- penal.args(X)
+    ## exchange rate (defer evaluation if it is a function)
+    if(!is.function(tau)) check.1.real(tau)
+    ## reinsert in 'pspace' to pass to 'mincontrast'
+    pspace$penalty <- penalty
+    pspace$penal.args <- penal.args
+    pspace$tau <- tau
+    ## unpenalised version
+    pspace.unpen <- pspace
+    pspace.unpen[c("penalty", "penal.args", "tau")] <- NULL
+  }
+  #' ...................................................
 
   #'
   mcargs <- resolve.defaults(list(observed=Stat,
@@ -410,12 +525,32 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
                                   margs=dots$margs,
                                   model=dots$model,
                                   pspace=pspace), ## As modified above
-                             list(...)
-                             )
+                             list(...),
+                             sargs)
+
 
   if(isDPP && algorithm=="Brent" && changealgorithm)
     mcargs <- resolve.defaults(mcargs, list(lower=alg$lower, upper=alg$upper))
 
+  if(is.function(penalty) && is.function(tau)) {
+    ## data-dependent exchange rate 'tau': evaluate now
+    if("poisval" %in% names(formals(tau))) {
+      ## New style: requires value of (unpenalised) objective function at Poisson process
+      mcargs.unpen <- mcargs
+      mcargs.unpen$pspace <- pspace.unpen
+      ## Evaluate using undocumented argument 'evalpar' to mincontrast
+      mcargs.unpen$evalpar <- poispar
+      poisval <- do.call(mincontrast, mcargs.unpen)
+      tau <- tau(X, poisval=poisval)
+    } else {
+      ## old style
+      tau <- tau(X)
+    }
+    check.1.real(tau)
+    ## update 'tau' in argument list
+    pspace$tau <- tau
+    mcargs$pspace$tau <- tau
+  }
   
   ## .............. FIT .......................
   if(verbose) splat("Starting minimum contrast fit")
@@ -423,6 +558,19 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
   if(verbose) splat("Returned from minimum contrast fit")
   ## ..........................................
 
+  ## extract fitted parameters and reshape
+  if(!usecanonical) {
+    optpar.canon <- NULL
+    optpar.human <- mcfit$par
+    names(optpar.human) <- names(startpar.human)
+  } else {
+    optpar.canon <- mcfit$par
+    names(optpar.canon) <- names(startpar)
+    optpar.human <- tohuman(optpar.canon, margs=margs)
+    names(optpar.human) <- names(startpar.human)
+  }
+  mcfit$par       <- optpar.human
+  mcfit$par.canon <- optpar.canon
   ## extract fitted parameters
   optpar        <- mcfit$par
   names(optpar) <- names(startpar)
@@ -442,7 +590,7 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
   ## Extra stuff for ordinary cluster/lgcp models
   ## imbue with meaning
   ## infer model parameters
-  mcfit$modelpar <- info$interpret(optpar, lambda)
+  mcfit$modelpar <- info$interpret(optpar.human, lambda)
   mcfit$internal <- list(model=ifelse(isPCP, clusters, "lgcp"))
   mcfit$covmodel <- dots$covmodel
   
@@ -459,7 +607,7 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
   }
   ## Parameter values (new format)
   mcfit$mu <- mu
-  mcfit$clustpar <- info$checkpar(mcfit$par, native=FALSE)
+  mcfit$clustpar <- info$checkpar(mcfit$par, native=FALSE, strict=strict)
   mcfit$clustargs <- info$outputshape(dots$margs)
 
   ## The old fit fun that would have been used (DO WE NEED THIS?)
@@ -485,7 +633,13 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
 kppmComLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE,
                        weightfun, rmax, algorithm="Nelder-Mead",
                        DPP=NULL, ..., 
+                       penalised = FALSE,
                        pspace=NULL) {
+  pspace <- do.call(make.pspace,
+                    resolve.defaults(
+                      list(penalised=penalised, fitmethod="clik2", clusters=clusters),
+                      as.list(pspace),
+                      list(...)))
   W <- as.owin(X)
   if(is.null(rmax))
     rmax <- rmax.rule("K", W, intensity(X))
@@ -568,6 +722,69 @@ kppmComLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE,
   # determine starting parameter values
   startpar <- selfstart(X)
   
+  pspace.given <- pspace
+  #' ............ permit negative parameter values ...................
+  strict <- !isFALSE(pspace$strict)
+  if(!strict) pcfunargs <- append(pcfunargs, list(strict=FALSE))
+  #' ............ parameter corresponding to Poisson process .........
+  if(isDPP) {
+    poispar <- NULL
+  } else if(isPCP) {
+    if(!("kappa" %in% names(startpar)))
+      stop("Internal error: startpar does not include 'kappa'")
+    poispar <- startpar
+    poispar[["kappa"]] <- Inf
+  } else {
+    ## LGCP
+    if(!("sigma2" %in% names(startpar)))
+      stop("Internal error: startpar does not include 'sigma2'")
+    poispar <- startpar
+    poispar[["sigma2"]] <- .Machine$double.eps # i.e. 0
+  }
+  #' ............ use canonical parameters .........................
+  usecanonical <- isTRUE(pspace$canonical)
+  if(usecanonical) {
+     tocanonical <- info$tocanonical
+     tohuman <- info$tohuman
+     if(is.null(tocanonical) || is.null(tohuman)) {
+       warning("Canonical parameters are not yet supported for this model")
+       usecanonical <- FALSE
+     }
+  }
+  startpar.human <- startpar
+  poispar.human <- poispar
+  if(usecanonical) {
+    pcftheo <- pcfun
+    startpar <- tocanonical(startpar, margs=margs)
+    if(!is.null(poispar)) poispar <- tocanonical(poispar, margs=margs)
+    pcfun <- function(par, ...) { pcftheo(tohuman(par, ...), ...) }
+  }
+  #' ............ penalty ......................................
+  penalty    <- pspace$penalty
+  penal.args <- pspace$penal.args
+  tau        <- pspace$tau %orifnull% 1
+  if(is.function(penalty)) {
+    ## penalised optimisation
+    if(usecanonical) {
+      penalty.human <- penalty
+      penalty <- function(par, ...) { penalty.human(tohuman(par, ...), ...) }
+    }
+    ## data-dependent arguments in penalty
+    if(is.function(penal.args)) 
+      penal.args <- penal.args(X)
+    ## exchange rate (defer evaluation if it is a function)
+    if(!is.function(tau)) check.1.real(tau)
+    ## reinsert in 'pspace' for insurance
+    pspace$penalty <- penalty
+    pspace$penal.args <- penal.args
+    pspace$tau <- tau
+  }
+  #' ............ debugger .....................................
+  TRACE <- isTRUE(pspace$trace)
+  if(SAVE <- isTRUE(pspace$save)) {
+    saveplace <- new.env()
+    assign("h", NULL, envir=saveplace)
+  } else saveplace <- NULL
   
   # .....................................................
   # create local function to evaluate pair correlation
@@ -580,6 +797,14 @@ kppmComLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE,
     # pack up necessary information
     objargs <- list(dIJ=dIJ, sumweight=sumweight, g=g, gscale=gscale, 
                     envir=environment(paco),
+                    ## The following variables are temporarily omitted
+                    ## in order to calculate the objective function
+                    ## without using them, or their side effects.
+                    penalty=NULL,   # updated below
+                    penal.args=NULL,   # updated below
+                    tau=NULL,   # updated below
+                    TRACE=FALSE, # updated below
+                    saveplace=NULL, # updated below
                     BIGVALUE=1, # updated below
                     SMALLVALUE=.Machine$double.eps)
     # define objective function (with 'paco' in its environment)
@@ -592,12 +817,57 @@ kppmComLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE,
         integ <- pmax(SMALLVALUE, integ)
         logcl <- 2*(logprod - sumweight * log(integ))
         logcl <- safeFiniteValue(logcl, default=-BIGVALUE)
-        return(logcl)
+        ## penalty
+        if(hasPenalty <- is.function(penalty)) {
+          straf <- do.call(penalty, append(list(par), penal.args))
+          logclPEN <- logcl - tau * straf
+        }
+        ## debugger
+        if(isTRUE(TRACE)) {
+          cat("Parameters:", fill=TRUE)
+          print(par)
+          splat("\tlogprod:", logprod)
+          splat("\tinteg:", integ)
+          splat("log composite likelihood:", logcl)
+          if(hasPenalty)
+            splat("penalised log composite likelihood:", logclPEN)
+        }
+        ## save state
+        if(is.environment(saveplace)) {
+          h <- get("h", envir=saveplace)
+          value <- list(logcl=logcl)
+          if(hasPenalty)
+            value <- append(value, list(logclPEN=logclPEN))
+          hplus <- as.data.frame(append(par, value))
+          h <- rbind(h, hplus)
+          assign("h", h, envir=saveplace)
+        }
+        return(if(hasPenalty) logclPEN else logcl)
       },
       enclos=objargs$envir)
     }
-    ## Determine a suitable large number to replace Inf
+    ## Determine the values of some parameters
+    ## (1) Determine a suitable large number to replace Inf
     objargs$BIGVALUE <- bigvaluerule(obj, objargs, startpar)
+    ## (2) Evaluate exchange rate 'tau'
+    if(is.function(penalty) && is.function(tau)) {
+      ## data-dependent exchange rate 'tau': evaluate now
+      if("poisval" %in% names(formals(tau))) {
+        ## New style: requires value of (unpenalised) objective function at Poisson process
+        poisval <- obj(poispar, objargs)
+        tau <- tau(X, poisval=poisval)
+      } else {
+        tau <- tau(X)
+      }
+      check.1.real(tau)
+    }
+    ## Now insert the penalty, etc
+    objargs <- resolve.defaults(list(penalty    = penalty,
+                                     penal.args = penal.args,
+                                     tau        = tau,
+                                     saveplace  = saveplace,
+                                     TRACE      = TRACE),
+                                objargs)
   } else {
     # create local function to evaluate  pair correlation(d) * weight(d)
     #  (with additional parameters 'pcfunargs', 'weightfun' in its environment)
@@ -610,6 +880,11 @@ kppmComLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE,
     # pack up necessary information
     objargs <- list(dIJ=dIJ, wIJ=wIJ, sumweight=sumweight, g=g, gscale=gscale, 
                     envir=environment(wpaco),
+                    penalty=NULL,   # updated below
+                    penal.args=NULL,   # updated below
+                    tau=NULL,   # updated below
+                    TRACE=FALSE, # updated below
+                    saveplace=NULL, # updated below
                     BIGVALUE=1, # updated below
                     SMALLVALUE=.Machine$double.eps)
     # define objective function (with 'paco', 'wpaco' in its environment)
@@ -624,12 +899,55 @@ kppmComLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE,
           2*(sum(wIJ * log(safePositiveValue(paco(dIJ, par))))
             - sumweight * log(integ)),
           default=-BIGVALUE)
-        return(logcl)
+        ## penalty
+        if(hasPenalty <- is.function(penalty)) {
+          straf <- do.call(penalty, append(list(par), penal.args))
+          logclPEN <- logcl - tau * straf
+        }
+        ## debugger
+        if(isTRUE(TRACE)) {
+          cat("Parameters:", fill=TRUE)
+          print(par)
+          splat("\tinteg:", integ)
+          splat("log composite likelihood:", logcl)
+          if(hasPenalty)
+            splat("penalised log composite likelihood:", logclPEN)
+        }
+        if(is.environment(saveplace)) {
+          h <- get("h", envir=saveplace)
+          value <- list(logcl=logcl)
+          if(hasPenalty)
+            value <- append(value, list(logclPEN=logclPEN))
+          hplus <- as.data.frame(append(par, value))
+          h <- rbind(h, hplus)
+          assign("h", h, envir=saveplace)
+        }
+        return(if(hasPenalty) logclPEN else logcl)
       },
       enclos=objargs$envir)
     }
-    ## Determine a suitable large number to replace Inf
+    ## Determine the values of some parameters
+    ## (1) Determine a suitable large number to replace Inf
     objargs$BIGVALUE <- bigvaluerule(obj, objargs, startpar)
+    ## (2) Evaluate exchange rate 'tau'
+    if(is.function(penalty) && is.function(tau)) {
+      ## data-dependent exchange rate 'tau': evaluate now
+      if("poisval" %in% names(formals(tau))) {
+        ## New style: requires value of (unpenalised) objective function at Poisson process
+        poisval <- obj(poispar, objargs)
+        tau <- tau(X, poisval=poisval)
+      } else {
+        tau <- tau(X)
+      }
+      check.1.real(tau)
+    }
+    ## Now insert the penalty, etc
+    objargs <- resolve.defaults(list(penalty    = penalty,
+                                     penal.args = penal.args,
+                                     tau        = tau,
+                                     saveplace  = saveplace,
+                                     TRACE      = TRACE),
+                                objargs)
   }
 
   ## ......................  Optimization settings  ........................
@@ -658,7 +976,7 @@ kppmComLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE,
   changealgorithm <- length(startpar)==1 && algorithm=="Nelder-Mead"
   if(isDPP){
     alg <- dppmFixAlgorithm(algorithm, changealgorithm, clusters,
-                            startpar)
+                            startpar.human)
     algorithm <- optargs$method <- alg$algorithm
     if(algorithm=="Brent" && changealgorithm){
       optargs$lower <- alg$lower
@@ -666,6 +984,10 @@ kppmComLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE,
     }
   }
   
+  if(isTRUE(pspace$debug)) {
+    splat("About to optimize... Objective function arguments:")
+    print(objargs)
+  }
   
   ## ..........   optimize it ..............................
   opt <- do.call(optim, optargs)
@@ -674,11 +996,20 @@ kppmComLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE,
   signalStatus(optimStatus(opt), errors.only=TRUE)
   
   ## .......... extract fitted parameters .....................
-  optpar        <- opt$par
-  names(optpar) <- names(startpar)
+  if(!usecanonical) {
+    optpar.canon <- NULL
+    optpar.human <- opt$par
+    names(optpar.human) <- names(startpar.human)
+  } else {
+    optpar.canon <- opt$par
+    names(optpar.canon) <- names(startpar)
+    optpar.human <- tohuman(optpar.canon, margs=margs)
+    names(optpar.human) <- names(startpar.human)
+  }
+  opt$par             <- optpar.human
+  opt$par.canon       <- optpar.canon
   ## save starting values in 'opt' for consistency with mincontrast()
-  opt$par       <- optpar
-  opt$startpar  <- startpar
+  opt$startpar        <- startpar.human
 
   ## Finish in DPP case
   if(!is.null(DPP)){
@@ -690,7 +1021,7 @@ kppmComLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE,
                 objfun       = obj,
                 objargs      = objargs,
                 maxlogcl     = opt$value,
-                pspace.given = pspace,
+                pspace.given = pspace.given,
                 pspace.used  = pspace)
     # pack up
     clusters <- update(clusters, as.list(opt$par))
@@ -702,20 +1033,25 @@ kppmComLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE,
                    po         = po,
                    lambda     = lambda,
                    Fit        = Fit)
+    if(SAVE) {
+      h <- get("h", envir=saveplace)
+      if(!is.null(h)) class(h) <- unique(c("traj", class(h)))
+      attr(result, "h") <- h
+    }
     return(result)
   }
   
   ## meaningful model parameters
-  modelpar <- info$interpret(optpar, lambda)
+  modelpar <- info$interpret(optpar.human, lambda)
   # infer parameter 'mu'
   if(isPCP) {
     # Poisson cluster process: extract parent intensity kappa
-    kappa <- optpar[["kappa"]]
+    kappa <- optpar.human[["kappa"]]
     # mu = mean cluster size
     mu <- if(stationary) lambda/kappa else eval.im(lambda/kappa)
   } else {
     # LGCP: extract variance parameter sigma2
-    sigma2 <- optpar[["sigma2"]]
+    sigma2 <- optpar.human[["sigma2"]]
     # mu = mean of log intensity 
     mu <- if(stationary) log(lambda) - sigma2/2 else
           eval.im(log(lambda) - sigma2/2)    
@@ -728,7 +1064,7 @@ kppmComLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE,
               objfun       = obj,
               objargs      = objargs,
               maxlogcl     = opt$value,
-              pspace.given = pspace,
+              pspace.given = pspace.given,
               pspace.used  = pspace)
   # pack up
   result <- list(Xname      = Xname,
@@ -740,13 +1076,19 @@ kppmComLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE,
                  po         = po,
                  lambda     = lambda,
                  mu         = mu,
-                 par        = optpar,
-                 clustpar   = info$checkpar(par=optpar, native=FALSE),
+                 par        = optpar.human,
+                 par.canon  = optpar.canon,
+                 clustpar   = info$checkpar(par=optpar.human, native=FALSE, strict=strict),
                  clustargs  = info$outputshape(shapemodel$margs),
                  modelpar   = modelpar,
                  covmodel   = shapemodel,
                  Fit        = Fit)
   
+  if(SAVE) {
+    h <- get("h", envir=saveplace)
+    if(!is.null(h)) class(h) <- unique(c("traj", class(h)))
+    attr(result, "h") <- h
+  }
 
   return(result)
 }
@@ -759,8 +1101,13 @@ kppmComLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE,
 
 kppmPalmLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE, weightfun, rmax,
                         algorithm="Nelder-Mead", DPP=NULL, ...,
-                        
+                        penalised = FALSE,
                         pspace=NULL) {
+  pspace <- do.call(make.pspace,
+                    resolve.defaults(
+                      list(penalised=penalised, fitmethod="palm", clusters=clusters),
+                      as.list(pspace),
+                      list(...)))
   W <- as.owin(X)
   if(is.null(rmax))
     rmax <- rmax.rule("K", W, intensity(X))
@@ -844,6 +1191,69 @@ kppmPalmLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE, 
   # determine starting parameter values
   startpar <- selfstart(X)
   
+  pspace.given <- pspace
+  #' ............ permit negative parameter values ................
+  strict <- !isFALSE(pspace$strict)
+  if(!strict) pcfunargs <- append(pcfunargs, list(strict=strict))
+  #' ............ parameter corresponding to Poisson process ......
+  if(isDPP) {
+    poispar <- NULL
+  } else if(isPCP) {
+    if(!("kappa" %in% names(startpar)))
+      stop("Internal error: startpar does not include 'kappa'")
+    poispar <- startpar
+    poispar[["kappa"]] <- Inf
+  } else {
+    #' LGCP
+    if(!("sigma2" %in% names(startpar)))
+      stop("Internal error: startpar does not include 'sigma2'")
+    poispar <- startpar
+    poispar[["sigma2"]] <- .Machine$double.eps # i.e. 0
+  }
+  #' ............ use canonical parameters .........................
+  usecanonical <- isTRUE(pspace$canonical)
+  if(usecanonical) {
+     tocanonical <- info$tocanonical
+     tohuman <- info$tohuman
+     if(is.null(tocanonical) || is.null(tohuman)) {
+       warning("Canonical parameters are not yet supported for this model")
+       usecanonical <- FALSE
+     }
+  }
+  startpar.human <- startpar
+  poispar.human <- poispar
+  if(usecanonical) {
+    pcftheo <- pcfun
+    startpar <- tocanonical(startpar, margs=margs)
+    if(!is.null(poispar)) poispar <- tocanonical(poispar, margs=margs)
+    pcfun <- function(par, ...) { pcftheo(tohuman(par, ...), ...) }
+  }
+  #' ............ penalty .......................................
+  penalty <- pspace$penalty
+  penal.args <- pspace$penal.args
+  tau <- pspace$tau %orifnull% 1
+  if(is.function(penalty)) {
+    ## penalised optimisation
+    if(usecanonical) {
+      penalty.human <- penalty
+      penalty <- function(par, ...) { penalty.human(tohuman(par, ...), ...) }
+    }
+    ## data-dependent arguments in penalty
+    if(is.function(penal.args)) 
+      penal.args <- penal.args(X)
+    ## exchange rate (defer evaluation if it is a function)
+    if(!is.function(tau)) check.1.real(tau)
+    ## reinsert in 'pspace' for insurance
+    pspace$penalty <- penalty
+    pspace$penal.args <- penal.args
+    pspace$tau <- tau
+  }
+  #' ............ debugger ......................................
+  TRACE <- isTRUE(pspace$trace)
+  if(SAVE <- isTRUE(pspace$save)) {
+    saveplace <- new.env()
+    assign("h", NULL, envir=saveplace)
+  } else saveplace <- NULL
 
   ## .....................................................
   # create local function to evaluate pair correlation
@@ -857,6 +1267,14 @@ kppmPalmLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE, 
     objargs <- list(dIJ=dIJ, g=g, gscale=gscale,
                     sumloglam=safeFiniteValue(sum(log(lambdaJ))),
                     envir=environment(paco),
+                    ## The following variables are temporarily omitted
+                    ## in order to calculate the objective function
+                    ## without using them, or their side effects.
+                    penalty=NULL,   # updated below
+                    penal.args=NULL,   # updated below
+                    tau=NULL,   # updated below
+                    TRACE=FALSE, # updated below
+                    saveplace=NULL, # updated below
                     BIGVALUE=1, # updated below
                     SMALLVALUE=.Machine$double.eps)
     # define objective function (with 'paco' in its environment)
@@ -869,12 +1287,54 @@ kppmPalmLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE, 
                 sumloglam + sum(log(safePositiveValue(paco(dIJ, par))))
                 - gscale * integ,
           default=-BIGVALUE)
-        return(logplik)
+        ## penalty
+        if(hasPenalty <- is.function(penalty)) {
+          straf <- do.call(penalty, append(list(par), penal.args))
+          logplikPEN <- logplik - tau * straf
+        }
+        ## debugger
+        if(isTRUE(TRACE)) {
+          cat("Parameters:", fill=TRUE)
+          print(par)
+          splat("integral:", integ)
+          splat("log Palm likelihood:", logplik)
+          if(hasPenalty)
+            splat("penalised log Palm likelihood:", logplikPEN)
+        }
+        if(is.environment(saveplace)) {
+          h <- get("h", envir=saveplace)
+          value <- list(logplik=logplik)
+          if(hasPenalty)
+            value <- append(value, list(logplikPEN=logplikPEN))
+          hplus <- as.data.frame(append(par, value))
+          h <- rbind(h, hplus)
+          assign("h", h, envir=saveplace)
+        }
+        return(if(hasPenalty) logplikPEN else logplik)
       },
       enclos=objargs$envir)
     }
-    ## Determine a suitable large number to replace Inf
+    ## Determine the values of some parameters
+    ## (1) Determine a suitable large number to replace Inf
     objargs$BIGVALUE <- bigvaluerule(obj, objargs, startpar)
+    ## (2) Evaluate exchange rate 'tau'
+    if(is.function(penalty) && is.function(tau)) {
+      ## data-dependent exchange rate 'tau': evaluate now
+      if("poisval" %in% names(formals(tau))) {
+        ## New style: requires value of (unpenalised) objective function at Poisson process
+        poisval <- obj(poispar, objargs)
+        tau <- tau(X, poisval=poisval)
+      } else {
+        tau <- tau(X)
+      }
+      check.1.real(tau)
+    }
+    objargs <- resolve.defaults(list(penalty    = penalty,
+                                     penal.args = penal.args,
+                                     tau        = tau,
+                                     saveplace  = saveplace,
+                                     TRACE      = TRACE),
+                                objargs)
   } else {
     # create local function to evaluate  pair correlation(d) * weight(d)
     #  (with additional parameters 'pcfunargs', 'weightfun' in its environment)
@@ -890,6 +1350,11 @@ kppmPalmLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE, 
                       sum(wIJ * safeFiniteValue(log(lambdaJ)))
                     ),
                     envir=environment(wpaco),
+                    penalty=NULL,   # updated below
+                    penal.args=NULL,   # updated below
+                    tau=NULL,   # updated below
+                    TRACE=FALSE, # updated below
+                    saveplace=NULL, # updated below
                     BIGVALUE=1, # updated below
                     SMALLVALUE=.Machine$double.eps)
     # define objective function (with 'paco', 'wpaco' in its environment)
@@ -902,12 +1367,55 @@ kppmPalmLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE, 
                              sum(wIJ * log(safePositiveValue(paco(dIJ, par))))
                              - gscale * integ,
                              default=-BIGVALUE)
-        return(logplik)
+        ## penalty
+        if(hasPenalty <- is.function(penalty)) {
+          straf <- do.call(penalty, append(list(par), penal.args))
+          logplikPEN <- logplik - tau * straf
+        }
+        ## debugger
+        if(isTRUE(TRACE)) {
+          cat("Parameters:", fill=TRUE)
+          print(par)
+          splat("integral:", integ)
+          splat("log Palm likelihood:", logplik)
+          if(hasPenalty)
+            splat("penalised log Palm likelihood:", logplikPEN)
+        }
+        if(is.environment(saveplace)) {
+          h <- get("h", envir=saveplace)
+          value <- list(logplik=logplik)
+          if(hasPenalty)
+            value <- append(value, list(logplikPEN=logplikPEN))
+          hplus <- as.data.frame(append(par, value))
+          h <- rbind(h, hplus)
+          assign("h", h, envir=saveplace)
+        }
+        return(if(hasPenalty) logplikPEN else logplik)        
       },
       enclos=objargs$envir)
     }
-    ## Determine a suitable large number to replace Inf
+    ## Determine the values of some parameters
+    ## (1) Determine a suitable large number to replace Inf
     objargs$BIGVALUE <- bigvaluerule(obj, objargs, startpar)
+    ## (2) Evaluate exchange rate 'tau'
+    if(is.function(penalty) && is.function(tau)) {
+      ## data-dependent exchange rate 'tau': evaluate now
+      if("poisval" %in% names(formals(tau))) {
+        ## New style: requires value of (unpenalised) objective function at Poisson process
+        poisval <- obj(poispar, objargs)
+        tau <- tau(X, poisval=poisval)
+      } else {
+        tau <- tau(X)
+      }
+      check.1.real(tau)
+    }
+    ## Now insert penalty, etc.
+    objargs <- resolve.defaults(list(penalty    = penalty,
+                                     penal.args = penal.args,
+                                     tau        = tau,
+                                     saveplace  = saveplace,
+                                     TRACE      = TRACE),
+                                objargs)
   }
 
   ## ......................  Optimization settings  ........................
@@ -936,7 +1444,7 @@ kppmPalmLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE, 
   changealgorithm <- length(startpar)==1 && algorithm=="Nelder-Mead"
   if(isDPP){
     alg <- dppmFixAlgorithm(algorithm, changealgorithm, clusters,
-                            startpar)
+                            startpar.human)
     algorithm <- optargs$method <- alg$algorithm
     if(algorithm=="Brent" && changealgorithm){
       optargs$lower <- alg$lower
@@ -946,6 +1454,10 @@ kppmPalmLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE, 
 
   ## .......................................................................
   
+  if(isTRUE(pspace$debug)) {
+    splat("About to optimize... Objective function arguments:")
+    print(objargs)
+  }
 
   # optimize it
   opt <- do.call(optim, optargs)
@@ -953,11 +1465,20 @@ kppmPalmLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE, 
   signalStatus(optimStatus(opt), errors.only=TRUE)
   
   ## Extract optimal values of parameters
-  optpar <- opt$par
-  names(optpar) <- names(startpar)
+  if(!usecanonical) {
+    optpar.canon <- NULL
+    optpar.human <- opt$par
+    names(optpar.human) <- names(startpar.human)
+  } else {
+    optpar.canon <- opt$par
+    names(optpar.canon) <- names(startpar)
+    optpar.human <- tohuman(optpar.canon, margs=margs)
+    names(optpar.human) <- names(startpar.human)
+  }
+  opt$par            <- optpar.human
+  opt$par.canon      <- optpar.canon
   ## save starting values in 'opt' for consistency with minconfit()
-  opt$par      <- optpar
-  opt$startpar <- startpar
+  opt$startpar       <- startpar.human
 
   ## Finish in DPP case
   if(!is.null(DPP)){
@@ -969,10 +1490,10 @@ kppmPalmLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE, 
                 objfun       = obj,
                 objargs      = objargs,
                 maxlogcl     = opt$value,
-                pspace.given = pspace,
+                pspace.given = pspace.given,
                 pspace.used  = pspace)
     # pack up
-    clusters <- update(clusters, as.list(optpar))
+    clusters <- update(clusters, as.list(optpar.human))
     result <- list(Xname      = Xname,
                    X          = X,
                    stationary = stationary,
@@ -981,19 +1502,24 @@ kppmPalmLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE, 
                    po         = po,
                    lambda     = lambda,
                    Fit        = Fit)
+    if(SAVE) {
+      h <- get("h", envir=saveplace)
+      if(!is.null(h)) class(h) <- unique(c("traj", class(h)))
+      attr(result, "h") <- h
+    }
     return(result)
   }
   # meaningful model parameters
-  modelpar <- info$interpret(optpar, lambda)
+  modelpar <- info$interpret(optpar.human, lambda)
   # infer parameter 'mu'
   if(isPCP) {
     # Poisson cluster process: extract parent intensity kappa
-    kappa <- optpar[["kappa"]]
+    kappa <- optpar.human[["kappa"]]
     # mu = mean cluster size
     mu <- if(stationary) lambda/kappa else eval.im(lambda/kappa)
   } else {
     # LGCP: extract variance parameter sigma2
-    sigma2 <- optpar[["sigma2"]]
+    sigma2 <- optpar.human[["sigma2"]]
     # mu = mean of log intensity 
     mu <- if(stationary) log(lambda) - sigma2/2 else
           eval.im(log(lambda) - sigma2/2)    
@@ -1006,7 +1532,7 @@ kppmPalmLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE, 
               objfun       = obj,
               objargs      = objargs,
               maxlogcl     = opt$value,
-              pspace.given = pspace,
+              pspace.given = pspace.given,
               pspace.used  = pspace)
   # pack up
   result <- list(Xname      = Xname,
@@ -1018,15 +1544,20 @@ kppmPalmLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE, 
                  po         = po,
                  lambda     = lambda,
                  mu         = mu,
-                 par        = optpar,
-                 clustpar   = info$checkpar(par=optpar, native=FALSE),
+                 par        = optpar.human,
+                 par.canon  = optpar.canon,
+                 clustpar   = info$checkpar(par=optpar.human, native=FALSE, strict=strict),
                  clustargs  = info$outputshape(shapemodel$margs),
                  modelpar   = modelpar,
                  covmodel   = shapemodel,
                  Fit        = Fit)
+  if(SAVE) {
+    h <- get("h", envir=saveplace)
+    if(!is.null(h)) class(h) <- unique(c("traj", class(h)))
+    attr(result, "h") <- h
+  }
   return(result)
 }
-
 
 ## >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ##       A  d  a  p  t  i  v  e     C  o  m  p  o  s  i  t  e    L  i  k  e  l  i  h  o  o  d
@@ -1046,7 +1577,7 @@ kppmCLadap <- function(X, Xname, po, clusters, control, weightfun,
            call.=FALSE)
   
   W <- as.owin(X)
-  
+
   if(is.null(rmax)) # specified for numerical stability
     rmax <- shortside(Frame(W))
 
@@ -1062,7 +1593,15 @@ kppmCLadap <- function(X, Xname, po, clusters, control, weightfun,
                          sieve=TRUE)
   M         <- dcm$result
   otherargs <- dcm$otherargs
-  
+
+  #' penalised estimation is not supported
+  if(any(m <- (c("penalised", "pspace") %in% names(otherargs)))) 
+    warning(paste(ngettext(sum(m), "Argument", "Arguments"),
+                  commasep(sQuote(c("penalised", "pspace")[m])),
+                  ngettext(sum(m), "is", "are"),
+                  "not supported for adaptive composite likelihood"),
+            call.=FALSE)
+    
   # compute intensity at pairs of data points
   # and c.d.f. of interpoint distance in window
   if(stationary <- is.stationary(po)) {
@@ -1439,7 +1978,6 @@ improve.kppm <- local({
 
 is.kppm <- function(x) { inherits(x, "kppm")}
 
-
 print.kppm <- print.dppm <- function(x, ...) {
 
   isPCP <- x$isPCP
@@ -1465,6 +2003,9 @@ print.kppm <- print.dppm <- function(x, ...) {
 
   if(waxlyrical('gory', terselevel)) {
     fittedby <- "Fitted by"
+    #' detect whether fit used a penalty
+    if(!is.null(x$Fit$pspace$penalty))
+      fittedby <- "Fitted by penalised"
     switch(x$Fit$method,
            mincon = {
              splat(fittedby, "minimum contrast")
@@ -1499,6 +2040,9 @@ print.kppm <- print.dppm <- function(x, ...) {
            )
   }
 
+  #' optimization trace
+  if(!is.null(attr(x, "h")))
+    splat("[Includes history of evaluations of objective function]")
   
   parbreak(terselevel)
   
@@ -1533,6 +2077,11 @@ print.kppm <- print.dppm <- function(x, ...) {
             paste(tagvalue, collapse=", "))
     }
   }
+  pc <- x$par.canon
+  if(!is.null(pc)) {
+    splat("Fitted canonical parameters:")
+    print(pc, digits=digits)
+  }
   pa <- x$clustpar
   if (!is.null(pa)) {
     splat("Fitted",
@@ -1555,9 +2104,17 @@ print.kppm <- print.dppm <- function(x, ...) {
     splat(if(is.im(rx)) "(Average) strength" else "Strength",
           "of repulsion:", signif(mean(rx), 4))
   }
+  if(isPCP) {
+    parbreak(terselevel)
+    g <- pcfmodel(x)
+    phi <- g(0) - 1
+    splat("Cluster strength: phi = ", signif(phi, 4))
+    psib <- phi/(1+phi)
+    splat("Sibling probability: psib = ", signif(psib, 4))
+    
+  }
   invisible(NULL)
 }
-
 
 plot.kppm <- local({
 
@@ -1661,7 +2218,6 @@ terms.kppm <- terms.dppm <- function(x, ...) {
 labels.kppm <- labels.dppm <- function(object, ...) {
   labels(object$po, ...)
 }
-
 
 update.kppm <- function(object, ..., evaluate=TRUE, envir=environment(terms(object))) {
   argh <- list(...)
@@ -1773,7 +2329,6 @@ update.kppm <- function(object, ..., evaluate=TRUE, envir=environment(terms(obje
 updateData.kppm <- function(model, X, ...) {
   update(model, X=X)
 }
-
 
 unitname.kppm <- unitname.dppm <- function(x) {
   return(unitname(x$X))
@@ -1954,4 +2509,12 @@ reach.kppm <- function(x, ..., epsilon) {
   b <- uniroot(f, c(0, a))$root
   return(b)
 }
+
+is.poissonclusterprocess <- function(model) {
+  UseMethod("is.poissonclusterprocess")
+}
+
+is.poissonclusterprocess.default <- function(model) { FALSE }
+  
+is.poissonclusterprocess.kppm <- function(model) { isTRUE(model$isPCP) }
 
