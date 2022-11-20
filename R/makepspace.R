@@ -4,7 +4,7 @@
 #'
 #'   Including default penalty for cluster scale
 #'
-#'   $Revision: 1.5 $ $Date: 2022/11/20 08:09:28 $
+#'   $Revision: 1.6 $ $Date: 2022/11/20 08:31:40 $
 #' 
 #'   Copyright (c) Tilman Davies, Martin Hazelton and Adrian Baddeley 2022
 #'  GNU Public Licence >= 2.0
@@ -38,7 +38,9 @@ make.pspace <- function(...,
             nhalfgrid = nhalfgrid,
             strict    = !isFALSE(strict),
             xval      = isTRUE(xval),
-            xval.args = as.list(xval.args))
+            xval.args = as.list(xval.args),
+            debug     = debug,
+            transfo   = transfo)
   ## penalise cluster scale?
   if(is.function(penalty)) {
     ## user-specified penalty
