@@ -35,6 +35,7 @@
        control=list(),
        stabilize=TRUE,
        algorithm,
+       trajectory=FALSE,
        statistic="K",
        statargs=list(),
        rmax = NULL,
@@ -60,6 +61,7 @@
        control=list(),
        stabilize=TRUE,
        algorithm,
+       trajectory=FALSE,
        statistic="K",
        statargs=list(),
        rmax = NULL,
@@ -162,6 +164,10 @@
     equation solver \code{\link[nleqslv]{nleqslv}}
     (renamed as the argument \code{method} to \code{\link[nleqslv]{nleqslv}})
     with default \code{"Bryden"}.
+  }
+  \item{trajectory}{
+    Logical value specifying whether to save the history of all
+    function evaluations performed by the optimization algorithm.
   }
   \item{statistic}{
     Name of the summary statistic to be used
@@ -384,7 +390,13 @@
   }
   If \code{penalised=TRUE}, the fitting procedure is modified by
   adding a penalty against extreme values of the cluster scale,
-  as proposed by Baddeley et al (2022). 
+  as proposed by Baddeley et al (2022).
+
+  If \code{trajectory=TRUE}, the resulting object contains the history
+  of all points in the cluster parameter space which were evaluated by
+  the optimization algorithm. The trajectory can be extracted by
+  \code{traj(fit)} or \code{traj(obsurf(fit))} where \code{fit} is the
+  fitted model object.
 }
 \section{Cluster parameters for Neyman-Scott models}{
   For Neyman-Scott models, the fitting procedure searches

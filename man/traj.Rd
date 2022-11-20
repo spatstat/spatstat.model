@@ -12,7 +12,8 @@ traj(object)
 }
 \arguments{
   \item{object}{
-    Fitted cluster point process model (object of class \code{"kppm"}).
+    Fitted cluster point process model (object of class \code{"kppm"})
+    or objective function surface (object of class \code{"objsurf"}).
   }
 }
 \details{
@@ -38,7 +39,7 @@ traj(object)
   \code{\link{methods.traj}}
 }
 \examples{
-  fit <- kppm(redwood, pspace=list(save=TRUE))
+  fit <- kppm(redwood, trajectory=TRUE)
   h <- traj(fit)
 }
 

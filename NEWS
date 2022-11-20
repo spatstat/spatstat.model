@@ -1,4 +1,15 @@
+        CHANGES IN spatstat.model VERSION 3.1-1
 
+OVERVIEW
+
+    o Further features added to kppm.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o kppm
+    New argument 'trajectory' specifies whether to save the history
+    of function evaluations performed by the optimization algorithm.
+    
         CHANGES IN spatstat.model VERSION 3.1-0
 
 OVERVIEW
@@ -16,7 +27,8 @@ OVERVIEW
 NEW CLASSES
 
     o traj
-    Trajectory (history of function evaluations) in a model that was fitted by optimisation.
+    Trajectory (history of function evaluations) in a model
+    that was fitted by optimisation.
     
 NEW FUNCTIONS
 

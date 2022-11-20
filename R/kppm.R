@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.223 $ $Date: 2022/11/13 08:03:09 $
+# $Revision: 1.224 $ $Date: 2022/11/20 07:59:54 $
 #
 
 kppm <- function(X, ...) {
@@ -71,6 +71,7 @@ kppm.ppp <- kppm.quad <-
            control=list(),
            stabilize=TRUE,
            algorithm,
+           trajectory=FALSE,
            statistic="K",
            statargs=list(),
            rmax = NULL,
@@ -93,6 +94,9 @@ kppm.ppp <- kppm.quad <-
   if(missing(algorithm)) {
     algorithm <- if(method == "adapcl") "Broyden" else "Nelder-Mead"
   } else check.1.string(algorithm)
+  
+  if(isTRUE(trajectory) && method == "adapcl")
+    warning("trajectory=TRUE is not supported for method 'adapcl'", call.=FALSE)
 
   ClusterArgs <- list(method = method,
                       improve.type = improve.type,
@@ -171,18 +175,21 @@ kppm.ppp <- kppm.quad <-
                              statargs=statargs, rmax=rmax,
                              algorithm=algorithm,
                              penalised = penalised,
+                             trajectory = trajectory,
                              ...),
          clik2   = kppmComLik(X=XX, Xname=Xname, po=po, clusters=clusters,
                              control=control, stabilize=stabilize,
                              weightfun=weightfun, 
                              rmax=rmax, algorithm=algorithm,
                              penalised = penalised,
+                             trajectory = trajectory,
                              ...),
          palm   = kppmPalmLik(X=XX, Xname=Xname, po=po, clusters=clusters,
                              control=control, stabilize=stabilize,
                              weightfun=weightfun, 
                              rmax=rmax, algorithm=algorithm,
                              penalised = penalised,
+                             trajectory = trajectory,
                              ...),
          adapcl   = kppmCLadap(X=XX, Xname=Xname, po=po, clusters=clusters,
                              control=control, epsilon=epsilon, 
@@ -633,7 +640,7 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
 kppmComLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE,
                        weightfun, rmax, algorithm="Nelder-Mead",
                        DPP=NULL, ..., 
-                       penalised = FALSE,
+                       penalised = FALSE, 
                        pspace=NULL) {
   pspace <- do.call(make.pspace,
                     resolve.defaults(
@@ -1101,7 +1108,7 @@ kppmComLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE,
 
 kppmPalmLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE, weightfun, rmax,
                         algorithm="Nelder-Mead", DPP=NULL, ...,
-                        penalised = FALSE,
+                        penalised = FALSE, 
                         pspace=NULL) {
   pspace <- do.call(make.pspace,
                     resolve.defaults(

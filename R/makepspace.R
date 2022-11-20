@@ -4,7 +4,7 @@
 #'
 #'   Including default penalty for cluster scale
 #'
-#'   $Revision: 1.3 $ $Date: 2022/11/13 07:37:14 $
+#'   $Revision: 1.5 $ $Date: 2022/11/20 08:09:28 $
 #' 
 #'   Copyright (c) Tilman Davies, Martin Hazelton and Adrian Baddeley 2022
 #'  GNU Public Licence >= 2.0
@@ -14,7 +14,8 @@ make.pspace <- function(...,
                         canonical=FALSE,
                         adjusted=FALSE,
                         trace=FALSE,
-                        save=FALSE,
+                        save=trajectory,
+                        trajectory=FALSE,
                         nhalfgrid=NULL,
                         strict=TRUE,
                         penalised=NULL,
