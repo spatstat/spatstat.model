@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.224 $ $Date: 2022/11/20 07:59:54 $
+# $Revision: 1.225 $ $Date: 2022/11/21 02:26:03 $
 #
 
 kppm <- function(X, ...) {
@@ -224,15 +224,15 @@ kppm.ppp <- kppm.quad <-
 
 kppmMinCon <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE, statistic, statargs,
                        algorithm="Nelder-Mead", DPP=NULL, ...,
-                       penalised = FALSE,
                        pspace=NULL) {
   # Minimum contrast fit
   stationary <- is.stationary(po)
   pspace <- do.call(make.pspace,
                     resolve.defaults(
-                      list(penalised=penalised, fitmethod="mincon", clusters=clusters),
+                      list(fitmethod="mincon", clusters=clusters),
+                      list(...), ## ellipsis arguments override pspace
                       as.list(pspace),
-                      list(...)))
+                      .MatchNull=FALSE))
   # compute intensity
   if(stationary) {
     lambda <- summary(po)$trend$value
@@ -640,13 +640,13 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
 kppmComLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE,
                        weightfun, rmax, algorithm="Nelder-Mead",
                        DPP=NULL, ..., 
-                       penalised = FALSE, 
                        pspace=NULL) {
   pspace <- do.call(make.pspace,
                     resolve.defaults(
-                      list(penalised=penalised, fitmethod="clik2", clusters=clusters),
+                      list(fitmethod="clik2", clusters=clusters),
+                      list(...), ## ellipsis arguments override pspace
                       as.list(pspace),
-                      list(...)))
+                      .MatchNull=FALSE))
   W <- as.owin(X)
   if(is.null(rmax))
     rmax <- rmax.rule("K", W, intensity(X))
@@ -1108,13 +1108,13 @@ kppmComLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE,
 
 kppmPalmLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE, weightfun, rmax,
                         algorithm="Nelder-Mead", DPP=NULL, ...,
-                        penalised = FALSE, 
                         pspace=NULL) {
   pspace <- do.call(make.pspace,
                     resolve.defaults(
-                      list(penalised=penalised, fitmethod="palm", clusters=clusters),
+                      list(fitmethod="palm", clusters=clusters),
+                      list(...), ## ellipsis arguments override pspace
                       as.list(pspace),
-                      list(...)))
+                      .MatchNull=FALSE))
   W <- as.owin(X)
   if(is.null(rmax))
     rmax <- rmax.rule("K", W, intensity(X))

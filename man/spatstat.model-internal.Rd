@@ -320,11 +320,11 @@ Kpcf.kppm(model, what)
 \method{Kmodel}{slrm}(model, \dots)
 killinteraction(model)
 kppmComLik(X, Xname, po, clusters, control, stabilize, weightfun, rmax,
-           algorithm, DPP, \dots, penalised, pspace)
+           algorithm, DPP, \dots, pspace)
 kppmMinCon(X, Xname, po, clusters, control, stabilize, statistic, statargs,
-           algorithm, DPP, \dots, penalised, pspace)
+           algorithm, DPP, \dots, pspace)
 kppmPalmLik(X, Xname, po, clusters, control, stabilize, weightfun, rmax, 
-           algorithm, DPP, \dots, penalised, pspace)
+           algorithm, DPP, \dots, pspace)
 kppmCLadap(X, Xname, po, clusters, control, weightfun, 
            rmax, epsilon, DPP, algorithm, \dots,
            startpar, globStrat)

@@ -4,7 +4,7 @@
 #'
 #'   Including default penalty for cluster scale
 #'
-#'   $Revision: 1.7 $ $Date: 2022/11/21 01:22:34 $
+#'   $Revision: 1.8 $ $Date: 2022/11/21 02:36:46 $
 #' 
 #'   Copyright (c) Tilman Davies, Martin Hazelton and Adrian Baddeley 2022
 #'  GNU Public Licence >= 2.0
@@ -42,10 +42,11 @@ make.pspace <- function(...,
             debug     = debug,
             transfo   = transfo)
   ## penalise cluster scale?
+  penalised <- isTRUE(penalised)
   if(is.function(penalty)) {
     ## user-specified penalty
     penalised <- TRUE
-  } else if(isTRUE(penalised) && is.null(penalty)) {
+  } else if(penalised && is.null(penalty)) {
     ## default penalty function
     if(flatness <= 0 || flatness %% 2 != 0)
       stop("'flatness' of penalty must be even and positive", call.=FALSE)
