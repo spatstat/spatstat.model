@@ -1,3 +1,15 @@
+        CHANGES IN spatstat.model VERSION 3.1-2
+
+OVERVIEW
+
+    o Bug fixes.
+
+BUG FIXES
+
+    o kppm
+    Terminated with an error about missing argument 'A', if penalised=TRUE.
+    Fixed.
+
         CHANGES IN spatstat.model VERSION 3.1-1
 
 OVERVIEW

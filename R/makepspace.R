@@ -4,7 +4,7 @@
 #'
 #'   Including default penalty for cluster scale
 #'
-#'   $Revision: 1.6 $ $Date: 2022/11/20 08:31:40 $
+#'   $Revision: 1.7 $ $Date: 2022/11/21 01:22:34 $
 #' 
 #'   Copyright (c) Tilman Davies, Martin Hazelton and Adrian Baddeley 2022
 #'  GNU Public Licence >= 2.0
@@ -64,7 +64,7 @@ make.pspace <- function(...,
   }
   if(penalised) {
     ## compute arguments of penalty
-    if(!is.null(penal.args)) {
+    if(is.null(penal.args)) {
       penal.args <- function(X, rho=flatness) {
         nnd <- nndist(X)
         p <- list(A = median(nnd),
@@ -73,7 +73,7 @@ make.pspace <- function(...,
         return(p)
       }
     }
-    if(!is.null(tau)) {
+    if(is.null(tau)) {
       fitmethod <- match.arg(fitmethod)
       tau <- switch(fitmethod,
                     mincon = function(X, poisval, f=C0factor) { f * poisval },

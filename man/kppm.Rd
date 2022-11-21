@@ -641,10 +641,12 @@
   }
 
   # Different fitting techniques
-  kppm(redwood ~ 1, "Thomas", method="c")
-  kppm(redwood ~ 1, "Thomas", method="p")
+  fitc <- kppm(redwood ~ 1, "Thomas", method="c")
+  fitp <- kppm(redwood ~ 1, "Thomas", method="p")
+  # penalised fit
+  fitmp <- kppm(redwood ~ 1, "Thomas", penalised=TRUE)
   # quasi-likelihood improvement 
-  kppm(redwood ~ x, "Thomas", improve.type = "quasi")
+  fitq <- kppm(redwood ~ x, "Thomas", improve.type = "quasi")
 
   if(!online) spatstat.options(op)
 }
@@ -653,6 +655,8 @@
   with contributions from Abdollah Jalilian and Rasmus Waagepetersen.
   Adaptive composite likelihood method contributed by Chiara Fend
   and modified by Adrian Baddeley.
+  Penalised optimization developed by Adrian Baddeley, Tilman Davies
+  and Martin Hazelton.
 }
 \keyword{spatial}
 \keyword{models}
