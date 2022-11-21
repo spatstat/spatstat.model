@@ -1,32 +1,27 @@
-        CHANGES IN spatstat.model VERSION 3.1-3
 
-OVERVIEW
-
-    o Internal tweaks.
-
-        CHANGES IN spatstat.model VERSION 3.1-2
-
-OVERVIEW
-
-    o Bug fixes.
-
-BUG FIXES
-
-    o kppm
-    Terminated with an error about missing argument 'A', if penalised=TRUE.
-    Fixed.
-
-        CHANGES IN spatstat.model VERSION 3.1-1
+        CHANGES IN spatstat.model VERSION 3.1-0.001
 
 OVERVIEW
 
     o Further features added to kppm.
+
+    o Bug fixes and internal tweaks.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o kppm
     New argument 'trajectory' specifies whether to save the history
     of function evaluations performed by the optimization algorithm.
+    
+BUG FIXES
+
+    o kppm
+    Terminated with an error about missing argument 'A', if penalised=TRUE.
+    Fixed.
+
+    o summary.kppm
+    Did not correctly recognise when a model was fitted using a penalty.
+    Fixed.
     
         CHANGES IN spatstat.model VERSION 3.1-0
 

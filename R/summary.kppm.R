@@ -1,7 +1,7 @@
 #'
 #'       summary.kppm.R
 #'
-#'   $Revision: 1.40 $  $Date: 2022/11/13 08:35:45 $
+#'   $Revision: 1.41 $  $Date: 2022/11/21 02:52:46 $
 #' 
 
 summary.kppm <- function(object, ..., quick=FALSE) {
@@ -63,7 +63,7 @@ summary.kppm <- function(object, ..., quick=FALSE) {
     Lam <- integral(predict(object, window=win))
     result$odi <- vac/Lam
     #' detect penalised fit
-    result$penalised <- !is.null(Fit$pspace$penalty)
+    result$penalised <- !is.null(Fit$pspace.used$penalty)
     #' optimization trace
     result$trace <- attr(object, "h")
     #' spatial persistence (over window)
