@@ -243,7 +243,7 @@ check.separable(dmat, covname, isconstant, fatal)
 \method{coef}{summary.slrm}(object, \dots)
 \method{coef}{vblogit}(object, \dots) 
 condSimCox(object, nsim, \dots, window, n.cond, w.cond,
-           giveup, maxchunk, verbose, drop)
+           giveup, maxchunk, saveLambda, verbose, drop)
 damaged.ppm(object)
 data.mppm(x)
 deltasuffstat(model, \dots,

@@ -3,7 +3,7 @@
 #'
 #'    simulate.kppm
 #'
-#'    $Revision: 1.9 $ $Date: 2022/04/06 08:51:41 $
+#'    $Revision: 1.10 $ $Date: 2022/11/24 10:21:07 $
 
 simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
                           window=NULL, covariates=NULL,
@@ -194,6 +194,7 @@ condSimCox <- function(object, nsim=1,
                        ..., window=NULL,
                        n.cond=NULL, w.cond=NULL,
                        giveup=1000, maxchunk=100,
+                       saveLambda=FALSE,
                        verbose=TRUE, drop=FALSE) {
   stopifnot(is.kppm(object))
   shortcut <- isFALSE(object$isPCP)
@@ -263,6 +264,7 @@ condSimCox <- function(object, nsim=1,
           Yfree <- rpoispp(lamj.free)
           Y <- superimpose(Ycond, Yfree, W=w.sim)
         }
+        if(saveLambda) attr(Y, "Lambda") <- lamj
         results <- append(results, list(Y))
       }
     }

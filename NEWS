@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 3.1-0.001
+        CHANGES IN spatstat.model VERSION 3.1-0.002
 
 OVERVIEW
 
@@ -15,6 +15,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
 BUG FIXES
 
+    o simulate.kppm
+    If the model was very close to a Poisson process, and if saveLambda=TRUE was selected,
+    the attribute "Lambda" was incorrectly labelled "lambda".
+    Fixed.
+    
     o kppm
     Terminated with an error about missing argument 'A', if penalised=TRUE.
     Fixed.
