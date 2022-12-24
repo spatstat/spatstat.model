@@ -1,6 +1,6 @@
 Package: spatstat.model
-Version: 3.1-0.002
-Date: 2022-11-24
+Version: 3.1-0.003
+Date: 2022-12-24
 Title: Parametric Statistical Modelling for the 'spatstat' Family
 Authors@R: c(person("Adrian", "Baddeley", 
                     role = c("aut", "cre", "cph"),
@@ -55,12 +55,12 @@ Depends: R (>= 3.5.0), spatstat.data (>= 3.0), spatstat.geom (>= 3.0), spatstat.
 Imports: spatstat.utils (>= 3.0), spatstat.sparse (>= 3.0), mgcv, Matrix, abind, tensor, goftest (>= 1.2-2)
 Suggests: sm, maptools (>= 0.9-9), gsl, locfit, spatial, RandomFields (>= 3.1.24.1), RandomFieldsUtils(>= 0.3.3.1), fftwtools (>= 0.9-8), nleqslv, glmnet, spatstat.linnet (>= 3.0), spatstat (>= 3.0)
 Additional_repositories: https://spatstat.r-universe.dev
-Description: Functionality for exploratory data analysis and nonparametric analysis of
-	     spatial data, mainly spatial point patterns,
-	     in the 'spatstat' family of packages.
+Description: Functionality for parametric statistical modelling and inference for spatial data,
+	     mainly spatial point patterns, in the 'spatstat' family of packages.
 	     (Excludes analysis of spatial data on a linear network,
 	     which is covered by the separate package 'spatstat.linnet'.)
-	     Methods include quadrat counts, K-functions and their simulation envelopes, nearest neighbour distance and empty space statistics, Fry plots, pair correlation function, kernel smoothed intensity, relative risk estimation with cross-validated bandwidth selection, mark correlation functions, segregation indices, mark dependence diagnostics, and kernel estimates of covariate effects. Formal hypothesis tests of random pattern (chi-squared, Kolmogorov-Smirnov, Monte Carlo, Diggle-Cressie-Loosmore-Ford, Dao-Genton, two-stage Monte Carlo) and tests for covariate effects (Cox-Berman-Waller-Lawson, Kolmogorov-Smirnov, ANOVA) are also supported.
+	     Supports parametric modelling, formal statistical inference, and model validation.
+	     Parametric models include Poisson point processes, Cox point processes, Neyman-Scott cluster processes, Gibbs point processes and determinantal point processes. Models can be fitted to data using maximum likelihood, maximum pseudolikelihood, maximum composite likelihood and the method of minimum contrast. Fitted models can be simulated and predicted. Formal inference includes hypothesis tests (quadrat counting tests, Cressie-Read tests, Clark-Evans test, Berman test, Diggle-Cressie-Loosmore-Ford test, scan test, studentised permutation test, segregation test, ANOVA tests of fitted models, adjusted composite likelihood ratio test, envelope tests, Dao-Genton test, balanced independent two-stage test), confidence intervals for parameters, and prediction intervals for point counts. Model validation techniques include leverage, influence, partial residuals, added variable plots, diagnostic plots, pseudoscore residual plots, model compensators and Q-Q plots.
 License: GPL (>= 2)
 URL: http://spatstat.org/
 NeedsCompilation: yes
