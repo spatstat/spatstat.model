@@ -1,11 +1,13 @@
 
-        CHANGES IN spatstat.model VERSION 3.1-0.004
+        CHANGES IN spatstat.model VERSION 3.1-0.005
 
 OVERVIEW
 
     o We thank Bethany Macdonald for contributions.
     
-    o Further features added to kppm.
+    o kppm can save the history of the optimisation algorithm.
+
+    o kppm has been accelerated.
 
     o Bug fixes and internal tweaks.
 
@@ -16,7 +18,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     of function evaluations performed by the optimization algorithm.
 
     o kppm
-    Computation accelerated when 'method="palm"'
+    Computation accelerated when 'method="palm"' or 'method='clik2'"
     [Kindly contributed by Bethany Macdonald.]
     
 BUG FIXES
@@ -24,6 +26,11 @@ BUG FIXES
     o simulate.kppm
     If the model was very close to a Poisson process, and if saveLambda=TRUE was selected,
     the attribute "Lambda" was incorrectly labelled "lambda".
+    Fixed.
+
+    o simulate.kppm
+    Simulation of the variance-gamma model terminated with an error about the value of 'nu' 
+    (with recent versions of spatstat.random).
     Fixed.
     
     o kppm

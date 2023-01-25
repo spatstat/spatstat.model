@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.226 $ $Date: 2023/01/25 04:06:49 $
+# $Revision: 1.227 $ $Date: 2023/01/25 05:16:09 $
 #
 
 kppm <- function(X, ...) {
@@ -650,12 +650,10 @@ kppmComLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE,
   W <- as.owin(X)
   if(is.null(rmax))
     rmax <- rmax.rule("K", W, intensity(X))
-  # identify pairs of points that contribute
-  cl <- closepairs(X, rmax, what="ijd")
-#  I <- cl$i
-#  J <- cl$j
+  ## identify unordered pairs of points that contribute
+  cl <- closepairs(X, rmax, what="ijd", twice=FALSE, neat=FALSE)
   dIJ <- cl$d
-  # compute weights for pairs of points
+  # compute weights for unordered pairs of points
   if(is.function(weightfun)) {
     wIJ <- weightfun(dIJ)
     sumweight <- safePositiveValue(sum(wIJ))
@@ -816,7 +814,7 @@ kppmComLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE,
                     SMALLVALUE=.Machine$double.eps)
     # define objective function (with 'paco' in its environment)
     # This is the log composite likelihood minus the constant term 
-    #       sum(log(lambdaIJ)) - npairs * log(gscale)
+    #       2 * (sum(log(lambdaIJ)) - npairs * log(gscale))
     obj <- function(par, objargs) {
       with(objargs, {
         logprod <- sum(log(safePositiveValue(paco(dIJ, par))))
@@ -896,7 +894,7 @@ kppmComLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE,
                     SMALLVALUE=.Machine$double.eps)
     # define objective function (with 'paco', 'wpaco' in its environment)
     # This is the log composite likelihood minus the constant term 
-    #       sum(wIJ * log(lambdaIJ)) - sumweight * log(gscale)
+    #       2 * (sum(wIJ * log(lambdaIJ)) - sumweight * log(gscale))
     obj <- function(par, objargs) {
       with(objargs,
       {
