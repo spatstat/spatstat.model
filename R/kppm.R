@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.225 $ $Date: 2022/11/21 02:26:03 $
+# $Revision: 1.226 $ $Date: 2023/01/25 04:06:49 $
 #
 
 kppm <- function(X, ...) {
@@ -1118,21 +1118,20 @@ kppmPalmLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE, 
   W <- as.owin(X)
   if(is.null(rmax))
     rmax <- rmax.rule("K", W, intensity(X))
-  # identify pairs of points that contribute
-  cl <- closepairs(X, rmax)
-#  I <- cl$i
-  J <- cl$j
+  ## identify unordered pairs of points that contribute
+  cl <- closepairs(X, rmax, twice=FALSE, neat=FALSE)
   dIJ <- cl$d
-  # compute weights for pairs of points
+  ## compute weights for unordered pairs of points. Must be symmetric.
   if(is.function(weightfun)) {
     wIJ <- weightfun(dIJ)
-#    sumweight <- sum(wIJ)
   } else {
     npairs <- length(dIJ)
     wIJ <- rep.int(1, npairs)
-#    sumweight <- npairs
   }
-  # convert window to mask, saving other arguments for later
+  ## first point in each *ordered* pair
+  J <- c(cl$i, cl$j)
+  
+  ## convert window to mask, saving other arguments for later
   dcm <- do.call.matched(as.mask,
                          append(list(w=W), list(...)),
                          sieve=TRUE)
@@ -1291,7 +1290,7 @@ kppmPalmLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE, 
         integ <- unlist(stieltjes(paco, g, par=par))
         integ <- pmax(SMALLVALUE, integ)
         logplik <- safeFiniteValue(
-                sumloglam + sum(log(safePositiveValue(paco(dIJ, par))))
+                sumloglam + 2 * sum(log(safePositiveValue(paco(dIJ, par))))
                 - gscale * integ,
           default=-BIGVALUE)
         ## penalty
@@ -1354,7 +1353,7 @@ kppmPalmLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE, 
     # pack up necessary information
     objargs <- list(dIJ=dIJ, wIJ=wIJ, g=g, gscale=gscale,
                     wsumloglam=safeFiniteValue(
-                      sum(wIJ * safeFiniteValue(log(lambdaJ)))
+                      sum(c(wIJ,wIJ) * safeFiniteValue(log(lambdaJ)))
                     ),
                     envir=environment(wpaco),
                     penalty=NULL,   # updated below
@@ -1371,7 +1370,7 @@ kppmPalmLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE, 
         integ <- unlist(stieltjes(wpaco, g, par=par))
         integ <- pmax(SMALLVALUE, integ)
         logplik <- safeFiniteValue(wsumloglam +
-                             sum(wIJ * log(safePositiveValue(paco(dIJ, par))))
+                             2 * sum(wIJ * log(safePositiveValue(paco(dIJ, par))))
                              - gscale * integ,
                              default=-BIGVALUE)
         ## penalty

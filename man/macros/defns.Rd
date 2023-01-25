@@ -14,6 +14,7 @@
 \newcommand{\ottmar}{Ottmar Cronie \email{ottmar@chalmers.se}}
 \newcommand{\stephenEglen}{Stephen Eglen \email{S.J.Eglen@damtp.cam.ac.uk}}
 \newcommand{\mehdi}{Mehdi Moradi \email{m2.moradi@yahoo.com}}
+\newcommand{\yamei}{Ya-Mei Chang \email{yamei628@gmail.com}}
 % Names with accents
 \newcommand{\Bogsted}{\ifelse{latex}{\out{B\o gsted}}{Bogsted}}
 \newcommand{\Cramer}{\ifelse{latex}{\out{Cram\'er}}{Cramer}}
@@ -37,5 +38,6 @@
 \newcommand{\rmhInteractionsList}{\code{\link[spatstat.model]{AreaInter}}, \code{\link[spatstat.model]{BadGey}}, \code{\link[spatstat.model]{DiggleGatesStibbard}}, \code{\link[spatstat.model]{DiggleGratton}}, \code{\link[spatstat.model]{Fiksel}}, \code{\link[spatstat.model]{Geyer}}, \code{\link[spatstat.model]{Hardcore}}, \code{\link[spatstat.model]{Hybrid}}, \code{\link[spatstat.model]{LennardJones}}, \code{\link[spatstat.model]{MultiStrauss}}, \code{\link[spatstat.model]{MultiStraussHard}}, \code{\link[spatstat.model]{PairPiece}}, \code{\link[spatstat.model]{Penttinen}}, \code{\link[spatstat.model]{Poisson}}, \code{\link[spatstat.model]{Softcore}}, \code{\link[spatstat.model]{Strauss}}, \code{\link[spatstat.model]{StraussHard}} and \code{\link[spatstat.model]{Triplets}}}
 %% Frequent references
 \newcommand{\baddrubaturnbook}{Baddeley, A., Rubak, E. and Turner, R. (2015) \emph{Spatial Point Patterns: Methodology and Applications with R}. Chapman and Hall/CRC Press. }
+\newcommand{\baddchangclustersim}{Baddeley, A. and Chang, Y.-M. (2023) Robust algorithms for simulating cluster point processes. \emph{Journal of Statistical Computation and Simulation}. To appear.}
 
 

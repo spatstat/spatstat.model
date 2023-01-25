@@ -3,7 +3,7 @@
 #'
 #'    simulate.kppm
 #'
-#'    $Revision: 1.10 $ $Date: 2022/11/24 10:21:07 $
+#'    $Revision: 1.11 $ $Date: 2023/01/25 04:26:29 $
 
 simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
                           window=NULL, covariates=NULL,
@@ -89,27 +89,27 @@ simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
          Thomas={
            kappa <- mp$kappa
            sigma <- mp$sigma
-           cmd <- expression(rThomas(kappa,sigma,mu,win, ...))
+           cmd <- expression(rThomas(kappa=kappa, scale=sigma, mu=mu, win=win, ...))
            dont.complain.about(kappa, sigma, mu)
          },
          MatClust={
            kappa <- mp$kappa
            r     <- mp$R
-           cmd   <- expression(rMatClust(kappa,r,mu,win, ...))
+           cmd   <- expression(rMatClust(kappa=kappa, scale=r, mu=mu, win=win, ...))
            dont.complain.about(kappa, r)
          },
          Cauchy = {
            kappa <- mp$kappa
            omega <- mp$omega
-           cmd   <- expression(rCauchy(kappa, omega, mu, win, ...))
+           cmd   <- expression(rCauchy(kappa = kappa, scale=omega, mu=mu, win=win, ...))
            dont.complain.about(kappa, omega, mu)
          },
          VarGamma = {
            kappa  <- mp$kappa
            omega  <- mp$omega
            nu.ker <- object$covmodel$margs$nu.ker
-           cmd    <- expression(rVarGamma(kappa, nu.ker, omega, mu, win, ...))
-           dont.complain.about(kappa, nu.ker, omega, mu)
+           cmd    <- expression(rVarGamma(kappa=kappa, scale=omega, mu=mu, nu=nu.ker, win=win, ...))
+           dont.complain.about(kappa, omega, mu, nu.ker)
          },
          LGCP={
            sigma2 <- mp$sigma2

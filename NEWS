@@ -1,8 +1,10 @@
 
-        CHANGES IN spatstat.model VERSION 3.1-0.003
+        CHANGES IN spatstat.model VERSION 3.1-0.004
 
 OVERVIEW
 
+    o We thank Bethany Macdonald for contributions.
+    
     o Further features added to kppm.
 
     o Bug fixes and internal tweaks.
@@ -12,6 +14,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o kppm
     New argument 'trajectory' specifies whether to save the history
     of function evaluations performed by the optimization algorithm.
+
+    o kppm
+    Computation accelerated when 'method="palm"'
+    [Kindly contributed by Bethany Macdonald.]
     
 BUG FIXES
 
