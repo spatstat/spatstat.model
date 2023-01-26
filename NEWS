@@ -1,13 +1,13 @@
 
-        CHANGES IN spatstat.model VERSION 3.1-0.005
+        CHANGES IN spatstat.model VERSION 3.1-1
 
 OVERVIEW
 
     o We thank Bethany Macdonald for contributions.
     
-    o kppm can save the history of the optimisation algorithm.
+    o kppm has been accelerated when method='palm' or 'clik2'
 
-    o kppm has been accelerated.
+    o kppm can save the history of the optimisation algorithm.
 
     o Bug fixes and internal tweaks.
 
@@ -18,7 +18,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     of function evaluations performed by the optimization algorithm.
 
     o kppm
-    Computation accelerated when 'method="palm"' or 'method='clik2'"
+    Computation accelerated when 'method="palm"' or 'method='clik2'".
     [Kindly contributed by Bethany Macdonald.]
     
 BUG FIXES
@@ -45,13 +45,15 @@ BUG FIXES
 
 OVERVIEW
 
-    o Penalised model-fitting for Poisson cluster process models.
+    o We thank Tilman Davies and Martin Hazelton for contributions.
 
-    o Index of the strength of clustering in a Poisson cluster process model.
+    o Penalised model-fitting for Neyman-Scott cluster process models.
+
+    o Index of the strength of clustering in a Neyman-Scott cluster process model.
     
     o Probability of having any siblings.
 
-    o More information is printed about Poisson cluster process models.
+    o More information is printed about Neyman-Scott cluster process models.
     
     o Minor improvements.
 
@@ -67,7 +69,8 @@ NEW FUNCTIONS
     Probability that a point in a cluster process has any siblings.
 
     o is.poissonclusterprocess
-    Detects whether a given model is a Poisson cluster process.
+    Detects whether a given model is a Poisson cluster process
+    (which includes Neyman-Scott processes).
 
     o traj, print.traj, plot.traj, lines.traj
     Extract, print and plot the trajectory of function evaluations.
