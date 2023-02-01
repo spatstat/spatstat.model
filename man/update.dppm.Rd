@@ -1,34 +1,34 @@
-\name{update.kppm}
-\alias{update.kppm}
-\title{Update a Fitted Cluster Point Process Model}
+\name{update.dppm}
+\alias{update.dppm}
+\title{Update a Fitted Determinantal Point Process Model}
 \description{
-  \code{update} method for class \code{"kppm"}.
+  \code{update} method for class \code{"dppm"}.
 }
 \usage{
- \method{update}{kppm}(object, \dots, evaluate=TRUE,
+ \method{update}{dppm}(object, \dots, evaluate=TRUE,
                        envir=environment(terms(object)))
 }
 \arguments{
   \item{object}{
-    Fitted cluster point process model.
-    An object of class \code{"kppm"},
-    obtained from \code{\link{kppm}}.
+    Fitted determinantal point process model.
+    An object of class \code{"dppm"},
+    obtained from \code{\link{dppm}}.
   }
   \item{\dots}{
-    Arguments passed to \code{\link{kppm}}.
+    Arguments passed to \code{\link{dppm}}.
   }
   \item{evaluate}{
     Logical value indicating whether to return the updated fitted model
-    (\code{evaluate=TRUE}, the default) or just the updated call to \code{kppm}
+    (\code{evaluate=TRUE}, the default) or just the updated call to \code{dppm}
     (\code{evaluate=FALSE}).
   }
   \item{envir}{
-    Environment in which to re-evaluate the call to \code{\link{kppm}}.
+    Environment in which to re-evaluate the call to \code{\link{dppm}}.
   }
 }
 \details{
-  \code{object} should be a fitted cluster point process model,
-  obtained from the model-fitting function \code{\link{kppm}}.
+  \code{object} should be a fitted determinantal point process model,
+  obtained from the model-fitting function \code{\link{dppm}}.
   The model will be updated according to the new arguments provided.
 
   If the argument \code{trend} is provided, it determines the
@@ -50,33 +50,24 @@
   \code{X} if it is provided, or otherwise by any unnamed argument
   that is a point pattern or a quadrature scheme.
 
-  The model is refitted using \code{\link{kppm}}.
+  The model is refitted using \code{\link{dppm}}.
 }
 \value{
   Another fitted cluster point process model (object of
-  class \code{"kppm"}.
+  class \code{"dppm"}.
 }
 \seealso{
-  \code{\link{kppm}},  \code{\link{plot.kppm}},
-  \code{\link{predict.kppm}}, \code{\link{simulate.kppm}},
-  \code{\link{methods.kppm}},
-  \code{\link{vcov.kppm}}
+  \code{\link{dppm}},  \code{\link{plot.dppm}},
+  \code{\link{predict.dppm}}, \code{\link{simulate.dppm}},
+  \code{\link{methods.dppm}}.
 }
 \examples{
- fit <- kppm(redwood ~1, "Thomas")
- fitx <- update(fit, ~ . + x)
- fitM <- update(fit, clusters="MatClust")
- fitC <- update(fit, cells)
- fitCx <- update(fit, cells ~ x)
+  fit <- dppm(swedishpines ~ x + y, dppGauss, method="c")
+  fitx <- update(fit, ~x)
+  fit2 <- update(fit, flipxy(swedishpines))
 }
 \author{
-  \adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{models}

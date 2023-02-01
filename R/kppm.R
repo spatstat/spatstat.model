@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.227 $ $Date: 2023/01/25 05:16:09 $
+# $Revision: 1.228 $ $Date: 2023/02/01 08:41:04 $
 #
 
 kppm <- function(X, ...) {
@@ -2223,7 +2223,7 @@ labels.kppm <- labels.dppm <- function(object, ...) {
   labels(object$po, ...)
 }
 
-update.kppm <- function(object, ..., evaluate=TRUE, envir=environment(terms(object))) {
+update.kppm <- update.dppm <- function(object, ..., evaluate=TRUE, envir=environment(terms(object))) {
   argh <- list(...)
   nama <- names(argh)
   callframe <- object$callframe

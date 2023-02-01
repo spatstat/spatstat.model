@@ -29,11 +29,11 @@
 }
 \details{
   These functions are methods for the generic commands
-  \code{\link{coef}},
-  \code{\link{formula}},
-  \code{\link{print}},
-  \code{\link{terms}} and
-  \code{\link{labels}}
+  \code{\link[stats]{coef}},
+  \code{\link[stats]{formula}},
+  \code{\link[base]{print}},
+  \code{\link[stats]{terms}} and 
+  \code{\link[base]{labels}}
   for the class \code{"dppm"}.
 
   An object of class \code{"dppm"} represents a fitted
@@ -48,8 +48,6 @@
 }
 \author{
   \adrian
-  
-  
 }
 \seealso{
   \code{\link{dppm}},  \code{\link{plot.dppm}},
