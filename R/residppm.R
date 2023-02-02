@@ -4,7 +4,7 @@
 # computes residuals for fitted point process model
 #
 #
-# $Revision: 1.26 $ $Date: 2022/01/04 05:30:06 $
+# $Revision: 1.27 $ $Date: 2023/02/02 02:37:29 $
 #
 
 residuals.ppm <-
@@ -57,8 +57,9 @@ residuals.ppm <-
                                append(list(data.ppm(object)),
                                       quad))
       }
-      # refit the model with new quadscheme
-      hi.res.fit <- update(object, hi.res.quad)
+      ## refit the model with new quadscheme
+      e <- list2env(list(hi.res.quad=hi.res.quad), parent=object$callframe)
+      hi.res.fit <- update(object, hi.res.quad, envir=e)
       NewCoef <- coef(hi.res.fit)
     }
   }

@@ -3,7 +3,7 @@
 #
 #	Computes the GNZ contrast of delta-f for any function f
 #
-#	$Revision: 1.10 $	$Date: 2022/01/04 05:30:06 $
+#	$Revision: 1.12 $	$Date: 2023/02/02 02:39:37 $
 #
 ################################################################################
 #
@@ -20,7 +20,10 @@ psst <- function(object, fun, r=NULL, breaks=NULL, ...,
   } else if(is.ppp(object) || is.quad(object)) {
     if(is.ppp(object)) object <- quadscheme(object, ...)
     if(!is.null(model)) {
-      fit <- update(model, Q=object, forcefit=TRUE)
+      stopifnot(is.ppm(model))
+      ## update 'model' using new point pattern 'object' 
+      e <- list2env(list(object=object), parent=model$callframe)
+      fit <- update(model, Q=object, forcefit=TRUE, envir=e)
     } else {
       fit <- ppm(object, trend=trend, interaction=interaction, rbord=rbord,
                  forcefit=TRUE)

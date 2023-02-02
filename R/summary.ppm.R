@@ -3,7 +3,7 @@
 #
 #    summary() method for class "ppm"
 #
-#    $Revision: 1.80 $   $Date: 2022/11/03 11:08:33 $
+#    $Revision: 1.81 $   $Date: 2023/02/02 00:07:00 $
 #
 #    summary.ppm()
 #    print.summary.ppm()
@@ -193,6 +193,8 @@ summary.ppm <- local({
     ######  Arguments in call ####################################
   
     y$args <- x[c("call", "correction", "rbord")]
+
+    y$dataname <- x$dataname %orifnull% x$Qname
   
     #######  Main data components #########################
 
@@ -328,9 +330,13 @@ print.summary.ppm <- function(x, ...) {
     return(invisible(NULL))
   }
 
-  # otherwise - full details
+  ## otherwise - full details
   splat("Point process model")
-  fitter <- if(!is.null(x$fitter)) x$fitter else "unknown"
+
+  if(!is.null(dataname <- x$dataname)) 
+    splat("Fitted to data:", dataname)
+  
+  fitter <- x$fitter %orifnull% "unknown"
   methodchosen <-
     if(is.null(x$method))
       "unspecified method"

@@ -2,7 +2,7 @@
 #  update.ppm.R
 #
 #
-#  $Revision: 1.65 $    $Date: 2022/11/03 11:08:33 $
+#  $Revision: 1.68 $    $Date: 2023/02/02 01:42:56 $
 #
 #
 #
@@ -161,13 +161,19 @@ update.ppm <- local({
 
     ## Find the argument 'Q' by name or implicitly by class
     ##   (including detection of conflicts)
-    argQ <- NULL
+    argQ <- argQexpr <- newQname <- NULL
+    newX <- newXname <- NULL
     if(n <- sp.foundclasses(c("ppp", "quad"), unnamedargs, "Q", nama)) {
       argQ <- unnamedargs[[n]]
+      argQexpr <- sys.call()[[which(!named)[n] + 2L]]
+      newX <- argQ
+      newXname <- short.deparse(argQexpr)
       unnamedargs <- unnamedargs[-n]
     }
     if("Q" %in% nama) {
       argQ <- namedargs$Q
+      argQexpr <- sys.call()$Q
+      newQname <- short.deparse(argQexpr)
       nama <- setdiff(nama, "Q")
       namedargs <- namedargs[nama]
     }
@@ -182,12 +188,15 @@ update.ppm <- local({
           call$Q <- newformula(callQ, argQ, callframe, envir)
         } else {
           ## split into Q = X and trend = ~trend
-          if(!is.null(lhs <- lhs.of.formula(argQ)))
-            call$Q <- newpattern(call$Q, lhs, callframe, envir)
+          if(!is.null(lhs <- lhs.of.formula(argQ))) {
+            call$Q <- newX <- newpattern(call$Q, lhs, callframe, envir)
+            newXname <- short.deparse(lhs)
+          }
           call$trend <- newformula(call$trend,
                                    rhs.of.formula(eval(argQ)),
                                    callframe, envir)
         }
+        newQ <- call$Q
       } else {
         ## Q = X
         if(newstyle) {
@@ -209,7 +218,9 @@ update.ppm <- local({
           oldstyle <- TRUE
         }
         ## Now update the dataset
-        call$Q <- argQ
+        call$Q <- argQexpr %orifnull% argQ
+        if(is.null(newX)) newX <- argQ
+        if(is.null(newXname)) newXname <- newQname
       }
     }
 
@@ -239,7 +250,10 @@ update.ppm <- local({
         ## ppm.formula: update the formula
         if(is.null(lhs)) {
           argfmla <- as.formula(paste(".", deparse(argfmla)))
-        } else X.is.new <- TRUE
+        } else {
+          X.is.new <- TRUE
+          newXname <- short.deparse(lhs)
+        }
         callQ <- update(object$trend, call$Q)
         call$Q <- newformula(callQ, argfmla, callframe, envir)
       } else {
@@ -250,10 +264,11 @@ update.ppm <- local({
         } else {
           ## split into Q = X and trend = ~trend
           X.is.new <- TRUE
-          call$Q <- newpattern(call$Q, lhs, callframe, envir)
+          call$Q <- newX <- newpattern(call$Q, lhs, callframe, envir)
           call$trend <- newformula(call$trend,
                                    rhs.of.formula(argfmla),
                                    callframe, envir)
+          newXname <- short.deparse(lhs)
         }
       } 
     }
@@ -287,8 +302,7 @@ update.ppm <- local({
     ## ****** Special action when Q is a point pattern *************
     ## *************************************************************
     if(X.is.new && fixdummy && oldstyle &&
-       is.ppp(X <- eval(call$Q, as.list(envir), enclos=callframe)) &&
-       identical(Window(X), Window(data.ppm(object)))) {
+       is.ppp(newX) && identical(Window(newX), Window(data.ppm(object)))) {
       ## Instead of allowing default.dummy(X) to occur,
       ## explicitly create a quadrature scheme from X,
       ## using the same dummy points and weight parameters
@@ -297,11 +311,11 @@ update.ppm <- local({
       if(is.marked(Qold)) {
         dpar <- Qold$param$dummy
         wpar <- Qold$param$weight
-        Qnew <- do.call(quadscheme, append(list(X), append(dpar, wpar)))
+        Qnew <- do.call(quadscheme, append(list(newX), append(dpar, wpar)))
       } else {
         Dum <- Qold$dummy
         wpar <- Qold$param$weight
-        Qnew <- do.call(quadscheme, append(list(X, Dum), wpar))
+        Qnew <- do.call(quadscheme, append(list(newX, Dum), wpar))
       }
       ## replace X by new Q
       call$Q <- Qnew
@@ -309,7 +323,13 @@ update.ppm <- local({
 
     ## finally call ppm
     call[[1]] <- as.name('ppm')
-    return(eval(call, as.list(envir), enclos=callframe))
+    result <- eval(call, as.list(envir), enclos=callframe)
+
+    ## tweak name of 'original' data 
+    if(!is.null(newXname))
+      result$Qname <- newXname
+    
+    return(result)
   }
 
   update.ppm

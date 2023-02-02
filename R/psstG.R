@@ -3,7 +3,7 @@
 #
 #	Pseudoscore residual for unnormalised G (saturation process)
 #
-#	$Revision: 1.10 $	$Date: 2018/10/19 03:29:29 $
+#	$Revision: 1.12 $	$Date: 2023/02/02 02:39:29 $
 #
 ################################################################################
 #
@@ -20,9 +20,12 @@ psstG <- function(object, r=NULL, breaks=NULL, ...,
     if(is.ppp(object))
       object <- quadscheme(object, ...)
     # fit model
-    if(!is.null(model))
-      fit <- update(model, Q=object, forcefit=TRUE)
-    else 
+    if(!is.null(model)) {
+      stopifnot(is.ppm(model))
+      ## update 'model' using new point pattern 'object' 
+      e <- list2env(list(object=object), parent=model$callframe)
+      fit <- update(model, Q=object, forcefit=TRUE, envir=e)
+    } else 
       fit <- ppm(object,
                  trend=trend, interaction=interaction,
                  rbord=rbord, forcefit=TRUE)

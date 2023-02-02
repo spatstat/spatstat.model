@@ -3,7 +3,7 @@
 #
 #	Pseudoscore residual for unnormalised F (area-interaction)
 #
-#	$Revision: 1.8 $	$Date: 2022/01/04 05:30:06 $
+#	$Revision: 1.10 $	$Date: 2023/02/02 02:39:33 $
 #
 ################################################################################
 #
@@ -23,16 +23,20 @@ psstA <- function(object, r=NULL, breaks=NULL, ...,
     if(is.ppp(object))
       object <- quadscheme(object, ...)
     # fit model
-    if(!is.null(model))
-      fit <- update(model, Q=object, forcefit=TRUE)
-    else if(ppmcorrection == "border")
+    if(!is.null(model)) {
+      stopifnot(is.ppm(model))
+      ## update 'model' using new point pattern 'object' 
+      e <- list2env(list(object=object), parent=model$callframe)
+      fit <- update(model, Q=object, forcefit=TRUE, envir=e)
+    } else if(ppmcorrection == "border") {
       fit <- ppm(object,
                  trend=trend, interaction=interaction,
                  rbord=rbord, forcefit=TRUE)
-    else
+    } else {
       fit <- ppm(object,
                  trend=trend, interaction=interaction,
                  correction=ppmcorrection, forcefit=TRUE)
+    }
   } else 
     stop("object should be a fitted point process model or a point pattern")
 

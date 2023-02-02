@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.152 $	$Date: 2022/06/18 10:00:59 $
+#	$Revision: 2.153 $	$Date: 2023/02/02 00:16:02 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -52,6 +52,10 @@ function(x, ...,
   np <- length(coef(x))
   terselevel <- spatstat.options("terse")
   digits <- getOption('digits')
+  showextras <- waxlyrical('extras', terselevel)
+  
+  ## secret option
+  showname <- !isFALSE(list(...)$showname)
   
   ## Determine whether SE is required 
   want.SE <- force.SE <- force.no.SE <- FALSE
@@ -64,7 +68,7 @@ function(x, ...,
            always = { force.SE <- TRUE }, 
            never  = { force.no.SE <- TRUE },
            poisson = {
-             want.SE <- is.poisson(x) && waxlyrical("extras", terselevel)
+             want.SE <- is.poisson(x) && showextras
            })
   }
   do.SE <- (want.SE || force.SE) && !force.no.SE
@@ -86,7 +90,8 @@ function(x, ...,
   poisson <-    s$poisson
   markeddata <- s$marked
   multitype  <- s$multitype
-        
+  dataname   <- s$dataname
+  
 #  markedpoisson <- poisson && markeddata
   csr <- poisson && notrend && !markeddata
 
@@ -94,11 +99,15 @@ function(x, ...,
   if(special) {
     ## ---------- Trivial/special cases -----------------------
     splat("Stationary Poisson process")
+    if(showname && showextras)
+      splat("Fitted to point pattern dataset", sQuote(dataname))
     cat("Intensity:", signif(s$trend$value, digits), fill=TRUE)
   } else {
     ## ----------- Print model type -------------------
     if("model" %in% what) {
       splat(s$name)
+      if(showname && showextras)
+        splat("Fitted to point pattern dataset", sQuote(dataname))
       parbreak(terselevel)
         
       if(markeddata) mrk <- s$entries$marks
@@ -170,14 +179,13 @@ function(x, ...,
 
   if("interaction" %in% what) {
     if(!poisson) {
-      print(s$interaction, family=FALSE, banner=FALSE, 
-            brief=!waxlyrical("extras"))
+      print(s$interaction, family=FALSE, banner=FALSE, brief=!showextras)
       parbreak(terselevel)
     }
   }
   
   # ----- parameter estimates with SE and 95% CI --------------------
-  if(waxlyrical("extras", terselevel) && ("se" %in% what) && (np > 0)) {
+  if(showextras && ("se" %in% what) && (np > 0)) {
     if(!is.null(cose <- s$coefs.SE.CI)) {
       print(cose, digits=digits)
     } else if(do.SE) {
@@ -213,7 +221,7 @@ function(x, ...,
             "did not converge ***")
   }
 
-  if(waxlyrical("extras", terselevel) && s$projected) {
+  if(showextras && s$projected) {
     parbreak()
     splat("Fit was emended to obtain a valid point process model")
   }
@@ -226,7 +234,7 @@ function(x, ...,
     } else {
       splat("*** Interaction parameters are outside valid range ***")
     }
-  } else if(is.na(s$valid) && waxlyrical("extras", terselevel)) {
+  } else if(showextras && is.na(s$valid)) {
     parbreak()
     splat("[Validity of model could not be checked]")
   }

@@ -3,7 +3,7 @@
 #
 #   model compensated K-function
 #
-# $Revision: 1.17 $ $Date: 2022/01/04 05:30:06 $
+# $Revision: 1.19 $ $Date: 2023/02/02 02:39:43 $
 #
 
 Kcom <- local({
@@ -21,7 +21,10 @@ Kcom <- local({
   } else if(is.ppp(object) || is.quad(object)) {
     if(is.ppp(object)) object <- quadscheme(object, ...)
     if(!is.null(model)) {
-      fit <- update(model, Q=object, forcefit=TRUE)
+      stopifnot(is.ppm(model))
+      ## update 'model' using new point pattern 'object' 
+      e <- list2env(list(object=object), parent=model$callframe)
+      fit <- update(model, Q=object, forcefit=TRUE, envir=e)
     } else {
       fit <- ppm(object, trend=trend, interaction=interaction, rbord=rbord,
                  forcefit=TRUE)
