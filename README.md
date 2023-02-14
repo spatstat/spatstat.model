@@ -35,6 +35,7 @@ For a full list of functions, see the help file for `spatstat.model-package`.
 - fitting Cox point process models to point pattern data (`kppm`)
 - fitting Neyman-Scott cluster process models to point pattern data (`kppm`)
 - fitting Gibbs point process models to point pattern data (`ppm`)
+- fitting recursively partitioned models to point patterns (`rppm')
 - class support for fitted models (update, summary, predict, plot, coef, vcov)
 - minimum contrast estimation
 - simulation of fitted point process models
