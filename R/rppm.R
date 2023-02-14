@@ -3,7 +3,7 @@
 #' 
 #'  Recursive Partitioning for Point Process Models
 #'
-#'  $Revision: 1.22 $  $Date: 2022/06/19 03:56:40 $
+#'  $Revision: 1.24 $  $Date: 2023/02/14 04:25:45 $
 
 rppm <- function(..., rpargs=list()) {
   ## do the equivalent of ppm(...)
@@ -25,7 +25,7 @@ rppm <- function(..., rpargs=list()) {
                                       weights=df$.mpl.W),
                                  rpargs,
                                  list(method="poisson")))
-  result <- list(pfit=pfit, rp=rp)
+  result <- list(pfit=pfit, rp=rp, rpargs=rpargs)
   class(result) <- c("rppm", class(result))
   return(result)
 }
@@ -144,4 +144,26 @@ residuals.rppm <- function(object,
   Q <- quad.ppm(as.ppm(object))
   lambda <- predict(object)
   residualMeasure(Q, lambda, type)
+}
+
+terms.rppm <- function(x, ...) { terms(x$pfit) }
+
+update.rppm <- function(object, ..., envir=environment(terms(object))) {
+  pfit <- update(object$pfit, ..., envir=envir)
+  if(!is.poisson(pfit))
+    warning("Interpoint interaction will be ignored", call.=FALSE)
+  df <- getglmdata(pfit)
+  gf <- getglmfit(pfit)
+  sf <- getglmsubset(pfit)
+  rpargs <- resolve.1.default("rpargs", ...) %orifnull% object$rpargs
+  rp <- do.call(rpart,
+                resolve.defaults(list(formula=formula(gf),
+                                      data=df,
+                                      subset=sf,
+                                      weights=df$.mpl.W),
+                                 rpargs,
+                                 list(method="poisson")))
+  result <- list(pfit=pfit, rp=rp, rpargs=rpargs)
+  class(result) <- c("rppm", class(result))
+  return(result)
 }

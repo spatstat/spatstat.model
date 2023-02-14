@@ -1,9 +1,11 @@
 
-        CHANGES IN spatstat.model VERSION 3.1-2.002
+        CHANGES IN spatstat.model VERSION 3.1-2.003
 
 OVERVIEW
 
-    o Improvements to 'update' methods for point process models
+    o Improvements to 'update' methods for point process models.
+
+    o New 'update' methods for classes 'dppm' and 'rppm'.
 
     o Minor improvements and bug fixes.
 
@@ -12,14 +14,23 @@ NEW FUNCTIONS
     o update.dppm
     Update method for determinantal point process models.
     
+    o update.rppm
+    Update method for recursively partitioned point process models.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o update.slrm
     Now accepts the idiom 'update(object, X)' where X is a point pattern.
 
+    o update.ppm, update.kppm, update.dppm, update.slrm, update.rppm
+    All of these methods now accept the idiom 'update(object, X)'
+    where X is a point pattern.
+
     o print.ppm, summary.ppm
     Prints the name of the point pattern dataset to which the model was fitted.
 
+    o update.ppm
+    Internal improvements.
 
         CHANGES IN spatstat.model VERSION 3.1-2
 

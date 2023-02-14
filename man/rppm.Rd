@@ -46,6 +46,7 @@
 \seealso{
   \code{\link{plot.rppm}}, 
   \code{\link{predict.rppm}}, 
+  \code{\link{update.rppm}}, 
   \code{\link{prune.rppm}}.
 }
 \examples{

@@ -201,6 +201,7 @@
 \alias{summary.msr}
 \alias{summary.profilepl}
 \alias{summary.vblogit}
+\alias{terms.rppm}
 \alias{tweak.coefs}
 \alias{unitname.msr}
 \alias{unitname<-.msr}
@@ -499,6 +500,7 @@ suffstat.poisson(model, X, callstring)
 \method{summary}{msr}(object, \dots)
 \method{summary}{profilepl}(object, \dots)
 \method{summary}{vblogit}(object, \dots)
+\method{terms}{rppm}(x, \dots)
 tweak.coefs(model, new.coef)
 \method{unitname}{msr}(x) 
 \method{unitname}{msr}(x) <- value 
