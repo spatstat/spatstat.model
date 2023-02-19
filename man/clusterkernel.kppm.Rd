@@ -1,10 +1,10 @@
-\name{clusterkernel}
+\name{clusterkernel.kppm}
 \alias{clusterkernel.kppm}
 \title{
   Extract Cluster Offspring Kernel
 }
 \description{
-  Given a cluster point process model, this command
+  Given a fitted cluster point process model, this command
   returns the probability density of the cluster offspring.
 }
 \usage{
@@ -22,10 +22,15 @@
   }
 }
 \details{
-  Given a specification of a cluster point process model, this command
+  Given a cluster point process model, this command
   returns a \code{function(x,y)} giving the two-dimensional
   probability density of the cluster offspring points assuming a cluster parent
   located at the origin.
+
+  The function \code{clusterkernel} is generic,
+  with methods for class \code{"kppm"} (described here)
+  and \code{"character"}
+  (described in \code{\link[spatstat.random]{clusterkernel.character}}).
 }
 \value{
   A function in the \R language with arguments \code{x,y,\dots}.
@@ -34,6 +39,7 @@
   \spatstatAuthors.
 }
 \seealso{
+  \code{\link[spatstat.random]{clusterkernel.character}},
   \code{\link{clusterfield}}, \code{\link[spatstat.model]{kppm}}
 }
 \examples{

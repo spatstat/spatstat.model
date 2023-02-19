@@ -1,4 +1,4 @@
-\name{clusterradius}
+\name{clusterradius.kppm}
 \alias{clusterradius.kppm}
 \title{
   Compute or Extract Effective Range of Cluster Kernel
@@ -9,9 +9,7 @@
   cluster offspring is neglible.
 }
 \usage{
-
 \method{clusterradius}{kppm}(model, \dots, thresh = NULL, precision = FALSE)
-
 }
 \arguments{
   \item{model}{
@@ -70,15 +68,7 @@
   Additionally, the precision related to this range value is returned as
   an attribute \code{"prec"}, if \code{precision=TRUE}.
 }
-\author{
-\adrian
-
-
-\rolf
-
-and \ege
-
-}
+\author{\spatstatAuthors.}
 \seealso{
   \code{\link{clusterkernel}}, \code{\link[spatstat.model]{kppm}},
   \code{\link[spatstat.random]{rMatClust}}, \code{\link[spatstat.random]{rThomas}},
@@ -88,6 +78,5 @@ and \ege
 \examples{
   fit <- kppm(redwood ~ x, "MatClust")
   clusterradius(fit)
-
 }
 \keyword{spatial}

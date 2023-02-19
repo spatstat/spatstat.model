@@ -2,7 +2,7 @@
 #  update.ppm.R
 #
 #
-#  $Revision: 1.68 $    $Date: 2023/02/02 01:42:56 $
+#  $Revision: 1.69 $    $Date: 2023/02/16 02:35:40 $
 #
 #
 #
@@ -397,10 +397,6 @@ damaged.ppm <- function(object) {
   }
   badQ <- is.null(Q) || !(inherits(Q, c("ppp", "quad", "formula")))
   return(badQ)
-}
-
-updateData <- function(model, X, ...) {
-  UseMethod("updateData")
 }
 
 updateData.ppm <- function(model, X, ..., warn=TRUE) {

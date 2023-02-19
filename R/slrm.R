@@ -3,7 +3,7 @@
 #
 #  Spatial Logistic Regression
 #
-#  $Revision: 1.64 $   $Date: 2023/02/01 08:31:26 $
+#  $Revision: 1.66 $   $Date: 2023/02/16 02:33:58 $
 #
 
 slrm <- function(formula, ..., data=NULL, offset=TRUE, link="logit",
@@ -633,9 +633,15 @@ model.images.slrm <- function(object, ...) {
 }
 
 update.slrm <- function(object, fmla, ..., evaluate=TRUE, env=parent.frame()) {
-  ## support idiom 'update(model, Pattern)'
-  if(!missing(fmla) && is.ppp(X <- fmla))
-    return(updateData(object, X))
+  if(!missing(fmla) && is.ppp(X <- fmla)) {
+    ## idiom 'update(model, Pattern)'
+    covlist <- object$Data$covariates
+    Yname <- object$CallInfo$responsename
+    newdata <- append(covlist, setNames(list(X), Yname))
+    ## call this method again with new arguments
+    object <- update(object, data=newdata, ..., env=env)
+    return(object)
+  }
   ## resume normal service
   z <- getCall(object)
   extras <- match.call(expand.dots = FALSE)$...
