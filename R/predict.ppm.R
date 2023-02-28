@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.115 $	$Date: 2022/06/12 04:40:18 $
+#	$Revision: 1.116 $	$Date: 2023/02/28 01:34:26 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -803,7 +803,7 @@ equalpairs <- function(U, X, marked=FALSE) {
   
 fill.coefs <- function(coefs, required) {
   # 'coefs' should contain all the 'required' values
-  coefsname <- deparse(substitute(coefs))
+  coefsname <- short.deparse(substitute(coefs))
   nama <- names(coefs)
   if(is.null(nama)) {
     #' names cannot be matched

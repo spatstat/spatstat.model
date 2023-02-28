@@ -11,7 +11,8 @@
 \usage{
   \method{plot}{mppm}(x, \dots,
                 trend=TRUE, cif=FALSE, se=FALSE,
-                how=c("image", "contour", "persp"))
+                how=c("image", "contour", "persp"),
+                main)
 }
 \arguments{
   \item{x}{
@@ -36,6 +37,9 @@
   }
   \item{how}{
     Single character string indicating the style of plot to be performed. 
+  }
+  \item{main}{
+    Character string for the main title of the plot.
   }
 }
 \value{

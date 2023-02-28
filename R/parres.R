@@ -3,7 +3,7 @@
 #
 # code to plot transformation diagnostic
 #
-#   $Revision: 1.17 $  $Date: 2022/05/20 04:11:49 $
+#   $Revision: 1.18 $  $Date: 2023/02/28 01:55:09 $
 #
 
 parres <- function(model, covariate, ...,
@@ -14,7 +14,7 @@ parres <- function(model, covariate, ...,
                    covname) {  
 
   callstring <- paste(deparse(sys.call()), collapse = "")
-  modelname <- deparse(substitute(model))
+  modelname <- short.deparse(substitute(model))
 
   stopifnot(is.ppm(model))
   

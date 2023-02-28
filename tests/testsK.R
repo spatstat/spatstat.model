@@ -15,7 +15,7 @@ cat(paste("--------- Executing",
 #
 # tests/kppm.R
 #
-# $Revision: 1.37 $ $Date: 2021/09/27 04:11:22 $
+# $Revision: 1.38 $ $Date: 2023/02/28 04:00:42 $
 #
 # Test functionality of kppm that depends on RandomFields
 # Test update.kppm for old style kppm objects
@@ -115,6 +115,26 @@ local({
      fit1pClik <- update(fit1p, method="clik")
      fit1pPalm <- update(fit1p, method="palm")
    }
+
+   ## shortcut evaluation of pcf
+   ##  (the code being tested is in spatstat.random::clusterinfo.R)
+   if(FULLTEST) {
+     putSpatstatVariable("RFshortcut", TRUE)
+     fitGshort <- kppm(redwood ~ 1, "LGCP", covmodel=list(model="gauss"))
+     fitSshort <- kppm(redwood ~ 1, "LGCP", covmodel=list(model="stable", alpha=1))
+     putSpatstatVariable("RFshortcut", FALSE)
+     fitGlong <-  kppm(redwood ~ 1, "LGCP", covmodel=list(model="gauss"))
+     fitSlong <-  kppm(redwood ~ 1, "LGCP", covmodel=list(model="stable", alpha=1))
+     discrepG <- unlist(parameters(fitGshort)) - unlist(parameters(fitGlong))
+     discrepS <- unlist(parameters(fitSshort)) - unlist(parameters(fitSlong))
+     print(discrepG)
+     print(discrepS)
+     if(max(abs(discrepG) > 0.01))
+       stop("Discrepancy in short-cut fitting of Gaussian LGCP")
+     if(max(abs(discrepS) > 0.01))
+       stop("Discrepancy in short-cut fitting of stable LGCP")
+   }
+   
    ## image covariate (a different code block) 
    xx <- as.im(function(x,y) x, Window(redwood))
    fit1xx <- update(fit1p, . ~ xx, data=solist(xx=xx))

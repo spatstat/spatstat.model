@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.123 $ $Date: 2022/11/03 11:08:33 $
+#  $Revision: 1.124 $ $Date: 2023/02/28 01:56:34 $
 #
 
 leverage <- function(model, ...) {
@@ -969,7 +969,7 @@ plot.leverage.ppm <- function(x, ...,
 
 persp.leverage.ppm <- function(x, ..., what=c("smooth", "nearest"),
                                main, zlab="leverage") {
-  if(missing(main)) main <- deparse(substitute(x))
+  if(missing(main)) main <- short.deparse(substitute(x))
   what <- match.arg(what)
   y <- as.im(x, what=what)
   if(is.null(y)) return(invisible(NULL))

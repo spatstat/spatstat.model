@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.114 $  $Date: 2022/11/24 01:22:16 $
+#   $Revision: 2.115 $  $Date: 2023/02/28 01:56:55 $
 #
 
 ## Code for envelope() and envelope.ppp() is moved to spatstat.explore
