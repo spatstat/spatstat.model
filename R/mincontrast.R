@@ -260,7 +260,7 @@ mincontrast <- local({
     ## adjustment of theoretical summary function
     adjustment <- pspace$adjustment
     if(!is.null(adjustment)) {
-      check.named.list(adjustment, c("fun", "auxdata"))
+      check.named.list(adjustment, c("fun", "auxdata"), xtitle="adjustment")
       stopifnot(is.function(adjustment$fun))
     }
     ## penalty for parameter value
