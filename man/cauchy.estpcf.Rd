@@ -121,8 +121,8 @@ cauchy.estpcf(X, startpar=c(kappa=1,scale=1), lambda=NULL,
   }
 }
 \references{
-  Ghorbani, M. (2012) Cauchy cluster process.
-  \emph{Metrika}, to appear.
+  Ghorbani, M. (2013) Cauchy cluster process.
+  \emph{Metrika} \bold{76}, 697--706.
 
   Jalilian, A., Guan, Y. and Waagepetersen, R. (2013)
   Decomposition of variance for spatial Cox processes.

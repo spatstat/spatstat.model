@@ -1,11 +1,13 @@
 
-        CHANGES IN spatstat.model VERSION 3.2-1.004
+        CHANGES IN spatstat.model VERSION 3.2-1.005
 
 OVERVIEW
 
     o Internal reorganisation of files.
 
     o Internal efficiencies.
+
+    o Minor changes to documentation.
 
         CHANGES IN spatstat.model VERSION 3.2-1
 
