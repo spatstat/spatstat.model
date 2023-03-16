@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 3.2-1.006
+        CHANGES IN spatstat.model VERSION 3.2-1.007
 
 OVERVIEW
 
@@ -9,6 +9,20 @@ OVERVIEW
 
     o Minor changes to documentation.
 
+    o Bug fixes.
+
+BUG FIXES
+
+    o predict.ppm
+    Standard error calculation ('se=TRUE') crashed if the fitted model
+    was a generalised additive model (fitted with 'use.gam=TRUE').
+    Fixed.
+
+    o effectfun
+    Standard error calculation ('se.fit=TRUE') crashed if the fitted model
+    was a generalised additive model (fitted with 'use.gam=TRUE').
+    Fixed.
+    
         CHANGES IN spatstat.model VERSION 3.2-1
 
 OVERVIEW

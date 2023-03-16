@@ -490,30 +490,43 @@ predict.ppm <- local({
       if(type == "intensity") 
         z <- PoisSaddle(z, fitin(model))
       
-      ##
       if(needSE) {
-        ## extract variance-covariance matrix of parameters
-        vc <- vcov(model, new.coef=new.coef)
-        ## compute model matrix
-        fmla <- rhs.of.formula(formula(glmfit))
+        ## compute standard error, needed for some purpose
+        if(inherits(glmfit, "gam")) {
+          ## compute SE using predict.gam
+          if(!is.null(new.coef))
+            warning("new.coef ignored in standard error calculation")
+          SE <- predict(glmfit, newdata=newdata, type="response",
+                        se.fit=TRUE)[[2]]
+        } else {
+          ## Use vcov.ppm
+          ## extract variance-covariance matrix of parameters
+          vc <- vcov(model, new.coef=new.coef)
+          ## compute model matrix
+          fmla <- rhs.of.formula(formula(glmfit))
 #        mf <- model.frame(fmla, newdata, ..., na.action=na.pass)
 #        mm <- model.matrix(fmla, mf, ..., na.action=na.pass)
-        mf <- model.frame(fmla, newdata, na.action=na.pass)
-        mm <- model.matrix(fmla, mf, na.action=na.pass)
-        if(nrow(mm) != nrow(newdata))
-          stop("Internal error: row mismatch in SE calculation")
-        ## compute relative variance = diagonal of quadratic form
-        if(ncol(mm) != ncol(vc))
-          stop("Internal error: column mismatch in SE calculation")
-        vv <- quadform(mm, vc)
-        ## standard error
-        SE <- lambda * sqrt(vv)
+          mf <- model.frame(fmla, newdata, na.action=na.pass)
+          mm <- model.matrix(fmla, mf, na.action=na.pass)
+          if(nrow(mm) != nrow(newdata))
+            stop("Internal error: row mismatch in SE calculation")
+          ## compute relative variance = diagonal of quadratic form
+          if(ncol(mm) != ncol(vc))
+            stop("Internal error: column mismatch in SE calculation")
+          vv <- quadform(mm, vc)
+          ## standard error
+          SE <- lambda * sqrt(vv)
+        }
+
+        ## Save desired quantities depending on SE
         if(se) 
           zse <- SE
+
         if(interval == "confidence") {
           z <- lambda + outer(SE, ci.q, "*")
           colnames(z) <- ci.names
-        } 
+        }
+        
       } 
       
       ## ############################################################  
