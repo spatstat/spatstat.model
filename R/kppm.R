@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.229 $ $Date: 2023/02/02 01:59:29 $
+# $Revision: 1.230 $ $Date: 2023/03/26 10:08:44 $
 #
 
 kppm <- function(X, ...) {
@@ -1145,8 +1145,8 @@ kppmPalmLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE, 
     # stationary unmarked Poisson process
     lambda <- intensity(X)
     lambdaJ <- rep(lambda, length(J))
-    # compute cdf of distance between a uniform random point in W
-    # and a randomly-selected point in X 
+    # compute cdf of distance between a randomly-selected point in X 
+    # and a uniform random point in W
     g <- distcdf(X, M, delta=rmax/4096)
     # scaling constant is (integral of intensity) * (number of points)
     gscale <- npoints(X)^2
@@ -1155,7 +1155,7 @@ kppmPalmLik <- function(X, Xname, po, clusters, control=list(), stabilize=TRUE, 
     lambdaX <- fitted(po, dataonly=TRUE)
     lambda <- lambdaM <- predict(po, locations=M)
     lambdaJ <- lambdaX[J] 
-    # compute cdf of distance between a uniform random point in X 
+    # compute cdf of distance between a randomly-selected point in X 
     # and a random point in W with density proportional to intensity function
     g <- distcdf(X, M, dV=lambdaM, delta=rmax/4096)
     # scaling constant is (integral of intensity) * (number of points)

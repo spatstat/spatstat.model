@@ -32,6 +32,7 @@
 \newcommand{\Martin}{\ifelse{latex}{\out{Mart\'{\i}n}}{Martin}}
 \newcommand{\Dominguez}{\ifelse{latex}{\out{Dom\'{\i}nguez}}{Dominguez}}
 \newcommand{\Rodriguez}{\ifelse{latex}{\out{Rodr\'{\i}guez}}{Rodriguez}}
+\newcommand{\Gonzalez}{\ifelse{latex}{\out{Gonz\'{a}lez}}{Gonzalez}}
 %% List of all Gibbs interactions 
 \newcommand{\GibbsInteractionsList}{\code{\link[spatstat.model]{AreaInter}}, \code{\link[spatstat.model]{BadGey}}, \code{\link[spatstat.model]{Concom}}, \code{\link[spatstat.model]{DiggleGatesStibbard}}, \code{\link[spatstat.model]{DiggleGratton}}, \code{\link[spatstat.model]{Fiksel}}, \code{\link[spatstat.model]{Geyer}}, \code{\link[spatstat.model]{Hardcore}}, \code{\link[spatstat.model]{HierHard}}, \code{\link[spatstat.model]{HierStrauss}}, \code{\link[spatstat.model]{HierStraussHard}}, \code{\link[spatstat.model]{Hybrid}}, \code{\link[spatstat.model]{LennardJones}}, \code{\link[spatstat.model]{MultiHard}}, \code{\link[spatstat.model]{MultiStrauss}}, \code{\link[spatstat.model]{MultiStraussHard}}, \code{\link[spatstat.model]{OrdThresh}}, \code{\link[spatstat.model]{Ord}}, \code{\link[spatstat.model]{Pairwise}}, \code{\link[spatstat.model]{PairPiece}}, \code{\link[spatstat.model]{Penttinen}}, \code{\link[spatstat.model]{Poisson}}, \code{\link[spatstat.model]{Saturated}}, \code{\link[spatstat.model]{SatPiece}}, \code{\link[spatstat.model]{Softcore}}, \code{\link[spatstat.model]{Strauss}}, \code{\link[spatstat.model]{StraussHard}} and \code{\link[spatstat.model]{Triplets}}}
 %% List of interactions recognised by RMH code

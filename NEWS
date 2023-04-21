@@ -1,16 +1,23 @@
 
-        CHANGES IN spatstat.model VERSION 3.2-1.007
+        CHANGES IN spatstat.model VERSION 3.2-2
 
 OVERVIEW
 
-    o Internal reorganisation of files.
+    o Accelerated some code.
 
-    o Internal efficiencies.
+    o Standard errors are now available for 'ppm' models fitted using 'gam'.
+    
+    o Internal reorganisation.
 
     o Minor changes to documentation.
 
     o Bug fixes.
 
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o plot.mppm
+    New argument 'main'.
+    
 BUG FIXES
 
     o predict.ppm
@@ -21,6 +28,21 @@ BUG FIXES
     o effectfun
     Standard error calculation ('se.fit=TRUE') crashed if the fitted model
     was a generalised additive model (fitted with 'use.gam=TRUE').
+    Fixed.
+
+    o parres
+    If 'model' was a large object, computation was extremely slow
+    or terminated with a message about 'deparse'.
+    Fixed.
+
+    o plot.mppm
+    If the fitted model 'x' was a large object, computation was extremely slow
+    or terminated with a message about 'deparse'.
+    Fixed.
+
+    o predict.ppm
+    If 'new.coef' was given and the fitted model 'object' was a large object,
+    computation was extremely slow, or terminated with message about 'deparse'. 
     Fixed.
     
         CHANGES IN spatstat.model VERSION 3.2-1
