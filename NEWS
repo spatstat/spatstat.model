@@ -1,4 +1,11 @@
 
+        CHANGES IN spatstat.model VERSION 3.2-3
+
+OVERVIEW
+
+    o Tweak to satisfy package checker.
+
+
         CHANGES IN spatstat.model VERSION 3.2-2
 
 OVERVIEW

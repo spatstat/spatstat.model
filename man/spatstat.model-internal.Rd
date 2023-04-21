@@ -110,7 +110,8 @@
 \alias{optimStatus}
 \alias{optimNsteps}
 \alias{outdated.interact}
-\alias{oversize.quad}    
+\alias{oversize.quad}
+\alias{parameters.detpointprocfamily}
 \alias{PairPotentialType}
 \alias{partialModelMatrix}
 \alias{pcfmodel.slrm}
@@ -387,6 +388,7 @@ optimNsteps(x)
 outdated.interact(object)
 oversize.quad(Q, \dots, nU, nX, p)
 PairPotentialType(pairpot)
+\method{parameters}{detpointprocfamily}(model, \dots)
 partialModelMatrix(X,D,model,callstring,\dots)
 \method{pcfmodel}{slrm}(model, \dots)
 ploterodewin(W1, W2, col.edge, col.inside, do.plot, \dots)
