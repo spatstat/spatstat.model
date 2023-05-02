@@ -16,6 +16,7 @@ at new locations.
    X=data.ppm(object), correction, ignore.hardcore=FALSE,
    \dots,
    dimyx=NULL, eps=NULL,
+   rule.eps = c("adjust.eps", "grow.frame", "shrink.frame"),
    new.coef=NULL, check=TRUE, repair=TRUE)
 }
 \arguments{
@@ -101,6 +102,10 @@ at new locations.
   \item{eps}{
     Width and height of pixels in the prediction grid.
     A numerical value, or numeric vector of length 2.
+  }
+  \item{rule.eps}{
+    Argument passed to \code{\link[spatstat.geom]{as.mask}} controlling the
+    discretisation. See \code{\link[spatstat.geom]{as.mask}}.
   }
   \item{new.coef}{
     Numeric vector of parameter values to replace the 

@@ -420,7 +420,7 @@ ppmDerivatives(fit, what, Dcovfun, loc, covfunargs)
 ppmInfluenceEngine(fit, what, \dots, iScore, iHessian, iArgs,
               drop, method, fine, precomputed, sparseOK,
               fitname, multitypeOK, entrywise, matrix.action,
-              dimyx, eps,
+              dimyx, eps, rule.eps,
               geomsmooth)
 \method{predict}{vblogit}(object, newdata, type, se.fit, dispersion,
                           terms, na.action, \dots)
@@ -479,7 +479,7 @@ slr.prepare(CallInfo, envir, data, dataAtPoints, splitby, clip)
 slrAssemblePixelData(Y, Yname, W, covimages, dataAtPoints, pixelarea)
 slrmInfluence(model, what, \dots)
 \method{spatialCovariateEvidence}{ppm}(model, covariate, \dots, lambdatype,
-          dimyx, eps, interpolate, jitter, jitterfactor,
+          dimyx, eps, rule.eps, interpolate, jitter, jitterfactor,
           modelname, covname, dataname, subset, clip.predict) 
 \method{spatialCovariateEvidence}{slrm}(model, covariate, \dots, lambdatype,
           jitter, jitterfactor,

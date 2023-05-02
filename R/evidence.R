@@ -4,7 +4,7 @@
 #'   evaluate covariate values at data points and at pixels
 #'   together with intensity of null/reference model
 #'
-#' $Revision: 1.49 $ $Date: 2022/05/22 00:52:15 $
+#' $Revision: 1.50 $ $Date: 2023/05/02 06:45:02 $
 #'
 
 ## Code for generic spatialCovariateEvidence() is moved to spatstat.explore
@@ -15,6 +15,8 @@ spatialCovariateEvidence.ppm <- local({
   spatialCovariateEvidence.ppm <- function(model, covariate, ...,
                             lambdatype=c("cif", "trend", "intensity"),
                             dimyx=NULL, eps=NULL,
+                            rule.eps=c("adjust.eps",
+                                       "grow.frame", "shrink.frame"),
                             interpolate=TRUE,
                             jitter=TRUE, jitterfactor=1,
                             modelname=NULL, covname=NULL,
@@ -41,8 +43,10 @@ spatialCovariateEvidence.ppm <- local({
     W <- as.owin(model)
 
     #' explicit control of pixel resolution
-    if(!is.null(dimyx) || !is.null(eps))
-      W <- as.mask(W, dimyx=dimyx, eps=eps)
+    if(!is.null(dimyx) || !is.null(eps)) {
+      rule.eps <- match.arg(rule.eps)
+      W <- as.mask(W, dimyx=dimyx, eps=eps, rule.eps=rule.eps)
+    }
 
     Wfull <- Zfull <- NULL
     

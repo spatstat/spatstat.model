@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.116 $	$Date: 2023/02/28 01:34:26 $
+#	$Revision: 1.117 $	$Date: 2023/05/02 07:31:44 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -69,9 +69,11 @@ predict.ppm <- local({
                           correction,
                           ignore.hardcore=FALSE,
                           ...,
-                          dimyx=NULL, eps=NULL, 
+                          dimyx=NULL, eps=NULL,
+                          rule.eps=c("adjust.eps","grow.frame","shrink.frame"),
                           new.coef=NULL, check=TRUE, repair=TRUE) {
     interval <- match.arg(interval)
+    rule.eps <- match.arg(rule.eps)
     ## extract undocumented arguments 
     xarg <- xtract(...)
     sumobj <- xarg$sumobj
@@ -334,7 +336,7 @@ predict.ppm <- local({
         }
         if(is.null(window))
           window <- sumobj$entries$data$window
-        masque <- as.mask(window, dimyx=ngrid, eps=eps)
+        masque <- as.mask(window, dimyx=ngrid, eps=eps, rule.eps=rule.eps)
       }
       ## Hack -----------------------------------------------
       ## gam with lo() will not allow extrapolation beyond the range of x,y

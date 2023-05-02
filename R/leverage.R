@@ -95,6 +95,7 @@ ppmInfluenceEngine <- function(fit,
                          entrywise = TRUE,
                          matrix.action = c("warn", "fatal", "silent"),
                          dimyx=NULL, eps=NULL,
+                         rule.eps = c("adjust.eps","grow.frame","shrink.frame"),
                          geomsmooth = TRUE) {
   if(is.null(fitname)) 
     fitname <- short.deparse(substitute(fit))
@@ -106,11 +107,14 @@ ppmInfluenceEngine <- function(fit,
     what <- c("leverage", "influence", "dfbetas",
               "score", "derivatives", "increments")
   matrix.action <- match.arg(matrix.action)
-
+  
   influencecalc <- any(what %in% c("leverage", "influence", "dfbetas"))
   hesscalc <- influencecalc || any(what == "derivatives")
   sparse <- sparseOK 
   target <- paste(what, collapse=",")
+
+  ## discretisation
+  rule.eps <- match.arg(rule.eps)
   
   ## ...........  collect information about the model .................
   
@@ -796,7 +800,7 @@ ppmInfluenceEngine <- function(fit,
       levsmo <- Smooth(levvaldum,
                        sigma=smallsigma,
                        geometric=geomsmooth,
-                       dimyx=dimyx, eps=eps)
+                       dimyx=dimyx, eps=eps, rule.eps=rule.eps)
       levnearest <- nnmark(levvaldum, dimyx=dimyx, eps=eps)
     } else {
       levsplitdum <- split(levvaldum, reduce=TRUE)
@@ -804,7 +808,8 @@ ppmInfluenceEngine <- function(fit,
                        sigma=smallsigma,
                        geometric=geomsmooth,
                        dimyx=dimyx, eps=eps)
-      levnearest <- solapply(levsplitdum, nnmark, dimyx=dimyx, eps=eps)
+      levnearest <- solapply(levsplitdum, nnmark,
+                             dimyx=dimyx, eps=eps, rule.eps=rule.eps)
     }
     ## mean level
     if(fit.is.poisson) {
@@ -868,7 +873,8 @@ ppmInfluenceEngine <- function(fit,
       DFB <- msr(Q, dis[isdata, ], con)
     }
     #' add smooth component
-    DFB <- augment.msr(DFB, sigma=smallsigma, dimyx=dimyx, eps=eps)
+    DFB <- augment.msr(DFB, sigma=smallsigma,
+                       dimyx=dimyx, eps=eps, rule.eps=rule.eps)
     result$dfbetas <- DFB
   }
   return(result)

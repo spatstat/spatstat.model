@@ -43,7 +43,9 @@
     (from the \pkg{stats} package) or 
     \code{\link[goftest]{cvm.test}} or
     \code{\link[goftest]{ad.test}} (from the \pkg{goftest} package)
-    to control the test.
+    to control the test;
+    and arguments passed to \code{\link[spatstat.geom]{as.mask}}
+    to control the pixel resolution.
   }
   \item{interpolate}{
     Logical flag indicating whether to interpolate pixel images.

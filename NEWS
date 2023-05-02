@@ -1,4 +1,25 @@
 
+        CHANGES IN spatstat.model VERSION 3.2-3.001
+
+OVERVIEW
+
+    o Minor improvements.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o cdf.test.ppm
+    Recognises argument 'rule.eps' passed to 'as.mask'.
+
+    o dfbetas.ppm
+    Recognises argument 'rule.eps' passed to 'as.mask'.
+
+    o leverage.ppm
+    Recognises argument 'rule.eps' passed to 'as.mask'.
+
+    o rhohat.ppm
+    New argument 'rule.eps' passed to 'as.mask'.
+
+
         CHANGES IN spatstat.model VERSION 3.2-3
 
 OVERVIEW
