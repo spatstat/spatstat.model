@@ -41,7 +41,7 @@ local({
 #'     tests/hypotests.R
 #'     Hypothesis tests
 #' 
-#'  $Revision: 1.9 $ $Date: 2020/11/02 06:39:23 $
+#'  $Revision: 1.10 $ $Date: 2023/07/17 07:30:48 $
 
 if(FULLTEST) {
 local({

@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.235 $	$Date: 2021/09/04 09:31:09 $
+#	$Revision: 5.238 $	$Date: 2023/07/26 07:45:45 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -115,7 +115,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2021/09/04 09:31:09 $")
+                        date="$Date: 2023/07/26 07:45:45 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -881,6 +881,19 @@ mpl.get.covariates <- local({
     } else if(is.list(covariates)) {
       if(length(covariates) == 0)
         return(as.data.frame(matrix(, n, 0)))
+      if(any(islin <- unlist(lapply(covariates, inherits, what="lintess")))) {
+        ## convert 'lintess' objects to 'linfun' for handling
+        if(requireNamespace("spatstat.linnet", quietly=TRUE) &&
+           isNamespaceLoaded("spatstat.linnet")) {
+          covariates[islin] <- lapply(covariates[islin],
+                                      spatstat.linnet::as.linfun)
+        } else {
+          stop(paste("The package", sQuote("spatstat.linnet"),
+                     "is required to handle", sQuote("lintess"),
+                     "objects"))
+        }
+      }
+      ## recognise type of each covariate
       isim   <- unlist(lapply(covariates, is.im))
       isfun  <- unlist(lapply(covariates, is.function))
       iswin  <- unlist(lapply(covariates, is.owin))

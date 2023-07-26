@@ -5,10 +5,11 @@
 ##  - clusterfield
 ##  - clusterradius.
 ##
-##   $Revision: 1.12 $  $Date: 2022/11/03 11:08:33 $
+##   $Revision: 1.13 $  $Date: 2023/06/09 05:13:54 $
 ##
 
 ## The generic clusterkernel() is now in spatstat.random
+## The method clusterkernel.character is now in spatstat.random
 
 clusterkernel.kppm <- function(model, ...) {
   kernelR <- Kpcf.kppm(model, what = "kernel")
@@ -18,7 +19,9 @@ clusterkernel.kppm <- function(model, ...) {
   return(f)
 }
 
-## The generic clusterradius() is now in spatstat.random
+## The generic clusterfield() is now in spatstat.random
+## The method clusterfield.character is now in spatstat.random
+## The method clusterfield.function is now in spatstat.random
 
 clusterfield.kppm <- function(model, locations = NULL, ...) {
     f <- clusterkernel(model)
@@ -31,7 +34,8 @@ clusterfield.kppm <- function(model, locations = NULL, ...) {
     clusterfield.function(f, locations, ..., mu = model$mu)
 }
 
-## The generic clusterradius is defined in spatstat.random
+## The generic clusterradius is now defined in spatstat.random
+## The method clusterradius.character is now defined in spatstat.random
 
 clusterradius.kppm <- function(model, ..., thresh = NULL, precision = FALSE){
     a <- list(model = model$clusters,
