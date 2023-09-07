@@ -1,10 +1,14 @@
 
-        CHANGES IN spatstat.model VERSION 3.2-4.001
+        CHANGES IN spatstat.model VERSION 3.2-5
 
 OVERVIEW
 
-    o Minor improvements.
+    o Internal improvements.
 
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o ppm
+    Internal changes to support improvements in spatstat.linnet::lppm.
 
         CHANGES IN spatstat.model VERSION 3.2-4
 

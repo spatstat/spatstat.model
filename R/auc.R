@@ -3,7 +3,7 @@
 ##
 ##  Calculate ROC curve or area under it
 ##
-## $Revision: 1.16 $ $Date: 2023/01/15 02:21:19 $
+## $Revision: 1.17 $ $Date: 2023/08/15 07:44:11 $
 
 ## Code for roc() and roc.ppp() and internals is moved to spatstat.explore
 
