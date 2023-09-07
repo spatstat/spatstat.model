@@ -72,10 +72,12 @@
 \alias{is.interact}
 \alias{is.marked.mppm}    
 \alias{is.marked.msr}    
+\alias{is.marked.rppm}    
 \alias{is.marked.slrm}
 \alias{is.mppm}
 \alias{is.multitype.mppm}    
 \alias{is.multitype.msr}    
+\alias{is.multitype.rppm}    
 \alias{is.multitype.slrm}    
 \alias{is.poisson.mppm}
 \alias{is.poisson.rppm}
