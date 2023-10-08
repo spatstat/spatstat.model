@@ -77,3 +77,4 @@
 \keyword{spatial}
 \keyword{models}
 
+\concept{Model diagnostics}

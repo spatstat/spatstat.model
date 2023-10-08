@@ -63,13 +63,7 @@
 \author{
   \adrian, Ida-Maria Sintorn and Leanne Bischoff.
   Implemented by 
-  \adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{mppm}},

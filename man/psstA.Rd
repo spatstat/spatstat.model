@@ -196,3 +196,4 @@ psstA(object, r = NULL, breaks = NULL, \dots,
 }
 \keyword{spatial}
 \keyword{models}
+\concept{Model diagnostics}

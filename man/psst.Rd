@@ -154,3 +154,4 @@ psst(object, fun, r = NULL, breaks = NULL, ...,
 }
 \keyword{spatial}
 \keyword{models}
+\concept{Model diagnostics}

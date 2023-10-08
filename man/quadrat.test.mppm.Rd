@@ -111,4 +111,4 @@
 }
 \keyword{spatial}
 \keyword{htest}
-
+\concept{Goodness-of-fit}

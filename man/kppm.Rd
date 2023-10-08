@@ -652,11 +652,11 @@
 }
 \author{
   \spatstatAuthors,
-  with contributions from Abdollah Jalilian and Rasmus Waagepetersen.
+  with contributions from \abdollah and \rasmus.
   Adaptive composite likelihood method contributed by Chiara Fend
   and modified by Adrian Baddeley.
-  Penalised optimization developed by Adrian Baddeley, Tilman Davies
-  and Martin Hazelton.
+  Penalised optimization developed by Adrian Baddeley, \tilman
+  and \martinH.
 }
 \keyword{spatial}
 \keyword{models}

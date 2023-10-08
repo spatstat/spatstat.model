@@ -53,8 +53,6 @@
 }
 \author{
   \adrian
-  
-  
 }
 \seealso{
   \code{\link{Smooth}},

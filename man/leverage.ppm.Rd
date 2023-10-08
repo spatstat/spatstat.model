@@ -116,3 +116,4 @@ if(offline) spatstat.options(op)
 \keyword{spatial}
 \keyword{models}
 \concept{diagnostics}
+\concept{Model diagnostics}

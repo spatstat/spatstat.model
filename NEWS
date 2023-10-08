@@ -1,4 +1,11 @@
 
+        CHANGES IN spatstat.model VERSION 3.2-6.001
+
+OVERVIEW
+
+    o spatstat.model no longer suggests package 'maptools'.
+
+
         CHANGES IN spatstat.model VERSION 3.2-6
 
 OVERVIEW

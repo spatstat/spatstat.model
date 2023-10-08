@@ -3,7 +3,7 @@
 #'
 #' Experimental
 #' 
-#'   $Revision: 1.10 $ $Date: 2022/02/21 02:24:07 $
+#'   $Revision: 1.11 $ $Date: 2023/09/11 04:13:58 $
 #'
 
 zclustermodel <- function(name="Thomas", ..., mu, kappa, scale) {
@@ -67,7 +67,7 @@ pcfmodel.zclustermodel <- function(model, ...) {
   mpar <- model$par.idio
   other <- model$other
   f <- function(r) {
-    do.call(p, c(list(par=mpar, rvals=r), other))
+    as.numeric(do.call(p, c(list(par=mpar, rvals=r), other)))
   }
   return(f)
 }

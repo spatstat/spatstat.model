@@ -171,5 +171,4 @@ Performs analysis of deviance for one or more fitted point process models.
 \keyword{spatial}
 \keyword{models}
 \keyword{methods}
- 
- 
+\concept{Model selection}

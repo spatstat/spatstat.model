@@ -62,3 +62,4 @@
 }
 \keyword{spatial}
 \keyword{manip}
+\concept{Model diagnostics}

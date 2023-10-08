@@ -260,3 +260,4 @@
 \keyword{htest}
 \keyword{spatial}
 
+\concept{Goodness-of-fit}

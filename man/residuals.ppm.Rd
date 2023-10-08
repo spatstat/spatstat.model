@@ -229,10 +229,7 @@
    res.true <- residuals(fit, new.coef=truecoef)  
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{models}
