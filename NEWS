@@ -1,12 +1,34 @@
 
-        CHANGES IN spatstat.model VERSION 3.2-6.002
+        CHANGES IN spatstat.model VERSION 3.2-6.004
 
 OVERVIEW
 
-    o spatstat.model no longer suggests package 'maptools'.
+    o spatstat.model no longer suggests package 'maptools' or 'RandomFields'.
 
+    o code for log-Gaussian Cox models has changed.
+    
     o minor improvements to help files.
     
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o kppm
+    The code for fitting log-Gaussian Cox process models (clusters="LGCP")
+    has been re-implemented without using the package 'RandomFields'.
+    The current code supports the 'exponential', 'gauss', 'stable',
+    'gencauchy' and 'matern' covariance models.
+    
+    o lgcp.estK, lgcp.estpcf
+    This code for fitting log-Gaussian Cox process models
+    has been re-implemented without using the package 'RandomFields'.
+    The current code supports the 'exponential', 'gauss', 'stable',
+    'gencauchy' and 'matern' covariance models.
+
+    o simulate.kppm
+    For log-Gaussian Cox process models (clusters='LGCP') the simulation
+    algorithm has been completely re-implemented to avoid dependence
+    on the defunct package 'RandomFields'. For details, see the help
+    for 'rLGCP' in the package 'spatstat.random'.
+
         CHANGES IN spatstat.model VERSION 3.2-6
 
 OVERVIEW

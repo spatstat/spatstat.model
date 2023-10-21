@@ -137,15 +137,7 @@ lgcp.estpcf(X,
   }{
     C(r) = sigma^2 * exp(-r/alpha).
   }
-  To determine the template model, the string \code{"modelname"} will be
-  prefixed by \code{"RM"} and the code will search for
-  a function of this name in the \pkg{RandomFields} package.
-  For a list of available models see 
-  \code{\link[RandomFields]{RMmodel}} in the
-  \pkg{RandomFields} package. For example the
-  \Matern covariance with exponent \eqn{\nu=0.3}{nu = 0.3} is specified
-  by \code{covmodel=list(model="matern", nu=0.3)} corresponding
-  to the function \code{RMmatern} in the \pkg{RandomFields} package.
+  For a list of available models see \code{\link{kppm}}.
   
   If the argument \code{lambda} is provided, then this is used
   as the value of \eqn{\lambda}{lambda}. Otherwise, if \code{X} is a
@@ -198,7 +190,8 @@ lgcp.estpcf(X,
   \rasmus and \ege.
 }
 \seealso{
-  \code{\link{lgcp.estK}} for alternative method of fitting LGCP.
+  \code{\link{kppm}} and \code{\link{lgcp.estK}}
+  for alternative methods of fitting LGCP.
   
   \code{\link{matclust.estpcf}},
   \code{\link{thomas.estpcf}} for other models.
@@ -207,18 +200,13 @@ lgcp.estpcf(X,
   fitting algorithm, including important parameters that affect
   the accuracy of the fit.
   
-  \code{\link[RandomFields]{RMmodel}} in the
-  \pkg{RandomFields} package, for covariance function models.
-  
   \code{\link{pcf}} for the pair correlation function.
 }
 \examples{
     u <- lgcp.estpcf(redwood, c(var=1, scale=0.1))
     u
     plot(u)
-    if(require(RandomFields)) {
-      lgcp.estpcf(redwood, covmodel=list(model="matern", nu=0.3))
-    }
+    lgcp.estpcf(redwood, covmodel=list(model="matern", nu=0.3))
 }
 \keyword{spatial}
 \keyword{models}

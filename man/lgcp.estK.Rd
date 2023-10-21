@@ -131,15 +131,7 @@ lgcp.estK(X, startpar=c(var=1,scale=1),
   }{
     C(r) = sigma^2 * exp(-r/alpha).
   }
-  To determine the template model, the string \code{"modelname"} will be
-  prefixed by \code{"RM"} and the code will search for
-  a function of this name in the \pkg{RandomFields} package.
-  For a list of available models see 
-  \code{\link[RandomFields]{RMmodel}} in the
-  \pkg{RandomFields} package. For example the
-  \Matern covariance with exponent \eqn{\nu=0.3}{nu = 0.3} is specified
-  by \code{covmodel=list(model="matern", nu=0.3)} corresponding
-  to the function \code{RMmatern} in the \pkg{RandomFields} package.
+  For a list of available models see \code{\link{kppm}}.
   
   If the argument \code{lambda} is provided, then this is used
   as the value of \eqn{\lambda}{lambda}. Otherwise, if \code{X} is a
@@ -200,7 +192,8 @@ lgcp.estK(X, startpar=c(var=1,scale=1),
   and Shen Guochun, and by \ege.
 }
 \seealso{
-  \code{\link{lgcp.estpcf}} for alternative method of fitting LGCP.
+  \code{\link{kppm}} and
+  \code{\link{lgcp.estpcf}} for alternative methods of fitting LGCP.
   
   \code{\link{matclust.estK}},
   \code{\link{thomas.estK}} for other models.
@@ -208,9 +201,6 @@ lgcp.estK(X, startpar=c(var=1,scale=1),
   \code{\link{mincontrast}} for the generic minimum contrast
   fitting algorithm, including important parameters that affect
   the accuracy of the fit.
-  
-  \code{\link[RandomFields]{RMmodel}} in the
-  \pkg{RandomFields} package, for covariance function models.
   
   \code{\link{Kest}} for the \eqn{K} function.
 }
@@ -225,13 +215,11 @@ lgcp.estK(X, startpar=c(var=1,scale=1),
     }
   
     \testonly{
-      if(require(RandomFields)) {
-        K <- Kest(redwood, r=seq(0, 0.1, length=9))
-        op <- spatstat.options(fastK.lgcp=TRUE)
-        lgcp.estK(K, covmodel=list(model="matern", nu=0.3),
-                  control=list(maxit=2))
-        spatstat.options(op)
-      }
+       K <- Kest(redwood, r=seq(0, 0.1, length=9))
+       op <- spatstat.options(fastK.lgcp=TRUE)
+       lgcp.estK(K, covmodel=list(model="matern", nu=0.3),
+                 control=list(maxit=2))
+       spatstat.options(op)
     }
     if(FALSE) {
       ## takes several minutes!

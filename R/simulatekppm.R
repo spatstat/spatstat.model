@@ -3,7 +3,7 @@
 #'
 #'    simulate.kppm
 #'
-#'    $Revision: 1.11 $ $Date: 2023/01/25 04:26:29 $
+#'    $Revision: 1.12 $ $Date: 2023/10/20 11:04:52 $
 
 simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
                           window=NULL, covariates=NULL,
@@ -83,33 +83,33 @@ simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
            )
   }
 
-  # prepare data for execution
-  out <- list()
+  ## simulate
   switch(object$clusters,
          Thomas={
            kappa <- mp$kappa
            sigma <- mp$sigma
-           cmd <- expression(rThomas(kappa=kappa, scale=sigma, mu=mu, win=win, ...))
-           dont.complain.about(kappa, sigma, mu)
+           out <- rThomas(kappa=kappa, scale=sigma, mu=mu, win=win,
+                          ..., nsim=nsim, drop=FALSE)
          },
          MatClust={
            kappa <- mp$kappa
            r     <- mp$R
-           cmd   <- expression(rMatClust(kappa=kappa, scale=r, mu=mu, win=win, ...))
-           dont.complain.about(kappa, r)
+           out   <- rMatClust(kappa=kappa, scale=r, mu=mu, win=win,
+                              ..., nsim=nsim, drop=FALSE)
          },
          Cauchy = {
            kappa <- mp$kappa
            omega <- mp$omega
-           cmd   <- expression(rCauchy(kappa = kappa, scale=omega, mu=mu, win=win, ...))
-           dont.complain.about(kappa, omega, mu)
+           out   <- rCauchy(kappa = kappa, scale=omega, mu=mu, win=win,
+                            ..., nsim=nsim, drop=FALSE)
          },
          VarGamma = {
            kappa  <- mp$kappa
            omega  <- mp$omega
            nu.ker <- object$covmodel$margs$nu.ker
-           cmd    <- expression(rVarGamma(kappa=kappa, scale=omega, mu=mu, nu=nu.ker, win=win, ...))
-           dont.complain.about(kappa, omega, mu, nu.ker)
+           out    <- rVarGamma(kappa=kappa, scale=omega, mu=mu,
+                               nu=nu.ker, win=win,
+                               ..., nsim=nsim, drop=FALSE)
          },
          LGCP={
            sigma2 <- mp$sigma2
@@ -118,71 +118,19 @@ simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
            model <- cm$model
            margs <- cm$margs
            param <- append(list(var=sigma2, scale=alpha), margs)
-           #' 
+           #'
            if(!is.im(mu)) {
              # model will be simulated in 'win'
-             cmd <- expression(rLGCP(model=model, mu=mu, param=param,
-                               ..., win=win))
-             #' check that RandomFields package recognises parameter format
-             rfmod <- try(rLGCP(model, mu=mu, param=param, win=win,
-                              ..., modelonly=TRUE))
+             out <- rLGCP(model=model, mu=mu, param=param,
+                          win=win,
+                          ..., nsim=nsim, drop=FALSE)
            } else {
              # model will be simulated in as.owin(mu), then change window
-             cmd <- expression(rLGCP(model=model, mu=mu, param=param,
-                               ...)[win])
-             #' check that RandomFields package recognises parameter format
-             rfmod <- try(rLGCP(model, mu=mu, param=param, 
-                              ..., modelonly=TRUE))
+             out <- rLGCP(model=model, mu=mu, param=param,
+                          ..., nsim=nsim, drop=FALSE)
+             out <- solapply(out, "[", i=win)
            }
-           #' suppress warnings from code checker
-           dont.complain.about(model, mu, param)
-           #' check that model is recognised
-           if(inherits(rfmod, "try-error"))
-             stop(paste("Internal error in simulate.kppm:",
-                        "unable to build Random Fields model",
-                        "for log-Gaussian Cox process"))
          })
-  
-  # run
-  if(verbose) {
-    cat(paste("Generating", nsim, "simulations... "))
-    state <- list()
-  }
-  for(i in 1:nsim) {
-    out[[i]] <- try(eval(cmd))
-    if(verbose) state <- progressreport(i, nsim, state=state)
-  }
-  # detect failures
-  if(any(bad <- unlist(lapply(out, inherits, what="try-error")))) {
-    nbad <- sum(bad)
-    gripe <- paste(nbad,
-                   ngettext(nbad, "simulation was", "simulations were"),
-                   "unsuccessful")
-    if(verbose) splat(gripe)
-    if(retry <= 0) {
-      fate <- "returned as NULL"
-      out[bad] <- list(NULL)
-    } else {
-      if(verbose) cat("Retrying...")
-      ntried <- 0
-      while(ntried < retry) {
-        ntried <- ntried + 1
-        for(j in which(bad))
-          out[[j]] <- try(eval(cmd))
-        bad <- unlist(lapply(out, inherits, what="try-error"))
-        nbad <- sum(bad)
-        if(nbad == 0) break
-      }
-      if(verbose) cat("Done.\n")
-      fate <- if(nbad == 0) "all recomputed" else
-              paste(nbad, "simulations still unsuccessful")
-      fate <- paste(fate, "after", ntried,
-                    ngettext(ntried, "further try", "further tries"))
-    }
-    warning(paste(gripe, fate, sep=": "))
-  }
-  if(verbose)
-    cat("Done.\n")
   #' pack up
   out <- simulationresult(out, nsim, drop)
   out <- timed(out, starttime=starttime)

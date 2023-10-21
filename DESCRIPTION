@@ -1,6 +1,6 @@
 Package: spatstat.model
-Version: 3.2-6.002
-Date: 2023-10-08
+Version: 3.2-6.004
+Date: 2023-10-21
 Title: Parametric Statistical Modelling and Inference for the 'spatstat' Family
 Authors@R: c(person("Adrian", "Baddeley", 
                     role = c("aut", "cre", "cph"),
@@ -55,10 +55,9 @@ Authors@R: c(person("Adrian", "Baddeley",
 	     person("Hangsheng", "Wang",
 	            role = "ctb"))
 Maintainer: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>
-Depends: R (>= 3.5.0), spatstat.data (>= 3.0), spatstat.geom (>= 3.2-1), spatstat.random (>= 3.1-5), spatstat.explore (>= 3.2-1), stats, graphics, grDevices, utils, methods, nlme, rpart
+Depends: R (>= 3.5.0), spatstat.data (>= 3.0), spatstat.geom (>= 3.2-1), spatstat.random (>= 3.2-1), spatstat.explore (>= 3.2-1), stats, graphics, grDevices, utils, methods, nlme, rpart
 Imports: spatstat.utils (>= 3.0-3), spatstat.sparse (>= 3.0), mgcv, Matrix, abind, tensor, goftest (>= 1.2-2)
-Suggests: sm, gsl, locfit, spatial, RandomFields (>= 3.1.24.1), RandomFieldsUtils(>= 0.3.3.1), fftwtools (>= 0.9-8), nleqslv, glmnet, spatstat.linnet (>= 3.1), spatstat (>= 3.0)
-Additional_repositories: https://spatstat.r-universe.dev
+Suggests: sm, gsl, locfit, spatial, fftwtools (>= 0.9-8), nleqslv, glmnet, spatstat.linnet (>= 3.1), spatstat (>= 3.0)
 Description: Functionality for parametric statistical modelling and inference for spatial data,
 	     mainly spatial point patterns, in the 'spatstat' family of packages.
 	     (Excludes analysis of spatial data on a linear network,

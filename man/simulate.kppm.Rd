@@ -106,6 +106,19 @@
   captures the initial state of the random number generator.
   See Details.
 }
+\section{Warning: new implementation for LGCP}{
+  The simulation algorithm for log-Gaussian Cox processes
+  has been completely re-written
+  in \pkg{spatstat.random} version \code{3.2-0} to avoid depending on
+  the package \pkg{RandomFields} which is now defunct (and is sadly missed).
+
+  It is no longer possible to replicate results
+  of \code{simulate.kppm} for log-Gaussian Cox processes
+  that were obtained using previous versions of \pkg{spatstat.random}.
+
+  The current code for simulating log-Gaussian Cox processes
+  is a new implementation and should be considered vulnerable to new bugs. 
+}
 \examples{
   if(offline <- !interactive()) {
     spatstat.options(npixel=32, ndummy.min=16)

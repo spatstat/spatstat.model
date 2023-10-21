@@ -498,12 +498,7 @@
   }
 }
 \section{Log-Gaussian Cox Models}{
-  Fitting a log-Gaussian Cox process model
-  requires the \pkg{RandomFields} package,
-  except in the default case where the exponential covariance
-  is assumed.
-
-  To fit a log-Gaussian Cox model with non-exponential covariance,
+  To fit a log-Gaussian Cox model,
   specify \code{clusters="LGCP"} and use additional arguments
   to specify the covariance structure. These additional arguments can
   be given individually in the call to \code{kppm}, or they can be
@@ -515,18 +510,70 @@
 
   The argument \code{model} specifies the type of covariance
   model: the default is \code{model="exp"} for an exponential covariance.
-  Alternatives include \code{"matern"}, \code{"cauchy"} and \code{"spheric"}.
-  Model names correspond to functions beginning with \code{RM} in the
-  \pkg{RandomFields} package: for example \code{model="matern"}
-  corresponds to the function \code{RMmatern} in the 
-  \pkg{RandomFields} package.
-  
-  Additional arguments are passed to the
-  relevant function in the \pkg{RandomFields} package:
-  for example if \code{model="matern"} then the additional argument
-  \code{nu} is required, and is passed to the function
-  \code{RMmatern} in the \pkg{RandomFields} package.
+  Additional arguments specify the shape parameters of the covariance
+  model. For example if \code{model="matern"} then the additional argument
+  \code{nu} is required. 
 
+  The available models are as follows:
+  \describe{
+    \item{\code{model="exponential"}:}{
+      the exponential covariance function
+      \deqn{C(r) = \sigma^2 \exp(-r/h)}{C(r) = sigma^2 * exp(-r/h)}
+      where \eqn{\sigma^2} is the (fitted) variance parameter,
+      and \eqn{h} is the (fitted) scale parameter.
+      No shape parameters are required.
+    }
+    \item{\code{model="gauss"}:}{
+      the Gaussian covariance function
+      \deqn{C(r) = \sigma^2 \exp(-(r/h)^2)}{C(r) = sigma^2 * exp(-(r/h)^2)}
+      where \eqn{\sigma^2} is the (fitted) variance parameter,
+      and \eqn{h} is the (fitted) scale parameter.
+      No shape parameters are required.
+    }
+    \item{\code{model="stable"}:}{
+      the stable covariance function
+      \deqn{
+	C(r) = \sigma^2 \exp(-(r/h)^\alpha)
+      }{
+	C(r) = sigma^2 * exp(-(r/h)^alpha)
+      }
+      where \eqn{\sigma^2} is the (fitted) variance parameter,
+      \eqn{h} is the (fitted) scale parameter,
+      and \eqn{\alpha} is the shape parameter \code{alpha}.
+      The parameter \code{alpha} must be given, either as a stand-alone
+      argument, or as an entry in the list \code{covmodel}.
+    }
+    \item{\code{model="gencauchy"}:}{
+      the generalised Cauchy covariance function
+      \deqn{
+	C(r) = \sigma^2 (1 + (x/h)^\alpha)^{-\beta/\alpha}
+      }{
+	C(r) = sigma^2 * (1 + (x/h)^\alpha)^(-\beta/\alpha)
+      }
+      where \eqn{\sigma^2} is the (fitted) variance parameter,
+      \eqn{h} is the (fitted) scale parameter,
+      and \eqn{\alpha} and \eqn{\beta} are the shape parameters
+      \code{alpha} and \code{beta}.
+      The parameters \code{alpha} and \code{beta}
+      must be given, either as stand-alone arguments, or as entries
+      in the list \code{covmodel}.
+    }
+    \item{\code{model="matern"}:}{
+      the Whittle-\Matern covariance function
+      \deqn{
+	C(r) = \sigma^2 \frac{1}{2^{\nu-1} \Gamma(\nu)}
+	       (\sqrt{2 \nu} \, r/h)^\nu K_\nu(\sqrt{2\nu}\, r/h)
+      }{
+	C(r) = \sigma^2 * 2^(1-\nu) * \Gamma(\nu)^(-1) *
+	       (sqrt(2 *\nu) * r/h)^\nu * K[\nu](sqrt(2 * nu) * r/h)
+      }
+      where \eqn{\sigma^2} is the (fitted) variance parameter,
+      \eqn{h} is the (fitted) scale parameter,
+      and \eqn{\nu} is the shape parameter \code{nu}.
+      The parameter \code{nu} must be given, either as a stand-alone
+      argument, or as an entry in the list \code{covmodel}.
+    }
+  }
   Note that it is not possible to use \emph{anisotropic} covariance models
   because the \code{kppm} technique assumes the pair correlation function
   is isotropic.
@@ -633,12 +680,9 @@
 
   # log-Gaussian Cox process (LGCP) models
   kppm(redwood ~ 1, "LGCP", statistic="pcf")
-  if(require("RandomFields")) {
-    # Random Fields package is needed for non-default choice of covariance model
-    kppm(redwood ~ x, "LGCP", statistic="pcf",
-                              model="matern", nu=0.3,
-                              control=list(maxit=10))
-  }
+  kppm(redwood ~ x, "LGCP", statistic="pcf",
+                            model="matern", nu=0.3,
+                            control=list(maxit=10))
 
   # Different fitting techniques
   fitc <- kppm(redwood ~ 1, "Thomas", method="c")
