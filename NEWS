@@ -1,11 +1,11 @@
 
-        CHANGES IN spatstat.model VERSION 3.2-6.004
+        CHANGES IN spatstat.model VERSION 3.2-7
 
 OVERVIEW
 
     o spatstat.model no longer suggests package 'maptools' or 'RandomFields'.
 
-    o code for log-Gaussian Cox models has changed.
+    o code for fitting log-Gaussian Cox models has changed.
     
     o minor improvements to help files.
     

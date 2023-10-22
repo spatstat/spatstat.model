@@ -15,9 +15,9 @@ cat(paste("--------- Executing",
 #
 # tests/kppm.R
 #
-# $Revision: 1.38 $ $Date: 2023/02/28 04:00:42 $
+# $Revision: 1.39 $ $Date: 2023/10/21 04:25:51 $
 #
-# Test functionality of kppm that depends on RandomFields
+# Test functionality of kppm that once depended on RandomFields
 # Test update.kppm for old style kppm objects
 
 if(!FULLTEST)
@@ -87,7 +87,7 @@ local({
    kfut <- as.fv(fut)
  }
  
- if(require(RandomFields)) {
+ if(ALWAYS) {
    fit0 <- kppm(redwood ~1, "LGCP")
    is.poisson(fit0)
    Y0 <- simulate(fit0, saveLambda=TRUE)[[1]]
@@ -157,9 +157,6 @@ local({
      Y2 <- simulate(fit2, saveLambda=TRUE)[[1]]
      stopifnot(is.ppp(Y2))
    }
-   # check package mechanism
-   kraever("RandomFields")
-   
  }
 
 })
@@ -178,7 +175,7 @@ local({
   hut <- kppm(redwood ~ x, method="palm", weightfun=NULL)
   mut <- kppm(redwood)
   nut <- update(mut, Y)
-  if(require(RandomFields)) {
+  if(TRUE) {
     #' Bug in rLGCP spotted by Tilman Davies
     X <- rLGCP("matern", function(x,y) { 1 - 0.4* y },
                var=2, scale=0.7, nu=0.5, win = square(10),
