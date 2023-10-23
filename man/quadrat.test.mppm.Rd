@@ -60,11 +60,11 @@
   }
   In the first case, 
   suppose \code{P} is a list of point patterns we want to test.
-  Then fit the multiple model \code{fit1 <- mppm(P, ~1)} which signifies a
+  Then fit the multiple model \code{fit1 <- mppm(P ~1)} which signifies a
   Poisson point process model with a constant intensity. Then
   apply \code{quadrat.test(fit1)}.
 
-  In the second case, fit the model code{fit2 <- mppm(P, ~id)}
+  In the second case, fit the model \code{fit2 <- mppm(P ~id)}
   which signifies a Poisson point process with a different constant
   intensity for each point pattern. Then apply \code{quadrat.test(fit2)}.
 }

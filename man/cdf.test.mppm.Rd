@@ -45,7 +45,7 @@
   }
   \item{interpolate}{
     Logical flag indicating whether to interpolate between
-    pixel values when code{covariate} is a pixel image.
+    pixel values when \code{covariate} is a pixel image.
     See \emph{Details}.
   }
   \item{fast}{
@@ -126,7 +126,7 @@
   \code{\link[goftest]{cvm.test}} or \code{\link[goftest]{ad.test}}.
 
   The argument \code{interpolate} determines 
-  how pixel values will be handled when code{covariate} is a pixel image.
+  how pixel values will be handled when \code{covariate} is a pixel image.
   The value of the covariate at a data point is obtained
   by looking up the value of the nearest pixel if
   \code{interpolate=FALSE}, or by linearly interpolating

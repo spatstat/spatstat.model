@@ -466,7 +466,7 @@
       subject to random variation.
 
       After this initial fit, there are several ways to improve the fit:
-      \itemize{
+      \describe{
 	\item{improve.type="none":}{
 	  No further improvement is performed.
 	}

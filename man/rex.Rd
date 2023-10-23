@@ -46,7 +46,7 @@ rex(x, r = 2, k = 1, recursive = FALSE)
   Estimates based on a step size \eqn{s} are assumed to have an error
   of order \eqn{s^k}.
 
-  Thus, the default values \code{r=2} and {k=1} imply that the errors in
+  Thus, the default values \code{r=2} and \code{k=1} imply that the errors in
   the second column of \code{x} should be roughly \eqn{(1/r)^k = 1/2} as large
   as the errors in the first column, and so on.
 }
