@@ -6,7 +6,9 @@
   parameters of a fitted point process model.
 }
 \usage{
-  \method{vcov}{ppm}(object, \dots, what = "vcov", verbose = TRUE,
+  \method{vcov}{ppm}(object, \dots,
+                    what = c("vcov", "corr", "fisher"),
+                    verbose = TRUE,
                     fine=FALSE,
                     gam.action=c("warn", "fatal", "silent"),
                     matrix.action=c("warn", "fatal", "silent"),

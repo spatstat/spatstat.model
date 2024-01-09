@@ -5,15 +5,16 @@
 #
 #   Original code: Abdollah Jalilian
 #
-#   $Revision: 1.11 $  $Date: 2018/02/15 03:28:11 $
+#   $Revision: 1.14 $  $Date: 2024/01/09 02:01:35 $
 #
 
 vcov.kppm <- function(object, ...,
-                      what=c("vcov", "corr", "fisher", "internals"),
+                      what=c("vcov", "corr", "fisher"),
                       fast = NULL, rmax = NULL, eps.rmax = 0.01,
                       verbose = TRUE)
 {
-  what <- match.arg(what)
+  what <- if(missing(what)) "vcov" else
+          match.arg(what, c("vcov", "corr", "fisher", "internals", "all"))
   verifyclass(object, "kppm")
   fast.given <- !is.null(fast)
   #' secret argument (eg for testing)
@@ -39,6 +40,15 @@ vcov.kppm <- function(object, ...,
     Z <- model.matrix(po)
     ## evaluate integrand
     ff <- Z * lambda * wt
+    if(anyNA(ff)) {
+      bad <- !complete.cases(ff)      
+      ff[bad,] <- 0
+      warning(paste(percentage(mean(bad)),
+                    paren(paste(sum(bad), "out of", length(bad))),
+                    "quadrature points had NA covariate values",
+                    "and were ignored in the variance calculation"),
+              call.=FALSE)
+    }
     ## extract pcf
     g <- pcfmodel(object)
     ## resolve options for algorithm
@@ -108,7 +118,7 @@ vcov.kppm <- function(object, ...,
     J.inv <- try(solve(J))
     ## could be singular 
     if(inherits(J.inv, "try-error")) {
-      if(what == "internals") {
+      if(what == "internals" || what == "all") {
         return(list(ff=ff, J=J, E=E, J.inv=NULL))
       } else {
         return(NULL)
@@ -149,12 +159,22 @@ vcov.kppm <- function(object, ...,
            return(co)
          },
          fisher={
-           fish <- try(solve(vc))
-           if(inherits(fish, "try-error")) fish <- NULL 
+           fish <- there.is.no.try(solve(vc))
            return(fish)
          },
          internals={
            return(list(ff=ff, J=J, E=E, J.inv=J.inv, vc=vc))
+         },
+         all={
+           sd <- sqrt(diag(vc))
+           co <- vc/outer(sd, sd, "*")
+           fish <- there.is.no.try(solve(vc))
+           internals <- list(ff=ff, J=J, E=E, J.inv=J.inv, vc=vc)
+           return(list(vcov      = vc,
+                       sd        = sd,
+                       co        = co,
+                       fish      = fish,
+                       internals = internals))
          })
   stop(paste("Unrecognised option: what=", what))
 }

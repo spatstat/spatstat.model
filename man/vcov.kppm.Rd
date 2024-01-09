@@ -7,7 +7,7 @@
 }
 \usage{
    \method{vcov}{kppm}(object, ...,
-          what=c("vcov", "corr", "fisher", "internals"),
+          what=c("vcov", "corr", "fisher"),
           fast = NULL, rmax = NULL, eps.rmax = 0.01,
           verbose = TRUE)
 }

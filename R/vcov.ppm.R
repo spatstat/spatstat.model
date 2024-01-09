@@ -3,18 +3,19 @@
 ## and Fisher information matrix
 ## for ppm objects
 ##
-##  $Revision: 1.138 $  $Date: 2022/06/21 02:19:56 $
+##  $Revision: 1.140 $  $Date: 2024/01/09 01:59:21 $
 ##
 
 vcov.ppm <- local({
 
-vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
-                     fine=FALSE,
-                     gam.action=c("warn", "fatal", "silent"),
-                     matrix.action=c("warn", "fatal", "silent"),
-                     logi.action=c("warn", "fatal", "silent"),
-                     nacoef.action=c("warn", "fatal", "silent"),
-                     hessian=FALSE) {
+  vcov.ppm <- function(object, ..., what=c("vcov", "corr", "fisher"),
+                       verbose=TRUE,
+                       fine=FALSE,
+                       gam.action=c("warn", "fatal", "silent"),
+                       matrix.action=c("warn", "fatal", "silent"),
+                       logi.action=c("warn", "fatal", "silent"),
+                       nacoef.action=c("warn", "fatal", "silent"),
+                       hessian=FALSE) {
   verifyclass(object, "ppm")
   argh <- list(...)
 
@@ -36,13 +37,19 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
     message("Argument 'A1dummy' has been replaced by 'fine'")
     fine <- as.logical(argh$A1dummy)
   } else fine <- as.logical(fine)
-  
-  stopifnot(length(what) == 1 && is.character(what))
-  what.options <- c("vcov", "corr", "fisher", "Fisher", "internals", "all")
-  what.map     <- c("vcov", "corr", "fisher", "fisher", "internals", "all")
-  if(is.na(m <- pmatch(what, what.options)))
-    stop(paste("Unrecognised option: what=", sQuote(what)))
-  what <- what.map[m]
+
+  if(missing(what)) {
+    what <- "vcov"
+  } else {
+    what <- pickoption("what", what,
+                       c(vcov      = "vcov",
+                         corr      = "corr",
+                         fisher    = "fisher",
+                         Fisher    = "fisher",
+                         internals = "internals",
+                         all       = "all"),
+                       allow.all=FALSE)
+  }
 
   ## No vcov for Variational Bayes
   if(!is.null(object$internal$VB))

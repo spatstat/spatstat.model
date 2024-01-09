@@ -1,4 +1,33 @@
 
+        CHANGES IN spatstat.model VERSION 3.2-8.001
+
+OVERVIEW
+
+    o We thank Marta Luraschi for contributions.
+    
+    o Minor improvements and bug fixes.
+    
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o vcov.kppm
+    If any quadrature points have NA values for one of the covariates,
+    these quadrature points are ignored in the variance calculation,
+    with a warning.
+    
+    o vcov.kppm
+    Minor change to formal arguments.
+
+    o vcov.ppm
+    Minor change to formal arguments.
+
+BUG FIXES
+
+    o vcov.kppm
+    If any quadrature points had NA values for one of the covariates,
+    the result was a matrix of NA values.
+    Fixed.
+    
+    
         CHANGES IN spatstat.model VERSION 3.2-8
 
 OVERVIEW

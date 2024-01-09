@@ -673,10 +673,26 @@
   Some common error messages and warning messages 
   are listed below, with explanations.
   \describe{
-    \item{\dQuote{System is computationally singular}}{
-      The Fisher information matrix of the fitted model has a
-      determinant close to zero, so that the matrix cannot be inverted,
-      and the software cannot calculate standard errors or confidence intervals.
+    \item{\dQuote{Model is invalid} or \dQuote{Model is not valid}}{
+      The fitted model coefficients do not define a valid point
+      process. This can occur because some of the fitted coefficients
+      are \code{NA} (perhaps because the model formula included redundant
+      covariates so that the coefficients cannot be estimated), or
+      because the fitted interaction coefficients do not define
+      a valid point process (e.g. because a point process
+      model which always has inhibition between points was fitted to a
+      clustered point pattern). See \code{\link{valid.ppm}} for detailed
+      information. 
+    }
+    \item{\dQuote{System is computationally singular} or
+      \dQuote{Fisher information matrix is singular}}{
+      The software cannot calculate standard errors or confidence
+      intervals for the coefficients of the fitted model.
+      This requires the (asymptotic) variance-covariance
+      matrix, which is the inverse matrix of the Fisher information
+      matrix of the fitted model. The error message states
+      that the determinant of the Fisher information matrix is zero,
+      or close to zero, so that the matrix cannot be inverted.
       This error is usually reported when the model is printed,
       because the \code{print} method calculates standard errors for the
       fitted parameters. Singularity usually occurs because the spatial
