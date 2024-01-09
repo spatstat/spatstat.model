@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.153 $	$Date: 2023/02/02 00:16:02 $
+#	$Revision: 2.154 $	$Date: 2023/11/03 00:37:43 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -190,7 +190,7 @@ function(x, ...,
       print(cose, digits=digits)
     } else if(do.SE) {
       # standard error calculation failed
-      splat("Standard errors unavailable; variance-covariance matrix is singular")
+      splat("Standard errors unavailable; Fisher information matrix is singular")
     } else if(!force.no.SE) {
       # standard error was voluntarily omitted
       if(waxlyrical('space', terselevel))

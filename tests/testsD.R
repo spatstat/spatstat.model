@@ -64,7 +64,7 @@ reset.spatstat.options()
 #'                    and inhomogeneous summary functions
 #'                    and idw, adaptive.density, intensity
 #'
-#'  $Revision: 1.62 $  $Date: 2022/05/22 11:14:51 $
+#'  $Revision: 1.63 $  $Date: 2023/11/05 01:47:37 $
 #'
 
 if(!FULLTEST)
