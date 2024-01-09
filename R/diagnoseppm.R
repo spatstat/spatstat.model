@@ -3,7 +3,7 @@
 #
 # Makes diagnostic plots based on residuals or energy weights
 #
-# $Revision: 1.44 $ $Date: 2019/10/02 10:33:21 $
+# $Revision: 1.45 $ $Date: 2024/01/09 02:27:11 $
 #
 
 diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
@@ -124,10 +124,16 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
   # ------------- smoothed field ------------------------------
 
   Z <- NULL
-  if(opt$smooth | opt$xcumul | opt$ycumul | opt$xmargin | opt$ymargin) {
+  if(opt$smooth || opt$xcumul || opt$ycumul || opt$xmargin || opt$ymargin) {
     if(is.null(sigma))
-      sigma <- 0.1 * diameter(Wclip)  
-    Z <- density.ppp(Yclip, sigma, weights=Yclip$marks, edge=TRUE, ...)
+      sigma <- 0.1 * diameter(Wclip)
+    Ycm <- marks(Yclip)
+    ok <- is.finite(Ycm)
+    if(all(ok)) {
+      Z <- density.ppp(Yclip, sigma, weights=Ycm, edge=TRUE, ...)
+    } else {
+      Z <- density.ppp(Yclip[ok], sigma, weights=Ycm[ok], edge=TRUE, ...)
+    }
   }
   if(opt$smooth) {
     result$smooth <- list(Z = Z, sigma=sigma)
