@@ -204,6 +204,7 @@ update.ppm <- local({
           fo <- as.formula(call$Q)
           Yexpr <- lhs.of.formula(fo)
           trend <- rhs.of.formula(fo)
+          environment(trend) <- environment(terms(formula(object)))
           newcall <- call("ppm", Q=Yexpr, trend=trend)
           if(length(call) > 2) {
             whichQ <- which(names(call) == "Q")
