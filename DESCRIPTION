@@ -1,6 +1,6 @@
 Package: spatstat.model
-Version: 3.2-8.001
-Date: 2024-01-09
+Version: 3.2-8.003
+Date: 2024-01-11
 Title: Parametric Statistical Modelling and Inference for the 'spatstat' Family
 Authors@R: c(person("Adrian", "Baddeley", 
                     role = c("aut", "cre", "cph"),
@@ -55,7 +55,7 @@ Authors@R: c(person("Adrian", "Baddeley",
 	     person("Hangsheng", "Wang",
 	            role = "ctb"))
 Maintainer: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>
-Depends: R (>= 3.5.0), spatstat.data (>= 3.0), spatstat.geom (>= 3.2-7), spatstat.random (>= 3.2-1), spatstat.explore (>= 3.2-5), stats, graphics, grDevices, utils, methods, nlme, rpart
+Depends: R (>= 3.5.0), spatstat.data (>= 3.0), spatstat.geom (>= 3.2-7), spatstat.random (>= 3.2-1), spatstat.explore (>= 3.2-5.008), stats, graphics, grDevices, utils, methods, nlme, rpart
 Imports: spatstat.utils (>= 3.0-3), spatstat.sparse (>= 3.0), mgcv, Matrix, abind, tensor, goftest (>= 1.2-2)
 Suggests: sm, gsl, locfit, spatial, fftwtools (>= 0.9-8), nleqslv, glmnet, spatstat.linnet (>= 3.1), spatstat (>= 3.0)
 Description: Functionality for parametric statistical modelling and inference for spatial data,

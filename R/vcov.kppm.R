@@ -5,7 +5,7 @@
 #
 #   Original code: Abdollah Jalilian
 #
-#   $Revision: 1.14 $  $Date: 2024/01/09 02:01:35 $
+#   $Revision: 1.15 $  $Date: 2024/01/11 09:29:58 $
 #
 
 vcov.kppm <- function(object, ...,
@@ -38,17 +38,18 @@ vcov.kppm <- function(object, ...,
     lambda <- fitted(po, type="lambda")
     ## extract covariate values
     Z <- model.matrix(po)
-    ## evaluate integrand
-    ff <- Z * lambda * wt
-    if(anyNA(ff)) {
-      bad <- !complete.cases(ff)      
-      ff[bad,] <- 0
+    ## trap NA covariate values
+    if(anyNA(Z)) {
+      bad <- !complete.cases(Z)      
+      Z[bad,] <- 0
       warning(paste(percentage(mean(bad)),
                     paren(paste(sum(bad), "out of", length(bad))),
                     "quadrature points had NA covariate values",
                     "and were ignored in the variance calculation"),
               call.=FALSE)
     }
+    ## evaluate integrand
+    ff <- Z * lambda * wt
     ## extract pcf
     g <- pcfmodel(object)
     ## resolve options for algorithm

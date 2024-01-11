@@ -17,7 +17,7 @@ cat(paste("--------- Executing",
 #
 #  Test validity of envelope data
 #
-#  $Revision: 1.28 $  $Date: 2022/11/24 01:35:26 $
+#  $Revision: 1.29 $  $Date: 2024/01/10 13:45:29 $
 #
 
 local({
@@ -80,6 +80,20 @@ if(FULLTEST) {
     UU <- envelope(kfit, nsim=7, simulate=expression(simulate(kfit, drop=TRUE)))
     VV <- envelope(kfit, nsim=7, weights=1:7)
     MM <- envelope(kfit, nsim=7, Kinhom, lambda=density(redwood3))
+}
+
+if(FULLTEST) {
+  ## from Marcelino de la Cruz - scoping in update.ppm
+  X <- cells
+  Z <- density(X)
+  pfit <- ppm(X ~ Z)
+  cat("Fitted ppm(X~Z)", fill=TRUE)
+  penv <- envelope(pfit, Kinhom, lambda=pfit, nsim=3)
+  RX <- rotate(X, pi/3, centre="centroid")
+  RZ <- density(RX)
+  Rpfit <- ppm(RX ~ RZ)
+  cat("Fitted ppm(RX~RZ)", fill=TRUE)
+  Rpenv <- envelope(Rpfit, Kinhom, lambda=Rpfit, nsim=3)
 }
 
 if(FULLTEST) {
