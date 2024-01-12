@@ -5,7 +5,7 @@
 #
 #   Original code: Abdollah Jalilian
 #
-#   $Revision: 1.15 $  $Date: 2024/01/11 09:29:58 $
+#   $Revision: 1.16 $  $Date: 2024/01/12 00:50:36 $
 #
 
 vcov.kppm <- function(object, ...,
@@ -50,6 +50,11 @@ vcov.kppm <- function(object, ...,
     }
     ## evaluate integrand
     ff <- Z * lambda * wt
+    ## trap NA values of integrand
+    if(anyNA(ff)) {
+      bad <- !complete.cases(ff)
+      ff[bad,] <- 0
+    }
     ## extract pcf
     g <- pcfmodel(object)
     ## resolve options for algorithm
