@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.105 $   $Date: 2022/07/08 01:09:38 $
+#  $Revision: 1.106 $   $Date: 2024/01/25 09:32:46 $
 #
 
 mppm <- local({
@@ -556,6 +556,24 @@ is.mppm <- function(x) {
 coef.mppm <- function(object, ...) {
   coef(object$Fit$FIT)
 }
+
+getglmdata.mppm <- function(object, ...) {
+  verifyclass(object, "mppm")
+  return(object$Fit$moadf)
+}
+
+getglmfit.mppm <- function(object, ...) {
+  verifyclass(object, "mppm")
+  return(object$Fit$FIT)
+}
+
+getglmsubset.mppm <- function(object, ...) {
+  verifyclass(object, "mppm")
+  return(object$Fit$moadf$.mpl.SUBSET)
+}
+
+hasglmfit.mppm <- function(object) { TRUE }
+
 
 
 fixef.mppm <- function(object, ...) {

@@ -3,7 +3,7 @@
 #
 #  Spatial Logistic Regression
 #
-#  $Revision: 1.66 $   $Date: 2023/02/16 02:33:58 $
+#  $Revision: 1.67 $   $Date: 2024/01/25 09:07:52 $
 #
 
 slrm <- function(formula, ..., data=NULL, offset=TRUE, link="logit",
@@ -402,6 +402,22 @@ print.summary.slrm <- function(x, ...) {
 }
 
 coef.summary.slrm <- function(object, ...) { object$coefs.SE.CI }
+
+getglmdata.slrm <- function(object, ...) { object$Data$df }
+
+getglmfit.slrm <- function(object, ...) { object$Fit$FIT }
+
+getglmsubset.slrm <- function(object, ...) {
+  su <- getCall(object)$subset
+  if(is.null(su)) return(rep(TRUE, nrow(model.matrix(object))))
+  su <- try(eval(su, envir=environment(terms(object))))
+  if(inherits(su, "try-error")) 
+    warning("Internal error: unable to evaluate the subset")
+  return(su)
+}
+
+hasglmfit.slrm <- function(object) { TRUE }
+
 
 logLik.slrm <- function(object, ..., adjust=TRUE) {
   FIT  <- object$Fit$FIT

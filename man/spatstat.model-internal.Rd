@@ -49,8 +49,17 @@
 \alias{formula.hackglmmPQL} 
 \alias{getdataname}
 \alias{getglmdata}
+\alias{getglmdata.ppm}
+\alias{getglmdata.mppm}
+\alias{getglmdata.slrm}
 \alias{getglmfit}
+\alias{getglmfit.ppm}
+\alias{getglmfit.mppm}
+\alias{getglmfit.slrm}
 \alias{getglmsubset}
+\alias{getglmsubset.ppm}
+\alias{getglmsubset.mppm}
+\alias{getglmsubset.slrm}
 \alias{getppmdatasubset}
 \alias{getppmOriginalCovariates}
 \alias{geyercounts}
@@ -58,6 +67,9 @@
 \alias{GLMpredict}
 \alias{hackglmmPQL}
 \alias{hasglmfit}
+\alias{hasglmfit.ppm}
+\alias{hasglmfit.mppm}
+\alias{hasglmfit.slrm}
 \alias{hierarchicalordering}
 \alias{hiermat}
 \alias{ho.engine}
@@ -286,9 +298,18 @@ fii(interaction, coefs, Vnames, IsOffset, vnameprefix)
 forbid.logi(object)
 \method{formula}{hackglmmPQL}(x, \dots)
 getdataname(defaultvalue, \dots, dataname)
-getglmdata(object, drop=FALSE)
-getglmfit(object)
-getglmsubset(object)
+getglmdata(object, \dots)
+\method{getglmdata}{ppm}(object, \dots, drop=FALSE)
+\method{getglmdata}{mppm}(object, \dots)
+\method{getglmdata}{slrm}(object, \dots)
+getglmfit(object, \dots)
+\method{getglmfit}{ppm}(object, \dots)
+\method{getglmfit}{mppm}(object, \dots)
+\method{getglmfit}{slrm}(object, \dots)
+getglmsubset(object, \dots)
+\method{getglmsubset}{ppm}(object, \dots)
+\method{getglmsubset}{mppm}(object, \dots)
+\method{getglmsubset}{slrm}(object, \dots)
 getppmdatasubset(object)
 getppmOriginalCovariates(object)
 geyercounts(U,X,r,sat,Xcounts,EqualPairs)
@@ -297,6 +318,8 @@ GLMpredict(fit, data, coefs, changecoef, type)
 hackglmmPQL(fixed, random, family, data, correlation, weights,
             control, niter, verbose, subset, \dots, reltol)
 hasglmfit(object)
+\method{hasglmfit}{ppm}(object)
+\method{hasglmfit}{slrm}(object)
 hierarchicalordering(i, s)
 hiermat(x, h)
 ho.engine(model, \dots, nsim, nrmh, start, control, verb)
