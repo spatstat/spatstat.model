@@ -65,7 +65,7 @@ reset.spatstat.options()
 #'                    and idw, adaptive.density, intensity
 #'                    and SpatialMedian, SpatialQuantile
 #'
-#'  $Revision: 1.65 $  $Date: 2024/01/21 04:01:57 $
+#'  $Revision: 1.67 $  $Date: 2024/01/29 07:07:16 $
 #'
 
 if(!FULLTEST)
