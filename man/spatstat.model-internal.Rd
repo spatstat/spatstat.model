@@ -318,6 +318,7 @@ GLMpredict(fit, data, coefs, changecoef, type)
 hackglmmPQL(fixed, random, family, data, correlation, weights,
             control, niter, verbose, subset, \dots, reltol)
 hasglmfit(object)
+\method{hasglmfit}{mppm}(object)
 \method{hasglmfit}{ppm}(object)
 \method{hasglmfit}{slrm}(object)
 hierarchicalordering(i, s)
