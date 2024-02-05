@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.117 $	$Date: 2023/05/02 07:31:44 $
+#	$Revision: 1.118 $	$Date: 2024/02/04 08:04:51 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -353,7 +353,7 @@ predict.ppm <- local({
         gxr <- range(gg$x[gg$SUBSET])
         gyr <- range(gg$y[gg$SUBSET])
         ## trim window to this range
-        masque <- intersect.owin(masque, owin(gxr, gyr))
+        masque <- intersect.owin(masque, owinInternalRect(gxr, gyr))
       }
       ## ------------------------------------ End Hack
       ##

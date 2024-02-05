@@ -1,4 +1,15 @@
 
+        CHANGES IN spatstat.model VERSION 3.2-10.001
+
+OVERVIEW
+
+    o Slightly accelerated.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o spatstat.model package
+    Some computations slightly accelerated.
+
         CHANGES IN spatstat.model VERSION 3.2-10
 
 OVERVIEW
