@@ -15,7 +15,7 @@ cat(paste("--------- Executing",
 #
 # tests/kppm.R
 #
-# $Revision: 1.39 $ $Date: 2023/10/21 04:25:51 $
+# $Revision: 1.40 $ $Date: 2024/02/26 05:44:02 $
 #
 # Test functionality of kppm that once depended on RandomFields
 # Test update.kppm for old style kppm objects
@@ -175,12 +175,6 @@ local({
   hut <- kppm(redwood ~ x, method="palm", weightfun=NULL)
   mut <- kppm(redwood)
   nut <- update(mut, Y)
-  if(TRUE) {
-    #' Bug in rLGCP spotted by Tilman Davies
-    X <- rLGCP("matern", function(x,y) { 1 - 0.4* y },
-               var=2, scale=0.7, nu=0.5, win = square(10),
-               dimyx=c(32,64))
-  }
 })
 }
 
