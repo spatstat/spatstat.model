@@ -432,7 +432,7 @@ reset.spatstat.options()
 #
 # Things that might go wrong with predict()
 #
-#  $Revision: 1.20 $ $Date: 2020/04/30 05:41:59 $
+#  $Revision: 1.23 $ $Date: 2024/04/13 03:37:42 $
 #
 
 local({
@@ -466,6 +466,13 @@ local({
     a <- c(A=1,B=2,Z=42)
     b <- c(B=41,A=0)
     ab <- adaptcoef(a, b, drop=TRUE)
+    #' check that grid parameters 'dimyx' and 'eps' are respected
+    pyx <- predict(fut, type="cif", dimyx=7)
+    if(all(dim(pyx) == dim(p0)))
+      stop("predict.ppm ignores argument dimyx")
+    peps <- predict(fut, type="cif", eps=0.14)
+    if(all(dim(peps) == dim(p0)))
+      stop("predict.ppm ignores argument eps")
   }
 
   if(FULLTEST) {

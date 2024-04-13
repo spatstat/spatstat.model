@@ -249,36 +249,33 @@ predict.ppm <- local({
       locations <- NULL
     }
 
-    #' incompatible:
-    if(!is.null(locations)) {
-      #' other arguments are incompatible
-      offending <- c(!is.null(ngrid), !is.null(dimyx), !is.null(eps))
-      if(any(offending)) {
-        offenders <- c("grid", "dimyx", "eps")[offending]
-        nbad <- sum(offending)
-        stop(paste(ngettext(nbad, "The argument", "The arguments"),
-                   commasep(sQuote(offenders)), 
-                   ngettext(nbad, "is", "are"),
-                   "incompatible with", sQuote("locations")),
-             call.=FALSE)
-      }
-    }
-
-    #' equivalent:
-    if(!is.null(ngrid) && !is.null(dimyx))
-      warning(paste("The arguments", sQuote("ngrid"), "and", sQuote("dimyx"),
-                    "are equivalent: only one should be given"),
-              call.=FALSE)
-    
-    ngrid <- ngrid %orifnull% dimyx
-    
-    if(is.null(ngrid) && is.null(locations)) 
-      ## use regular grid
-      ngrid <- rev(spatstat.options("npixel"))
-    
     want.image <- is.null(locations) || is.mask(locations)
-    make.grid <- !is.null(ngrid) 
+    make.grid <- is.null(locations)
 
+    #' grid parameters given explicitly?
+    gridpars <- list(ngrid=ngrid, dimyx=dimyx, eps=eps)
+    gridpars <- gridpars[!sapply(gridpars, is.null)]
+    ngridpars <- length(gridpars)
+
+    #' check for incompatible arguments
+    if(ngridpars > 1)
+      warning(paste("Only one of the arguments",
+                    commasep(sQuote(names(gridpars))),
+                    "should be given"),
+              call.=FALSE)
+
+    if(ngridpars > 0 && !is.null(locations))
+      stop(paste(ngettext(ngridpars, "The argument", "The arguments"),
+                 commasep(sQuote(names(gridpars))), 
+                 ngettext(ngridpars, "is", "are"),
+                 "incompatible with", sQuote("locations")),
+           call.=FALSE)
+
+    #' apply defaults
+    if(make.grid && ngridpars == 0) {
+      ngrid <- rev(spatstat.options("npixel"))
+    } 
+    
     ## ##############   Determine prediction points  #####################
 
     if(!want.image) {
@@ -328,14 +325,9 @@ predict.ppm <- local({
         masque <- locations
       else {
         ##    (B)(ii) We have to make the grid ourselves  
-        ##    Validate ngrid
-        if(!is.null(ngrid)) {
-          if(!is.numeric(ngrid))
-            stop("ngrid should be a numeric vector")
-          ngrid <- ensure2vector(ngrid)
-        }
         if(is.null(window))
           window <- sumobj$entries$data$window
+        ngrid <- ngrid %orifnull% dimyx
         masque <- as.mask(window, dimyx=ngrid, eps=eps, rule.eps=rule.eps)
       }
       ## Hack -----------------------------------------------

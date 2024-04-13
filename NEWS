@@ -1,4 +1,16 @@
 
+        CHANGES IN spatstat.model VERSION 3.2-11.001
+
+OVERVIEW
+
+    o Bug fix.
+
+BUG FIXES
+
+    o predict.ppm
+    Argument 'eps' was ignored in many cases.
+    Fixed.
+
         CHANGES IN spatstat.model VERSION 3.2-11
 
 OVERVIEW
