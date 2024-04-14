@@ -31,6 +31,7 @@
        prior.var = NULL,
        nd = NULL,
        eps = NULL,
+       quad.args=list(),
        gcontrol=list(),
        nsim=100, nrmh=1e5, start=NULL, control=list(nrep=nrmh),
        verb=TRUE,
@@ -56,6 +57,7 @@
        prior.var = NULL,
        nd = NULL,
        eps = NULL,
+       quad.args=list(),
        gcontrol=list(),
        nsim=100, nrmh=1e5, start=NULL, control=list(nrep=nrmh),
        verb=TRUE,
@@ -176,6 +178,12 @@
     A positive number, or a vector of two positive numbers, giving the
     horizontal and vertical spacing, respectively, of the grid of
     dummy points. Incompatible with \code{nd}.
+  }
+  \item{quad.args}{
+    Arguments controlling the construction of the quadrature scheme,
+    when \code{Q} is a point pattern. A list of arguments that will be
+    passed to \code{\link{quadscheme}}
+    or (if \code{method="logi"}) to \code{\link{quadscheme.logi}}.
   }
   \item{gcontrol}{
     Optional. List of parameters passed to \code{\link{glm.control}}
@@ -406,6 +414,13 @@
       and dummy points respectively.
       Alternatively use \code{\link{pixelquad}} to make a quadrature
       scheme with a dummy point at every pixel in a pixel image.
+
+      The argument \code{quad.args} can be used to control the
+      construction of the quadrature scheme. For example
+      \code{quad.args=list(quasi=TRUE, method="dirichlet", eps=0.1)} would
+      create dummy points according to a quasirandom pattern, with a
+      typical spacing of 0.1 units between dummy points,
+      and compute quadrature weights based on the Dirichlet tessellation.
 
       A practical advantage of quadrature schemes arises when we want to fit
       a model involving covariates (e.g. soil pH). Suppose we have only been

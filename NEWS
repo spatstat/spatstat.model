@@ -1,9 +1,17 @@
 
-        CHANGES IN spatstat.model VERSION 3.2-11.001
+        CHANGES IN spatstat.model VERSION 3.2-11.002
 
 OVERVIEW
 
-    o Bug fix.
+    o Easier control over quadrature schemes.
+    
+    o Bug fix in predict.ppm.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o ppm.ppp
+    New argument 'quad.args' is a list of arguments passed to 'quadscheme'
+    to control the construction of the quadrature scheme.
 
 BUG FIXES
 

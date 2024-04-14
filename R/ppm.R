@@ -1,5 +1,5 @@
 #
-#	$Revision: 1.61 $	$Date: 2022/11/03 11:08:33 $
+#	$Revision: 1.63 $	$Date: 2024/04/14 02:01:13 $
 #
 #    ppm()
 #          Fit a point process model to a two-dimensional point pattern
@@ -83,6 +83,7 @@ function(Q,
          prior.var = NULL,
          nd = NULL,
          eps = NULL,
+         quad.args = list(),
          gcontrol=list(),
          nsim=100,
          nrmh=1e5,
@@ -252,6 +253,7 @@ function(Q,
                               prior.mean=prior.mean,
                               prior.var=prior.var,
                               VB=VB,
+                              quad.args = quad.args,
                               ...)
          },
          mpl = {
@@ -267,7 +269,8 @@ function(Q,
                              use.gam=use.gam,
                              forcefit=forcefit,
                              nd = nd,
-                             eps = eps, 
+                             eps = eps,
+                             quad.args = quad.args,
                              gcontrol=gcontrol,
                              callstring=callstring,
                              ...)

@@ -359,7 +359,8 @@ kppmCLadap(X, Xname, po, clusters, control, weightfun,
 \method{labels}{ppm}(object, \dots)
 \method{leverage}{ppmInfluence}(model, \dots)
 \method{lines}{objsurf}(x, \dots, directed)
-logi.engine(Q, trend, interaction, \dots, 
+logi.engine(Q, trend, interaction, \dots,
+            quad.args,
             covariates, subsetexpr, clipwin,
             correction, rbord, covfunargs, allcovar, 
             vnamebase, vnameprefix, justQ, savecomputed, precomputed,
@@ -388,7 +389,7 @@ mpl.engine(Q, trend, interaction, \dots,
          covariates, subsetexpr, clipwin, covfunargs, correction,
 	 rbord, use.gam, gcontrol,
          GLM, GLMfamily, GLMcontrol, famille,
-         forcefit, nd, eps, allcovar, callstring,
+         forcefit, nd, eps, quad.args, allcovar, callstring,
          precomputed, savecomputed, preponly,
          rename.intercept, justQ, weightfactor)
 mpl.get.covariates(covariates, locations, type, covfunargs, need.deriv)
@@ -439,7 +440,7 @@ PPMmodelmatrix(object, data, \dots, subset, Q, keepNA, irregular,
        correction, rbord, use.gam, method, forcefit,
        improve.type, improve.args, emend, project,
        prior.mean, prior.var,
-       nd, eps, gcontrol, nsim, nrmh, start, control,
+       nd, eps, quad.args, gcontrol, nsim, nrmh, start, control,
        verb, callstring)
 ppmCovariates(model)
 ppmDerivatives(fit, what, Dcovfun, loc, covfunargs)

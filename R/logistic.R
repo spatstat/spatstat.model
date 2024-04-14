@@ -1,7 +1,7 @@
 ##
 ##  logistic.R
 ##
-##   $Revision: 1.28 $  $Date: 2020/11/27 03:04:30 $
+##   $Revision: 1.29 $  $Date: 2024/04/14 01:51:01 $
 ##
 ##  Logistic composite likelihood method
 ##
@@ -11,6 +11,7 @@ logi.engine <- function(Q,
                         trend = ~1,
                         interaction,
                         ...,
+                        quad.args=list(),
                         covariates=NULL,
                         subsetexpr=NULL,
                         clipwin=NULL,
@@ -59,7 +60,8 @@ logi.engine <- function(Q,
   # create dummy points
   if(inherits(Q, "ppp")){
     Xplus <- Q
-    Q <- quadscheme.logi(Xplus, ...)
+    Q <- do.call(quadscheme.logi,
+                 append(list(data=quote(Xplus), ...), quad.args))
     D <- Q$dummy
     Dinfo <- Q$param
   } else if(checkfields(Q, c("data", "dummy"))) {
@@ -69,7 +71,8 @@ logi.engine <- function(Q,
     if(is.null(Dinfo)){
       Dinfo <- list(how="given", rho=npoints(D)/(area(D)*markspace.integral(D)))
     }
-    Q <- quadscheme.logi(Xplus, D)
+    Q <- do.call(quadscheme.logi,
+                 append(list(data=quote(Xplus), dummy=quote(D), ...), quad.args))
   } else stop("Format of object Q is not understood")
   ## clip to subset?
   if(!is.null(clipwin)) {
@@ -219,7 +222,7 @@ logi.engine <- function(Q,
   the.version <- list(major=spv$major,
                       minor=spv$minor,
                       release=spv$patchlevel,
-                      date="$Date: 2020/11/27 03:04:30 $")
+                      date="$Date: 2024/04/14 01:51:01 $")
 
   ## Compile results
   fit <- list(method      = "logi",
