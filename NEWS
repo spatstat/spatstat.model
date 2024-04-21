@@ -1,11 +1,17 @@
 
-        CHANGES IN spatstat.model VERSION 3.2-11.002
+        CHANGES IN spatstat.model VERSION 3.2-11.003
 
 OVERVIEW
 
+    o Package now depends on 'spatstat.univar'.
+    
     o Easier control over quadrature schemes.
     
     o Bug fix in predict.ppm.
+
+PACKAGE DEPENDENCE
+
+    o spatstat.model now depends on the new package 'spatstat.univar'.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

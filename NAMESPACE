@@ -3,7 +3,8 @@
 ## ................  Import packages ..................
 
 import(stats,graphics,grDevices,utils,methods)
-import(spatstat.utils,spatstat.data,spatstat.sparse,
+import(spatstat.utils,spatstat.data,
+       spatstat.univar,spatstat.sparse,
        spatstat.geom,spatstat.random,spatstat.explore)
 import(goftest)
 import(Matrix,nlme,rpart)
