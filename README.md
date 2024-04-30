@@ -36,8 +36,8 @@ For a full list of functions, see the help file for `spatstat.model-package`.
 - fitting Neyman-Scott cluster process models to point pattern data (`kppm`)
 - fitting Gibbs point process models to point pattern data (`ppm`)
 - fitting recursively partitioned models to point patterns (`rppm`)
-- class support for fitted models (`update`, `summary`, `predict`, `plot`, `simulate`, `coef`, `confint`, `vcov`, `anova`)
-- minimum contrast estimation
+- class support for fitted models (`update`, `print`, `summary`, `predict`, `plot`, `simulate`, `coef`, `confint`, `vcov`, `anova`, `residuals`, `fitted`, `deviance`, `AIC`, `logLik`, `terms`, `formula`, `model.matrix`)
+- minimum contrast estimation (generic algorithm)
 - simulation of fitted point process models
 
 #### Formal inference
@@ -49,12 +49,13 @@ likelihood ratio test, envelope tests, Dao-Genton test, balanced independent two
 
 #### Informal validation
 
+- residuals
 - leverage
 - influence
-- partial residuals
+- partial residual plot
 - added variable plot
 - diagnostic plots
 - pseudoscore residual plots
-- model compensators
+- model compensators of summary functions
 - Q-Q plots
 

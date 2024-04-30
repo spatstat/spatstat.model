@@ -458,14 +458,15 @@
 
   \bold{Resampling and randomisation procedures}
 
-  You can build your own tests based on randomisation
-  and resampling using the following capabilities:
+  You can build your own tests based on randomisation and resampling
+  using the following capabilities:
   
   \tabular{ll}{
     \code{\link[spatstat.random]{quadratresample}} \tab block resampling \cr
     \code{\link[spatstat.random]{rshift}} \tab random shifting of (subsets of) points\cr
     \code{\link[spatstat.random]{rthin}} \tab  random thinning  
   }
+
 }
 \section{Licence}{
   This library and its documentation are usable under the terms of the "GNU 
