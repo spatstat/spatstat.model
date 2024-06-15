@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.105 $  $Date: 2022/06/19 04:08:19 $
+#  $Revision: 1.106 $  $Date: 2024/06/09 00:01:49 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!is.quad(qscheme))
@@ -43,9 +43,9 @@ msr <- function(qscheme, discrete, density, check=TRUE) {
     if(check) {
       # check numbers of rows
       check.nmatrix(discrete, ndata, things="data points",
-                    naok=TRUE, squarematrix=FALSE)
+                    naok=TRUE, squarematrix=FALSE, mname="discrete")
       check.nmatrix(density,  nquad, things="quadrature points",
-                    naok=TRUE, squarematrix=FALSE)
+                    naok=TRUE, squarematrix=FALSE, mname="density")
     }
     nd <- ncol(discrete)
     nc <- ncol(density)
