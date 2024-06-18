@@ -1,5 +1,6 @@
 \name{spatstat.model-internal} 
 \title{Internal spatstat.model functions}
+\alias{spatstat.model-internal} %DoNotExport
 \alias{accumulateStatus}
 \alias{active.interactions}
 \alias{adaptcoef}
