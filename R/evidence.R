@@ -4,7 +4,7 @@
 #'   evaluate covariate values at data points and at pixels
 #'   together with intensity of null/reference model
 #'
-#' $Revision: 1.50 $ $Date: 2023/05/02 06:45:02 $
+#' $Revision: 1.52 $ $Date: 2024/06/22 09:46:42 $
 #'
 
 ## Code for generic spatialCovariateEvidence() is moved to spatstat.explore
@@ -147,7 +147,7 @@ spatialCovariateEvidence.ppm <- local({
           covariate.k <- covariate[[k]]
           if(!interpolate) {
             #' look up covariate values 
-            values <- safelookup(covariate, X)
+            values <- safelookup(covariate.k, X[ii])
           } else {
             #' interpolate
             values <- interp.im(covariate.k, x=X$x[ii], y=X$y[ii])
