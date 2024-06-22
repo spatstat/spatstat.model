@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 3.2-11.008
+        CHANGES IN spatstat.model VERSION 3.2-11.009
 
 OVERVIEW
 
@@ -8,6 +8,8 @@ OVERVIEW
     o Easier control over quadrature schemes.
     
     o Bug fix in predict.ppm.
+
+    o Internal improvements.
 
 PACKAGE DEPENDENCE
 

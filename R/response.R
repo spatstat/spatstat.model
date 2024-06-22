@@ -26,3 +26,5 @@ response.dppm <- response.kppm <- function(object) { data.ppm(as.ppm(object)) }
 response.slrm <- function(object) { object$Data$response }
 
 response.mppm <- function(object) { data.mppm(object) }
+
+response.exactppm <- function(object) { object$X }

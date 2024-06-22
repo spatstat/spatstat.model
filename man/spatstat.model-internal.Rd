@@ -184,6 +184,7 @@
 \alias{resid4plot}
 \alias{resid1plot}
 \alias{resid1panel}
+\alias{response.exactppm}
 \alias{rotate.msr}
 \alias{SaddleApprox}
 \alias{safeFiniteValue}
@@ -493,6 +494,7 @@ resid1plot(RES, opt, plot.neg, plot.smooth,
 resid1panel(observedX, observedV,
             theoreticalX, theoreticalV, theoreticalSD,
             xlab,ylab, \dots, do.plot)
+\method{response}{exactppm}(object)
 \method{rotate}{msr}(X, angle, \dots, centre)
 SaddleApprox(beta, fi, approx)
 safeFiniteValue(x, default)
