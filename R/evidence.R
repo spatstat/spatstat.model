@@ -4,7 +4,7 @@
 #'   evaluate covariate values at data points and at pixels
 #'   together with intensity of null/reference model
 #'
-#' $Revision: 1.52 $ $Date: 2024/06/22 09:46:42 $
+#' $Revision: 1.53 $ $Date: 2024/06/23 00:22:42 $
 #'
 
 ## Code for generic spatialCovariateEvidence() is moved to spatstat.explore
