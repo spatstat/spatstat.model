@@ -1,11 +1,13 @@
 
-        CHANGES IN spatstat.model VERSION 3.2-11.010
+        CHANGES IN spatstat.model VERSION 3.2-11.011
 
 OVERVIEW
 
     o Package now depends on 'spatstat.univar'.
     
     o Easier control over quadrature schemes.
+
+    o More options in fitted.slrm
     
     o Bug fix in predict.ppm.
 
@@ -20,6 +22,14 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o ppm.ppp
     New argument 'quad.args' is a list of arguments passed to 'quadscheme'
     to control the construction of the quadrature scheme.
+
+    o fitted.slrm
+    New argument 'type' allows calculation of fitted probabilities, intensities
+    or link function values.
+
+    o fitted.slrm
+    New arguments 'dataonly' and 'leaveoneout' allow calculation of fitted
+    values at the data points only, using leave-one-out calculation if desired.
 
 BUG FIXES
 

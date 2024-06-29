@@ -6,10 +6,12 @@
 }
 \description{
   Given a fitted Spatial Logistic Regression model,
-  this function computes the fitted probabilities for each pixel.
+  this function computes the fitted probabilities for each pixel,
+  or the fitted probabilities at each original data point.
 }
 \usage{
-  \method{fitted}{slrm}(object, ...)
+  \method{fitted}{slrm}(object, \dots, type="probabilities",
+                 dataonly=FALSE, leaveoneout=FALSE)
 }
 \arguments{
   \item{object}{
@@ -19,6 +21,23 @@
   \item{\dots}{
     Ignored.
   }
+  \item{type}{
+    Character string (partially) matching one of 
+    \code{"probabilities"}, \code{"intensity"} or \code{"link"}
+    determining the quantity that should be predicted.
+  }
+  \item{dataonly}{
+    Logical. If \code{TRUE}, then values will only be computed
+    at the points of the data point pattern. If \code{FALSE}, then
+    values will be computed at the pixels used to fit the model.
+  }
+  \item{leaveoneout}{
+    Logical value
+    specifying whether to perform a leave-one-out calculation
+    when \code{dataonly=TRUE}. If \code{leaveoneout=TRUE},
+    the fitted value at each data point \code{X[i]} is calculated
+    by re-fitting the model to the data with \code{X[i]} removed.
+  }
 }
 \details{
   This is a method for the generic function
@@ -27,12 +46,18 @@
   (objects of class \code{"slrm"}, usually obtained
   from the function \code{\link{slrm}}).
 
-  The algorithm computes
-  the fitted probabilities of the presence of a random point in each pixel.
+  By default, the algorithm computes
+  the fitted probabilities of the presence of a random point in each
+  pixel,
+  and returns them as an image.
+
+  If \code{dataonly=TRUE}, the algorithm computes the fitted
+  presence probabilities only at the locations of the original data points.
 }
 \value{
   A pixel image (object of class \code{"im"}) containing the
-  fitted probability for each pixel.
+  fitted probability for each pixel,
+  or a numeric vector containing the fitted probability at each data point.
 }
 \seealso{
   \code{\link{slrm}},
@@ -42,6 +67,7 @@
   X <- rpoispp(42)
   fit <- slrm(X ~ x+y)
   plot(fitted(fit))
+  fitted(fit, dataonly=TRUE)
 }
 \author{\adrian
   and \rolf.

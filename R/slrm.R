@@ -431,10 +431,30 @@ logLik.slrm <- function(object, ..., adjust=TRUE) {
   return(ll)
 }
 
-fitted.slrm <- function(object, ...) {
-  if(length(list(...)) > 0)
-    warning("second argument (and any subsequent arguments) ignored")
-  predict(object, type="probabilities")
+fitted.slrm <- function(object, ..., type="probabilities",
+                        dataonly=FALSE, leaveoneout=FALSE) {
+  trap.extra.arguments(...)
+  ## predict at every pixel
+  Z <- predict(object, type=type)
+  if(!dataonly) {
+    return(Z)
+  }
+  ## require fitted values only at original point locations
+  X <- response(object)
+  if(!leaveoneout) {
+    ## just extract fitted values
+    ZX <- safelookup(Z, X)
+    return(ZX)
+  }
+  ## leave-one-out calculation, directly
+  nX <- npoints(X)
+  ZX <- numeric(nX)
+  for(i in seq_len(nX)) {
+    model.i <- updateData(object, X[-i])
+    Z.i <- predict(model.i)
+    ZX[i] <- safelookup(Z.i, X[i])
+  }
+  return(ZX)
 }
 
 intensity.slrm <- function(X, ...) {
