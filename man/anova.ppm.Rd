@@ -90,7 +90,7 @@ Performs analysis of deviance for one or more fitted point process models.
       There may be an error message from \code{anova.glmlist} that
       \dQuote{models were not all fitted to the same size of dataset}.
       This implies that the models were fitted using different
-      quadrature schemes (see \code{\link{quadscheme}}) and/or
+      quadrature schemes (see \code{\link[spatstat.geom]{quadscheme}}) and/or
       with different edge corrections or different values of the
       border edge correction distance \code{rbord}.
 
@@ -112,7 +112,7 @@ Performs analysis of deviance for one or more fitted point process models.
 	taken a different value for different models. The default value of
 	\code{rbord} is equal to zero for a Poisson model,
 	and otherwise equals the reach (interaction distance) of the
-	interaction term (see \code{\link{reach}}).
+	interaction term (see \code{\link[spatstat.random]{reach}}).
 	To ensure that the models are comparable, set \code{rbord} to
 	equal the maximum reach of the interactions that you
 	are fitting.

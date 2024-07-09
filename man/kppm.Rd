@@ -207,10 +207,10 @@
   with Cauchy kernel,
   \code{clusters="VarGamma"} for the Neyman-Scott cluster process
   with Variance Gamma kernel (requires an additional argument \code{nu}
-  to be passed through the dots; see \code{\link{rVarGamma}} for details),
+  to be passed through the dots; see \code{\link[spatstat.random]{rVarGamma}} for details),
   and \code{clusters="LGCP"} for the log-Gaussian Cox process (may
   require additional arguments passed through \code{\dots}; see
-  \code{\link{rLGCP}} for details on argument names).
+  \code{\link[spatstat.random]{rLGCP}} for details on argument names).
   The first four models are Neyman-Scott cluster processes.
   
   The algorithm first estimates the intensity function
@@ -255,13 +255,13 @@
 
       For a homogeneous model (\code{ trend = ~1 })
       the empirical \eqn{K}-function of the data is computed
-      using \code{\link{Kest}},
+      using \code{\link[spatstat.explore]{Kest}},
       and the parameters of the cluster model are estimated by
       the method of minimum contrast.
 
       For an inhomogeneous model, 
       the inhomogeneous \eqn{K} function is estimated
-      by \code{\link{Kinhom}} using the fitted intensity.
+      by \code{\link[spatstat.explore]{Kinhom}} using the fitted intensity.
       Then the parameters of the cluster model
       are estimated by the method of minimum contrast using the
       inhomogeneous \eqn{K} function. This two-step estimation
@@ -269,9 +269,9 @@
   
       If \code{statistic="pcf"} then instead of using the
       \eqn{K}-function, the algorithm will use
-      the pair correlation function \code{\link{pcf}} for homogeneous
+      the pair correlation function \code{\link[spatstat.explore]{pcf}} for homogeneous
       models and the inhomogeneous pair correlation function
-      \code{\link{pcfinhom}} for inhomogeneous models.
+      \code{\link[spatstat.explore]{pcfinhom}} for inhomogeneous models.
       In this case, the smoothing parameters of the pair correlation
       can be controlled using the argument \code{statargs},
       as shown in the Examples.
@@ -429,17 +429,17 @@
     a vector \code{c(kappa, eta2)} where
     \code{eta2 = code{4 * scale^2}}
     where \code{scale} is the scale parameter for the model
-    as used in \code{\link{rCauchy}};
+    as used in \code{\link[spatstat.random]{rCauchy}};
     \item
     for \code{clusters="VarGamma"},
     a vector \code{c(kappa, eta)} where
     \code{eta} is equivalent to the
-    scale parameter \code{omega} used in  \code{\link{rVarGamma}}.
+    scale parameter \code{omega} used in  \code{\link[spatstat.random]{rVarGamma}}.
   }
   
   For \code{clusters="VarGamma"} it will be necessary to specify
   the shape parameter \code{nu} as described in the help for
-  \code{\link{rVarGamma}}. This is specified separately as an argument
+  \code{\link[spatstat.random]{rVarGamma}}. This is specified separately as an argument
   \code{nu} in the call to \code{kppm}.
 }
 \section{Optimization algorithm}{
@@ -621,10 +621,10 @@
   \code{\link{vargamma.estpcf}}.
 
   Summary statistics:
-  \code{\link{Kest}},
-  \code{\link{Kinhom}},
-  \code{\link{pcf}},
-  \code{\link{pcfinhom}}.
+  \code{\link[spatstat.explore]{Kest}},
+  \code{\link[spatstat.explore]{Kinhom}},
+  \code{\link[spatstat.explore]{pcf}},
+  \code{\link[spatstat.explore]{pcfinhom}}.
 
   For fitting Poisson or Gibbs point process models, see \code{\link{ppm}}.
 }

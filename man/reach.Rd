@@ -49,7 +49,7 @@
   interact with each other.
 
   For example, the interaction range of a Strauss process
-  (see \code{\link[spatstat.model]{Strauss}} or \code{\link{rStrauss}})
+  (see \code{\link[spatstat.model]{Strauss}} or \code{\link[spatstat.random]{rStrauss}})
   with parameters \eqn{\beta,\gamma,r}{beta,gamma,r} is equal to
   \eqn{r}, unless \eqn{\gamma=1}{gamma=1} in which case the model is
   Poisson and the interaction

@@ -33,7 +33,7 @@ thomas.estpcf(X, startpar=c(kappa=1,scale=1), lambda=NULL,
     to control the optimisation algorithm. See Details.
   }
   \item{pcfargs}{
-    Optional list containing arguments passed to \code{\link{pcf.ppp}}
+    Optional list containing arguments passed to \code{\link[spatstat.explore]{pcf.ppp}}
     to control the smoothing in the estimation of the
     pair correlation function.
   }
@@ -41,21 +41,21 @@ thomas.estpcf(X, startpar=c(kappa=1,scale=1), lambda=NULL,
 \details{
   This algorithm fits the Thomas point process model to a point pattern dataset
   by the Method of Minimum Contrast, using the pair correlation function
-  \code{\link{pcf}}.
+  \code{\link[spatstat.explore]{pcf}}.
 
   The argument \code{X} can be either
   \describe{
     \item{a point pattern:}{An object of class \code{"ppp"}
       representing a point pattern dataset. 
       The pair correlation function of the point pattern will be computed
-      using \code{\link{pcf}}, and the method of minimum contrast
+      using \code{\link[spatstat.explore]{pcf}}, and the method of minimum contrast
       will be applied to this.
     }
     \item{a summary statistic:}{An object of class \code{"fv"} containing
       the values of a summary statistic, computed for a point pattern
       dataset. The summary statistic should be the pair correlation function,
       and this object should have been obtained by a call to
-      \code{\link{pcf}} or one of its relatives.
+      \code{\link[spatstat.explore]{pcf}} or one of its relatives.
     }
   }
 
@@ -108,7 +108,7 @@ thomas.estpcf(X, startpar=c(kappa=1,scale=1), lambda=NULL,
   The remaining arguments \code{rmin,rmax,q,p} control the
   method of minimum contrast; see \code{\link{mincontrast}}.
 
-  The Thomas process can be simulated, using \code{\link{rThomas}}.
+  The Thomas process can be simulated, using \code{\link[spatstat.random]{rThomas}}.
 
   Homogeneous or inhomogeneous Thomas process models can also
   be fitted using the function \code{\link{kppm}}.
@@ -155,8 +155,8 @@ thomas.estpcf(X, startpar=c(kappa=1,scale=1), lambda=NULL,
 \seealso{
   \code{\link{thomas.estK}}
   \code{\link{mincontrast}},
-  \code{\link{pcf}},
-  \code{\link{rThomas}} to simulate the fitted model.
+  \code{\link[spatstat.explore]{pcf}},
+  \code{\link[spatstat.random]{rThomas}} to simulate the fitted model.
 }
 \examples{
     u <- thomas.estpcf(redwood, c(kappa=10, scale=0.1))

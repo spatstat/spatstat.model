@@ -51,7 +51,7 @@ compareFit(object, Fun, r = NULL, breaks = NULL, ...,
 }
   \item{same,different}{
     Character strings or character vectors passed to
-    \code{\link{collapse.fv}} to
+    \code{\link[spatstat.explore]{collapse.fv}} to
     determine the format of the output.
   }
 }
@@ -106,7 +106,7 @@ compareFit(object, Fun, r = NULL, breaks = NULL, ...,
   \code{\link{psst}},
   \code{\link{psstA}},
   \code{\link{psstG}},
-  \code{\link{collapse.fv}}
+  \code{\link[spatstat.explore]{collapse.fv}}
 }
 \examples{
    nd <- 40

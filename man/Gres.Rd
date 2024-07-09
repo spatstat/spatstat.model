@@ -45,7 +45,7 @@
 \value{
   A function value table (object of class \code{"fv"}),
   essentially a data frame of function values.
-  There is a plot method for this class. See \code{\link{fv.object}}.
+  There is a plot method for this class. See \code{\link[spatstat.explore]{fv.object}}.
 }
 \references{
   Baddeley, A., Rubak, E. and \Moller, J. (2011)
@@ -60,7 +60,7 @@
 \seealso{
   Related functions:
   \code{\link{Gcom}}, 
-  \code{\link{Gest}}.
+  \code{\link[spatstat.explore]{Gest}}.
 
   Alternative functions:
   \code{\link{Kres}}, 

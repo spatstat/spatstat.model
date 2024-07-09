@@ -56,7 +56,7 @@ psst(object, fun, r = NULL, breaks = NULL, ...,
     in calculating the diagnostic. Incompatible with \code{hi.res}.
   }
   \item{hi.res}{
-    Optional. List of parameters passed to \code{\link{quadscheme}}.
+    Optional. List of parameters passed to \code{\link[spatstat.geom]{quadscheme}}.
     If this argument is present, the model will be
     re-fitted at high resolution as specified by these parameters.
     The coefficients
@@ -121,7 +121,7 @@ psst(object, fun, r = NULL, breaks = NULL, ...,
   \code{com} for the compensator and \code{res} for the
   pseudoresidual.
   
-  There is a plot method for this class. See \code{\link{fv.object}}.
+  There is a plot method for this class. See \code{\link[spatstat.explore]{fv.object}}.
 }
 \references{
   Baddeley, A., Rubak, E. and \Moller, J. (2011)

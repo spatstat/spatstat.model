@@ -104,7 +104,7 @@ project.ppm(object, \dots, fatal=FALSE, trace=FALSE)
   \code{\link{ppm}},
   \code{\link{valid.ppm}},
   \code{\link{emend}},
-  \code{\link{spatstat.options}}
+  \code{\link[spatstat.geom]{spatstat.options}}
 }
 \examples{
    fit <- ppm(redwood ~1, Strauss(0.1))

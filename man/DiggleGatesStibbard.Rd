@@ -48,7 +48,7 @@ which can then be fitted to point pattern data.
   \code{\link{ppm}},
   \code{\link{pairwise.family}},
   \code{\link{DiggleGratton}},
-  \code{\link{rDGS}},
+  \code{\link[spatstat.random]{rDGS}},
   \code{\link{ppm.object}}
 }
 \references{

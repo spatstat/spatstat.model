@@ -80,7 +80,7 @@ Gcom(object, r = NULL, breaks = NULL, ...,
     in calculating the diagnostic. Incompatible with \code{hi.res}.
   }
   \item{hi.res}{
-    Optional. List of parameters passed to \code{\link{quadscheme}}.
+    Optional. List of parameters passed to \code{\link[spatstat.geom]{quadscheme}}.
     If this argument is present, the model will be
     re-fitted at high resolution as specified by these parameters.
     The coefficients
@@ -200,7 +200,7 @@ Gcom(object, r = NULL, breaks = NULL, ...,
   the \emph{restriction estimator} if \code{restrict=TRUE},
   and calculates the \emph{reweighting estimator} if \code{restrict=FALSE}.
   See Appendix E of Baddeley, Rubak and \Moller (2011).
-  See also \code{\link{spatstat.options}('eroded.intensity')}.
+  See also \code{\link[spatstat.geom]{spatstat.options}('eroded.intensity')}.
   Thus, by default, the reweighting estimator is computed
   for non-Poisson models.
 
@@ -219,7 +219,7 @@ Gcom(object, r = NULL, breaks = NULL, ...,
 \value{
   A function value table (object of class \code{"fv"}),
   essentially a data frame of function values.
-  There is a plot method for this class. See \code{\link{fv.object}}.
+  There is a plot method for this class. See \code{\link[spatstat.explore]{fv.object}}.
 }
 \references{
   Baddeley, A., Rubak, E. and \Moller, J. (2011)
@@ -233,7 +233,7 @@ Gcom(object, r = NULL, breaks = NULL, ...,
 }
 \seealso{
   Related functions:
-  \code{\link{Gest}},
+  \code{\link[spatstat.explore]{Gest}},
   \code{\link{Gres}}.
 
   Alternative functions:
@@ -245,7 +245,7 @@ Gcom(object, r = NULL, breaks = NULL, ...,
   Model fitting: \code{\link{ppm}}.
 }
 \examples{
-    fit0 <- ppm(cells, ~1) # uniform Poisson
+    fit0 <- ppm(cells ~1) # uniform Poisson
     G0 <- Gcom(fit0)
     G0
     plot(G0)

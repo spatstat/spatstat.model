@@ -20,7 +20,7 @@
   }
 }
 \details{
-  This is a method for the generic function \code{\link{intensity}}
+  This is a method for the generic function \code{\link[spatstat.geom]{intensity}}
   for spatial logistic regression models (class \code{"slrm"}).
 
   The fitted spatial logistic regression model \code{X} is interpreted
@@ -49,7 +49,7 @@
   \code{DOI: 10.1214/10-EJS581}
 }
 \seealso{
-  \code{\link{intensity}},
+  \code{\link[spatstat.geom]{intensity}},
   \code{\link{intensity.ppm}}
 }
 \examples{

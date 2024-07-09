@@ -26,13 +26,13 @@
     or \code{"lppm"}).
   }
   \item{\dots}{
-    Arguments passed to \code{\link{as.mask}} controlling the
+    Arguments passed to \code{\link[spatstat.geom]{as.mask}} controlling the
     pixel resolution for calculations.
   }
 }
 \details{
   This command computes Receiver Operating
-  Characteristic curve. The area under the ROC is computed by \code{\link{auc}}.
+  Characteristic curve. The area under the ROC is computed by \code{\link[spatstat.explore]{auc}}.
 
   For a point pattern \code{X} and a covariate \code{Z}, the
   ROC is a plot showing the ability of the 
@@ -79,7 +79,7 @@
 \spatstatAuthors.
 }
 \seealso{
-\code{\link{auc}}
+\code{\link[spatstat.explore]{auc}}
 }
 \examples{
   fit <- ppm(swedishpines ~ x+y)

@@ -73,7 +73,7 @@
   \code{\link{slrm}},
   \code{\link{valid.slrm}},
   \code{\link{emend}},
-  \code{\link{spatstat.options}}
+  \code{\link[spatstat.geom]{spatstat.options}}
 }
 \examples{
    fit <- slrm(redwood ~ x + I(x))

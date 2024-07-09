@@ -19,7 +19,7 @@ leverage(model, \dots)
   }
   \item{\dots}{
     Ignored, except for the arguments \code{dimyx} and \code{eps}
-    which are passed to \code{\link{as.mask}}
+    which are passed to \code{\link[spatstat.geom]{as.mask}}
     to control the spatial resolution of the result.
   }
   \item{drop}{
@@ -77,8 +77,9 @@ leverage(model, \dots)
   by \code{as.im} (see \code{\link{as.im.leverage.ppm}}).
   There are also methods for \code{contour}, \code{persp},
   \code{[}, \code{as.function}, 
-  \code{\link{as.owin}}, \code{\link{domain}}, \code{\link{Smooth}},
-  \code{\link{integral}},  and \code{mean}.
+  \code{\link[spatstat.geom]{as.owin}}, \code{\link[spatstat.geom]{domain}},
+  \code{\link[spatstat.explore]{Smooth}},
+  \code{\link[spatstat.univar]{integral}},  and \code{mean}.
 }
 \value{
   An object of class \code{"leverage.ppm"}.

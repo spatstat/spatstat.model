@@ -23,7 +23,7 @@
   }
   \item{\dots}{
     Arguments passed to \code{\link{plot.ppm}} or
-    \code{\link{plot.anylist}} controlling the plot.
+    \code{\link[spatstat.geom]{plot.anylist}} controlling the plot.
   }
   \item{trend}{
     Logical value indicating whether to plot the fitted trend.
@@ -53,14 +53,14 @@
   It invokes \code{\link{subfits}} to compute the fitted model for
   each individual point pattern dataset, then calls
   \code{\link{plot.ppm}} to plot these individual models. These
-  individual plots are displayed using \code{\link{plot.anylist}},
+  individual plots are displayed using \code{\link[spatstat.geom]{plot.anylist}},
   which generates either a series of separate plot frames or an
   array of plot panels on a single page. 
 }
 \seealso{
   \code{\link{plot.ppm}},
   \code{\link{mppm}},
-  \code{\link{plot.listof}}
+  \code{\link[spatstat.geom]{plot.anylist}}
 }
 \references{
   \baddrubaturnbook

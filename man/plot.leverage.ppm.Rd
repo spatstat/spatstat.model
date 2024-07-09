@@ -32,8 +32,8 @@
     \code{\link{leverage.ppm}}.
   }
   \item{\dots}{
-    Arguments passed to \code{\link{plot.im}} or \code{\link{contour.im}}
-    or \code{\link{persp.im}} controlling the plot.
+    Arguments passed to \code{\link[spatstat.geom]{plot.im}} or \code{\link[spatstat.geom]{contour.im}}
+    or \code{\link[spatstat.geom]{persp.im}} controlling the plot.
   }
   \item{what}{
     Character string (partially matched)
@@ -65,18 +65,18 @@
   Such objects are computed by the command \code{\link{leverage.ppm}}.
 
   The \code{plot} method displays the leverage function 
-  as a colour pixel image using \code{\link{plot.im}},
+  as a colour pixel image using \code{\link[spatstat.geom]{plot.im}},
   and draws a single contour line at the mean leverage value
-  using \code{\link{contour.default}}.
+  using \code{\link[graphics]{contour.default}}.
   Use the argument \code{clipwin} to restrict the plot to a subset
   of the full data.
 
   The \code{contour} method displays the leverage function as a contour
   plot, and also draws a single contour line at the mean leverage value,
-  using \code{\link{contour.im}}.
+  using \code{\link[spatstat.geom]{contour.im}}.
   
   The \code{persp} method displays the leverage function as a surface
-  in perspective view, using \code{\link{persp.im}}.
+  in perspective view, using \code{\link[spatstat.geom]{persp.im}}.
 
   Since the exact values of leverage are computed only
   at a finite set of quadrature locations, there are several options for
@@ -103,8 +103,8 @@
   by arguments to \code{\link{leverage.ppm}}.
 }
 \value{
-  Same as for \code{\link{plot.im}}, \code{\link{contour.im}}
-  and \code{\link{persp.im}} respectively.
+  Same as for \code{\link[spatstat.geom]{plot.im}}, \code{\link[spatstat.geom]{contour.im}}
+  and \code{\link[spatstat.geom]{persp.im}} respectively.
 }
 \references{
   Baddeley, A., Chang, Y.M. and Song, Y. (2013)

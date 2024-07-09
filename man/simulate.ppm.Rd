@@ -32,13 +32,13 @@
   }
   \item{start}{Data determining the initial state
     of the Metropolis-Hastings algorithm.  See
-    \code{\link{rmhstart}} for description of these arguments.
+    \code{\link[spatstat.random]{rmhstart}} for description of these arguments.
     Defaults to \code{list(n.start=npoints(data.ppm(object)))}
     meaning that the initial state of the algorithm
     has the same number of points as the original dataset.
   }
   \item{control}{Data controlling the running of
-    the Metropolis-Hastings algorithm.  See \code{\link{rmhcontrol}}
+    the Metropolis-Hastings algorithm.  See \code{\link[spatstat.random]{rmhcontrol}}
     for description of these arguments.
   }
   \item{w, window}{
@@ -46,8 +46,8 @@
     An object of class \code{"owin"}.
   }
   \item{\dots}{
-    Further arguments passed to \code{\link{rmhcontrol}},
-    or to \code{\link{rmh.default}}, or to covariate functions in the model.
+    Further arguments passed to \code{\link[spatstat.random]{rmhcontrol}},
+    or to \code{\link[spatstat.random]{rmh.default}}, or to covariate functions in the model.
   }
   \item{project}{
     Logical flag indicating what to do if the fitted model is
@@ -90,7 +90,7 @@
 
   In the case of a single run, the behaviour is controlled
   by the parameters \code{nsave,nburn,nrep}. These 
-  are described in \code{\link{rmhcontrol}}. They may be passed
+  are described in \code{\link[spatstat.random]{rmhcontrol}}. They may be passed
   in the \code{\dots} arguments or included in \code{control}.
   It is sufficient to specify two
   of the three parameters \code{nsave,nburn,nrep}.

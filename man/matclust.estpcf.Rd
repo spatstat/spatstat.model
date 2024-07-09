@@ -34,7 +34,7 @@ matclust.estpcf(X, startpar=c(kappa=1,scale=1), lambda=NULL,
     to control the optimisation algorithm. See Details.
   }
   \item{pcfargs}{
-    Optional list containing arguments passed to \code{\link{pcf.ppp}}
+    Optional list containing arguments passed to \code{\link[spatstat.explore]{pcf.ppp}}
     to control the smoothing in the estimation of the
     pair correlation function.
   }
@@ -49,14 +49,14 @@ matclust.estpcf(X, startpar=c(kappa=1,scale=1), lambda=NULL,
     \item{a point pattern:}{An object of class \code{"ppp"}
       representing a point pattern dataset. 
       The pair correlation function of the point pattern will be computed
-      using \code{\link{pcf}}, and the method of minimum contrast
+      using \code{\link[spatstat.explore]{pcf}}, and the method of minimum contrast
       will be applied to this.
     }
     \item{a summary statistic:}{An object of class \code{"fv"} containing
       the values of a summary statistic, computed for a point pattern
       dataset. The summary statistic should be the pair correlation function,
       and this object should have been obtained by a call to
-      \code{\link{pcf}} or one of its relatives.
+      \code{\link[spatstat.explore]{pcf}} or one of its relatives.
     }
   }
 
@@ -116,7 +116,7 @@ matclust.estpcf(X, startpar=c(kappa=1,scale=1), lambda=NULL,
   method of minimum contrast; see \code{\link{mincontrast}}.
 
   The \Matern Cluster process can be simulated, using
-  \code{\link{rMatClust}}.
+  \code{\link[spatstat.random]{rMatClust}}.
 
   Homogeneous or inhomogeneous \Matern Cluster models can also be
   fitted using the function \code{\link{kppm}}.
@@ -160,8 +160,8 @@ matclust.estpcf(X, startpar=c(kappa=1,scale=1), lambda=NULL,
   \code{\link{thomas.estK}},
   \code{\link{lgcp.estK}},
   \code{\link{mincontrast}},
-  \code{\link{pcf}},
-  \code{\link{rMatClust}} to simulate the fitted model.
+  \code{\link[spatstat.explore]{pcf}},
+  \code{\link[spatstat.random]{rMatClust}} to simulate the fitted model.
 }
 \examples{
     u <- matclust.estpcf(redwood, c(kappa=10, R=0.1))

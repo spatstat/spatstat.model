@@ -143,7 +143,7 @@
     \item{a pixel image,}{
       giving the values of a spatial covariate at 
       a fine grid of locations. It should be an object of
-      class \code{"im"}, see \code{\link{im.object}}.
+      class \code{"im"}, see \code{\link[spatstat.geom]{im.object}}.
     }
     \item{a function,}{
       which can be evaluated
@@ -172,7 +172,7 @@
       This should be an object of class \code{"tess"}.
       (To make a covariate in which each tile of the tessellation
       has a numerical value, convert the tessellation to a \code{function(x,y)}
-      using \code{\link{as.function.tess}}.)
+      using \code{\link[spatstat.geom]{as.function.tess}}.)
     }
     \item{a single number,}{indicating a covariate that is
       constant in this dataset.
@@ -301,7 +301,7 @@
   \code{\link{ppm.object}} for details of how to
   print, plot and manipulate a fitted model.
 
-  \code{\link{ppp}} and \code{\link{quadscheme}}
+  \code{\link[spatstat.geom]{ppp}} and \code{\link[spatstat.geom]{quadscheme}}
   for constructing data.
   
   Interactions: \GibbsInteractionsList.

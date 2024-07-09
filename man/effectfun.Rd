@@ -91,7 +91,7 @@
 \seealso{
   \code{\link{ppm}},
   \code{\link{predict.ppm}},
-  \code{\link{fv.object}}
+  \code{\link[spatstat.explore]{fv.object}}
 }
 \examples{
   X <- copper$SouthPoints

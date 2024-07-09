@@ -15,7 +15,7 @@
     signed measure or vector-valued measure.
   }
   \item{\dots}{
-    Arguments passed to \code{\link{density.ppp}} controlling the
+    Arguments passed to \code{\link[spatstat.explore]{density.ppp}} controlling the
     smoothing bandwidth and the pixel resolution.
   }
   \item{drop}{
@@ -55,7 +55,7 @@
   \adrian
 }
 \seealso{
-  \code{\link{Smooth}},
+  \code{\link[spatstat.explore]{Smooth}},
   \code{\link{msr}},
   \code{\link{plot.msr}}
 }

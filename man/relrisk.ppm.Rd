@@ -77,7 +77,7 @@
   }
 }
 \details{
-  The command \code{\link{relrisk}} is generic and can be used to
+  The command \code{\link[spatstat.explore]{relrisk}} is generic and can be used to
   estimate relative risk in different ways.
   
   This function \code{relrisk.ppm} is the method for fitted point
@@ -181,13 +181,13 @@
   \spatstatAuthors.
 }
 \seealso{
-  There is another method \code{\link{relrisk.ppp}} for point pattern datasets
+  There is another method \code{\link[spatstat.explore]{relrisk.ppp}} for point pattern datasets
   which computes \emph{nonparametric} estimates of relative risk
   by kernel smoothing.
 
   See also
-  \code{\link{relrisk}}, 
-  \code{\link{relrisk.ppp}},
+  \code{\link[spatstat.explore]{relrisk}}, 
+  \code{\link[spatstat.explore]{relrisk.ppp}},
   \code{\link{ppm}}
 }
 \examples{

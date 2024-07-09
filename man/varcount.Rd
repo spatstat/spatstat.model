@@ -29,7 +29,7 @@ varcount(model, B=Window(model), \dots, dimyx = NULL, relative=FALSE)
   }
   \item{dimyx}{
     Spatial resolution for the calculations.
-    Argument passed to \code{\link{as.mask}}.
+    Argument passed to \code{\link[spatstat.geom]{as.mask}}.
   }
   \item{relative}{
     Logical value specifying whether to divide the variance

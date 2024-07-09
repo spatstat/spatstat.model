@@ -23,7 +23,7 @@
   \item{\dots}{
     Arguments passed to \code{\link[rpart]{plot.rpart}}
     and \code{\link[rpart]{text.rpart}} (if \code{what="tree"})
-    or passed to \code{\link{plot.im}} (if \code{what="spatial"})
+    or passed to \code{\link[spatstat.geom]{plot.im}} (if \code{what="spatial"})
     controlling the appearance of the plot.
   }
   \item{treeplot}{
@@ -44,12 +44,12 @@
 
   If \code{what="spatial"}, the predicted intensity
   will be computed using \code{\link{predict.rppm}}, and
-  this intensity will be plotted as an image using \code{\link{plot.im}}.
+  this intensity will be plotted as an image using \code{\link[spatstat.geom]{plot.im}}.
 }
 \value{
   If \code{what="tree"}, a list containing \code{x} and \code{y}
   coordinates of the plotted nodes of the tree.
-  If \code{what="spatial"}, the return value of \code{\link{plot.im}}.
+  If \code{what="spatial"}, the return value of \code{\link[spatstat.geom]{plot.im}}.
 }
 \author{
   \spatstatAuthors

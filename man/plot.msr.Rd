@@ -21,10 +21,10 @@
     An object of class \code{"msr"} (see \code{\link{msr}}).
   }
   \item{\dots}{
-    Extra arguments passed to \code{\link{Smooth.ppp}}
+    Extra arguments passed to \code{\link[spatstat.explore]{Smooth.ppp}}
     to control the interpolation of the
     continuous density component of \code{x},
-    or passed to \code{\link{plot.im}} or \code{\link{plot.ppp}}
+    or passed to \code{\link[spatstat.geom]{plot.im}} or \code{\link[spatstat.geom]{plot.ppp}}
     to control the appearance of the plot.
   }
   \item{add}{
@@ -73,12 +73,12 @@
   This is the \code{plot} method for the class \code{"msr"}.
   
   The continuous density component of \code{x} is interpolated
-  from the existing data by \code{\link{Smooth.ppp}},
-  and then displayed as a colour image by \code{\link{plot.im}}.
+  from the existing data by \code{\link[spatstat.explore]{Smooth.ppp}},
+  and then displayed as a colour image by \code{\link[spatstat.geom]{plot.im}}.
 
   The discrete atomic component of \code{x} is then superimposed on this
   image by plotting the atoms as circles (for positive mass)
-  or squares (for negative mass) by \code{\link{plot.ppp}}.
+  or squares (for negative mass) by \code{\link[spatstat.geom]{plot.ppp}}.
   By default, atoms with zero mass are not plotted at all. 
 
   To smooth both the discrete and continuous components,
@@ -91,10 +91,10 @@
 }
 \seealso{
   \code{\link{msr}},
-  \code{\link{Smooth.ppp}},
+  \code{\link[spatstat.explore]{Smooth.ppp}},
   \code{\link{Smooth.msr}},
-  \code{\link{plot.im}},
-  \code{\link{plot.ppp}}
+  \code{\link[spatstat.geom]{plot.im}},
+  \code{\link[spatstat.geom]{plot.ppp}}
 }
 \examples{
    X <- rpoispp(function(x,y) { exp(3+3*x) })

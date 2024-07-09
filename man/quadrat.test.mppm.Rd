@@ -42,7 +42,7 @@
   \itemize{
     \item the window of observation is divided
     into rectangular tiles, and the number of data points in each tile is
-    counted, as described in \code{\link{quadratcount}}.
+    counted, as described in \code{\link[spatstat.geom]{quadratcount}}.
     \item 
     The expected number of points in each quadrat is calculated,
     as determined by the fitted model.
@@ -89,7 +89,7 @@
 }
 \seealso{
   \code{\link{mppm}},
-  \code{\link{quadrat.test}}
+  \code{\link[spatstat.explore]{quadrat.test}}
 }
 \examples{
   H <- hyperframe(X=waterstriders)

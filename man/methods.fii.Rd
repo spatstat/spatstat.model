@@ -71,7 +71,7 @@
   quantities that are more easily interpretable, in a format that
   depends on the particular model.
   
-  There are also methods for the generic commands \code{\link{reach}} and
+  There are also methods for the generic commands \code{\link[spatstat.random]{reach}} and
   \code{\link{as.interact}}, described elsewhere.
 }
 \value{
@@ -95,7 +95,7 @@
   \code{\link{as.interact.fii}}
 }
 \examples{
-  mod <- ppm(cells, ~1, Strauss(0.1))
+  mod <- ppm(cells ~1, Strauss(0.1))
   f <- fitin(mod)
   f
   summary(f)

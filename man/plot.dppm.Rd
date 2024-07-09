@@ -15,7 +15,7 @@
   }
   \item{\dots}{
     Arguments passed to \code{\link{plot.ppm}}
-    and \code{\link{plot.fv}} to control the plot.
+    and \code{\link[spatstat.explore]{plot.fv}} to control the plot.
   }
   \item{what}{
     Character vector determining what will be plotted.
@@ -43,7 +43,7 @@
     is not produced for stationary models.}
 
     \item{what="statistic"}{specifies the empirical and fitted summary
-    statistics, which are plotted using \code{\link{plot.fv}}. This is
+    statistics, which are plotted using \code{\link[spatstat.explore]{plot.fv}}. This is
     only meaningful if the model has been fitted using the Method of
     Minimum Contrast, and it is turned off otherwise.}
 
@@ -59,6 +59,7 @@
 \seealso{
   \code{\link{dppm}},
   \code{\link{plot.ppm}},
+  \code{\link[spatstat.explore]{plot.fv}}.
 }
 \author{
   \spatstatAuthors.

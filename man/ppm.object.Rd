@@ -73,33 +73,33 @@
     generic \tab method \tab description \cr
     \code{\link{as.interact}} \tab \code{\link{as.interact.ppm}}
     \tab Interpoint interaction structure \cr
-    \code{\link{as.owin}} \tab \code{\link{as.owin.ppm}}
+    \code{\link[spatstat.geom]{as.owin}} \tab \code{\link{as.owin.ppm}}
     \tab Observation window of data \cr
-    \code{\link{berman.test}} \tab \code{\link{berman.test.ppm}}
+    \code{\link[spatstat.explore]{berman.test}} \tab \code{\link{berman.test.ppm}}
     \tab Berman's test \cr
-    \code{\link{envelope}} \tab \code{\link{envelope.ppm}}
+    \code{\link[spatstat.explore]{envelope}} \tab \code{\link{envelope.ppm}}
     \tab Simulation envelopes \cr
     \code{\link{fitin}} \tab \code{\link{fitin.ppm}}
     \tab Fitted interaction \cr
-    \code{\link{is.marked}} \tab \code{\link{is.marked.ppm}}
+    \code{\link[spatstat.geom]{is.marked}} \tab \code{\link{is.marked.ppm}}
     \tab Determine whether the model is marked \cr
-    \code{\link{is.multitype}} \tab \code{\link{is.multitype.ppm}}
+    \code{\link[spatstat.geom]{is.multitype}} \tab \code{\link{is.multitype.ppm}}
     \tab Determine whether the model is multitype \cr
-    \code{\link{is.poisson}} \tab \code{\link{is.poisson.ppm}}
+    \code{\link[spatstat.random]{is.poisson}} \tab \code{\link{is.poisson.ppm}}
     \tab Determine whether the model is Poisson \cr
-    \code{\link{is.stationary}} \tab \code{\link{is.stationary.ppm}}
+    \code{\link[spatstat.random]{is.stationary}} \tab \code{\link{is.stationary.ppm}}
     \tab Determine whether the model is stationary \cr
-    \code{\link{cdf.test}} \tab \code{\link{cdf.test.ppm}}
+    \code{\link[spatstat.explore]{cdf.test}} \tab \code{\link{cdf.test.ppm}}
     \tab Spatial distribution test \cr
-    \code{\link{quadrat.test}} \tab \code{\link{quadrat.test.ppm}}
+    \code{\link[spatstat.explore]{quadrat.test}} \tab \code{\link{quadrat.test.ppm}}
     \tab Quadrat counting test \cr
-    \code{\link{reach}} \tab \code{\link{reach.ppm}}
+    \code{\link[spatstat.random]{reach}} \tab \code{\link{reach.ppm}}
     \tab Interaction range of model \cr
-    \code{\link{rmhmodel}} \tab \code{\link{rmhmodel.ppm}}
+    \code{\link[spatstat.random]{rmhmodel}} \tab \code{\link{rmhmodel.ppm}}
     \tab Model in a form that can be simulated \cr
-    \code{\link{rmh}} \tab \code{\link{rmh.ppm}}
+    \code{\link[spatstat.random]{rmh}} \tab \code{\link{rmh.ppm}}
     \tab Perform simulation \cr
-    \code{\link{unitname}} \tab \code{\link{unitname.ppm}}
+    \code{\link[spatstat.geom]{unitname}} \tab \code{\link{unitname.ppm}}
     \tab Name of unit of length
     }
     

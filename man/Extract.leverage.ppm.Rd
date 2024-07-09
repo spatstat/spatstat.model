@@ -14,12 +14,12 @@
     computed by \code{\link{leverage.ppm}}.
   }
   \item{i}{
-    Subset index (passed to \code{\link{[.im}}).
+    Subset index (passed to \code{\link[spatstat.geom]{[.im}}).
     Either a spatial window (object of class \code{"owin"})
     or a spatial point pattern (object of class \code{"ppp"}).
   }
   \item{\dots}{
-    Further arguments passed to \code{\link{[.im}},
+    Further arguments passed to \code{\link[spatstat.geom]{[.im}},
     especially the argument \code{drop}.
   }
   \item{update}{
@@ -52,7 +52,7 @@
      specifying locations at which the leverage values are required.
      The result will be a numeric vector.
   }
-  The subset operator for images, \code{\link{[.im}}, is applied to
+  The subset operator for images, \code{\link[spatstat.geom]{[.im}}, is applied to
   the leverage map. If this yields a pixel image, then the result of
   \code{\link{[.leverage.ppm}} is another leverage object. Otherwise,
   a vector containing the numeric values of leverage is returned.

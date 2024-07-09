@@ -101,8 +101,8 @@
   basis. However this can be changed to any user-supplied basis in
   the argument \code{basis}. If such an alternative is supplied it
   must be the name of a function expecting the same arguments as
-  \code{\link{fourierbasis}} and returning the results in the same
-  form as \code{\link{fourierbasis}}.
+  \code{\link[spatstat.geom]{fourierbasis}} and returning the results in the same
+  form as \code{\link[spatstat.geom]{fourierbasis}}.
 
   If supplied, the arguments of convkernel must obey the
   following: first argument should be like the first argument of

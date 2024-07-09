@@ -18,7 +18,7 @@
   }
   \item{\dots}{
     Arguments passed to \code{\link{plot.ppm}}
-    and \code{\link{plot.fv}} to control the plot.
+    and \code{\link[spatstat.explore]{plot.fv}} to control the plot.
   }
   \item{what}{
     Character vector determining what will be plotted.
@@ -53,20 +53,20 @@
     is not produced for stationary models.}
 
     \item{what="statistic"}{specifies the empirical and fitted summary
-    statistics, which are plotted using \code{\link{plot.fv}}. This is
+    statistics, which are plotted using \code{\link[spatstat.explore]{plot.fv}}. This is
     only meaningful if the model has been fitted using the Method of
     Minimum Contrast, and it is turned off otherwise.}
 
     \item{what="cluster"}{specifies a fitted cluster, which is computed
-    by \code{\link{clusterfield}} and plotted by
-    \code{\link{plot.im}}. It is only meaningful for Poisson cluster
+    by \code{\link[spatstat.random]{clusterfield}} and plotted by
+    \code{\link[spatstat.geom]{plot.im}}. It is only meaningful for Poisson cluster
     (incl. Neyman-Scott) processes, and it is turned off for
     log-Gaussian Cox processes (LGCP). If the model is stationary (and
     non-LGCP) this option is turned on by default and shows a fitted
     cluster positioned at the centroid of the observation window. For
     non-stationary (and non-LGCP) models this option is only invoked if
     explicitly told so, and in that case an additional argument
-    \code{locations} (see \code{\link{clusterfield}}) must be given to
+    \code{locations} (see \code{\link[spatstat.random]{clusterfield}}) must be given to
     specify where to position the parent point(s) .}
 }
 Alternatively \code{what="all"} selects all available options.
@@ -81,6 +81,7 @@ Alternatively \code{what="all"} selects all available options.
 \seealso{
   \code{\link{kppm}},
   \code{\link{plot.ppm}},
+  \code{\link[spatstat.explore]{plot.fv}}.
 }
 \author{
   \spatstatAuthors.

@@ -45,7 +45,7 @@
 }
 \seealso{
   \code{\link{ppm}},  
-  \code{\link{as.owin}},
+  \code{\link[spatstat.geom]{as.owin}},
   \code{\link{coef.ppm}},
   \code{\link{extractAIC.ppm}},
   \code{\link{fitted.ppm}},

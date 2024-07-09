@@ -111,7 +111,7 @@
   and type \code{"mask"}). This determines a rectangular grid
   of locations, or a subset of such a grid, at which predictions
   will be computed. Binary image masks
-  are conveniently created using \code{\link{as.mask}}.
+  are conveniently created using \code{\link[spatstat.geom]{as.mask}}.
 
   The argument \code{covariates} gives the values of any spatial covariates
   at the prediction locations.
@@ -150,7 +150,7 @@
   selection of these three, if \code{how} is given).  Extra
   graphical parameters controlling the display may be passed
   directly via the arguments \code{...} or indirectly reset using
-  \code{\link{spatstat.options}}.
+  \code{\link[spatstat.geom]{spatstat.options}}.
 }
 \seealso{
   \code{\link{plot.plotppm}},
@@ -162,7 +162,7 @@
   \code{\link{image}},
   \code{\link{contour}},
   \code{\link{plot}},
-  \code{\link{spatstat.options}}
+  \code{\link[spatstat.geom]{spatstat.options}}
 }
 \section{Warnings}{
   See warnings in \code{\link{predict.ppm}}.

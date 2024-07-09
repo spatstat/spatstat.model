@@ -14,7 +14,7 @@
     computed by \code{\link{influence.ppm}}.
   }
   \item{i}{
-    Subset index (passed to \code{\link{[.ppp}}).
+    Subset index (passed to \code{\link[spatstat.geom]{[.ppp}}).
     Either a spatial window (object of class \code{"owin"})
     or an integer index.
   }

@@ -45,7 +45,7 @@
   \code{\link[stats]{simulate}} for the class \code{"slrm"} of fitted
   spatial logistic regression models.
   
-  Simulations are performed by \code{\link{rpoispp}}
+  Simulations are performed by \code{\link[spatstat.random]{rpoispp}}
   after the intensity has been computed by \code{\link{predict.slrm}}.
 
   The return value is a list of point patterns.
@@ -73,16 +73,13 @@
 }
 \seealso{
   \code{\link{slrm}},
-  \code{\link{rpoispp}},
+  \code{\link[spatstat.random]{rpoispp}},
   \code{\link{simulate.ppm}},
   \code{\link{simulate.kppm}},
   \code{\link[stats]{simulate}}
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{models}

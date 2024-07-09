@@ -17,7 +17,7 @@
   }
   \item{\dots}{
     Ignored, except for the arguments \code{dimyx} and \code{eps}
-    which are passed to \code{\link{as.mask}}
+    which are passed to \code{\link[spatstat.geom]{as.mask}}
     to control the spatial resolution of the image of the density
     component.    
   }

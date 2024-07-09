@@ -25,16 +25,16 @@
   }
   \item{start}{Data determining the initial state
     of the Metropolis-Hastings algorithm.  See
-    \code{\link{rmhstart}} for description of these arguments.
+    \code{\link[spatstat.random]{rmhstart}} for description of these arguments.
     Defaults to \code{list(x.start=data.ppm(model))}
   }
   \item{control}{Data controlling the iterative behaviour of
-    the Metropolis-Hastings algorithm.  See \code{\link{rmhcontrol}}
+    the Metropolis-Hastings algorithm.  See \code{\link[spatstat.random]{rmhcontrol}}
     for description of these arguments.
   }
   \item{\dots}{
-    Further arguments passed to \code{\link{rmhcontrol}},
-    or to \code{\link{rmh.default}}, or to covariate functions in the model.
+    Further arguments passed to \code{\link[spatstat.random]{rmhcontrol}},
+    or to \code{\link[spatstat.random]{rmh.default}}, or to covariate functions in the model.
   }
   \item{w}{
     Optional. Window in which the simulations should be generated.
@@ -69,16 +69,16 @@
 
 \value{
   A point pattern (an object of class \code{"ppp"}; see
-  \code{\link{ppp.object}}) or a list of point patterns.
+  \code{\link[spatstat.geom]{ppp.object}}) or a list of point patterns.
 }
 
 \details{
   This function generates simulated realisations from a point
   process model that has been fitted to point pattern data.  It is
-  a method for the generic function \code{\link{rmh}} for the
+  a method for the generic function \code{\link[spatstat.random]{rmh}} for the
   class \code{"ppm"} of fitted point process models.  To simulate
-  other kinds of point process models, see \code{\link{rmh}}
-  or \code{\link{rmh.default}}.
+  other kinds of point process models, see \code{\link[spatstat.random]{rmh}}
+  or \code{\link[spatstat.random]{rmh.default}}.
 
   The argument \code{model} describes the fitted model.  It must be
   an object of class \code{"ppm"} (see \code{\link{ppm.object}}),
@@ -123,15 +123,15 @@
   parameters determining the initial state and the iterative
   behaviour, respectively, of the Metropolis-Hastings algorithm.
 
-  The argument \code{start} is passed directly to \code{\link{rmhstart}}.
-  See \code{\link{rmhstart}} for details of the parameters of the
+  The argument \code{start} is passed directly to \code{\link[spatstat.random]{rmhstart}}.
+  See \code{\link[spatstat.random]{rmhstart}} for details of the parameters of the
   initial state, and their default values.
 
   The argument \code{control} is first passed to
-  \code{\link{rmhcontrol}}. Then if any additional arguments \code{\dots}
-  are given, \code{\link{update.rmhcontrol}} is called to update the
-  parameter values. See \code{\link{rmhcontrol}} for details of
-  the iterative behaviour parameters, and \code{\link{default.rmhcontrol}}
+  \code{\link[spatstat.random]{rmhcontrol}}. Then if any additional arguments \code{\dots}
+  are given, \code{\link[spatstat.random]{update.rmhcontrol}} is called to update the
+  parameter values. See \code{\link[spatstat.random]{rmhcontrol}} for details of
+  the iterative behaviour parameters, and \code{\link[spatstat.random]{default.rmhcontrol}}
   for their default values.
 
   Note that if you specify expansion of the simulation window
@@ -144,30 +144,30 @@
   
   After extracting the relevant information from the fitted model
   object \code{model}, \code{rmh.ppm} invokes the default
-  \code{rmh} algorithm \code{\link{rmh.default}}, unless the model
+  \code{rmh} algorithm \code{\link[spatstat.random]{rmh.default}}, unless the model
   is Poisson. If the model is Poisson then the Metropolis-Hastings
   algorithm is not needed, and the model is simulated directly, using
-  one of \code{\link{rpoispp}}, \code{\link{rmpoispp}},
-  \code{\link{rpoint}} or \code{\link{rmpoint}}.
+  one of \code{\link[spatstat.random]{rpoispp}}, \code{\link[spatstat.random]{rmpoispp}},
+  \code{\link[spatstat.random]{rpoint}} or \code{\link[spatstat.random]{rmpoint}}.
 
-  See \code{\link{rmh.default}} for further information about the
+  See \code{\link[spatstat.random]{rmh.default}} for further information about the
   implementation, or about the Metropolis-Hastings algorithm.
 }
 
 \section{Warnings}{
-  See Warnings in \code{\link{rmh.default}}.
+  See Warnings in \code{\link[spatstat.random]{rmh.default}}.
 }
 
 \seealso{
   \code{\link{simulate.ppm}},
-  \code{\link{rmh}},
-  \code{\link{rmhmodel}},
-  \code{\link{rmhcontrol}},
-  \code{\link{default.rmhcontrol}},
-  \code{\link{update.rmhcontrol}},
-  \code{\link{rmhstart}},
-  \code{\link{rmh.default}},
-  \code{\link{ppp.object}},
+  \code{\link[spatstat.random]{rmh}},
+  \code{\link[spatstat.random]{rmhmodel}},
+  \code{\link[spatstat.random]{rmhcontrol}},
+  \code{\link[spatstat.random]{default.rmhcontrol}},
+  \code{\link[spatstat.random]{update.rmhcontrol}},
+  \code{\link[spatstat.random]{rmhstart}},
+  \code{\link[spatstat.random]{rmh.default}},
+  \code{\link[spatstat.geom]{ppp.object}},
   \code{\link{ppm}},
 
   Interactions:

@@ -47,14 +47,14 @@ vargamma.estK(X, startpar=c(kappa=1,scale=1), nu = -1/4, lambda=NULL,
     \item{a point pattern:}{An object of class \code{"ppp"}
       representing a point pattern dataset. 
       The \eqn{K} function of the point pattern will be computed
-      using \code{\link{Kest}}, and the method of minimum contrast
+      using \code{\link[spatstat.explore]{Kest}}, and the method of minimum contrast
       will be applied to this.
     }
     \item{a summary statistic:}{An object of class \code{"fv"} containing
       the values of a summary statistic, computed for a point pattern
       dataset. The summary statistic should be the \eqn{K} function,
       and this object should have been obtained by a call to
-      \code{\link{Kest}} or one of its relatives.
+      \code{\link[spatstat.explore]{Kest}} or one of its relatives.
     }
   }
 
@@ -102,10 +102,10 @@ vargamma.estK(X, startpar=c(kappa=1,scale=1), nu = -1/4, lambda=NULL,
   The remaining arguments \code{rmin,rmax,q,p} control the
   method of minimum contrast; see \code{\link{mincontrast}}.
 
-  The corresponding model can be simulated using \code{\link{rVarGamma}}.
+  The corresponding model can be simulated using \code{\link[spatstat.random]{rVarGamma}}.
 
   The parameter \code{eta} appearing in \code{startpar} is equivalent to the
-  scale parameter \code{omega} used in  \code{\link{rVarGamma}}.
+  scale parameter \code{omega} used in  \code{\link[spatstat.random]{rVarGamma}}.
   
   Homogeneous or inhomogeneous Neyman-Scott/VarGamma models can also be
   fitted using the function \code{\link{kppm}} and the fitted models
@@ -150,10 +150,10 @@ vargamma.estK(X, startpar=c(kappa=1,scale=1), nu = -1/4, lambda=NULL,
   \code{\link{thomas.estK}},
   \code{\link{cauchy.estK}},
   \code{\link{mincontrast}},
-  \code{\link{Kest}},
+  \code{\link[spatstat.explore]{Kest}},
   \code{\link{Kmodel}}.
 
-  \code{\link{rVarGamma}} to simulate the model.
+  \code{\link[spatstat.random]{rVarGamma}} to simulate the model.
 }
 \examples{
    if(interactive()) {

@@ -66,7 +66,7 @@
   
   See \code{\link{ppm.object}} for a list of all operations that can be
   performed on objects of class \code{"ppm"}.
-  See \code{\link{quad.object}} for a list of all operations that can be
+  See \code{\link[spatstat.geom]{quad.object}} for a list of all operations that can be
   performed on objects of class \code{"quad"}.
 
   This function can also be applied to objects of class \code{"kppm"}
@@ -74,7 +74,7 @@
 }
 \seealso{
   \code{\link{ppm.object}},
-  \code{\link{quad.object}},
+  \code{\link[spatstat.geom]{quad.object}},
   \code{\link{ppm}}
 }
 \examples{

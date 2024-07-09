@@ -53,7 +53,7 @@
 }
 \seealso{
   \code{\link{ppm.object}},
-  \code{\link{ppp.object}},
+  \code{\link[spatstat.geom]{ppp.object}},
   \code{\link{ppm}}
 }
 \examples{

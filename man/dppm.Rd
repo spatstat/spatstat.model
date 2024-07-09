@@ -161,13 +161,13 @@
 
       For a homogeneous model (\code{ trend = ~1 })
       the empirical \eqn{K}-function of the data is computed
-      using \code{\link{Kest}},
+      using \code{\link[spatstat.explore]{Kest}},
       and the interaction parameters of the model are estimated by
       the method of minimum contrast.
 
       For an inhomogeneous model,
       the inhomogeneous \eqn{K} function is estimated
-      by \code{\link{Kinhom}} using the fitted intensity.
+      by \code{\link[spatstat.explore]{Kinhom}} using the fitted intensity.
       Then the interaction parameters of the model
       are estimated by the method of minimum contrast using the
       inhomogeneous \eqn{K} function. This two-step estimation
@@ -175,9 +175,9 @@
 
       If \code{statistic="pcf"} then instead of using the
       \eqn{K}-function, the algorithm will use
-      the pair correlation function \code{\link{pcf}} for homogeneous
+      the pair correlation function \code{\link[spatstat.explore]{pcf}} for homogeneous
       models and the inhomogeneous pair correlation function
-      \code{\link{pcfinhom}} for inhomogeneous models.
+      \code{\link[spatstat.explore]{pcfinhom}} for inhomogeneous models.
       In this case, the smoothing parameters of the pair correlation
       can be controlled using the argument \code{statargs},
       as shown in the Examples.
@@ -329,10 +329,10 @@
   \code{\link{dppPowerExp}},
 
   Summary statistics:
-  \code{\link{Kest}},
-  \code{\link{Kinhom}},
-  \code{\link{pcf}},
-  \code{\link{pcfinhom}}.
+  \code{\link[spatstat.explore]{Kest}},
+  \code{\link[spatstat.explore]{Kinhom}},
+  \code{\link[spatstat.explore]{pcf}},
+  \code{\link[spatstat.explore]{pcfinhom}}.
 
   See also \code{\link{ppm}}
 }

@@ -31,11 +31,11 @@
   \item{from}{Character string. See Details.}
 }
 \value{
-  An object of class \code{"owin"} (see \code{\link{owin.object}})
+  An object of class \code{"owin"} (see \code{\link[spatstat.geom]{owin.object}})
   specifying an observation window.
 }
 \details{
-  These are methods for the generic function \code{\link{Window}}
+  These are methods for the generic function \code{\link[spatstat.geom]{Window}}
   which extract the spatial window in which the object \code{X}
   is defined. 
   The argument \code{from} applies when \code{X} is a fitted 
@@ -48,11 +48,11 @@
   window in which the spatial covariates of the model were provided.
 }
 \seealso{
-  \code{\link{Window}},
-  \code{\link{Window.ppp}},
-  \code{\link{Window.psp}}.
+  \code{\link[spatstat.geom]{Window}},
+  \code{\link[spatstat.geom]{Window.ppp}},
+  \code{\link[spatstat.geom]{Window.psp}}.
   
-  \code{\link{owin.object}}
+  \code{\link[spatstat.geom]{owin.object}}
 }
 \examples{
    A <- ppm(cells ~ 1)

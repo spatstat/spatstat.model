@@ -64,11 +64,11 @@
   cluster point process models.
   
   Simulations are performed by
-  \code{\link{rThomas}},
-  \code{\link{rMatClust}},
-  \code{\link{rCauchy}},
-  \code{\link{rVarGamma}}
-  or \code{\link{rLGCP}}
+  \code{\link[spatstat.random]{rThomas}},
+  \code{\link[spatstat.random]{rMatClust}},
+  \code{\link[spatstat.random]{rCauchy}},
+  \code{\link[spatstat.random]{rVarGamma}}
+  or \code{\link[spatstat.random]{rLGCP}}
   depending on the model.
 
   Additional arguments \code{\dots} are passed to the relevant function
@@ -140,11 +140,11 @@
 }
 \seealso{
   \code{\link{kppm}},
-  \code{\link{rThomas}},
-  \code{\link{rMatClust}},
-  \code{\link{rCauchy}},
-  \code{\link{rVarGamma}},
-  \code{\link{rLGCP}},
+  \code{\link[spatstat.random]{rThomas}},
+  \code{\link[spatstat.random]{rMatClust}},
+  \code{\link[spatstat.random]{rCauchy}},
+  \code{\link[spatstat.random]{rVarGamma}},
+  \code{\link[spatstat.random]{rLGCP}},
   \code{\link{simulate.ppm}},
   \code{\link[stats]{simulate}}
 }

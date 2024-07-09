@@ -182,12 +182,12 @@
   \item{quad.args}{
     Arguments controlling the construction of the quadrature scheme,
     when \code{Q} is a point pattern. A list of arguments that will be
-    passed to \code{\link{quadscheme}}
-    or (if \code{method="logi"}) to \code{\link{quadscheme.logi}}.
+    passed to \code{\link[spatstat.geom]{quadscheme}}
+    or (if \code{method="logi"}) to \code{\link[spatstat.geom]{quadscheme.logi}}.
   }
   \item{gcontrol}{
     Optional. List of parameters passed to \code{\link{glm.control}}
-    (or passed to \code{\link{gam.control}} if \code{use.gam=TRUE})
+    (or passed to \code{\link[mgcv]{gam.control}} if \code{use.gam=TRUE})
     controlling the model-fitting algorithm. 
   }
   \item{nsim}{
@@ -199,7 +199,7 @@
     for each simulated realisation (for \code{improve.type="ho"})
   }
   \item{start,control}{
-    Arguments passed to \code{\link{rmh}} controlling the behaviour
+    Arguments passed to \code{\link[spatstat.random]{rmh}} controlling the behaviour
     of the Metropolis-Hastings algorithm (for \code{improve.type="ho"})
   }
   \item{verb}{
@@ -235,7 +235,7 @@
       (an object of class \code{"ppp"}) to which we wish to fit a model.
 
       The syntax of \code{ppm()} is closely analogous to the \R functions
-      \code{\link{glm}} and \code{gam}.
+      \code{\link{glm}} and \code{\link[mgcv]{gam}}.
       The analogy is:
       \tabular{ll}{
 	\bold{glm} \tab \bold{ppm} \cr
@@ -269,7 +269,7 @@
       Stochastic interactions between random points of the point process
       are defined by the argument \code{interaction}. This is an object of
       class \code{"interact"} which is initialised in a very similar way to the
-      usage of family objects in \code{\link{glm}} and \code{gam}.
+      usage of family objects in \code{\link{glm}} and \code{\link[mgcv]{gam}}.
       The models currently available are:
       \GibbsInteractionsList.
       See the examples below.
@@ -306,7 +306,7 @@
 	\item{a pixel image,}{
 	  giving the values of a spatial covariate at 
 	  a fine grid of locations. It should be an object of
-	  class \code{"im"}, see \code{\link{im.object}}.
+	  class \code{"im"}, see \code{\link[spatstat.geom]{im.object}}.
 	}
 	\item{a function,}{
 	  which can be evaluated
@@ -383,15 +383,15 @@
       combines the data points with additional `dummy' points.
       
       A quadrature scheme is an object of class \code{"quad"}
-      (see \code{\link{quad.object}})
+      (see \code{\link[spatstat.geom]{quad.object}})
       which specifies both the data point pattern and the dummy points
       for the quadrature scheme, as well as the quadrature weights
       associated with these points.
       If \code{Q} is simply a point pattern
-      (of class \code{"ppp"}, see \code{\link{ppp.object}})
+      (of class \code{"ppp"}, see \code{\link[spatstat.geom]{ppp.object}})
       then it is interpreted as specifying the
       data points only; a set of dummy points specified
-      by \code{\link{default.dummy}()} is added,
+      by \code{\link[spatstat.geom]{default.dummy}()} is added,
       and the default weighting rule is
       invoked to compute the quadrature weights.
  
@@ -405,14 +405,14 @@
       to determine the number of dummy points in the quadrature scheme.
       
       Complete control over the quadrature scheme is possible.
-      See \code{\link{quadscheme}} for an overview.
+      See \code{\link[spatstat.geom]{quadscheme}} for an overview.
       Use \code{quadscheme(X, D, method="dirichlet")} to compute
       quadrature weights based on the Dirichlet tessellation,
       or \code{quadscheme(X, D, method="grid")} to compute
       quadrature weights by counting points in grid squares,
       where \code{X} and \code{D} are the patterns of data points
       and dummy points respectively.
-      Alternatively use \code{\link{pixelquad}} to make a quadrature
+      Alternatively use \code{\link[spatstat.geom]{pixelquad}} to make a quadrature
       scheme with a dummy point at every pixel in a pixel image.
 
       The argument \code{quad.args} can be used to control the
@@ -514,10 +514,10 @@
       estimate \eqn{\theta_1}{theta1}. The corresponding model is
       returned.
 
-      Simulated realisations are generated using \code{\link{rmh}}.
+      Simulated realisations are generated using \code{\link[spatstat.random]{rmh}}.
       The iterative behaviour of the Metropolis-Hastings algorithm
       is controlled by the arguments \code{start} and \code{control}
-      which are passed to \code{\link{rmh}}.
+      which are passed to \code{\link[spatstat.random]{rmh}}.
 
       As a shortcut, the argument
       \code{nrmh} determines the number of Metropolis-Hastings
@@ -671,7 +671,7 @@
   \code{\link{ppm.object}} for details of how to
   print, plot and manipulate a fitted model.
 
-  \code{\link{ppp}} and \code{\link{quadscheme}}
+  \code{\link[spatstat.geom]{ppp}} and \code{\link[spatstat.geom]{quadscheme}}
   for constructing data.
   
   Interactions:
@@ -715,7 +715,7 @@
       (e.g. expressed in metres) so that the fitted coefficients were
       very small numbers. The simple remedy is to
       \bold{rescale the data}, for example, to convert from metres to
-      kilometres by \code{X <- \link{rescale}(X, 1000)}, then re-fit the
+      kilometres by \code{X <- \link[spatstat.geom]{rescale}(X, 1000)}, then re-fit the
       model. Singularity can also occur if the covariate values are
       very large numbers, or if the covariates are approximately
       collinear.       
@@ -845,7 +845,7 @@
   function \code{\link{predict.glm}}. 
 
   If you wish to fit a polynomial trend, 
-  we offer an alternative to \code{\link{poly}()},
+  we offer an alternative to \code{\link[stats]{poly}()},
   namely \code{polynom()}, which avoids the
   difficulty induced by transformations.  It is completely analogous
   to \code{poly} except that it does not orthonormalise.

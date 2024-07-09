@@ -84,7 +84,7 @@ improve.kppm(object, type=c("quasi", "wclik1", "clik1"), rmax = NULL,
   In all cases the estimating equation is based on dividing the
   observation window into small subregions and count the number of points
   in each subregion. To do this the observation window is first
-  converted into a digital mask by \code{\link{as.mask}} where the
+  converted into a digital mask by \code{\link[spatstat.geom]{as.mask}} where the
   resolution is controlled by the argument \code{dimyx}. The
   computational time grows with the cube of the number of subregions, so fine
   grids may take very long to compute (or even run out of memory).

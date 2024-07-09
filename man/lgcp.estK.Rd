@@ -53,14 +53,14 @@ lgcp.estK(X, startpar=c(var=1,scale=1),
     \item{a point pattern:}{An object of class \code{"ppp"}
       representing a point pattern dataset. 
       The \eqn{K} function of the point pattern will be computed
-      using \code{\link{Kest}}, and the method of minimum contrast
+      using \code{\link[spatstat.explore]{Kest}}, and the method of minimum contrast
       will be applied to this.
     }
     \item{a summary statistic:}{An object of class \code{"fv"} containing
       the values of a summary statistic, computed for a point pattern
       dataset. The summary statistic should be the \eqn{K} function,
       and this object should have been obtained by a call to
-      \code{\link{Kest}} or one of its relatives.
+      \code{\link[spatstat.explore]{Kest}} or one of its relatives.
     }
   }
   The algorithm fits a log-Gaussian Cox point process (LGCP)
@@ -202,7 +202,7 @@ lgcp.estK(X, startpar=c(var=1,scale=1),
   fitting algorithm, including important parameters that affect
   the accuracy of the fit.
   
-  \code{\link{Kest}} for the \eqn{K} function.
+  \code{\link[spatstat.explore]{Kest}} for the \eqn{K} function.
 }
 \examples{
     if(interactive()) {

@@ -77,17 +77,17 @@
   \spatstatAuthors.
 }
 \seealso{
-  \code{\link{is.marked}} to determine whether a model is a marked
+  \code{\link[spatstat.geom]{is.marked}} to determine whether a model is a marked
   point process. 
 
   \code{\link[spatstat.model]{summary.ppm}} for detailed information about a
   fitted model.
 
   Model-fitting functions 
-  \code{\link{ppm}},
-  \code{\link{dppm}},
-  \code{\link{kppm}},
-  \code{\link{slrm}}.
+  \code{\link[spatstat.model]{ppm}},
+  \code{\link[spatstat.model]{dppm}},
+  \code{\link[spatstat.model]{kppm}},
+  \code{\link[spatstat.model]{slrm}}.
 }
 \examples{
   fit <- ppm(cells ~ x)

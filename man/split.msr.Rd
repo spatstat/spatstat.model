@@ -15,7 +15,7 @@
   }
   \item{f}{
     Factor or tessellation determining the decomposition.
-    Argument passed to \code{\link{split.ppp}}.
+    Argument passed to \code{\link[spatstat.geom]{split.ppp}}.
     See Details.
   }
   \item{drop}{
@@ -38,7 +38,7 @@
   A measure \code{x} is represented in \pkg{spatstat} by 
   a finite set of sample points with values attached to them.
   The function \code{split.msr} divides this pattern of sample points
-  into several sub-patterns of points using \code{\link{split.ppp}}.
+  into several sub-patterns of points using \code{\link[spatstat.geom]{split.ppp}}.
   For each sub-pattern, the values attached to these points are
   extracted from \code{x}, and these values and sample points
   determine a measure, which is a
@@ -50,11 +50,11 @@
   separates \code{x} into a list of component measures, one for each
   possible mark.
 
-  Otherwise the argument \code{f} is passed to \code{\link{split.ppp}}.
+  Otherwise the argument \code{f} is passed to \code{\link[spatstat.geom]{split.ppp}}.
   It should be either a factor (of length equal to the number of
   sample points of \code{x}) or a tessellation (object of class
   \code{"tess"} representing a division of space into tiles)
-  as documented under \code{\link{split.ppp}}.
+  as documented under \code{\link[spatstat.geom]{split.ppp}}.
 }
 \value{
   A list, each of whose entries is a measure (object of class

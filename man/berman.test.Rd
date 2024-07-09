@@ -31,7 +31,7 @@
   \item{\dots}{
     Additional arguments controlling the pixel resolution
     (arguments \code{dimyx}, \code{eps} and \code{rule.eps}
-    passed to \code{\link{as.mask}})
+    passed to \code{\link[spatstat.geom]{as.mask}})
     or other undocumented features.
   }
 }
@@ -122,7 +122,7 @@
   An object of class \code{"htest"} (hypothesis test)
   and also of class \code{"bermantest"},
   containing the results of the test. The return value can be
-  plotted (by \code{\link{plot.bermantest}}) or printed
+  plotted (by \code{\link[spatstat.explore]{plot.bermantest}}) or printed
   to give an informative summary of the test.
 }
 \section{Warning}{
@@ -133,8 +133,8 @@
   \spatstatAuthors.
 }
 \seealso{
-  \code{\link{cdf.test}},
-  \code{\link{quadrat.test}},
+  \code{\link[spatstat.explore]{cdf.test}},
+  \code{\link[spatstat.explore]{quadrat.test}},
   \code{\link[spatstat.model]{ppm}}
 }
 \references{

@@ -61,7 +61,7 @@
   If \code{newdata=NULL}, predictions are computed for the original
   values of the covariates, to which the model was fitted.
   Otherwise \code{newdata} should be a hyperframe
-  (see \code{\link{hyperframe}}) containing columns of covariates
+  (see \code{\link[spatstat.geom]{hyperframe}}) containing columns of covariates
   as required by the model. If \code{type} includes \code{"cif"},
   then \code{newdata} must also include a column of spatial point
   pattern responses, in order to compute the conditional intensity.
@@ -145,7 +145,7 @@
 \seealso{
   \code{\link{mppm}},
   \code{\link{fitted.mppm}},
-  \code{\link{hyperframe}}
+  \code{\link[spatstat.geom]{hyperframe}}
 }
 \examples{
   h <- hyperframe(Bugs=waterstriders)

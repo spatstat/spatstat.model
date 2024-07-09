@@ -135,7 +135,7 @@ at new locations.
     and is a binary image mask or a pixel image:}
   If \code{object} is an unmarked point process,
   the result is a pixel image object (of class \code{"im"}, see
-  \code{\link{im.object}}) containing the predictions. 
+  \code{\link[spatstat.geom]{im.object}}) containing the predictions. 
   If \code{object} is a multitype point process,
   the result is a list of pixel images, containing the predictions
   for each type at the same grid of locations.
@@ -234,7 +234,7 @@ at new locations.
     \item 
     If neither \code{ngrid} nor \code{locations} is given, then
     \code{ngrid} is assumed. The value of \code{ngrid} defaults to
-    \code{\link{spatstat.options}("npixel")}, which is initialised to 128
+    \code{\link[spatstat.geom]{spatstat.options}("npixel")}, which is initialised to 128
     when \pkg{spatstat} is loaded.
   }
   The argument \code{locations} may be a point pattern,
@@ -295,7 +295,7 @@ at new locations.
     the names of the entries should correspond to
     the names of covariates in the model formula \code{trend}.
     Each entry in the list must be an image object (of class \code{"im"},
-    see \code{\link{im.object}}).
+    see \code{\link[spatstat.geom]{im.object}}).
     The software will look up
     the pixel values of each image at the quadrature points.
     \item 
@@ -332,7 +332,7 @@ at new locations.
   \code{\link{plot.ppm}},
   \code{\link{print.ppm}},
   \code{\link{fitted.ppm}},
-  \code{\link{spatstat.options}}
+  \code{\link[spatstat.geom]{spatstat.options}}
 }
 \section{Warnings}{
   The current implementation invokes \code{\link{predict.glm}}

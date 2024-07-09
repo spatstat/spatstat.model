@@ -42,14 +42,14 @@ thomas.estK(X, startpar=c(kappa=1,scale=1), lambda=NULL,
     \item{a point pattern:}{An object of class \code{"ppp"}
       representing a point pattern dataset. 
       The \eqn{K} function of the point pattern will be computed
-      using \code{\link{Kest}}, and the method of minimum contrast
+      using \code{\link[spatstat.explore]{Kest}}, and the method of minimum contrast
       will be applied to this.
     }
     \item{a summary statistic:}{An object of class \code{"fv"} containing
       the values of a summary statistic, computed for a point pattern
       dataset. The summary statistic should be the \eqn{K} function,
       and this object should have been obtained by a call to
-      \code{\link{Kest}} or one of its relatives.
+      \code{\link[spatstat.explore]{Kest}} or one of its relatives.
     }
   }
 
@@ -102,7 +102,7 @@ thomas.estK(X, startpar=c(kappa=1,scale=1), lambda=NULL,
   The remaining arguments \code{rmin,rmax,q,p} control the
   method of minimum contrast; see \code{\link{mincontrast}}.
 
-  The Thomas process can be simulated, using \code{\link{rThomas}}.
+  The Thomas process can be simulated, using \code{\link[spatstat.random]{rThomas}}.
 
   Homogeneous or inhomogeneous Thomas process models can also
   be fitted using the function \code{\link{kppm}}.
@@ -152,8 +152,8 @@ thomas.estK(X, startpar=c(kappa=1,scale=1), lambda=NULL,
   \code{\link{lgcp.estK}},
   \code{\link{matclust.estK}},
   \code{\link{mincontrast}},
-  \code{\link{Kest}},
-  \code{\link{rThomas}} to simulate the fitted model.
+  \code{\link[spatstat.explore]{Kest}},
+  \code{\link[spatstat.random]{rThomas}} to simulate the fitted model.
 }
 \examples{
     u <- thomas.estK(redwood, c(kappa=10, scale=0.1))

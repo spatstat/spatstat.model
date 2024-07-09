@@ -27,7 +27,7 @@
     does not correspond to a valid point process. See Details.}
   \item{control}{
     Parameters determining the iterative behaviour of the simulation
-    algorithm. Passed to \code{\link{rmhcontrol}}.
+    algorithm. Passed to \code{\link[spatstat.random]{rmhcontrol}}.
   }
   \item{new.coef}{
     New values for the canonical parameters of the model.
@@ -42,11 +42,11 @@
   a sensible description of the model chosen.
 }
 \details{
-  The generic function \code{\link{rmhmodel}} takes a
+  The generic function \code{\link[spatstat.random]{rmhmodel}} takes a
   description of a point process model in some format, and
   converts it into an object of class \code{"rmhmodel"}
   so that simulations of the model can be generated using
-  the Metropolis-Hastings algorithm \code{\link{rmh}}. 
+  the Metropolis-Hastings algorithm \code{\link[spatstat.random]{rmh}}. 
   
   This function \code{rmhmodel.ppm} is the method for
   the class \code{"ppm"} of fitted point process models.
@@ -59,7 +59,7 @@
   The optional argument \code{w} specifies the window
   in which the pattern is to be generated.  If specified, it must be in
   a form which can be coerced to an object of class \code{owin}
-  by \code{\link{as.owin}}.
+  by \code{\link[spatstat.geom]{as.owin}}.
 
   Not all fitted point process models
   obtained from \code{\link{ppm}} can be simulated.
@@ -104,12 +104,12 @@
    \emph{Biometrika} \bold{63}, 357--360.
 }
 \seealso{
-  \code{\link{rmhmodel}},
-  \code{\link{rmhmodel.list}},
-  \code{\link{rmhmodel.default}},
-  \code{\link{rmh}},
-  \code{\link{rmhcontrol}},
-  \code{\link{rmhstart}},
+  \code{\link[spatstat.random]{rmhmodel}},
+  \code{\link[spatstat.random]{rmhmodel.list}},
+  \code{\link[spatstat.random]{rmhmodel.default}},
+  \code{\link[spatstat.random]{rmh}},
+  \code{\link[spatstat.random]{rmhcontrol}},
+  \code{\link[spatstat.random]{rmhstart}},
   \code{\link{ppm}},
   \rmhInteractionsList.
 }

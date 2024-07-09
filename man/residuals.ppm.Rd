@@ -56,7 +56,7 @@
   }
   \item{quad}{
     Optional. Data specifying how to re-fit the model.
-    A list of arguments passed to \code{\link{quadscheme}}.
+    A list of arguments passed to \code{\link[spatstat.geom]{quadscheme}}.
     See the section on Modified Residuals below.
   }
 }
@@ -184,7 +184,7 @@
 
   The argument \code{quad} should normally be
   a list of arguments in \code{name=value} format that will be
-  passed to \code{\link{quadscheme}} (together with
+  passed to \code{\link[spatstat.geom]{quadscheme}} (together with
   the original data points) to determine the new quadrature scheme.
   It may also be a quadrature scheme (object of class
   \code{"quad"}) to which the model should be fitted, or a

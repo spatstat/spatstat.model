@@ -53,7 +53,7 @@ which can then be fitted to point pattern data.
   \code{\link{MultiStraussHard}},
   \code{\link{Strauss}}.
 
-  See \code{\link{ragsMultiHard}} and \code{\link{rmh}} for
+  See \code{\link[spatstat.random]{ragsMultiHard}} and \code{\link[spatstat.random]{rmh}} for
   simulation.
 }
 \examples{

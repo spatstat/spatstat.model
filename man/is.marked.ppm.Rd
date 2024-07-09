@@ -48,8 +48,8 @@
   as well as random point locations.
 }
 \seealso{
-  \code{\link{is.marked}},
-  \code{\link{is.marked.ppp}}
+  \code{\link[spatstat.geom]{is.marked}},
+  \code{\link[spatstat.geom]{is.marked.ppp}}
 }
 \examples{
    X <- lansing

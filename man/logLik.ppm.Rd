@@ -130,7 +130,7 @@
 }
 \seealso{
   \code{\link{ppm}},  
-  \code{\link{as.owin}},
+  \code{\link[spatstat.geom]{as.owin}},
   \code{\link{anova.ppm}},
   \code{\link{coef.ppm}},
   \code{\link{fitted.ppm}},

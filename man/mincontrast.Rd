@@ -81,9 +81,9 @@ mincontrast(observed, theoretical, startpar, \dots,
   and empirical curves. 
 
   The argument \code{observed} should be an object of class \code{"fv"}
-  (see \code{\link{fv.object}}) containing the values of a summary
+  (see \code{\link[spatstat.explore]{fv.object}}) containing the values of a summary
   statistic computed from the data point pattern. Usually this is the
-  function \eqn{K(r)} computed by \code{\link{Kest}} or one of its relatives.
+  function \eqn{K(r)} computed by \code{\link[spatstat.explore]{Kest}} or one of its relatives.
   
   The argument \code{theoretical} should be a user-supplied function
   that computes the theoretical expected value of the summary statistic.

@@ -40,7 +40,7 @@
 }
 \seealso{
   \code{\link[spatstat.random]{clusterkernel.character}},
-  \code{\link{clusterfield}}, \code{\link[spatstat.model]{kppm}}
+  \code{\link[spatstat.random]{clusterfield}}, \code{\link[spatstat.model]{kppm}}
 }
 \examples{
   fit <- kppm(redwood ~ x, "MatClust")

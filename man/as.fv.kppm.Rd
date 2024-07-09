@@ -17,14 +17,14 @@
   \item{x}{A fitted model which will be converted into a function table}
 }
 \value{
-  An object of class \code{"fv"} (see \code{\link{fv.object}}).
+  An object of class \code{"fv"} (see \code{\link[spatstat.explore]{fv.object}}).
 }
 \details{
   The generic command \code{as.fv} converts data \code{x}, that
   could be interpreted as the values of a function,
   into a function value table (object of the class \code{"fv"}
-  as described in \code{\link{fv.object}}). This object can then
-  be plotted easily using \code{\link{plot.fv}}.
+  as described in \code{\link[spatstat.explore]{fv.object}}). This object can then
+  be plotted easily using \code{\link[spatstat.explore]{plot.fv}}.
 
   Objects of class \code{"kppm"} (and related classes) represent
   a model that has been fitted to a dataset 

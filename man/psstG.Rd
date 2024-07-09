@@ -53,7 +53,7 @@ psstG(object, r = NULL, breaks = NULL, \dots,
     in calculating the diagnostic. Incompatible with \code{hi.res}.
   }
   \item{hi.res}{
-    Optional. List of parameters passed to \code{\link{quadscheme}}.
+    Optional. List of parameters passed to \code{\link[spatstat.geom]{quadscheme}}.
     If this argument is present, the model will be
     re-fitted at high resolution as specified by these parameters.
     The coefficients
@@ -120,7 +120,7 @@ psstG(object, r = NULL, breaks = NULL, \dots,
   pseudoresidual.
   
   There is a plot method for this class. See
-  \code{\link{fv.object}}.
+  \code{\link[spatstat.explore]{fv.object}}.
 }
 \references{
   Baddeley, A., Rubak, E. and \Moller, J. (2011)

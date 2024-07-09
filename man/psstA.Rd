@@ -37,7 +37,7 @@ psstA(object, r = NULL, breaks = NULL, \dots,
 	This argument is for internal use only.
   }
   \item{\dots}{
-    Extra arguments passed to \code{\link{quadscheme}} to determine
+    Extra arguments passed to \code{\link[spatstat.geom]{quadscheme}} to determine
     the quadrature scheme, if \code{object} is a point pattern.
   }
   \item{model}{
@@ -68,7 +68,7 @@ psstA(object, r = NULL, breaks = NULL, \dots,
     in calculating the diagnostic. Incompatible with \code{hi.res}.
   }
   \item{hi.res}{
-    Optional. List of parameters passed to \code{\link{quadscheme}}.
+    Optional. List of parameters passed to \code{\link[spatstat.geom]{quadscheme}}.
     If this argument is present, the model will be
     re-fitted at high resolution as specified by these parameters.
     The coefficients
@@ -145,7 +145,7 @@ psstA(object, r = NULL, breaks = NULL, \dots,
   \code{com} for the compensator and \code{res} for the
   pseudoresidual.
   
-  There is a plot method for this class. See \code{\link{fv.object}}.
+  There is a plot method for this class. See \code{\link[spatstat.explore]{fv.object}}.
 }
 \section{Warning}{
   This computation can take a \bold{very long time}.
@@ -178,7 +178,7 @@ psstA(object, r = NULL, breaks = NULL, \dots,
 
   Point process models: \code{\link{ppm}}.
   
-  Options: \code{\link{spatstat.options}}
+  Options: \code{\link[spatstat.geom]{spatstat.options}}
 }
 \examples{
    if(live <- interactive()) {

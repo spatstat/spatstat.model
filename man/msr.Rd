@@ -56,7 +56,7 @@
   makes an object of class \code{"msr"} from raw data.
   
   The first argument \code{qscheme} is a quadrature scheme (object of
-  class \code{"quad"}). It is typically created by \code{\link{quadscheme}} or
+  class \code{"quad"}). It is typically created by \code{\link[spatstat.geom]{quadscheme}} or
   extracted from a fitted point process model using
   \code{\link{quad.ppm}}. A quadrature scheme contains both data points
   and dummy points. The data points of \code{qscheme} are used as the locations

@@ -69,8 +69,9 @@
   It can be converted to a marked
   point pattern by \code{as.ppp} (see \code{\link{as.ppp.influence.ppm}}).
   There are also methods for \code{[},
-  \code{\link{as.owin}}, \code{\link{domain}},
-  \code{\link{shift}}, \code{\link{integral}} and \code{\link{Smooth}}.
+  \code{\link[spatstat.geom]{as.owin}}, \code{\link[spatstat.geom]{domain}},
+  \code{\link[spatstat.geom]{shift}}, \code{\link[spatstat.univar]{integral}}
+  and \code{\link[spatstat.explore]{Smooth}}.
 }
 \value{
   An object of class \code{"influence.ppm"}.

@@ -139,7 +139,7 @@
   \item{main}{Main title for the plot.}
   \item{\dots}{
     Extra arguments, controlling either the resolution of the smoothed image
-    (passed from \code{diagnose.ppm} to \code{\link{density.ppp}}) 
+    (passed from \code{diagnose.ppm} to \code{\link[spatstat.explore]{density.ppp}}) 
     or the appearance of the plots
     (passed from \code{diagnose.ppm} to \code{plot.diagppm} and from 
     \code{plot.diagppm} to \code{\link{plot.default}}).

@@ -30,7 +30,7 @@
 }
 \seealso{
   \code{\link{ppm.object}},
-  \code{\link{ppp.object}}
+  \code{\link[spatstat.geom]{ppp.object}}
 }
 \examples{
  fit <- ppm(cells, ~1, Strauss(r=0.1))

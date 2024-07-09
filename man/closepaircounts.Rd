@@ -66,7 +66,7 @@ crosspaircounts(X, Y, r)
   and \rolf
 }
 \seealso{
-  \code{\link{closepairs}} to identify all close pairs of points.
+  \code{\link[spatstat.geom]{closepairs}} to identify all close pairs of points.
 }
 \examples{
    a <- closepaircounts(cells, 0.1)

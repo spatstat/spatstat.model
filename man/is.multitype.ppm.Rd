@@ -48,8 +48,8 @@
   as well as random point locations.
 }
 \seealso{
-  \code{\link{is.multitype}},
-  \code{\link{is.multitype.ppp}}
+  \code{\link[spatstat.geom]{is.multitype}},
+  \code{\link[spatstat.geom]{is.multitype.ppp}}
 }
 \examples{
    X <- lansing

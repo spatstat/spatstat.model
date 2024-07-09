@@ -42,14 +42,14 @@ cauchy.estK(X, startpar=c(kappa=1,scale=1), lambda=NULL,
     \item{a point pattern:}{An object of class \code{"ppp"}
       representing a point pattern dataset. 
       The \eqn{K} function of the point pattern will be computed
-      using \code{\link{Kest}}, and the method of minimum contrast
+      using \code{\link[spatstat.explore]{Kest}}, and the method of minimum contrast
       will be applied to this.
     }
     \item{a summary statistic:}{An object of class \code{"fv"} containing
       the values of a summary statistic, computed for a point pattern
       dataset. The summary statistic should be the \eqn{K} function,
       and this object should have been obtained by a call to
-      \code{\link{Kest}} or one of its relatives.
+      \code{\link[spatstat.explore]{Kest}} or one of its relatives.
     }
   }
 
@@ -83,12 +83,12 @@ cauchy.estK(X, startpar=c(kappa=1,scale=1), lambda=NULL,
   The remaining arguments \code{rmin,rmax,q,p} control the
   method of minimum contrast; see \code{\link{mincontrast}}.
 
-  The corresponding model can be simulated using \code{\link{rCauchy}}.
+  The corresponding model can be simulated using \code{\link[spatstat.random]{rCauchy}}.
 
   For computational reasons, the optimisation procedure uses the parameter 
   \code{eta2}, which is equivalent to \code{4 * scale^2}
   where \code{scale} is the scale parameter for the model
-  as used in \code{\link{rCauchy}}.
+  as used in \code{\link[spatstat.random]{rCauchy}}.
   
   Homogeneous or inhomogeneous Neyman-Scott/Cauchy models can also be
   fitted using the function \code{\link{kppm}} and the fitted models
@@ -138,10 +138,10 @@ cauchy.estK(X, startpar=c(kappa=1,scale=1), lambda=NULL,
   \code{\link{thomas.estK}},
   \code{\link{vargamma.estK}},
   \code{\link{mincontrast}},
-  \code{\link{Kest}},
+  \code{\link[spatstat.explore]{Kest}},
   \code{\link{Kmodel}}.
 
-  \code{\link{rCauchy}} to simulate the model.
+  \code{\link[spatstat.random]{rCauchy}} to simulate the model.
 }
 \examples{
     u <- cauchy.estK(redwood)

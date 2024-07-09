@@ -28,7 +28,7 @@
   \item{W}{
     Object specifying the window of simulation (defaults to a unit
     box if nothing else is sensible -- see Details). Can be any single
-    argument acceptable to \code{\link{as.boxx}} (e.g. an \code{"owin"},
+    argument acceptable to \code{\link[spatstat.geom]{as.boxx}} (e.g. an \code{"owin"},
     \code{"box3"} or \code{"boxx"} object).
   }
   \item{trunc}{

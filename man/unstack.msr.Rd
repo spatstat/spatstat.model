@@ -40,7 +40,7 @@
 \seealso{
   \code{\link[utils]{unstack}}
 
-  \code{\link{unstack.ppp}}
+  \code{\link[spatstat.geom]{unstack.ppp}}
 
   \code{\link{split.msr}}.
 }

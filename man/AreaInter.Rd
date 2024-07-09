@@ -147,7 +147,7 @@
   \code{\link{pairwise.family}},
   \code{\link{ppm.object}}
 
-  \code{\link{ragsAreaInter}} and \code{\link{rmh}} for simulation
+  \code{\link[spatstat.random]{ragsAreaInter}} and \code{\link[spatstat.random]{rmh}} for simulation
   of area-interaction models.
 }
 \section{Warnings}{
@@ -160,7 +160,7 @@
   or too large. In these situations the model is approximately Poisson
   so that \eqn{\eta}{\eta} is unidentifiable.
   As a rule of thumb, one can inspect the empty space function
-  of the data, computed by \code{\link{Fest}}. The value \eqn{F(r)}
+  of the data, computed by \code{\link[spatstat.explore]{Fest}}. The value \eqn{F(r)}
   of the empty space function at the interaction radius \code{r} should
   be between 0.2 and 0.8. 
 }

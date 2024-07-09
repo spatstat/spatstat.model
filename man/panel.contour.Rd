@@ -23,8 +23,8 @@ panel.histogram(x, ...)
     Coordinates of points in a scatterplot.
   }
   \item{\dots}{
-    Extra graphics arguments, passed to \code{\link{contour.im}},
-    \code{\link{plot.im}} or \code{\link[graphics]{rect}}, respectively,
+    Extra graphics arguments, passed to \code{\link[spatstat.geom]{contour.im}},
+    \code{\link[spatstat.geom]{plot.im}} or \code{\link[graphics]{rect}}, respectively,
     to control the appearance of the panel.
   }
   \item{sigma}{
@@ -39,14 +39,14 @@ panel.histogram(x, ...)
   \code{\link[graphics]{pairs}} or \code{\link[graphics]{coplot}},
   to determine what kind of plotting is done in each panel
   of a multi-panel graphical display. In particular they work
-  with \code{\link{pairs.im}}.
+  with \code{\link[spatstat.explore]{pairs.im}}.
 
   The functions \code{panel.contour} and \code{panel.contour}
   are suitable for the off-diagonal plots which involve
   two datasets \code{x} and \code{y}.
   They first rescale \code{x} and \code{y} to the unit square,
   then apply kernel smoothing with bandwidth \code{sigma}
-  using \code{\link{density.ppp}}.
+  using \code{\link[spatstat.explore]{density.ppp}}.
   Then \code{panel.contour} draws a contour plot
   while \code{panel.image} draws a colour image.
 
@@ -61,7 +61,7 @@ panel.histogram(x, ...)
   \spatstatAuthors.
 }
 \seealso{
-  \code{\link{pairs.im}},
+  \code{\link[spatstat.explore]{pairs.im}},
   \code{\link{pairs.default}},
   \code{\link{panel.smooth}}
 }

@@ -46,7 +46,7 @@
   function at these distance values.
 }
 \seealso{
- \code{\link{Kest}} or \code{\link{pcf}}
+ \code{\link[spatstat.explore]{Kest}} or \code{\link[spatstat.explore]{pcf}}
   to estimate the \eqn{K} function or pair correlation function
   nonparametrically from data.
 

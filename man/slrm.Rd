@@ -12,7 +12,7 @@ slrm(formula, ..., data = NULL, offset = TRUE, link = "logit",
 \arguments{
   \item{formula}{The model formula. See Details.}
   \item{\dots}{
-    Optional arguments passed to \code{\link{as.mask}}
+    Optional arguments passed to \code{\link[spatstat.geom]{as.mask}}
     determining the pixel resolution for the discretisation
     of the point pattern.
   }

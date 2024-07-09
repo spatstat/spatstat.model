@@ -13,13 +13,13 @@
   }
 }
 \value{
-  An object of class \code{"layered"} (see \code{\link{layered}}).
+  An object of class \code{"layered"} (see \code{\link[spatstat.geom]{layered}}).
 }
 \details{
   This function converts the object \code{X}
   into an object of class \code{"layered"}.
 
-  It is a method for the generic \code{\link{as.layered}}
+  It is a method for the generic \code{\link[spatstat.geom]{as.layered}}
   for the class of measures.
 
   If \code{X} is a vector-valued measure,
@@ -27,7 +27,7 @@
   each containing a scalar-valued measure.
 }
 \seealso{
-  \code{\link{as.layered}},
+  \code{\link[spatstat.geom]{as.layered}},
   \code{\link{msr}}.
 }
 \examples{

@@ -95,8 +95,8 @@ clusterfit(X, clusters, lambda = NULL, startpar = NULL, \dots,
   \describe{
     \item{homogeneous:}{
       If \code{lambda} is \code{NUll} or a single numeric the pattern is
-      considered homogeneous and either \code{\link{Kest}} or
-      \code{\link{pcf}} is invoked. In this case \code{lambda} is
+      considered homogeneous and either \code{\link[spatstat.explore]{Kest}} or
+      \code{\link[spatstat.explore]{pcf}} is invoked. In this case \code{lambda} is
       \bold{not} used for anything when estimating the summary statistic.
     }
     \item{inhomogeneous:}{
@@ -104,8 +104,8 @@ clusterfit(X, clusters, lambda = NULL, startpar = NULL, \dots,
       If \code{lambda} is a pixel image (object of class \code{"im"}),
       a fitted point process model (object of class \code{"ppm"} or
       \code{"kppm"}) or a \code{function(x,y)} the pattern is considered
-      inhomogeneous. In this case either \code{\link{Kinhom}} or
-      \code{\link{pcfinhom}} is invoked with \code{lambda} as an
+      inhomogeneous. In this case either \code{\link[spatstat.explore]{Kinhom}} or
+      \code{\link[spatstat.explore]{pcfinhom}} is invoked with \code{lambda} as an
       argument.
       
     }

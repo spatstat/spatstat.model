@@ -21,7 +21,7 @@
   }
   \item{data}{
     A hyperframe (object of class \code{"hyperframe"},
-    see \code{\link{hyperframe}}) containing the
+    see \code{\link[spatstat.geom]{hyperframe}}) containing the
     point pattern responses and the explanatory variables. 
   }
   \item{interaction}{
@@ -46,7 +46,7 @@
     Optional. A formula (with no left hand side)
     describing a random effect. Variable names in the formula
     may be any of the column names of \code{data} and \code{interaction}.
-    The formula must be recognisable to \code{\link{lme}}. 
+    The formula must be recognisable to \code{\link[nlme]{lme}}. 
   }
   \item{weights}{
     Optional. Numeric vector of case weights for each row of \code{data}.
@@ -112,7 +112,7 @@
   of the covariate at a fine grid of locations.
 
   The argument \code{data} is a hyperframe (a generalisation of
-  a data frame, see \code{\link{hyperframe}}). This is like a data frame
+  a data frame, see \code{\link[spatstat.geom]{hyperframe}}). This is like a data frame
   except that the entries can be objects of any class.
   The hyperframe has one row for each experimental unit,
   and one column for each variable (response or explanatory variable).
@@ -198,8 +198,8 @@
   trend term. The argument \code{random} is a formula,
   with no left-hand side, that specifies the structure of the
   random effects. The formula should be recognisable to
-  \code{\link{lme}} (see the description of the argument \code{random}
-  for \code{\link{lme}}).
+  \code{\link[nlme]{lme}} (see the description of the argument \code{random}
+  for \code{\link[nlme]{lme}}).
 
   The names in the formula \code{random} may be any of the covariates
   supplied by \code{data}.

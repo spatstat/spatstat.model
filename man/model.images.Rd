@@ -70,7 +70,7 @@
   The pixel resolution is determined by \code{W} 
   if \code{W} is a mask (that is \code{W$type = "mask"}).
   Otherwise, the pixel resolution is determined by
-  \code{\link{spatstat.options}}.
+  \code{\link[spatstat.geom]{spatstat.options}}.
 
   The format of the result depends on whether the original point pattern
   data were marked or unmarked.
@@ -85,7 +85,7 @@
     be plotted immediately.
     \item 
     If the original dataset was a multitype point pattern,
-    the result is a \code{\link{hyperframe}}
+    the result is a \code{\link[spatstat.geom]{hyperframe}}
     with one column for each possible type of points.
     Each column is a named list of pixel images (objects of class
     \code{"im"}) containing the values of the spatial covariates.
@@ -109,10 +109,10 @@
   \code{\link{dppm}},
   \code{\link{kppm}},
   \code{\link{slrm}},
-  \code{\link{im}},
-  \code{\link{im.object}},
-  \code{\link{plot.solist}},
-  \code{\link{spatstat.options}}
+  \code{\link[spatstat.geom]{im}},
+  \code{\link[spatstat.geom]{im.object}},
+  \code{\link[spatstat.geom]{plot.solist}},
+  \code{\link[spatstat.geom]{spatstat.options}}
 }
 
 \examples{

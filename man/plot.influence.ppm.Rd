@@ -16,7 +16,7 @@
     \code{\link{influence.ppm}}.
   }
   \item{\dots}{
-    Arguments passed to \code{\link{plot.ppp}}
+    Arguments passed to \code{\link[spatstat.geom]{plot.ppp}}
     to control the plotting.
   }
   \item{multiplot}{

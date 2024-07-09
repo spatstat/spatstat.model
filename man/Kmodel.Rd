@@ -43,7 +43,7 @@
   function at these distance values.
 }
 \seealso{
-  \code{\link{Kest}} or \code{\link{pcf}}
+  \code{\link[spatstat.explore]{Kest}} or \code{\link[spatstat.explore]{pcf}}
   to estimate the \eqn{K} function or pair correlation function
   nonparametrically from data.
 
@@ -52,11 +52,8 @@
   
   \code{\link{Kmodel.ppm}} for the method for Gibbs processes.
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{models}

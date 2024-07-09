@@ -1,4 +1,11 @@
 
+        CHANGES IN spatstat.model VERSION 3.3-1
+
+OVERVIEW
+
+    o Internal changes to satisfy CRAN package checker.
+    
+
         CHANGES IN spatstat.model VERSION 3.3-0
 
 OVERVIEW

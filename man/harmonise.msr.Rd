@@ -16,7 +16,7 @@
   This function makes any number of measures compatible,
   by converting them all to a common quadrature scheme.
 
-  The command \code{\link{harmonise}} is generic. This is the
+  The command \code{\link[spatstat.geom]{harmonise}} is generic. This is the
   method for objects of class \code{"msr"}.
 }
 \value{
@@ -37,7 +37,7 @@
   harmonise(s1, s2)
 }
 \seealso{
-  \code{\link{harmonise}},
+  \code{\link[spatstat.geom]{harmonise}},
   \code{\link{msr}}
 }
 \keyword{spatial}

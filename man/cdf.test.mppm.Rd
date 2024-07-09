@@ -33,7 +33,7 @@
     or \code{"ad"} for Anderson-Darling test.
   }
   \item{\dots}{
-    Arguments passed to \code{\link{cdf.test}}
+    Arguments passed to \code{\link[spatstat.explore]{cdf.test}}
     to control the test.
   }
   \item{nsim}{
@@ -63,7 +63,7 @@
 }
 \details{
   This function is a method for the generic function
-  \code{\link{cdf.test}} for the class \code{mppm}.
+  \code{\link[spatstat.explore]{cdf.test}} for the class \code{mppm}.
 
   This function performs a goodness-of-fit test of
   a point process model that has been fitted to multiple point patterns.
@@ -89,7 +89,7 @@
     \item a pixel image (object of class \code{"im"}
     \item a list of \code{function(x,y)}, one for each point pattern
     \item a list of pixel images, one for each point pattern
-    \item a hyperframe (see \code{\link{hyperframe}})
+    \item a hyperframe (see \code{\link[spatstat.geom]{hyperframe}})
     of which the first
     column will be taken as containing the covariate
     \item a character string giving the name of one of the covariates
@@ -114,7 +114,7 @@
   observation window are evaluated,
   weighted according to the point process intensity of the fitted model,
   and compiled into a cumulative distribution function \eqn{F} using
-  \code{\link{ewcdf}}.
+  \code{\link[spatstat.univar]{ewcdf}}.
 
   The probability integral transformation is then applied:
   the values of the \code{covariate} at the original data points
@@ -160,11 +160,11 @@
 \value{
   An object of class \code{"cdftest"} and \code{"htest"}
   containing the results of the
-  test. See \code{\link{cdf.test}} for details.
+  test. See \code{\link[spatstat.explore]{cdf.test}} for details.
 }
 \seealso{
-  \code{\link{cdf.test}},
-  \code{\link{quadrat.test}},
+  \code{\link[spatstat.explore]{cdf.test}},
+  \code{\link[spatstat.explore]{quadrat.test}},
   \code{\link{mppm}}
 }
 \references{

@@ -44,7 +44,7 @@ Kcom(object, r = NULL, breaks = NULL, ...,
   }
   \item{correction}{
     Optional vector of character strings specifying the edge
-    correction(s) to be used. See \code{\link{Kest}} for options.
+    correction(s) to be used. See \code{\link[spatstat.explore]{Kest}} for options.
   }
   \item{conditional}{
     Optional. Logical value indicating whether to 
@@ -80,7 +80,7 @@ Kcom(object, r = NULL, breaks = NULL, ...,
     in calculating the diagnostic. Incompatible with \code{hi.res}.
   }
   \item{hi.res}{
-    Optional. List of parameters passed to \code{\link{quadscheme}}.
+    Optional. List of parameters passed to \code{\link[spatstat.geom]{quadscheme}}.
     If this argument is present, the model will be
     re-fitted at high resolution as specified by these parameters.
     The coefficients
@@ -118,7 +118,7 @@ Kcom(object, r = NULL, breaks = NULL, ...,
   as columns in a data frame (of class \code{"fv"}).
 
   The argument \code{correction} determines the edge correction(s)
-  to be applied. See \code{\link{Kest}} for explanation of the principle
+  to be applied. See \code{\link[spatstat.explore]{Kest}} for explanation of the principle
   of edge corrections. The following table gives the options
   for the \code{correction} argument, and the corresponding
   column names in the result:
@@ -184,7 +184,7 @@ Kcom(object, r = NULL, breaks = NULL, ...,
 \value{
   A function value table (object of class \code{"fv"}),
   essentially a data frame of function values.
-  There is a plot method for this class. See \code{\link{fv.object}}.
+  There is a plot method for this class. See \code{\link[spatstat.explore]{fv.object}}.
 }
 \references{
   Baddeley, A., Rubak, E. and \Moller, J. (2011)
@@ -199,7 +199,7 @@ Kcom(object, r = NULL, breaks = NULL, ...,
 \seealso{
   Related functions: 
   \code{\link{Kres}},
-  \code{\link{Kest}}.
+  \code{\link[spatstat.explore]{Kest}}.
 
   Alternative functions:
   \code{\link{Gcom}},

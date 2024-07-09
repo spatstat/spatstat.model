@@ -34,12 +34,12 @@ in any of several formats, into an object of class \code{"owin"}.
   \item{from}{Character string. See Details.}
 }
 \value{
-  An object of class \code{"owin"} (see \code{\link{owin.object}})
+  An object of class \code{"owin"} (see \code{\link[spatstat.geom]{owin.object}})
   specifying an observation window.
 }
 \details{
   The class \code{"owin"} is a way of specifying the observation window
-  for a point pattern. See \code{\link{owin.object}} for an overview.
+  for a point pattern. See \code{\link[spatstat.geom]{owin.object}} for an overview.
  
   The generic function \code{\link[spatstat.geom]{as.owin}}
   converts data in any of several formats 
@@ -132,7 +132,7 @@ in any of several formats, into an object of class \code{"owin"}.
     extracted.
     \item
     an object of class \code{"rmhmodel"} representing a
-    point process model that can be simulated using \code{\link{rmh}}.
+    point process model that can be simulated using \code{\link[spatstat.random]{rmh}}.
     The window (spatial domain) of the model will be extracted.
     The window may be \code{NULL} in some circumstances (indicating that the
     simulation window has not yet been determined). This is not treated
@@ -140,7 +140,7 @@ in any of several formats, into an object of class \code{"owin"}.
     \code{FALSE} for this method.
     \item
     an object of class \code{"layered"} representing a
-    list of spatial objects. See \code{\link{layered}}.
+    list of spatial objects. See \code{\link[spatstat.geom]{layered}}.
     In this case, \code{as.owin} will be applied to each
     of the objects in the list, and the union of these windows
     will be returned.

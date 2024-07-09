@@ -185,8 +185,8 @@ parres(model, covariate, ...,
 }
 \seealso{
   \code{\link{addvar}},
-  \code{\link{rhohat}},
-  \code{\link{rho2hat}}
+  \code{\link[spatstat.explore]{rhohat}},
+  \code{\link[spatstat.explore]{rho2hat}}
 }
 \examples{
   X <-  rpoispp(function(x,y){exp(3+x+2*x^2)})

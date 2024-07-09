@@ -46,7 +46,7 @@
     \code{\link{persp}}, \code{\link{image}} and \code{\link{contour}}.
   }
   \item{pppargs}{
-    List of extra arguments passed to \code{\link{plot.ppp}}
+    List of extra arguments passed to \code{\link[spatstat.geom]{plot.ppp}}
     when displaying the original point pattern data.
   }
 }
@@ -75,15 +75,12 @@
   other functions listed in the \code{how} argument, and won't be
   recognized by them.  This leads to a lot of annoying but harmless
   warning messages.  Arguments to \code{persp} may be supplied via
-  \code{\link{spatstat.options}()} which alleviates the warning
+  \code{\link[spatstat.geom]{spatstat.options}()} which alleviates the warning
   messages in this instance.
 }
 
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \seealso{ \code{\link{plot.ppm}()} }
 \examples{

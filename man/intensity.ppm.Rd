@@ -23,7 +23,7 @@
   }
 }
 \details{
-  This is a method for the generic function \code{\link{intensity}}
+  This is a method for the generic function \code{\link[spatstat.geom]{intensity}}
   for fitted point process models (class \code{"ppm"}).
 
   The intensity of a point process model is the expected
@@ -93,8 +93,8 @@
   \emph{Electronic Journal of Statistics} \bold{12} 3181--3203.
 }
 \seealso{
-  \code{\link{intensity}},
-  \code{\link{intensity.ppp}}
+  \code{\link[spatstat.geom]{intensity}},
+  \code{\link[spatstat.geom]{intensity.ppp}}
 }
 \examples{
   fitP <- ppm(swedishpines ~ 1)
