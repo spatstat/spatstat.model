@@ -1,11 +1,17 @@
 
-        CHANGES IN spatstat.model VERSION 3.3-1.001
+        CHANGES IN spatstat.model VERSION 3.3-1.002
 
 OVERVIEW
 
     o Tweaks to documentation.
-    
 
+    o Minor improvements.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o plot.palmdiag
+    Improved placement of legend.
+    
         CHANGES IN spatstat.model VERSION 3.3-1
 
 OVERVIEW

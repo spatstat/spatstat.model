@@ -6,7 +6,7 @@
 ## Copyright (c) Adrian Baddeley 2022
 ## GNU Public Licence >= 2.0
 ##
-##  $Revision: 1.3 $ $Date: 2022/11/09 08:40:30 $
+##  $Revision: 1.4 $ $Date: 2024/08/02 07:07:34 $
 
 palmdiagnose <- function(object, ..., breaks=30, trim=30, rmax=Inf) {
   if(missing(object)) {
@@ -121,7 +121,8 @@ plot.palmdiag <- function(x, ..., style=c("intervals", "dots", "bands"),
                                               main=main),
                                          list(...),
                                          list(xlim=xlim,
-                                              ylim=range(xsub, na.rm=TRUE))
+                                              ylim=range(xsub, na.rm=TRUE),
+                                              legendpos="float")
                                          ))
            b <- attr(x, "breaks")
            rmid <- (b[-1] + b[-length(b)])/2
