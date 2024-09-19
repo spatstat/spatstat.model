@@ -1,4 +1,16 @@
 
+        CHANGES IN spatstat.model VERSION 3.3-2.001
+
+OVERVIEW
+
+    o Tweaks to package dependencies.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o spatstat.model package
+    The package now formally 'Depends' only on 'spatstat.explore',
+    and Imports the other required packages in the spatstat family.
+    
         CHANGES IN spatstat.model VERSION 3.3-2
 
 OVERVIEW
