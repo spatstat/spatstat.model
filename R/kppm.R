@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.230 $ $Date: 2023/03/26 10:08:44 $
+# $Revision: 1.232 $ $Date: 2024/09/30 07:12:17 $
 #
 
 kppm <- function(X, ...) {
@@ -1833,7 +1833,18 @@ improve.kppm <- local({
     ## covariates at quadrature points
     po <- object$po
     Z <- model.images(po, mask)
-    Z <- sapply(Z, "[", i=U)
+    Zu <- sapply(Z, "[", i=U, drop=FALSE)
+
+    ## remove pixels which have NA values in covariates
+    ok <- complete.cases(Zu)
+    if(!all(ok)) {
+      Zu <- if(is.null(dim(Zu))) Zu[ok] else Zu[ok, , drop=FALSE] 
+      Yu <- Yu[ok]
+      wt <- wt[ok]
+      M <- mask
+      M$m[M$m] <- ok
+      U <- U[M]
+    }
 
     ##obtain initial beta estimate using composite likelihood
     beta0 <- coef(po)
@@ -1853,7 +1864,7 @@ improve.kppm <- local({
     ## preparing the WCL case
     if (type == "wclik1")
       Kmax <- 2*pi * integrate(function(r){r * (gfun(r) - 1)},
-                               lower=0, upper=rmax)$value * exp(c(Z %*% beta0))
+                               lower=0, upper=rmax)$value * exp(c(Zu %*% beta0))
     ## the g()-1 matrix without tapering
     if (!fast || (vcov && !fast.vcov)){
       if (verbose)
@@ -1885,7 +1896,7 @@ improve.kppm <- local({
     }
        
     if (type == "quasi" && fast){
-      mu0 <- exp(c(Z %*% beta0)) * wt
+      mu0 <- exp(c(Zu %*% beta0)) * wt
       mu0root <- sqrt(mu0)
       sparseG <- Matrix::sparseMatrix(i=cp$i, j=cp$j,
                                       x=mu0root[cp$i] * mu0root[cp$j] * Gtap,
@@ -1900,33 +1911,33 @@ improve.kppm <- local({
     bt <- beta0
     noItr <- 1
     repeat {
-      mu <- exp(c(Z %*% bt)) * wt
+      mu <- exp(c(Zu %*% bt)) * wt
       mu.root <- sqrt(mu)
       ## the core of estimating equation: ff=phi
       ## in case of ql, \phi=V^{-1}D=V_\mu^{-1/2}x where (G+I)x=V_\mu^{1/2} Z
       ff <- switch(type,
-                   clik1 = Z,
-                   wclik1= Z/(1 + Kmax),
+                   clik1 = Zu,
+                   wclik1= Zu/(1 + Kmax),
                    quasi = if(fast){
-                     Matrix::solve(Rroot, mu.root * Z)/mu.root
+                     Matrix::solve(Rroot, mu.root * Zu)/mu.root
                    } else{
-                     solve(diag(U$n) + t(gminus1 * mu), Z)
+                     solve(diag(U$n) + t(gminus1 * mu), Zu)
                    }
                    )
       ##alternative
       ##R=chol(sparseG+sparseMatrix(i=c(1:U$n),j=c(1:U$n),
       ##                            x=rep(1,U$n),dims=c(U$n,U$n)))
       ##ff2 <- switch(type,
-      ##              clik1 = Z,
-      ##              wclik1= Z/(1 + Kmax),
+      ##              clik1 = Zu,
+      ##              wclik1= Zu/(1 + Kmax),
       ##              quasi = if (fast)
-      ##                         solve(R,solve(t(R), mu.root * Z))/mu.root
-      ##                      else solve(diag(U$n) + t(gminus1 * mu), Z))
+      ##                         solve(R,solve(t(R), mu.root * Zu))/mu.root
+      ##                      else solve(diag(U$n) + t(gminus1 * mu), Zu))
       ## print(summary(as.numeric(ff)-as.numeric(ff2)))
       ## the estimating equation: u_f(\beta)
       uf <- (Yu - mu) %*% ff
       ## inverse of minus expectation of Jacobian matrix: I_f
-      Jinv <- solve(t(Z * mu) %*% ff)
+      Jinv <- solve(t(Zu * mu) %*% ff)
       if(maxIter==0){
         ## This is a built-in early exit for vcov internal calculations
         break

@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.156 $	$Date: 2024/01/25 09:17:39 $
+#	$Revision: 2.157 $	$Date: 2024/09/30 05:36:11 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -821,8 +821,8 @@ PPMmodelmatrix <- function(object,
     bt <- do.call(bt.frame,
                   c(list(Q), object[needed], list(splitInf=splitInf)))
     forbid <- bt$forbid
-    ## compute model matrix
-    mf <- model.frame(bt$fmla, bt$glmdata, ...)
+    ## compute model matrix (including NA's if present)
+    mf <- model.frame(bt$fmla, bt$glmdata, ..., na.action=NULL)
     mm <- model.matrix(bt$fmla, mf, ...)
     ass <- attr(mm, "assign")
     if(irregular) {

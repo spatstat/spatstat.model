@@ -1,9 +1,20 @@
 
-        CHANGES IN spatstat.model VERSION 3.3-2.002
+        CHANGES IN spatstat.model VERSION 3.3-2.003
 
 OVERVIEW
 
-    o Nothing so far.
+    o Bug fixes.
+
+BUG FIXES
+
+    o improve.kppm
+    Crashed if NA's were present in the covariate values.
+    Fixed.
+
+    o model.matrix.ppm
+    Crashed with a message about 'logical index too long',
+    if NA's were present in the covariate values.
+    Fixed.
 
         CHANGES IN spatstat.model VERSION 3.3-2
 
