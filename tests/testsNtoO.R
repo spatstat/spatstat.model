@@ -17,7 +17,7 @@ cat(paste("--------- Executing",
 #
 # Testing the response to the presence of NA's in covariates
 #
-# $Revision: 1.9 $ $Date: 2023/11/05 01:45:36 $
+# $Revision: 1.10 $ $Date: 2024/09/30 23:13:54 $
 
 if(FULLTEST) {
 local({
@@ -29,6 +29,8 @@ local({
   misfit <- ppm(X ~ Y)
   ## prediction 
   Z <- predict(misfit, type="trend", se=TRUE)
+  ## canonical covariates
+  M <- model.images(misfit)
   ## covariance matrix: all should be silent
   v <- vcov(misfit)
   ss <- vcov(misfit, what="internals")
@@ -36,6 +38,7 @@ local({
   ## should produce warnings but no failures
   misfit <- kppm(X ~Y)
   V <- predict(misfit, type="trend", se=TRUE)
+  M <- model.images(misfit)
   refit <- improve.kppm(misfit, dimyx=20)
 })
 }
