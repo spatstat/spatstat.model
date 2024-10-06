@@ -436,7 +436,7 @@ PoisSaddleArea(beta, fi)
 PoisSaddleGeyer(beta, fi)
 PoisSaddlePairwise(beta, fi)
 PPMmodelmatrix(object, data, \dots, subset, Q, keepNA, irregular,
-               splitInf)
+               splitInf, eps, dimyx, xy, rule.eps)
 \method{ppm}{default}(Q, trend, interaction,
        \dots, covariates, data, covfunargs, subset, clipwin,
        correction, rbord, use.gam, method, forcefit,

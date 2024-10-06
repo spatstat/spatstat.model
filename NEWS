@@ -1,10 +1,16 @@
 
-        CHANGES IN spatstat.model VERSION 3.3-2.004
+        CHANGES IN spatstat.model VERSION 3.3-2.005
 
 OVERVIEW
 
-    o Bug fixes.
+    o Bug fixes and minor improvements.
 
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o model.images.ppm
+    Now recognises arguments passed to 'as.mask'
+    to control the pixel raster for the images.
+    
 BUG FIXES
 
     o improve.kppm
