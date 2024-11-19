@@ -55,9 +55,9 @@ Authors@R: c(person("Adrian", "Baddeley",
 	     person("Hangsheng", "Wang",
 	            role = "ctb"))
 Maintainer: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>
-Depends: R (>= 3.5.0),  spatstat.data (>= 3.0-4), spatstat.univar (>= 3.0-0), spatstat.geom (>= 3.3-3.002), spatstat.random (>= 3.3-0), spatstat.explore (>= 3.3-0), stats, graphics, grDevices, utils, methods, nlme, rpart
-Imports: spatstat.utils (>= 3.0-5), spatstat.sparse (>= 3.1-0),mgcv, Matrix, abind, tensor, goftest (>= 1.2-2)
-Suggests: sm, gsl, locfit, spatial, fftwtools (>= 0.9-8), nleqslv, glmnet, spatstat.linnet (>= 3.1-5), spatstat (>= 3.0-8)
+Depends: R (>= 3.5.0),  spatstat.data (>= 3.1-4), spatstat.univar (>= 3.1-1), spatstat.geom (>= 3.3-4), spatstat.random (>= 3.3-2), spatstat.explore (>= 3.3-0), stats, graphics, grDevices, utils, methods, nlme, rpart
+Imports: spatstat.utils (>= 3.1-1), spatstat.sparse (>= 3.1-0),mgcv, Matrix, abind, tensor, goftest (>= 1.2-2)
+Suggests: sm, gsl, locfit, spatial, fftwtools (>= 0.9-8), nleqslv, glmnet, spatstat.linnet (>= 3.2-2), spatstat (>= 3.2-1)
 Description: Functionality for parametric statistical modelling and inference for spatial data,
 	     mainly spatial point patterns, in the 'spatstat' family of packages.
 	     (Excludes analysis of spatial data on a linear network,
