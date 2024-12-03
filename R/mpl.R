@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.240 $	$Date: 2024/04/14 01:45:07 $
+#	$Revision: 5.241 $	$Date: 2024/12/03 06:39:52 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -118,7 +118,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2024/04/14 01:45:07 $")
+                        date="$Date: 2024/12/03 06:39:52 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -1075,7 +1075,7 @@ quadBlockSizes <- function(nX, nD, p=1,
     if(nlastblock == nperblock) {
       msg <- paste(msg,
                    "each containing",
-                   nperblock, "dummy points")
+                   nperblock, "dummy points.")
     } else {
       msg <- paste(msg,
                    "the first",
@@ -1085,8 +1085,11 @@ quadBlockSizes <- function(nX, nD, p=1,
                    ngettext(nperblock, "dummy point", "dummy points"),
                    "and the last block containing",
                    nlastblock, 
-                   ngettext(nlastblock, "dummy point", "dummy points"))
+                   ngettext(nlastblock, "dummy point", "dummy points."))
     }
+    msg <- paste(msg, "Consider increasing the matrix size limit",
+                 "spatstat.options('maxmatrix')",
+                 "if you have sufficient RAM")
     message(msg)
   } else nlastblock <- nperblock
   return(list(nblocks=nblocks, nperblock=nperblock, nlastblock=nlastblock))
