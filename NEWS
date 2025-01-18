@@ -1,10 +1,11 @@
 
-        CHANGES IN spatstat.model VERSION 3.3-3.001
+        CHANGES IN spatstat.model VERSION 3.3-3.002
 
 OVERVIEW
 
     o Improvements to warning messages.
 
+    o Bug fix affecting spatstat.linnet
 
         CHANGES IN spatstat.model VERSION 3.3-3
 

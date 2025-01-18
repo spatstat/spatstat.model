@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.241 $	$Date: 2024/12/03 06:39:52 $
+#	$Revision: 5.242 $	$Date: 2025/01/18 03:12:15 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -118,7 +118,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2024/12/03 06:39:52 $")
+                        date="$Date: 2025/01/18 03:12:15 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -847,7 +847,8 @@ mpl.usable <- function(x) {
   iswin  <- sapply(x, is.owin)
   istess <- sapply(x, is.tess)
   isnum  <- sapply(x, is.numeric) & (lengths(x) == 1)
-  recognised <- isim | isfun | iswin | istess | isnum
+  islte  <- sapply(x, inherits, what="lintess")
+  recognised <- isim | isfun | iswin | istess | isnum | islte
   if(!all(recognised)) 
     x <- x[recognised]
   return(x)
