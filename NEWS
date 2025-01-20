@@ -1,12 +1,23 @@
 
-        CHANGES IN spatstat.model VERSION 3.3-3.002
+        CHANGES IN spatstat.model VERSION 3.3-4
 
 OVERVIEW
 
-    o Improvements to warning messages.
+    o Improvements to documentation.
 
     o Bug fix affecting spatstat.linnet
 
+BUG FIXES
+
+    o internal code
+    For point process models on a linear network (class 'lppm')
+    involving covariates of class 'lintess', the internal structure
+    of the fitted model was corrupted, leading to errors in calculating
+    properties of the fitted model, such as predict.lppm.
+    [Spotted by Andrea Gilardi.]
+    [Bug fix requires changes in spatstat.model internal code]
+    Fixed.
+    
         CHANGES IN spatstat.model VERSION 3.3-3
 
 OVERVIEW
