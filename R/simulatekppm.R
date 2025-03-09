@@ -120,15 +120,21 @@ simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
            param <- append(list(var=sigma2, scale=alpha), margs)
            #'
            if(!is.im(mu)) {
-             # model will be simulated in 'win'
+             #' model will be simulated in 'win'
              out <- rLGCP(model=model, mu=mu, param=param,
                           win=win,
                           ..., nsim=nsim, drop=FALSE)
            } else {
-             # model will be simulated in as.owin(mu), then change window
-             out <- rLGCP(model=model, mu=mu, param=param,
-                          ..., nsim=nsim, drop=FALSE)
-             out <- solapply(out, "[", i=win)
+             #' model will be simulated in as.owin(mu), then change window
+             outwin <- rLGCP(model=model, mu=mu, param=param,
+                             ..., nsim=nsim, drop=FALSE)
+             #' clip to 'win'
+             out <- solapply(outwin, "[", i=win)
+             #' reinstate Lambda images
+             if(isTRUE(list(...)$saveLambda)) {
+               for(j in seq_along(out))
+                 attr(out[[j]], "Lambda") <- attr(outwin[[j]], "Lambda")
+             }
            }
          })
   #' pack up

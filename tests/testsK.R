@@ -15,7 +15,7 @@ cat(paste("--------- Executing",
 #
 # tests/kppm.R
 #
-# $Revision: 1.40 $ $Date: 2024/02/26 05:44:02 $
+# $Revision: 1.41 $ $Date: 2025/03/09 10:29:37 $
 #
 # Test functionality of kppm that once depended on RandomFields
 # Test update.kppm for old style kppm objects
@@ -49,6 +49,7 @@ local({
  }
  if(ALWAYS) {
    Y <- simulate(fitx, seed=42, saveLambda=TRUE)[[1]]
+   stopifnot(is.im(attr(Y, "Lambda")))
  }
 
  if(FULLTEST) {
@@ -92,6 +93,7 @@ local({
    is.poisson(fit0)
    Y0 <- simulate(fit0, saveLambda=TRUE)[[1]]
    stopifnot(is.ppp(Y0))
+   stopifnot(is.im(attr(Y0, "Lambda")))
    p0 <- psib(fit0) # issues a warning
 
    if(FULLTEST) {
@@ -101,6 +103,7 @@ local({
                   control=list(maxit=3))
      Y1 <- simulate(fit1, saveLambda=TRUE)[[1]]
      stopifnot(is.ppp(Y1))
+     stopifnot(is.im(attr(Y1, "Lambda")))
    }
 
    ## fit LGCP using pcf
@@ -109,6 +112,7 @@ local({
                  statistic="pcf")
    Y1p <- simulate(fit1p, saveLambda=TRUE)[[1]]
    stopifnot(is.ppp(Y1p))
+   stopifnot(is.im(attr(Y1p, "Lambda")))
 
    ## .. and using different fitting methods
    if(FULLTEST) {
@@ -140,22 +144,26 @@ local({
    fit1xx <- update(fit1p, . ~ xx, data=solist(xx=xx))
    Y1xx <- simulate(fit1xx, saveLambda=TRUE)[[1]]
    stopifnot(is.ppp(Y1xx))
+   stopifnot(is.im(attr(Y1xx, "Lambda")))
    if(FULLTEST) {
      fit1xxVG <- update(fit1xx, clusters="VarGamma", nu=-1/4)
      Y1xxVG <- simulate(fit1xxVG, saveLambda=TRUE)[[1]]
      stopifnot(is.ppp(Y1xxVG))
+     stopifnot(is.im(attr(Y1xxVG, "Lambda")))
    }
    fit1xxLG <- update(fit1xx, clusters="LGCP",
                       covmodel=list(model="matern", nu=0.3),
                       statistic="pcf")
    Y1xxLG <- simulate(fit1xxLG, saveLambda=TRUE, drop=TRUE)
    stopifnot(is.ppp(Y1xxLG))
+   stopifnot(is.im(attr(Y1xxLG, "Lambda")))
    
    # ... and Abdollah's code
    if(FULLTEST) {
      fit2 <- kppm(redwood ~x, cluster="Cauchy", statistic="K")
      Y2 <- simulate(fit2, saveLambda=TRUE)[[1]]
      stopifnot(is.ppp(Y2))
+     stopifnot(is.im(attr(Y2, "Lambda")))
    }
  }
 
@@ -168,13 +176,14 @@ local({
   fet <- update(fut, redwood3)
   fot <- update(fut, trend=~y)
   fit <- kppm(redwoodfull ~ x)
-  Y <- simulate(fit, window=redwoodfull.extra$regionII, saveLambda=TRUE)
+  YR <- simulate(fit, window=redwoodfull.extra$regionII, saveLambda=TRUE)[[1]]
+  stopifnot(is.im(attr(YR, "Lambda")))
   gut <- improve.kppm(fit, type="wclik1")
   gut <- improve.kppm(fit, vcov=TRUE, fast.vcov=TRUE, save.internals=TRUE)
   hut <- kppm(redwood ~ x, method="clik", weightfun=NULL)
   hut <- kppm(redwood ~ x, method="palm", weightfun=NULL)
   mut <- kppm(redwood)
-  nut <- update(mut, Y)
+  nut <- update(mut, YR)
 })
 }
 

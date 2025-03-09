@@ -1,4 +1,19 @@
 
+        CHANGES IN spatstat.model VERSION 3.3-4.001
+
+OVERVIEW
+
+    o We thank John Ginos for contributions.
+    
+    o Bug fix.
+
+BUG FIXES
+
+    o simulate.kppm
+    Argument saveLambda=TRUE was ignored for nonstationary LGCP models.
+    [Spotted by John Ginos.]
+    Fixed.
+
         CHANGES IN spatstat.model VERSION 3.3-4
 
 OVERVIEW
