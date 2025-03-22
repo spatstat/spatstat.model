@@ -264,7 +264,7 @@ reset.spatstat.options()
 #'
 #'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.43 $  $Date: 2022/06/17 01:47:08 $
+#'   $Revision: 1.45 $  $Date: 2025/03/15 11:29:33 $
 #'
 #'   Assumes 'EveryStart.R' was run
 
