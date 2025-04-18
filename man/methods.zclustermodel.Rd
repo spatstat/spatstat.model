@@ -7,6 +7,7 @@
 \alias{print.zclustermodel}
 \alias{clusterradius.zclustermodel}
 \alias{reach.zclustermodel}
+\alias{simulate.zclustermodel}
 \title{
   Methods for Cluster Models
 }
@@ -28,6 +29,8 @@
  \method{clusterradius}{zclustermodel}(model,\dots,thresh=NULL, precision=FALSE)
 
  \method{reach}{zclustermodel}(x, \dots, epsilon)
+
+ \method{simulate}{zclustermodel}(object, nsim=1, \dots, win=unit.square())
 }
 \arguments{
   \item{model,object,x,X}{
@@ -50,6 +53,13 @@
   \item{thresh,epsilon}{Tolerance thresholds}
   \item{precision}{
     Logical value stipulating whether the precision should also be returned.
+  }
+  \item{win}{
+    Window (object of class \code{"owin"}) in which the simulated
+    pattern should be generated.
+  }
+  \item{nsim}{
+    Number of simulated patterns to be generated.
   }
 }
 \details{
@@ -77,6 +87,7 @@
   Z2 <- predict(m2, locations=square(1))
   varcount(m, square(1))
   varcount(m2, square(1))
+  X <- simulate(m)
 }
 \keyword{spatial}
 \keyword{models}

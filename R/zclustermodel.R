@@ -3,7 +3,7 @@
 #'
 #' Experimental
 #' 
-#'   $Revision: 1.11 $ $Date: 2023/09/11 04:13:58 $
+#'   $Revision: 1.12 $ $Date: 2025/04/18 08:13:38 $
 #'
 
 zclustermodel <- function(name="Thomas", ..., mu, kappa, scale) {
@@ -83,7 +83,7 @@ Kmodel.zclustermodel <- function(model, ...) {
 }
 
 intensity.zclustermodel <- function(X, ...) {
-  X$par[["kappa"]] * X$mu
+  X$par.std[["kappa"]] * X$mu
 }
   
 predict.zclustermodel <- function(object, ...,
@@ -122,3 +122,57 @@ reach.zclustermodel <- function(x, ..., epsilon) {
 }
 
 is.poissonclusterprocess.zclustermodel <- function(model) { TRUE }
+
+simulate.zclustermodel <- function(object, nsim=1, ..., win=unit.square()) {
+  with(object, {
+    switch(name,
+         Thomas = {
+           rThomas(kappa=par.std[["kappa"]],
+                   scale=par.std[["scale"]],
+                   mu=mu,
+                   win=win,
+                   nsim=nsim,
+                   ...)
+         },
+         MatClust = {
+           rMatClust(kappa=par.std[["kappa"]],
+                     scale=par.std[["scale"]],
+                     mu=mu,
+                     win=win,
+                     nsim=nsim,
+                     ...)
+         },
+         Cauchy = {
+           rCauchy(kappa=par.std[["kappa"]],
+                   scale=par.std[["scale"]],
+                   mu=mu,
+                   win=win,
+                   nsim=nsim,
+                   ...)
+         },
+         VarGamma = {
+           do.call(rVarGamma,
+                   resolve.defaults(
+                     list(kappa=par.std[["kappa"]],
+                          scale=par.std[["scale"]],
+                          mu=mu,
+                          win=win,
+                          nsim=nsim,
+                          ...),
+                     clustargs))
+         },
+         LGCP = {
+           do.call(rLGCP,
+                   resolve.defaults(
+                     list(kappa=par.std[["kappa"]],
+                          scale=par.std[["scale"]],
+                          mu=mu,
+                          win=win,
+                          nsim=nsim,
+                          ...),
+                     clustargs))
+         },
+         stop(paste("Unrecognised model name", sQuote(object$name)),
+              call.=FALSE)
+         )})
+}

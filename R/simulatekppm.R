@@ -150,7 +150,8 @@ condSimCox <- function(object, nsim=1,
                        giveup=1000, maxchunk=100,
                        saveLambda=FALSE,
                        verbose=TRUE, drop=FALSE) {
-  stopifnot(is.kppm(object))
+  if(!inherits(object, c("kppm", "zclustermodel")))
+    stop("object should belong to class 'kppm' or 'zclustermodel'", call=FALSE)
   shortcut <- isFALSE(object$isPCP)
 
   w.sim <- as.owin(window)
