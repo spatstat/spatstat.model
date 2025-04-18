@@ -177,9 +177,11 @@ profilepl(s, f, \dots, aic=FALSE, rbord=NULL, verbose = TRUE, fast=TRUE)
   \code{\link{plot.profilepl}}
 }
 \examples{
+    human <- interactive()
     # one irregular parameter
-    rr <- data.frame(r=seq(0.05,0.15, by=0.01))
-    \testonly{
+    if(human) {
+       rr <- data.frame(r=seq(0.05,0.15, by=0.01))
+    } else {
       rr <- data.frame(r=c(0.05,0.1,0.15))
     }
     ps <- profilepl(rr, Strauss, cells)
@@ -187,8 +189,9 @@ profilepl(s, f, \dots, aic=FALSE, rbord=NULL, verbose = TRUE, fast=TRUE)
     plot(ps)
 
     # two irregular parameters
-    rs <- expand.grid(r=seq(0.05,0.15, by=0.01),sat=1:3)
-    \testonly{
+    if(human) {
+       rs <- expand.grid(r=seq(0.05,0.15, by=0.01),sat=1:3)
+    } else {
       rs <- expand.grid(r=c(0.07,0.12),sat=1:2)
     }
     pg <- profilepl(rs, Geyer, cells)
