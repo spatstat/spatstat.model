@@ -11,6 +11,7 @@ zclustermodel <- function(name="Thomas", ..., mu, kappa, scale) {
   if(missing(mu)) stop("The mean cluster size mu must be given")
   if(missing(scale)) stop("The cluster scale must be given")
   rules <- spatstatClusterModelInfo(name)
+  if(!(rules$isPCP)) stop("zclustermodel only supports Neyman-Scott processes")
   par.std <- c(kappa=kappa, scale=scale)
   par.std <- rules$checkpar(par.std, native=FALSE)
   par.idio <- rules$checkpar(par.std, native=TRUE)
@@ -62,26 +63,6 @@ print.zclustermodel <- local({
 
 
                              
-pcfmodel.zclustermodel <- function(model, ...) {
-  p <- model$rules$pcf
-  mpar <- model$par.idio
-  other <- model$other
-  f <- function(r) {
-    as.numeric(do.call(p, c(list(par=mpar, rvals=r), other)))
-  }
-  return(f)
-}
-
-Kmodel.zclustermodel <- function(model, ...) {
-  K <- model$rules$K
-  mpar <- model$par.idio
-  other <- model$other
-  f <- function(r) {
-    as.numeric(do.call(K, c(list(par=mpar, rvals=r), other)))
-  }
-  return(f)
-}
-
 intensity.zclustermodel <- function(X, ...) {
   X$par.std[["kappa"]] * X$mu
 }
@@ -121,8 +102,6 @@ reach.zclustermodel <- function(x, ..., epsilon) {
   2 * clusterradius(x, ..., thresh=thresh)
 }
 
-is.poissonclusterprocess.zclustermodel <- function(model) { TRUE }
-
 simulate.zclustermodel <- function(object, nsim=1, ..., win=unit.square()) {
   with(object, {
     switch(name,
@@ -161,18 +140,33 @@ simulate.zclustermodel <- function(object, nsim=1, ..., win=unit.square()) {
                           ...),
                      clustargs))
          },
-         LGCP = {
-           do.call(rLGCP,
-                   resolve.defaults(
-                     list(kappa=par.std[["kappa"]],
-                          scale=par.std[["scale"]],
-                          mu=mu,
-                          win=win,
-                          nsim=nsim,
-                          ...),
-                     clustargs))
-         },
-         stop(paste("Unrecognised model name", sQuote(object$name)),
+         stop(paste("Unrecognised cluster process model name",
+                    sQuote(object$name)),
               call.=FALSE)
          )})
 }
+
+#' The following methods are for generics defined in spatstat.model
+
+is.poissonclusterprocess.zclustermodel <- function(model) { TRUE }
+
+pcfmodel.zclustermodel <- function(model, ...) {
+  p <- model$rules$pcf
+  mpar <- model$par.idio
+  other <- model$other
+  f <- function(r) {
+    as.numeric(do.call(p, c(list(par=mpar, rvals=r), other)))
+  }
+  return(f)
+}
+
+Kmodel.zclustermodel <- function(model, ...) {
+  K <- model$rules$K
+  mpar <- model$par.idio
+  other <- model$other
+  f <- function(r) {
+    as.numeric(do.call(K, c(list(par=mpar, rvals=r), other)))
+  }
+  return(f)
+}
+
