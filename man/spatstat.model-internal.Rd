@@ -13,6 +13,7 @@
 \alias{bt.frame}
 \alias{cannot.update}
 \alias{check.separable}
+\alias{clusterkernel.zclustermodel}
 \alias{coef.summary.kppm}
 \alias{coef.summary.ppm}
 \alias{coef.summary.slrm}
@@ -258,6 +259,7 @@ bt.frame(Q, trend, interaction, \dots, covariates,
 bigvaluerule(objfun, objargs, startpar, \dots)
 cannot.update(\dots)
 check.separable(dmat, covname, isconstant, fatal)
+\method{clusterkernel}{zclustermodel}(model, \dots)
 \method{coef}{summary.kppm}(object, \dots)
 \method{coef}{summary.ppm}(object, \dots)
 \method{coef}{summary.slrm}(object, \dots)

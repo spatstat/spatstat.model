@@ -3,7 +3,7 @@
 #'
 #' Experimental
 #' 
-#'   $Revision: 1.12 $ $Date: 2025/04/18 08:13:38 $
+#'   $Revision: 1.13 $ $Date: 2025/05/16 07:14:43 $
 #'
 
 zclustermodel <- function(name="Thomas", ..., mu, kappa, scale) {
@@ -145,6 +145,16 @@ simulate.zclustermodel <- function(object, nsim=1, ..., win=unit.square()) {
               call.=FALSE)
          )})
 }
+
+clusterkernel.zclustermodel <- function(model, ...) {
+  info <- spatstatClusterModelInfo(model$name)
+  k <- info$kernel
+  par <- model$par.std
+  clustargs <- model$clustargs
+  f <- function(x, y=0, ...) { k(par, sqrt(x^2+y^2), margs=clustargs) }  
+  return(f)
+}
+
 
 #' The following methods are for generics defined in spatstat.model
 

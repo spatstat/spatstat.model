@@ -3,7 +3,7 @@
 #'
 #'    simulate.kppm
 #'
-#'    $Revision: 1.13 $ $Date: 2025/04/19 05:23:43 $
+#'    $Revision: 1.14 $ $Date: 2025/05/22 05:25:49 $
 
 simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
                           window=NULL, covariates=NULL,
@@ -40,7 +40,7 @@ simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
   ## conditional simulation 
   if(!is.null(n.cond)) {
     ## fixed number of points
-    out <- condSimCox(object, nsim=nsim, seed=NULL, ..., 
+    out <- CondSimCox(object, nsim=nsim, seed=NULL, ..., 
                       win=win, covariates=covariates, 
                       n.cond=n.cond, w.cond=w.cond,
                       verbose=verbose, retry=retry, drop=drop)
