@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.244 $	$Date: 2025/06/03 01:05:35 $
+#	$Revision: 5.246 $	$Date: 2025/06/03 02:26:54 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -53,9 +53,11 @@ mpl.engine <-
            preponly=FALSE,
            rename.intercept=TRUE,
            justQ = FALSE,
-           weightfactor = NULL)
+           weightfactor = NULL,
+           Xweights=1)
   {
     GLMname <- if(!missing(GLM)) short.deparse(substitute(GLM)) else NULL
+    if(!missing(Xweights)) forcefit <- TRUE
     ## Extract precomputed data if available
     if(!is.null(precomputed$Q)) {
       Q <- precomputed$Q
@@ -118,7 +120,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2025/06/03 01:05:35 $")
+                        date="$Date: 2025/06/03 02:26:54 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -193,6 +195,7 @@ mpl.engine <-
                         precomputed=precomputed, savecomputed=savecomputed,
                         covfunargs=covfunargs,
                         weightfactor=weightfactor,
+                        Xweights=Xweights,
                         ...)
     ## back door
     if(preponly) {

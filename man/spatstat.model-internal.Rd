@@ -398,7 +398,7 @@ mpl.engine(Q, trend, interaction, \dots,
          GLM, GLMfamily, GLMcontrol, famille,
          forcefit, nd, eps, quad.args, allcovar, callstring,
          precomputed, savecomputed, preponly,
-         rename.intercept, justQ, weightfactor)
+         rename.intercept, justQ, weightfactor, Xweights)
 mpl.get.covariates(covariates, locations, type, covfunargs, need.deriv)
 mpl.prepare(Q, X, P, trend, interaction, covariates, 
             want.trend, want.inter, correction, rbord, Pname,
