@@ -7,34 +7,37 @@
 }
 \description{
   Compute the AUC (area under the Receiver Operating Characteristic
-  curve) for
-  a fitted point process model.
+  curve) for a fitted point process model.
 }
 \usage{
+\method{auc}{ppm}(X, \dots, subset=NULL)
 
-\method{auc}{ppm}(X, \dots)
+\method{auc}{kppm}(X, \dots, subset=NULL)
 
-\method{auc}{kppm}(X, \dots)
-
-\method{auc}{slrm}(X, \dots)
-
+\method{auc}{slrm}(X, \dots, subset=NULL)
 }
 \arguments{
   \item{X}{
-    Point pattern (object of class \code{"ppp"} or \code{"lpp"})
-    or fitted point process model (object of class \code{"ppm"},
-    \code{"kppm"}, \code{"slrm"} or \code{"lppm"}).
+    Fitted point process model
+    (object of class \code{"ppm"} or \code{"kppm"} or \code{"lppm"})
+    or fitted spatial logistic regression model
+    (object of class \code{"slrm"}).
   }
   \item{\dots}{
-    Arguments passed to \code{\link[spatstat.geom]{as.mask}} controlling the
-    pixel resolution for calculations.
+    Arguments passed to \code{\link[spatstat.model]{roc.ppm}},
+    and arguments passed to \code{\link[spatstat.geom]{as.mask}}
+    controlling the pixel resolution for calculations,
+  }
+  \item{subset}{
+    Optional. A spatial window (object of class \code{"owin"})
+    specifying a subset of the data, for which the AUC should be
+    calculated.
   }
 }
 \details{
   This command computes the AUC, the area under the Receiver Operating
   Characteristic curve. The ROC itself is computed by \code{\link[spatstat.explore]{roc}}.
 
-  
   For a fitted point process model \code{X},
   the AUC measures the ability of the
   fitted model intensity to separate the spatial domain
@@ -51,14 +54,17 @@
   (For spatial logistic regression models (class \code{"slrm"})
   replace \dQuote{intensity} by \dQuote{probability of presence}
   in the text above.)
+
+  The algorithm also calculates the theoretically expected AUC value
+  for this model, as described in \rocpapercite.
 }
 \value{
-  Numeric.
-  For \code{auc.ppm}, \code{auc.kppm} and \code{auc.lppm}, the result is a 
-  numeric vector of length 2 giving the AUC value 
+  Numeric vector of length 2 giving the AUC value 
   and the theoretically expected AUC value for this model.
 }
 \references{
+  \rocpaper.
+  
   Lobo, J.M.,
   \ifelse{latex}{\out{Jim{\'e}nez}}{Jimenez}-Valverde, A.
   and Real, R. (2007)
@@ -74,13 +80,16 @@
   \ifelse{latex}{\out{Birkh{\"a}user}}{Birkhauser}, Basel.
 }
 \author{
-  \spatstatAuthors.
+  \rocketAuthors.
 }
 \seealso{
-  \code{\link[spatstat.explore]{roc}}
+  \code{\link[spatstat.explore]{roc}},
+  \code{\link[spatstat.model]{roc.ppm}},
+  \code{\link[spatstat.explore]{youden}}.
 }
 \examples{
   fit <- ppm(swedishpines ~ x+y)
   auc(fit)
+  auc(swedishpines, "x")
 }
 \keyword{spatial}

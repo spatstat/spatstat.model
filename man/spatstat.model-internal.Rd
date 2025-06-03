@@ -202,6 +202,7 @@
 \alias{slrAssemblePixelData}
 \alias{slrmInfluence}
 \alias{spatialCovariateEvidence.ppm}
+\alias{spatialCovariateEvidence.kppm}
 \alias{spatialCovariateEvidence.slrm}
 \alias{spatialCovariateUnderModel}
 \alias{spatialCovariateUnderModel.ppm}
@@ -405,7 +406,7 @@ mpl.prepare(Q, X, P, trend, interaction, covariates,
             subsetexpr,
             covfunargs, allcovar, precomputed, savecomputed,
             vnamebase, vnameprefix, warn.illegal, warn.unidentifiable,
-            weightfactor, skip.border, clip.interaction, splitInf)
+            weightfactor, skip.border, clip.interaction, splitInf, Xweights)
 mpl.usable(x)
 newformula(old, change, eold, enew, expandpoly, dotvars)
 newstyle.coeff.handling(object)
@@ -515,7 +516,8 @@ slrAssemblePixelData(Y, Yname, W, covimages, dataAtPoints, pixelarea)
 slrmInfluence(model, what, \dots)
 \method{spatialCovariateEvidence}{ppm}(model, covariate, \dots, lambdatype,
           dimyx, eps, rule.eps, interpolate, jitter, jitterfactor,
-          modelname, covname, dataname, subset, clip.predict) 
+          modelname, covname, dataname, subset, clip.predict, raster.action) 
+\method{spatialCovariateEvidence}{kppm}(model, covariate, \dots)
 \method{spatialCovariateEvidence}{slrm}(model, covariate, \dots, lambdatype,
           jitter, jitterfactor,
           modelname, covname, dataname, subset, raster.action) 

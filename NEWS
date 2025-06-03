@@ -1,4 +1,41 @@
 
+        CHANGES IN spatstat.model VERSION 3.3-6.002
+
+OVERVIEW
+
+    o Extensions to ROC curves.
+
+NEW FUNCTIONS
+
+    o addROC
+    Calculate partial ROC curve for adding a new covariate to a model.
+
+    o dropROC
+    Calculate partial ROC curve for removing a covariate from a model.
+
+    o dropply, addapply
+    Consider all single-variable additions or deletions in a model.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o roc.ppm, roc.slrm, roc.kppm
+    New argument 'baseline' allows calculation of ROC relative to a baseline.
+
+    o roc.ppm, roc.slrm, roc.kppm
+    New argument 'method' determines the estimation method.
+    New options include a kernel smoothing estimate and a monotone estimate.
+    
+    o roc.ppm, roc.slrm, roc.kppm
+    New arguments 'CI', 'alpha' for calculating confidence intervals.
+
+    o roc.ppm, roc.slrm, roc.kppm
+    New argument 'subset' specifies a sub-region of the spatial domain
+    in which the ROC should be calculated.
+
+    o roc.ppm, roc.slrm, roc.kppm
+    New argument 'leaveoneout' specifies whether to use leave-one-out estimates
+    of intensity at the data points.
+
         CHANGES IN spatstat.model VERSION 3.3-6
 
 OVERVIEW

@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.242 $	$Date: 2025/01/18 03:12:15 $
+#	$Revision: 5.244 $	$Date: 2025/06/03 01:05:35 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -118,7 +118,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2025/01/18 03:12:15 $")
+                        date="$Date: 2025/06/03 01:05:35 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -355,7 +355,8 @@ mpl.prepare <- local({
                           weightfactor=NULL,
                           skip.border=FALSE,
                           clip.interaction=TRUE,
-                          splitInf=FALSE) {
+                          splitInf=FALSE,
+                          Xweights=1) {
     ## Q: quadrature scheme
     ## X = data.quad(Q)
     ## P = union.quad(Q)
@@ -367,6 +368,15 @@ mpl.prepare <- local({
 
     want.subset <- !is.null(subsetexpr)
   
+    if(!missing(Xweights)) {
+      if(is.null(Xweights)) {
+        Xweights <- 1
+      } else {
+        check.nvector(Xweights, X$n, things="data points",
+                      vname="Xweights", oneok=TRUE)
+      }
+    }
+    
     computed <- list()
     problems <- list()
   
@@ -425,7 +435,7 @@ mpl.prepare <- local({
       mQ <- marks.quad(Q)   ## is NULL for unmarked patterns
       zQ <- is.data(Q)
       yQ <- numeric(nQ)
-      yQ[zQ] <- 1/wQ[zQ]
+      yQ[zQ] <- Xweights/wQ[zQ]
       zeroes <- attr(wQ, "zeroes")
       sQ <- if(is.null(zeroes)) rep.int(TRUE, nQ) else !zeroes
       ## tweak weights ONLY
@@ -810,7 +820,7 @@ mpl.prepare <- local({
                    is.identifiable=is.identifiable,
                    computed=computed,
                    vnamebase=vnamebase, vnameprefix=vnameprefix,
-                   forbid=forbid)
+                   forbid=forbid, Xweights=Xweights)
     return(result)
   }
 

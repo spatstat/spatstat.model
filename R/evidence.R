@@ -4,7 +4,7 @@
 #'   evaluate covariate values at data points and at pixels
 #'   together with intensity of null/reference model
 #'
-#' $Revision: 1.53 $ $Date: 2024/06/23 00:22:42 $
+#' $Revision: 1.55 $ $Date: 2025/06/02 07:00:33 $
 #'
 
 ## Code for generic spatialCovariateEvidence() is moved to spatstat.explore
@@ -20,8 +20,10 @@ spatialCovariateEvidence.ppm <- local({
                             interpolate=TRUE,
                             jitter=TRUE, jitterfactor=1,
                             modelname=NULL, covname=NULL,
-                            dataname=NULL, subset=NULL, clip.predict=TRUE) {
+                            dataname=NULL, subset=NULL, clip.predict=TRUE,
+                            raster.action) {
     lambdatype <- match.arg(lambdatype)
+    dont.complain.about(raster.action) 
     #' evaluate covariate values at data points and at pixels
     ispois <- is.poisson(model)
     csr <- ispois && is.stationary(model)
@@ -264,6 +266,16 @@ spatialCovariateEvidence.ppm <- local({
             
   spatialCovariateEvidence.ppm
 })
+
+spatialCovariateEvidence.kppm <- function(model, covariate, ...) {
+  mname <- singlestring(short.deparse(substitute(model)))
+  cname <- singlestring(short.deparse(substitute(covariate)))
+  result <- do.call(spatialCovariateEvidence,
+                    resolve.defaults(list(model=as.ppm(model), covariate=covariate),
+                                     list(...),
+                                     list(modelname=mname, covname=cname)))
+  return(result)
+}
 
 
 ## Code for spatialCovariateEvidence.ppp() is moved to spatstat.explore
