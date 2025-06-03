@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.246 $	$Date: 2025/06/03 02:26:54 $
+#	$Revision: 5.249 $	$Date: 2025/06/03 07:27:54 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -57,7 +57,6 @@ mpl.engine <-
            Xweights=1)
   {
     GLMname <- if(!missing(GLM)) short.deparse(substitute(GLM)) else NULL
-    if(!missing(Xweights)) forcefit <- TRUE
     ## Extract precomputed data if available
     if(!is.null(precomputed$Q)) {
       Q <- precomputed$Q
@@ -120,7 +119,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2025/06/03 02:26:54 $")
+                        date="$Date: 2025/06/03 07:27:54 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -134,13 +133,17 @@ mpl.engine <-
        !forcefit && !allcovar && is.null(subsetexpr)) {
       ## the model is the uniform Poisson process
       ## The MPLE (= MLE) can be evaluated directly
-      npts <- npoints(X)
-      W    <- as.owin(X)
+      nX <- npoints(X)
+      if(!missing(Xweights))
+        check.nvector(Xweights, nX, oneok=TRUE, vname="Xweights")
+      W  <- as.owin(X)
       if(correction == "border" && rbord > 0) {
-        npts <- sum(bdist.points(X) >= rbord)
+        ## npts <- sum(bdist.points(X) >= rbord)
+        npts <- sum(Xweights * (bdist.points(X) >= rbord))
         areaW <- eroded.areas(W, rbord)
       } else {
-        npts <- npoints(X)
+        ## npts <- npoints(X)
+        npts <- if(length(Xweights) == 1) Xweights * nX else sum(Xweights)
         areaW <- area(W)
       }
       volume <- areaW * markspace.integral(X)
@@ -180,7 +183,8 @@ mpl.engine <-
                    fisher      = fisher,
                    varcov      = varcov,
                    version     = the.version,
-                   problems    = list())
+                   problems    = list(),
+                   Xweights    = Xweights)
       class(rslt) <- "ppm"
       return(rslt)
     }
