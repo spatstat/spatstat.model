@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.106 $   $Date: 2024/01/25 09:32:46 $
+#  $Revision: 1.108 $   $Date: 2025/06/26 01:52:24 $
 #
 
 mppm <- local({
@@ -135,7 +135,7 @@ mppm <- local({
     Yclass <- data.sumry$classes[Yname]
     if(Yclass == "ppp") {
       ## convert to quadrature schemes, for efficiency's sake
-      Y <- solapply(Y, quadscheme, ...)
+      Y <- solapply(Y, quadschemeplus, ...)
       ## Ydescrip <- "point patterns" ## not used
     } else if(Yclass == "quad") {
       Y <- as.solist(Y)
@@ -544,7 +544,13 @@ mppm <- local({
                "between different rows of the hyperframe 'data'"),
          call.=FALSE)
   }
-    
+
+  quadschemeplus <- function(..., quad.args) {
+    #' catch argument 'quad.args' recognised by ppm
+    if(missing(quad.args)) quadscheme(...) else do.call(quadscheme, append(list(...), quad.args))
+  }
+
+  
   mppm
 })
 

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 3.3-6.005
+        CHANGES IN spatstat.model VERSION 3.3-6.006
 
 OVERVIEW
 
@@ -18,6 +18,9 @@ NEW FUNCTIONS
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o mppm
+    Recognises argument 'quad.args'.
+    
     o roc.ppm, roc.slrm, roc.kppm
     New argument 'baseline' allows calculation of ROC relative to a baseline.
 
