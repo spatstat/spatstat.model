@@ -2,9 +2,9 @@
 \alias{predict.ppm}
 \title{Prediction from a Fitted Point Process Model}
 \description{
-Given a fitted point process model obtained by \code{\link{ppm}},	
-evaluate the spatial trend or the conditional intensity of the model
-at new locations.
+  Given a fitted point process model obtained by \code{\link{ppm}},	
+  evaluate the intensity, conditional intensity or spatial trend of the model
+  at new locations.
 }
 \usage{
    \method{predict}{ppm}(object, window=NULL, ngrid=NULL, locations=NULL,
@@ -198,15 +198,10 @@ at new locations.
     }
   }
   The spatial trend, conditional intensity, and intensity
-  are all equivalent if the fitted model is a Poisson point process.
-  However, if the model is not a Poisson process, then they are
-  all different. The ``spatial trend'' is the (exponentiated)
-  first order potential, and not the intensity of the process.
-  [For example if we fit the
-  stationary Strauss process with parameters
-  \eqn{\beta}{beta} and \eqn{\gamma}{gamma},
-  then the spatial trend is constant and equal to \eqn{\beta}{beta},
-  while the intensity is a smaller value.]
+  are all equivalent if the fitted model is a Poisson point process,
+  but they are different if the model is not a Poisson process.
+  See the section on \emph{Intensity, Conditional Intensity and Trend}
+  below. 
 
   The default is to compute an estimate of the desired quantity.
   If \code{interval="confidence"} or \code{interval="prediction"},
@@ -316,15 +311,86 @@ at new locations.
   it may be easier to use \code{\link{plot.ppm}} which calls
   this function and plots the results.
 }
+\section{Intensity, Conditional Intensity and Trend}{
+  The point process models fitted by \code{\link{ppm}} are either
+  Poisson point process models with a specified form of the intensity
+  function, or Gibbs point process models with a specified form of the
+  \emph{conditional} intensity function.
+  
+  The intensity \eqn{\lambda(u)} of a point process at a location
+  \eqn{u} is the expected number of points of the process
+  per unit area in the vicinity of the location \eqn{u}.
+  
+  For a Poisson point process model fitted by \code{\link{ppm}}, the
+  intensity function is of the form
+  \deqn{
+    \lambda(u) = \exp(\theta^\top Z(u))
+  }{
+    lambda(u) =  exp(theta.Z(u))
+  }
+  where \eqn{Z(u)} is a specified function of spatial location (possibly
+  vector valued) and \eqn{\theta} is a parameter or parameter vector.
+  Fitting the model is equivalent to estimating the parameters
+  \eqn{\theta}. Given a fitted Poisson model, the intensity function can
+  be calculated from the equation above.
+
+  For a Gibbs point process model, this approach is not feasible
+  because the intensity function is not known analytically as a function
+  of the model parameters. Instead it is more effective to work with the
+  \emph{conditional} intensity. The conditional intensity
+  \eqn{\lambda(u\mid X)}{lambda(u|X)} is the expected number
+  of points per unit area in the vicinity of \eqn{u}, given that the
+  rest of the point process is \code{X}. 
+
+  For a Gibbs point process model fitted by \code{\link{ppm}}, the
+  conditional intensity function is of the form
+  \deqn{
+    \lambda(u\mid X) = \exp(\theta^\top Z(u) + \phi^\top S(u\mid X)
+  }{
+    lambda(u|X) =  exp(theta.Z(u) + phi.S(u|X))
+  }
+  where \eqn{S(u\mid X)}{S(u|X)} is a specified function and
+  \eqn{\phi}{phi} is a parameter vector. The parameters \eqn{\phi}{phi}
+  control the interaction (stochastic dependence) between points in the
+  process, while the parameters \eqn{\theta}{theta} control the spatial
+  inhomogeneity of the process. Fitting the model is equivalent to
+  estimating the parameter vectors \eqn{\theta}{theta} and
+  \eqn{\phi}{phi}.
+  Given a fitted Gibbs model, the conditional intensity function can be
+  calculated from the equation above. When \code{type="cif"}
+  the conditional intensity is calculated at every location \eqn{u} in a
+  pixel grid, using the observed point pattern \code{X}.
+
+  For a Gibbs point process model with conditional intensity
+  \eqn{\lambda(u \mid X)}{lambda(u | X)}  as described above, 
+  the \sQuote{spatial trend} is
+  \deqn{
+    \beta(u) = \exp(\theta^\top Z(u))
+  }{
+    beta(u) = exp(theta.Z(u))
+  }
+  The spatial trend ignores the interaction between points.
+  When \code{type="trend"}, this function is calculated at every
+  location \eqn{u} in a pixel grid.
+  
+  For a Gibbs point process model, the intensity function is not known
+  analytically, but it is possible to \emph{approximate}
+  the intensity function (Baddeley and Nair, 2012).
+  When \code{type="intensity"}, this approximation is computed
+  at every location \eqn{u} in a pixel grid.
+
+  For a Poisson process, the intensity, conditional intensity
+  and spatial trend are all identical.
+
+  For more information, see Sections 13.3.3, 13.3.6 and 13.12.6 of
+  Baddeley, Rubak and Turner (2015).
+}
 \references{
-  Baddeley, A. and Turner, R.
-  Practical maximum pseudolikelihood for spatial point patterns.
-  \emph{Australian and New Zealand Journal of Statistics}
-  \bold{42} (2000) 283--322.
- 
-  Berman, M. and Turner, T.R. 
-  Approximating point process likelihoods with GLIM.
-  \emph{Applied Statistics} \bold{41} (1992) 31--38.
+  Baddeley, A. and Nair, G. (2012) 
+  Fast approximation of the intensity of Gibbs point processes.
+  \emph{Electronic Journal of Statistics} \bold{6} 1155--1169.
+
+  \baddrubaturnbook
 }
 \seealso{
   \code{\link{ppm}},
@@ -332,6 +398,7 @@ at new locations.
   \code{\link{plot.ppm}},
   \code{\link{print.ppm}},
   \code{\link{fitted.ppm}},
+  \code{\link{intensity.ppm}},
   \code{\link[spatstat.geom]{spatstat.options}}
 }
 \section{Warnings}{
