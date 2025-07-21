@@ -15,7 +15,7 @@ cat(paste("--------- Executing",
 #
 #  tests/undoc.R
 #
-#   $Revision: 1.16 $   $Date: 2020/11/02 07:06:49 $
+#   $Revision: 1.17 $   $Date: 2025/07/21 07:35:03 $
 #
 #  Test undocumented hacks, experimental code, etc
 
@@ -108,6 +108,24 @@ local({
     }
     B <- Ord(gradual, "gradual Ord process")
   }
+
+  if(FULLTEST) {
+    #' experimental 'zgibbsmodel' class
+    mS <- zgibbsmodel(100, Strauss(0.2), -0.5)
+    mG <- zgibbsmodel(100, Geyer(0.2, 1), -0.5)
+    mA <- zgibbsmodel(100, AreaInter(0.2), -0.5)
+    print(mS)
+    print(mG)
+    print(mA)
+    interactionorder(mS)
+    interactionorder(mG)
+    interactionorder(mA)
+    #' intensity.zgibbsmodel -> fakefii
+    intensity(mS)
+    intensity(mG)
+    intensity(mA)
+  }
+
 })
   
 

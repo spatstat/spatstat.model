@@ -3,7 +3,7 @@
 #'
 #'    Experimental
 #' 
-#'    $Revision: 1.3 $ $Date: 2022/04/26 07:56:22 $
+#'    $Revision: 1.5 $ $Date: 2025/07/21 07:24:19 $
 
 zgibbsmodel <- local({
 
@@ -84,7 +84,7 @@ print.zgibbsmodel <- function(x, ...) {
   }
   if(!is.poisson(x)) {
     print(as.interact(x))
-    splat("Iinteraction coefficients:")
+    splat("Interaction coefficients:")
     print(x$icoef)
   }
   invisible(NULL) 
@@ -95,19 +95,27 @@ fakefii <- function(model) {
   stopifnot(inherits(model, "zgibbsmodel"))
   inte <- as.interact(model)
   if(is.multitype(inte)) stop("Not implemented for multitype interactions")
-  ## determine dimension of potential, etc
-  fakePOT <- inte$pot(d=matrix(, 0, 0), par=inte$par)
-  IsOffset <- attr(fakePOT, "IsOffset")
-  fakePOT <- ensure3Darray(fakePOT)
-  Vnames <- dimnames(fakePOT)[[3]]
-  p <- dim(fakePOT)[3]
-  if(sum(nzchar(Vnames)) < p)
-    Vnames <- if(p == 1) "Interaction" else paste0("Interaction.", 1:p)
-  if(length(IsOffset) < p)
-    IsOffset <- logical(p)
-  ## determine interaction coefficients
-  icoef <- model$icoef
-  if(!any(nzchar(names(icoef)))) names(icoef) <- Vnames
+  ## determine dimension of canonical statistic
+  X <- ppp(numeric(0), numeric(0), window=owin())
+  E <- matrix(integer(0), 0, 2)
+  M <- evalInteraction(X, X, E, inte, correction="none")
+  ## M should be a matrix with 0 rows and p columns
+  p <- ncol(M)
+  if(p == 0) {
+    icoef <- numeric(0)
+    Vnames <- character(0)
+    IsOffset <- logical(0)
+  } else {
+    Vnames <- colnames(M)
+    IsOffset <- attr(M, "IsOffset")
+    if(sum(nzchar(Vnames)) < p)
+      Vnames <- if(p == 1) "Interaction" else paste0("Interaction.", 1:p)
+    if(length(IsOffset) < p)
+      IsOffset <- logical(p)
+    ## determine interaction coefficients
+    icoef <- model$icoef
+    if(length(icoef) && !any(nzchar(names(icoef)))) names(icoef) <- Vnames
+  } 
   ## create fake object
   fii(inte, icoef, Vnames, IsOffset)
 }
