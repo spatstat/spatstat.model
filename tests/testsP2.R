@@ -77,7 +77,7 @@ local({
 #'
 #'   Class support for ppm
 #'
-#'   $Revision: 1.9 $ $Date: 2022/03/07 03:26:09 $
+#'   $Revision: 1.10 $ $Date: 2025/07/27 07:12:44 $
 
 if(FULLTEST) {
 local({
@@ -127,8 +127,14 @@ local({
   print(fitFast)
   fitZZe <- emend(fitZZ, trace=TRUE)
   spatstat.options(op)
+
+  #' (4) intensity.ppm: approximations: nonstationary case
+  fitGx <- ppm(swedishpines ~ x, Geyer(9, 1))
+  lamGx <- intensity(fitGx, dimyx=32)
+  fitAx <- ppm(swedishpines ~ x, AreaInter(7))
+  lamAx <- intensity(fitAx, dimyx=32)
   
-  #' (4) methods for other generics
+  #' (5) methods for other generics
   logLik(fitZ, absolute=TRUE)
   unitname(fitZ)
   unitname(fat) <- c("metre", "metres")
@@ -138,8 +144,8 @@ local({
   interactionfamilyname(fat)
   interactionorder(fat)
   hardcoredist(fat)
-  
-  #' (5) miscellaneous
+
+  #' (6) miscellaneous
   
   ## example from Robert Aue - handling offsets
   X <- demohyper$Points[[1]]

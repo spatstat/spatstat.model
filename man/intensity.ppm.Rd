@@ -97,15 +97,24 @@
   \code{\link[spatstat.geom]{intensity.ppp}}
 }
 \examples{
+  d <- if(interactive()) 32 else 128
+
   fitP <- ppm(swedishpines ~ 1)
   intensity(fitP)
+
+  fitPx <- ppm(swedishpines ~ x)
+  intensity(fitPx, dimyx=d)
+
   fitS <- ppm(swedishpines ~ 1, Strauss(9))
   intensity(fitS)
   intensity(fitS, approx="D")
+
   fitSx <- ppm(swedishpines ~ x, Strauss(9))
-  lamSx <- intensity(fitSx)
+  lamSx <- intensity(fitSx, dimyx=d)
+
   fitG <- ppm(swedishpines ~ 1, Geyer(9, 1))
   lamG <- intensity(fitG)
+
   fitA <- ppm(swedishpines ~ 1, AreaInter(7))
   lamA <- intensity(fitA)
 }

@@ -1,4 +1,18 @@
 
+        CHANGES IN spatstat.model VERSION 3.4-0.001
+
+OVERVIEW
+
+    o Improvements to intensity.ppm for Geyer models.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o intensity.ppm
+    For Geyer models, the computation is faster,
+    and supports more values of the saturation parameter 'sat',
+    namely sat = 0.5, 1, 1.5, 2, 2.5 and 3.
+    
+
         CHANGES IN spatstat.model VERSION 3.4-0
 
 OVERVIEW

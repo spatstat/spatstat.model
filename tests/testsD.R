@@ -65,7 +65,7 @@ reset.spatstat.options()
 #'                    and idw, adaptive.density, intensity
 #'                    and SpatialMedian, SpatialQuantile
 #'
-#'  $Revision: 1.67 $  $Date: 2024/01/29 07:07:16 $
+#'  $Revision: 1.70 $  $Date: 2025/07/27 07:21:08 $
 #'
 
 if(!FULLTEST)
@@ -107,8 +107,11 @@ local({
     rants(model=fut, relative=TRUE, at="points")
   }
   if(FULLTEST) {
-    ## cases of 'intensity' etc
-    a <- intensity(ppm(amacrine ~ 1))
+    ## intensity - multitype Poisson
+    fitM <- ppm(amacrine ~ 1)
+    lamM <- intensity(fitM)
+    fitMx <- ppm(amacrine ~ x)
+    lamMx <- intensity(fitMx, dimyx=32)
   }
 })
 

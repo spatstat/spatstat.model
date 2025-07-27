@@ -3,7 +3,7 @@
 #'
 #'    Intensity and intensity approximations for fitted point process models
 #'
-#'    $Revision: 1.4 $ $Date: 2022/05/23 02:33:06 $
+#'    $Revision: 1.7 $ $Date: 2025/07/27 06:50:57 $
 #'
 #'    Adrian Baddeley with contributions from Frederic Lavancier
 
@@ -117,25 +117,44 @@ PoisSaddleGeyer <- local({
     inte <- as.interact(fi)
     sat <- inte$par$sat
     R   <- inte$par$r
+    if(sat == 0 || R == 0) return(beta)
     #' get probability distribution of Geyer statistic under reference model
     z <- Spatstat.Geyer.Nulldist # from sysdata
     if(is.na(m <- match(sat, z$sat)))
       stop(paste("Sorry, the Poisson-saddlepoint approximation",
-                 "is not implemented for Geyer models with sat =", sat),
+                 "is not implemented for Geyer models with sat =",
+                 paste0(sat, ";"),
+                 "supported values are sat =", commasep(z$sat)),
            call.=FALSE)
-    probmatrix <- z$prob[[m]]
-    maxachievable <- max(which(colSums(probmatrix) > 0)) - 1
-    gammarange <- sort(c(1, gamma^maxachievable))
+    ## extract frequency table of values of Geyer statistic T(0, Z_n)
+    ## from huge simulation, where Z_n is runifdisc(n, radius = 2*R).
+    freqtable <- z$freq[[m]]
+    possT <- attr(freqtable, "possvals")
+    possN <- 0:(nrow(freqtable)-1)
+    nsim <- attr(freqtable, "nsim") %orifnull% sum(freqtable[1,])
+    ## normalise to obtain probability distributions
+    probmatrix <- freqtable/nsim
+    #' Compute conditional expectation of gamma^T given N=n for each n
+    gammaT <- gamma^possT
+    EgamTgivenN <- probmatrix %*% gammaT
+    #' precompute some constants
+    gammasat <- gamma^sat
+    gammaTrange <- range(gammaT)
+    fpiR2 <- 4 * pi * R^2
     #' apply approximation
     betavalues <- beta[]
     nvalues <- length(betavalues)
     lambdavalues <- numeric(nvalues)
     for(i in seq_len(nvalues)) {
       beta.i <- betavalues[i]
-      ra <- beta.i * gammarange
-      lambdavalues[i] <- uniroot(diffapproxGeyer, ra, beta=beta.i,
-                                 gamma=gamma, R=R, sat=sat,
-                                 probmatrix=probmatrix)$root
+      lambdavalues[i] <- uniroot(diffapproxGeyer,
+                                 interval    = beta.i * gammaTrange,
+                                 beta        = beta.i,
+                                 gammasat    = gammasat,
+                                 fpiR2       = fpiR2,
+                                 EgamTgivenN = EgamTgivenN,
+                                 possN       = possN
+                                 )$root
     }
     #' return result in same format as 'beta'
     lambda <- beta
@@ -144,22 +163,16 @@ PoisSaddleGeyer <- local({
     return(lambda)
   }
 
-  diffapproxGeyer <- function(lambda, beta, gamma, R, sat, probmatrix) {
-    lambda - approxEpoisGeyerT(lambda, beta, gamma, R, sat, probmatrix)
-  }
-  approxEpoisGeyerT <- function(lambda, beta=1, gamma=1, R=1, sat=1,
-                                probmatrix) {
+  diffapproxGeyer <- function(lambda, beta,
+                              gammasat,
+                              fpiR2, EgamTgivenN, possN) {
     #' Compute approximation to E_Pois(lambda) Lambda(0,X) for Geyer
-    #' ('probmatrix' contains distribution of geyerT(0, Z_n) for each n,
-    #' where 'sat' is given, and Z_n is runifdisc(n, radius=2*R).
-    possT <- 0:(ncol(probmatrix)-1)
-    possN <- 0:(nrow(probmatrix)-1)
-    pN <- dpois(possN, lambda * pi * (2*R)^2)
-    EgamT <- pN %*% probmatrix %*% (gamma^possT)
-    #' assume that, for n > max(possN),
+    pN <- dpois(possN, lambda * fpiR2)
+    EgamT <- sum(pN * EgamTgivenN) + gammasat * (1-sum(pN))
+    #' Last term on previous line assumes that, for n > max(possN),
     #' distribution of T is concentrated on T=sat
-    EgamT <- EgamT + (gamma^sat) * (1-sum(pN))
-    return(beta * EgamT)
+    lambdaApprox <- beta * EgamT
+    return(lambdaApprox - lambda)
   }
 
   PoisSaddleGeyer
