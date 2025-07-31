@@ -54,7 +54,11 @@
     whose resolution is controlled by the arguments \code{\dots}
     which are passed to \code{\link{predict.ppm}}.
     
-    \item if \code{approx="DPP"}, the intensity is calculated using
+    The Poisson saddlepoint approximation uses the Lambert W-function
+    \code{\link{LambertW}} and runs approximately 100 times faster
+    if the suggested package \pkg{gsl} is loaded. 
+
+  \item if \code{approx="DPP"}, the intensity is calculated using
     the approximation of (Coeurjolly and Lavancier, 2018) based on a
     determinantal point process. This approximation is more accurate
     than the Poisson saddlepoint approximation, for inhibitory

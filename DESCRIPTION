@@ -1,6 +1,6 @@
 Package: spatstat.model
-Version: 3.4-0.002
-Date: 2025-07-28
+Version: 3.4-0.003
+Date: 2025-07-31
 Title: Parametric Statistical Modelling and Inference for the 'spatstat' Family
 Authors@R: c(person("Adrian", "Baddeley", 
                     role = c("aut", "cre", "cph"),
