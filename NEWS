@@ -1,10 +1,12 @@
 
-        CHANGES IN spatstat.model VERSION 3.4-0.003
+        CHANGES IN spatstat.model VERSION 3.4-0.004
 
 OVERVIEW
 
     o Improvements to intensity.ppm for Geyer models.
 
+    o We thank Andrea Gilardi for contributions.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o intensity.ppm
@@ -12,6 +14,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     and supports more values of the saturation parameter 'sat',
     namely sat = 0.5, 1, 1.5, 2, 2.5 and 3.
     
+BUG FIXES
+
+    o predict.mppm
+    Crashed if a covariate contained NA values and argument 'random' was given.
+    [Spotted by Andrea Gilardi.]
+    Fixed.
 
         CHANGES IN spatstat.model VERSION 3.4-0
 

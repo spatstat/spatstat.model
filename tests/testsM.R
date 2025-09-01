@@ -56,7 +56,7 @@ local({
 #
 # Basic tests of mppm
 #
-# $Revision: 1.23 $ $Date: 2022/07/08 04:55:13 $
+# $Revision: 1.24 $ $Date: 2025/09/01 05:17:34 $
 # 
 
 if(!FULLTEST)
@@ -152,6 +152,14 @@ local({
     p2G <- predict(fitG, locations=Fakes)
     p3G <- predict(fitG, locations=solapply(W, erosion, r=4))
     p4G <- predict(fitG, locations=locn, newdata=df)
+    ## NA in covariate
+    H$Z <- with(H, as.im(D))
+    H$Z[[1]][square(20)] <- NA
+    fitA <- mppm(Bugs ~ Z, data=H)
+    pA <- predict(fitA)
+    H$group <- factor(c(1,1,2))
+    fitB <- mppm(Bugs ~ Z, data=H, random = ~1|group)
+    pB <- predict(fitB)
   }
 })
 

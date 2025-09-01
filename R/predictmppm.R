@@ -1,7 +1,7 @@
 #
 #    predictmppm.R
 #
-#	$Revision: 1.18 $	$Date: 2022/04/26 07:25:57 $
+#	$Revision: 1.19 $	$Date: 2025/09/01 04:58:48 $
 #
 #
 # -------------------------------------------------------------------
@@ -475,14 +475,15 @@ predict.mppm <- local({
     return(ppp(xpredict, ypredict, window=M))
   }
 
-  Predict <- function(object, newdata, type=c("link", "response")) {
+  Predict <- function(object, newdata, type=c("link", "response"),
+                      ..., na.action=na.pass) {
     type <- match.arg(type)
     if(inherits(object, "glmmPQL")) {
       object <- stripGLMM(object)
-      pred <- predict(object, newdata=newdata)
+      pred <- predict(object, newdata=newdata, na.action=na.action)
       if(type == "response") pred <- object$family$linkinv(pred)
     } else {
-      pred <- predict(object, newdata=newdata, type=type)
+      pred <- predict(object, newdata=newdata, type=type, na.action=na.action)
     }
     return(as.numeric(pred))
   }
