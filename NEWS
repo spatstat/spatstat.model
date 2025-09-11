@@ -1,10 +1,12 @@
 
-        CHANGES IN spatstat.model VERSION 3.4-0.004
+        CHANGES IN spatstat.model VERSION 3.4-0.005
 
 OVERVIEW
 
     o Improvements to intensity.ppm for Geyer models.
 
+    o Minor improvements.
+    
     o We thank Andrea Gilardi for contributions.
     
 SIGNIFICANT USER-VISIBLE CHANGES
@@ -13,6 +15,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     For Geyer models, the computation is faster,
     and supports more values of the saturation parameter 'sat',
     namely sat = 0.5, 1, 1.5, 2, 2.5 and 3.
+
+    o ppm, kppm, dppm, slrm
+    These model-fitting functions now handle the case where the
+    point pattern is an 'NAobject'. 
     
 BUG FIXES
 

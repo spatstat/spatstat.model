@@ -1,5 +1,5 @@
 #
-#	$Revision: 1.63 $	$Date: 2024/04/14 02:01:13 $
+#	$Revision: 1.64 $	$Date: 2025/09/11 03:56:53 $
 #
 #    ppm()
 #          Fit a point process model to a two-dimensional point pattern
@@ -94,6 +94,8 @@ function(Q,
 ) {
   Qname <- short.deparse(substitute(Q))
 
+  if(is.NAobject(Q)) return(NAobject("ppm"))
+  
   subsetexpr <- if(!missing(subset)) substitute(subset) else NULL
   clipwin    <- if(!missing(clipwin)) clipwin else NULL
 

@@ -3,7 +3,7 @@
 #
 #  Spatial Logistic Regression
 #
-#  $Revision: 1.67 $   $Date: 2024/01/25 09:07:52 $
+#  $Revision: 1.68 $   $Date: 2025/09/11 04:01:17 $
 #
 
 slrm <- function(formula, ..., data=NULL, offset=TRUE, link="logit",
@@ -61,6 +61,8 @@ slrm <- function(formula, ..., data=NULL, offset=TRUE, link="logit",
 
   Data <- slr.prepare(CallInfo, parenv, data, dataAtPoints, splitby)
 
+  if(is.NAobject(Data)) return(NAobject("slrm"))
+  
 #  W  <- Data$W
   df <- Data$df
   nY <- npoints(Data$response)
@@ -108,6 +110,7 @@ slr.prepare <- local({
     ##
     ## Get the response point pattern Y 
     Y <- getobj(Yname, envir, data)
+    if(is.NAobject(Y)) return(NAobject("list"))
     if(!is.ppp(Y))
       stop(paste("The response", sQuote(Yname), "must be a point pattern"))
     ##

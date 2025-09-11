@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.232 $ $Date: 2024/09/30 07:12:17 $
+# $Revision: 1.234 $ $Date: 2025/09/11 04:19:21 $
 #
 
 kppm <- function(X, ...) {
@@ -110,6 +110,13 @@ kppm.ppp <- kppm.quad <-
                       rmax = rmax)
   Xenv <- list2env(as.list(covariates), parent=parent.frame())
   X <- eval(substitute(X), envir=Xenv, enclos=parent.frame())
+  if(is.NAobject(X)) {
+    ## response pattern is missing; result is an NA object
+    DPP <- list(...)$DPP
+    cla <- if(!is.null(DPP)) "dppm" else "kppm"
+    result <- NAobject(cla)
+    return(result)
+  }
   isquad <- is.quad(X)
   if(!is.ppp(X) && !isquad)
     stop("X should be a point pattern (ppp) or quadrature scheme (quad)")
