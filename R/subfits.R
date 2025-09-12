@@ -1,6 +1,6 @@
 #
 #
-#  $Revision: 1.56 $   $Date: 2022/07/08 00:59:33 $
+#  $Revision: 1.58 $   $Date: 2025/09/12 08:43:51 $
 #
 #
 
@@ -31,6 +31,7 @@ subfits.new <- local({
     Isoffsetlist <- object$Fit$Isoffsetlist
     has.design <- info$has.design
 #    has.random <- info$has.random
+    goodrows <- info$goodrows %orifnull% rep(TRUE, npat)
     announce("done.\n")
 
     ## fitted parameters
@@ -90,13 +91,13 @@ subfits.new <- local({
     announce("done.\n")
 
     ## set up lists for results 
-    models <- rep(list(NULL), npat)
-    interactions <- rep(list(NULL), npat)
+    models <- rep(list(NAobject("ppm")), npat)
+    interactions <- rep(list(NAobject("interact")), npat)
     
     ## interactions
     announce("Determining interactions...")
     pstate <- list()
-    for(i in 1:npat) {
+    for(i in which(goodrows)) {
       if(verbose) pstate <- progressreport(i, npat, state=pstate)
       ## Find relevant interaction
       acti <- active[i,]
@@ -149,7 +150,7 @@ subfits.new <- local({
     fake.version <- list(major=spv$major,
                          minor=spv$minor,
                          release=spv$patchlevel,
-                         date="$Date: 2022/07/08 00:59:33 $")
+                         date="$Date: 2025/09/12 08:43:51 $")
     fake.call <- call("cannot.update", Q=NULL, trend=trend,
                       interaction=NULL, covariates=NULL,
                       correction=object$Info$correction,
@@ -184,7 +185,7 @@ subfits.new <- local({
     ## Loop through point patterns
     announce("Generating models for each row...")
     pstate <- list()
-    for(i in 1:npat) {
+    for(i in which(goodrows)) {
       if(verbose) pstate <- progressreport(i, npat, state=pstate)
       Yi <- Y[[i]]
       Wi <- if(is.ppp(Yi)) Yi$window else Yi$data$window
@@ -260,6 +261,7 @@ subfits.old <- local({
     Isoffsetlist <- object$Fit$Isoffsetlist
     has.design <- info$has.design
     has.random <- info$has.random
+    goodrows <- info$goodrows %orifnull% rep(TRUE, npat)
     moadf    <- object$Fit$moadf
     announce("done.\n")
 
@@ -342,7 +344,7 @@ subfits.old <- local({
     if(what == "interactions") {
       announce("Determining interactions...")
       pstate <- list()
-      for(i in 1:npat) {
+      for(i in which(goodrows)) {
         if(verbose) pstate <- progressreport(i, npat, state=pstate)
         ## Find relevant interaction
         acti <- active[i,]
@@ -364,6 +366,11 @@ subfits.old <- local({
         vni <- if(nactive > 0) Vnamelist[[tagi]] else character(0)
         iso <- if(nactive > 0) Isoffsetlist[[tagi]] else logical(0)
         results[[i]] <- fii(interi, coefs.avail, vni, iso)
+      }
+      if(any(badrows <- !goodrows)) {
+        blank <- NAobject("fii")
+        for(i in which(badrows)) 
+          results[[i]] <- blank
       }
       announce("Done!\n")
       names(results) <- rownames
@@ -390,7 +397,7 @@ subfits.old <- local({
     ## Loop through point patterns
     announce("Looping through rows...")
     pstate <- list()
-    for(i in 1:npat) {
+    for(i in which(goodrows)) {
       if(verbose) pstate <- progressreport(i, npat, state=pstate)
       Yi <- Y[[i]]
       Wi <- if(is.ppp(Yi)) Yi$window else Yi$data$window
@@ -515,6 +522,11 @@ subfits.old <- local({
       }
       ## store in list
       results[[i]] <- fiti
+    }
+    if(any(badrows <- !goodrows)) {
+      blank <- NAobject("ppm")
+      for(i in which(badrows))
+        results[[i]] <- blank
     }
     announce("done.\n")
     names(results) <- rownames
