@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.108 $   $Date: 2025/06/26 01:52:24 $
+#  $Revision: 1.109 $   $Date: 2025/09/12 05:42:47 $
 #
 
 mppm <- local({
@@ -121,7 +121,6 @@ mppm <- local({
     ## ---- variables required (on RHS of one of the above formulae) -----
     allvars <- unique(allvars)
 
-  
     ########  EXTRACT DATA  #####################################
   
     ## Insert extra variable 'id'
@@ -129,13 +128,26 @@ mppm <- local({
     data.sumry <- summary(data, brief=TRUE)
     allvars <- unique(c(allvars, "id"))
 
+    ## Check for missing entries
+    if(anyNA(data)) {
+      isna <- is.na(data)
+      relevant <- colnames(data) %in% union(allvars, Yname)
+      goodrows <- !apply(isna[,relevant,drop=FALSE], 1, any)
+      firstgoodrow <- min(which(goodrows))
+    } else {
+      goodrows <- rep(TRUE, npat)
+      firstgoodrow <- 1
+    }
+    allgood <- all(goodrows)
+
     ## Extract the list of responses (point pattern/quadscheme)
     Y <- data[, Yname, drop=TRUE]
     if(npat == 1) Y <- solist(Y)
     Yclass <- data.sumry$classes[Yname]
     if(Yclass == "ppp") {
       ## convert to quadrature schemes, for efficiency's sake
-      Y <- solapply(Y, quadschemeplus, ...)
+      Y[goodrows] <- lapply(Y[goodrows], quadschemeplus, ...)
+      Y <- as.solist(Y)
       ## Ydescrip <- "point patterns" ## not used
     } else if(Yclass == "quad") {
       Y <- as.solist(Y)
@@ -251,7 +263,7 @@ mppm <- local({
     names(Isoffsetlist) <- itags
     ####
     ## ---------------- L O O P ---------------------------------
-    for(i in 1:npat) {
+    for(i in which(goodrows)) {
       ## extract responses and covariates for presentation to ppm()
       Yi <- Y[[i]]
       covariates <-
@@ -279,7 +291,7 @@ mppm <- local({
                           vnamebase=itags[j], vnameprefix=itags[j])
         ## store GLM variable names & check consistency
         vnameij <- prepj$Vnames
-        if(i == 1)
+        if(i == firstgoodrow)
           Vnamelist[[j]] <- vnameij
         else if(!identical(vnameij, Vnamelist[[j]]))
           stop("Internal error: Unexpected conflict in glm variable names")
@@ -302,7 +314,7 @@ mppm <- local({
       }
 
       ## assemble the Mother Of All Data Frames
-      if(i == 1) {
+      if(i == firstgoodrow) {
         moadf <- glmdat
       } else {
         ## There may be new or missing columns
@@ -468,6 +480,7 @@ mppm <- local({
                      names.data=names(data),
                      is.df.column=(data.sumry$storage == "dfcolumn"),
                      rownames=row.names(data),
+                     goodrows=goodrows,
                      correction=prep0$info$correction,
                      rbord=prep0$info$rbord
                      ),

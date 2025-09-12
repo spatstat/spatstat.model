@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 3.4-0.005
+        CHANGES IN spatstat.model VERSION 3.4-0.006
 
 OVERVIEW
 
@@ -16,7 +16,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     and supports more values of the saturation parameter 'sat',
     namely sat = 0.5, 1, 1.5, 2, 2.5 and 3.
 
-    o ppm, kppm, dppm, slrm
+    o ppm, kppm, dppm, slrm, mppm
     These model-fitting functions now handle the case where the
     point pattern is an 'NAobject'. 
     
