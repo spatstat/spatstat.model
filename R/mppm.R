@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.109 $   $Date: 2025/09/12 05:42:47 $
+#  $Revision: 1.111 $   $Date: 2025/09/14 03:14:03 $
 #
 
 mppm <- local({
@@ -146,8 +146,7 @@ mppm <- local({
     Yclass <- data.sumry$classes[Yname]
     if(Yclass == "ppp") {
       ## convert to quadrature schemes, for efficiency's sake
-      Y[goodrows] <- lapply(Y[goodrows], quadschemeplus, ...)
-      Y <- as.solist(Y)
+      Y <- solapply(Y, quadschemeplus, ...)
       ## Ydescrip <- "point patterns" ## not used
     } else if(Yclass == "quad") {
       Y <- as.solist(Y)
@@ -558,9 +557,10 @@ mppm <- local({
          call.=FALSE)
   }
 
-  quadschemeplus <- function(..., quad.args) {
+  quadschemeplus <- function(data, ..., quad.args) {
+    if(is.NAobject(data)) return(NAobject("quad"))
     #' catch argument 'quad.args' recognised by ppm
-    if(missing(quad.args)) quadscheme(...) else do.call(quadscheme, append(list(...), quad.args))
+    if(missing(quad.args)) quadscheme(data, ...) else do.call(quadscheme, append(list(data, ...), quad.args))
   }
 
   
@@ -625,15 +625,15 @@ quad.mppm <- function(x) {
 }
 
 data.mppm <- function(x) {
-  solapply(x$Y, getElement, name="data")
+  solapply(quad.mppm(x), elementOrNA, nam="data", cl="ppp")
 }
 
 is.marked.mppm <- function(X, ...) {
-  any(sapply(data.mppm(X), is.marked))
+  any(sapply(data.mppm(X), is.marked), na.rm=TRUE)
 }
   
 is.multitype.mppm <- function(X, ...) {
-  any(sapply(data.mppm(X), is.multitype))
+  any(sapply(data.mppm(X), is.multitype), na.rm=TRUE)
 }
   
 windows.mppm <- function(x) {
@@ -681,6 +681,9 @@ nobs.mppm <- function(object, ...) { sum(sapply(data.mppm(object), npoints)) }
 simulate.mppm <- function(object, nsim=1, ..., verbose=TRUE) {
   subs <- subfits(object)
   nr <- length(subs)
+  ok <- !sapply(subs, is.NAobject)
+  if(!all(ok))
+    blanks <- rep(list(NAobject("ppp")), nsim)
   sims <- list()
   if(verbose) {
     splat("Generating simulated realisations of", nr, "models..")
@@ -689,11 +692,15 @@ simulate.mppm <- function(object, nsim=1, ..., verbose=TRUE) {
   for(irow in seq_len(nr)) {
     model.i <- subs[[irow]]
     dont.complain.about(model.i)
-    sims[[irow]] <- do.call(simulate,
-                            resolve.defaults(list(object=quote(model.i),
-                                                  nsim=nsim, drop=FALSE),
-                                             list(...),
-                                             list(progress=FALSE)))
+    if(ok[irow]) {
+      sims[[irow]] <- do.call(simulate,
+                              resolve.defaults(list(object=quote(model.i),
+                                                    nsim=nsim, drop=FALSE),
+                                               list(...),
+                                               list(progress=FALSE)))
+    } else {
+      sims[[irow]] <- blanks
+    }
     if(verbose) state <- progressreport(irow, nr, state=state)
   }
   sim1list <- lapply(sims, "[[", i=1)

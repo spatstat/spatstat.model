@@ -1,7 +1,7 @@
 #
 #    predictmppm.R
 #
-#	$Revision: 1.19 $	$Date: 2025/09/01 04:58:48 $
+#	$Revision: 1.20 $	$Date: 2025/09/14 03:27:23 $
 #
 #
 # -------------------------------------------------------------------
@@ -13,8 +13,8 @@ predict.mppm <- local({
     ##
     ##	'object' is the output of mppm()
     ##
+    verifyclass(object, "mppm")
     model <- object
-    verifyclass(model, "mppm")
     ## 
     isMulti <- is.multitype(model)
     modelsumry <- summary(model)
@@ -168,6 +168,10 @@ predict.mppm <- local({
     ## extract names of interaction variables
     Vnamelist <- model$Fit$Vnamelist
     vnames <- unlist(Vnamelist)
+
+    ## rows containing missing objects
+    goodrows <- model$Info$goodrows %orifnull% rep(TRUE, ndata.old)
+    allgood <- all(goodrows)
     
     ## determine which interaction is applicable on each row
     interactions <- model$Inter$interaction
@@ -193,7 +197,8 @@ predict.mppm <- local({
 
     ## extract possible types, if model is multitype
     if(isMulti) {
-      levlist <- unique(lapply(data.mppm(model), levelsofmarks))
+      patterns <- data.mppm(model)
+      levlist <- unique(lapply(patterns[!is.na(patterns)], levelsofmarks))
       if(length(levlist) > 1)
         stop("Internal error: the different point patterns have inconsistent marks",
              call.=FALSE)
@@ -278,13 +283,14 @@ predict.mppm <- local({
     if(verbose)
       cat("(windows)...")
     Wins <- if(!need.grid)
-      lapply(locations, as.owin, fatal=FALSE)
+      solapply(locations, as.owin, fatal=FALSE)
     else if(!is.null(Y))
-      lapply(Y, as.owin, fatal=FALSE)
+      solapply(Y, as.owin, fatal=FALSE)
     else NULL
-    if(is.null(Wins) || any(sapply(Wins, is.null)))
+    if(is.null(Wins))
       stop("Cannot determine windows where predictions should be made")
-    ##
+    ## Replace any 'NULL' windows by NAobjects
+    Wins[sapply(Wins, is.null)] <- NA
     ##
     if(is.null(Y)) {
       ## only want trend; empty patterns will do
@@ -293,7 +299,7 @@ predict.mppm <- local({
     
     ## ensure Y contains data points only 
     if(is.quad(Y[[1]]))
-      Y <- lapply(Y, getElement, name="data")
+      Y <- solapply(Y, elementOrNA, nam="data", cl="ppp")
 
     ## Determine locations for prediction
     if(need.grid) {
@@ -396,14 +402,20 @@ predict.mppm <- local({
         for(i in seq(ndata.new)) {
           Val <- values[[i]]
           Loc <- Dummies[[i]]
-          isdum <- !is.data(Quads[[i]])
-          if(selfcheck)
-            if(length(isdum) != length(Val$trend))
-              stop("Internal error: mismatch between data frame and locations")
-          if(want.trend)
-            Trends[[i]] <- Loc %mark% (Val$trend[isdum])
-          if(want.cif)
-            Lambdas[[i]] <- Loc %mark% (Val$cif[isdum])
+          Qua <- Quads[[i]]
+          if(!is.NAobject(Loc) && !is.NAobject(Qua)) {
+            isdum <- !is.data(Qua)
+            if(selfcheck)
+              if(length(isdum) != length(Val$trend))
+                stop("Internal error: mismatch between data frame and locations")
+            if(want.trend)
+              Trends[[i]] <- Loc %mark% (Val$trend[isdum])
+            if(want.cif)
+              Lambdas[[i]] <- Loc %mark% (Val$cif[isdum])
+          } else {
+            if(want.trend) Trends[[i]] <- NAobject("ppp")
+            if(want.cif)   Lambdas[[i]] <- NAobject("ppp")
+          }
         }
       } else {
         if(verbose)
@@ -412,32 +424,37 @@ predict.mppm <- local({
         for(i in seq(ndata.new)) {
           values.i <- values[[i]]
           Q.i <- Quads[[i]]
-          values.i <- values.i[!is.data(Q.i), ]
           Template.i <- Templates[[i]]
-          ok.i <- !is.na(Template.i$v)
-          if(sum(ok.i) != nrow(values.i))
-            stop("Internal error: mismatch between data frame and image")
-          if(selfcheck) {
-            dx <- rasterx.im(Template.i)[ok.i] - values.i$x
-            dy <- rastery.im(Template.i)[ok.i] - values.i$y
-            cat(paste("i=", i, "range(dx) =", paste(range(dx), collapse=", "),
-                      "range(dy) =", paste(range(dy), collapse=", "), "\n"))
-          }
-          if(want.trend) {
-            Trend.i <- Template.i
-            Trend.i$v[ok.i] <- values.i$trend
-            Trends[[i]] <- Trend.i
-          }
-          if(want.cif) {
-            Lambda.i <- Template.i
-            Lambda.i$v[ok.i] <- values.i$cif
-            Lambdas[[i]] <- Lambda.i
+          if(!is.NAobject(Q.i) && !is.NAobject(Template.i)) {
+            values.i <- values.i[!is.data(Q.i), ]
+            ok.i <- !is.na(Template.i$v)
+            if(sum(ok.i) != nrow(values.i))
+              stop("Internal error: mismatch between data frame and image")
+            if(selfcheck) {
+              dx <- rasterx.im(Template.i)[ok.i] - values.i$x
+              dy <- rastery.im(Template.i)[ok.i] - values.i$y
+              cat(paste("i=", i, "range(dx) =", paste(range(dx), collapse=", "),
+                        "range(dy) =", paste(range(dy), collapse=", "), "\n"))
+            }
+            if(want.trend) {
+              Trend.i <- Template.i
+              Trend.i$v[ok.i] <- values.i$trend
+              Trends[[i]] <- Trend.i
+            }
+            if(want.cif) {
+              Lambda.i <- Template.i
+              Lambda.i$v[ok.i] <- values.i$cif
+              Lambdas[[i]] <- Lambda.i
+            }
+          } else {
+            if(want.trend) Trends[[i]] <- NAobject("im")
+            if(want.cif)   Lambdas[[i]] <- NAobject("im")
           }
         }
       }
       if(verbose)
         cat("done reshaping.\n")
-      
+
       if(want.trend) {
         trendname <- paste0("trend", lev)
         Answer[,trendname] <- Trends
@@ -452,11 +469,15 @@ predict.mppm <- local({
   }
 
   ## helper functions
-  emptypattern <- function(w) { ppp(numeric(0), numeric(0), window=w) }
+  emptypattern <- function(w) {
+    if(is.NAobject(w)) return(NAobject("ppp"))
+    ppp(numeric(0), numeric(0), window=w)
+  }
 
   levelsofmarks <- function(X) { levels(marks(X)) }
       
   gridsample <- function(W, ngrid) {
+    if(is.NAobject(W)) return(NAobject("list"))
     masque <- as.mask(W, dimyx=ngrid)
     xx <- raster.x(masque)
     yy <- raster.y(masque)
@@ -467,7 +488,8 @@ predict.mppm <- local({
     return(list(D=Dummy, I=Image))
   }
 
-  punctify <- function(M) { 
+  punctify <- function(M) {
+    if(is.NAobject(M)) return(NAobject("ppp"))
     xx <- raster.x(M)
     yy <- raster.y(M)
     xpredict <- xx[M$m]
