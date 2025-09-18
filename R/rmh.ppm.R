@@ -1,7 +1,7 @@
 #
 # simulation of FITTED model
 #
-#  $Revision: 1.38 $ $Date: 2022/04/06 07:23:19 $
+#  $Revision: 1.40 $ $Date: 2025/09/18 05:12:46 $
 #
 #
 rmh.ppm <- function(model, start = NULL,
@@ -10,7 +10,7 @@ rmh.ppm <- function(model, start = NULL,
                     w = NULL, project=TRUE,
                     nsim=1, drop=TRUE, saveinfo=TRUE,
                     verbose=TRUE,
-                    new.coef=NULL) {
+                    new.coef=NULL, newdata=NULL) {
   verifyclass(model, "ppm")
 
   check.1.integer(nsim)
@@ -31,7 +31,7 @@ rmh.ppm <- function(model, start = NULL,
   
   # convert fitted model object to list of parameters for rmh.default
   X <- rmhmodel(model, w=w, verbose=verbose, project=project, control=control,
-                new.coef=new.coef)
+                new.coef=new.coef, newdata=newdata)
 
   # set initial state
 
@@ -61,6 +61,7 @@ simulate.ppm <- function(object, nsim=1, ...,
                          window = NULL, 
                          project=TRUE,
                          new.coef=NULL,
+                         newdata=NULL,
                          verbose=FALSE,
                          progress=(nsim > 1),
                          drop=FALSE) {
@@ -97,7 +98,7 @@ simulate.ppm <- function(object, nsim=1, ...,
 
   # Set up model parameters for rmh
   rmodel <- rmhmodel(object, w=w, verbose=FALSE, project=TRUE, control=rcontr,
-                     new.coef=new.coef)
+                     new.coef=new.coef, newdata=newdata)
   if(is.null(start)) {
     datapattern <- data.ppm(object)
     start <- rmhstart(n.start=datapattern$n)

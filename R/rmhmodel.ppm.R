@@ -234,7 +234,8 @@ list(
 rmhmodel.ppm <- function(model, w, ...,
                          verbose=TRUE, project=TRUE,
                          control=rmhcontrol(),
-                         new.coef=NULL) {
+                         new.coef=NULL,
+                         newdata=NULL) {
   ## converts ppm object `model' into format palatable to rmh.default
   
   verifyclass(model, "ppm")
@@ -242,6 +243,12 @@ rmhmodel.ppm <- function(model, w, ...,
 
   if(!is.null(new.coef))
     model <- tweak.coefs(model, new.coef)
+
+  if(newdata.given <- !is.null(newdata)) {
+    covariates <- newdata
+  } else {
+    covariates <- model$covariates
+  }
   
   ## Ensure the fitted model is valid
   ## (i.e. exists mathematically as a point process)
@@ -259,12 +266,28 @@ rmhmodel.ppm <- function(model, w, ...,
   ## Extract essential information
   Y <- summary(model, quick="no variances")
 
+  if(Y$uses.covars && newdata.given &&
+     !all(ok <- Y$covars.used %in% names(covariates))) {
+    nbad <- sum(!ok)
+    stop(ngettext(nbad, "Covariate", "Covariates"),
+         commasep(sQuote(Y$covars.used[!ok])),
+         ngettext(nbad, "is", "are"),
+         "absent from", sQuote("newdata"),
+         call.=FALSE)
+  }
+
   if(Y$marked && !Y$multitype)
     stop("Not implemented for marked point processes other than multitype")
 
-  if(Y$uses.covars && is.data.frame(model$covariates))
+  if(Y$uses.covars && is.data.frame(covariates)) {
     stop(paste("This model cannot be simulated, because the",
-               "covariate values were given as a data frame."))
+               if(newdata.given) {
+                 "argument 'newdata' is"
+               } else {
+                 "covariate values were given as"
+               },
+               "a data frame."))
+  }
     
   ## enforce defaults for `control'
 
@@ -333,7 +356,7 @@ rmhmodel.ppm <- function(model, w, ...,
 
   ######## Expanded window for simulation?
 
-  covims <- if(Y$uses.covars) model$covariates[Y$covars.used] else NULL
+  covims <- if(Y$uses.covars) covariates[Y$covars.used] else NULL
     
   wsim <- rmhResolveExpansion(w, control, covims, "covariate")$wsim
       

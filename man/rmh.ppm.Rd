@@ -14,7 +14,7 @@
                     w = NULL, 
                     project=TRUE,
                     nsim=1, drop=TRUE, saveinfo=TRUE,
-                    verbose=TRUE, new.coef=NULL)
+                    verbose=TRUE, new.coef=NULL, newdata=NULL)
 }
 
 \arguments{
@@ -65,8 +65,11 @@
     New values for the canonical parameters of the model.
     A numeric vector of the same length as \code{coef(model)}.
   }
+  \item{newdata}{
+    List of pixel images, functions or numerical constants
+    to replace the \code{data} argument of the \code{model}.
+  }
 }
-
 \value{
   A point pattern (an object of class \code{"ppp"}; see
   \code{\link[spatstat.geom]{ppp.object}}) or a list of point patterns.
@@ -137,8 +140,9 @@
   Note that if you specify expansion of the simulation window
   using the parameter \code{expand} (so that the
   model will be simulated on a window larger than the original data
-  window) then the model must be capable of extrapolation to this
-  larger window. This is usually not possible for models which
+  window, reducing edge effects when simulating a Gibbs model)
+  then the model must be capable of extrapolation to this
+  larger window. This is usually not possible automatically for models which
   depend on external covariates, because the domain of a covariate image
   is usually the same as the domain of the fitted model.
   
@@ -153,7 +157,21 @@
   See \code{\link[spatstat.random]{rmh.default}} for further information about the
   implementation, or about the Metropolis-Hastings algorithm.
 }
-
+\section{Simulating a model on a different window}{
+  It is possible to simulate the \code{model} on a window that is
+  completely different from the original window (the window containing the data
+  to which the model was fitted). To do this, specify the argument
+  \code{w} as the window in which the simulated patterns should be
+  generated, as in \code{simulate(model, w=wsim)}.
+  If the model is stationary, then this is sufficient.
+  However if the model depends on spatial covariates, then the values of
+  these covariates inside the new simulation window will be required.
+  If the original covariates are functions, or pixel images that are
+  already defined on a region that includes the new simulation window, then no
+  further action is needed, and \code{simulate(model, w=wsim)} should
+  work. Otherwise, the values of the required covariates inside the new
+  simulation window should be supplied in the argument \code{newdata}.
+}
 \section{Warnings}{
   See Warnings in \code{\link[spatstat.random]{rmh.default}}.
 }

@@ -9,7 +9,7 @@
 \usage{
   \method{rmhmodel}{ppm}(model, w, ..., verbose=TRUE, project=TRUE,
                          control=rmhcontrol(),
-                         new.coef=NULL)
+                         new.coef=NULL, newdata=NULL)
 }
 \arguments{
   \item{model}{
@@ -32,6 +32,10 @@
   \item{new.coef}{
     New values for the canonical parameters of the model.
     A numeric vector of the same length as \code{coef(model)}.
+  }
+  \item{newdata}{
+    List of pixel images, functions or numerical constants
+    to replace the \code{data} argument of the \code{model}.
   }
 }
 \value{
@@ -83,6 +87,21 @@
     1}{gamma > 1} will be projected to a Strauss process with
   \eqn{\gamma = 1}{gamma = 1}, equivalent to a Poisson process.
 }  
+\section{Simulating a model on a different window}{
+  It is possible to simulate the \code{model} on a window that is
+  completely different from the original window (the window containing the data
+  to which the model was fitted). To do this, specify the argument
+  \code{w} as the window in which the simulated patterns should be
+  generated, as in \code{rmhmodel(model, w=wsim)}.
+  If the model is stationary, then this is sufficient.
+  However if the model depends on spatial covariates, then the values of
+  these covariates inside the new simulation window will be required.
+  If the original covariates are functions, or pixel images that are
+  already defined on a region that includes the new simulation window, then no
+  further action is needed, and \code{rmhmodel(model, w=wsim)} should
+  work. Otherwise, the values of the required covariates inside the new
+  simulation window should be supplied in the argument \code{newdata}.
+}
 \references{
    Diggle, P. J. (2003) \emph{Statistical Analysis of Spatial Point
    Patterns} (2nd ed.) Arnold, London.

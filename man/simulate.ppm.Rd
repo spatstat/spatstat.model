@@ -12,7 +12,7 @@
                          control = default.rmhcontrol(object, w=w),
                          w = window, 
                          window = NULL, 
-                         project=TRUE, new.coef=NULL,
+                         project=TRUE, new.coef=NULL, newdata=NULL, 
                          verbose=FALSE, progress=(nsim > 1),
                          drop=FALSE)
 }
@@ -28,7 +28,8 @@
     Logical. Whether to generate the simulated realisations
     from a single long run of the Metropolis-Hastings algorithm
     (\code{singlerun=TRUE}) or from separate, independent runs of the
-    algorithm (\code{singlerun=FALSE}, the default).
+    algorithm (\code{singlerun=FALSE}, the default). Ignored when the
+    model is a Poisson process.
   }
   \item{start}{Data determining the initial state
     of the Metropolis-Hastings algorithm.  See
@@ -42,7 +43,7 @@
     for description of these arguments.
   }
   \item{w, window}{
-    Optional. The window in which the model is defined.
+    Optional. The window in which the model should be simulated.
     An object of class \code{"owin"}.
   }
   \item{\dots}{
@@ -68,6 +69,10 @@
   \item{new.coef}{
     New values for the canonical parameters of the model.
     A numeric vector of the same length as \code{coef(object)}.
+  }
+  \item{newdata}{
+    List of pixel images, functions or numeric values
+    to replace the \code{data} argument of the original \code{object}.
   }
   \item{drop}{
     Logical. If \code{nsim=1} and \code{drop=TRUE}, the
@@ -104,10 +109,25 @@
 }
 \examples{
   \testonly{op <- spatstat.options(rmh.nrep=10)}
-  fit <- ppm(japanesepines, ~1, Strauss(0.1))
+  fit <- ppm(japanesepines ~1, Strauss(0.1))
   simulate(fit, 2)
   simulate(fit, 2, singlerun=TRUE, nsave=1e4, nburn=1e4)
   \testonly{spatstat.options(op)}
+}
+\section{Simulating a model on a different window}{
+  It is possible to simulate the model \code{object} on a window that is
+  different from the original window (the window containing the data
+  to which the model was fitted). To do this, specify the argument
+  \code{w} as the window in which the simulated patterns should be
+  generated, as in \code{simulate(object, w=wsim)}.
+  If the model is stationary, then this is sufficient.
+  However if the model depends on spatial covariates, then the values of
+  these covariates inside the new simulation window will be required.
+  If the original covariates are functions, or pixel images that are
+  defined on a region that includes the new simulation window, then no
+  further action is needed, and \code{simulate(object, w=wsim)} should
+  work. Otherwise, the values of the required covariates inside the new
+  simulation window should be supplied in the argument \code{newdata}.
 }
 \seealso{
   \code{\link{ppm}},
