@@ -6,7 +6,7 @@
 }
 \usage{
   \method{simulate}{kppm}(object, nsim = 1, seed=NULL, ...,
-         window=NULL, covariates=NULL,
+         w=window, window=NULL, covariates=NULL,
          n.cond = NULL, w.cond = NULL,
          verbose=TRUE, retry=10,
          drop=FALSE)
@@ -28,7 +28,7 @@
     Additional arguments passed to the relevant random generator.
     See Details.
   }
-  \item{window}{
+  \item{w, window}{
     Optional. Window (object of class \code{"owin"}) in which the
     model should be simulated.
   }
@@ -118,6 +118,22 @@
 
   The current code for simulating log-Gaussian Cox processes
   is a new implementation and should be considered vulnerable to new bugs. 
+}
+\section{Simulating a model on a different window}{
+  It is possible to simulate the model \code{object} on a window that is
+  different from the original window (the window containing the data
+  to which the model was fitted). To do this, specify the argument
+  \code{window} as the window in which the simulated patterns should be
+  generated, as in \code{simulate(object, window=wsim)}.
+  If the model is stationary, then this is sufficient.
+  However if the model depends on spatial covariates, then the values of
+  these covariates inside the new simulation window will be required.
+  If the original covariates are functions, or pixel images that are
+  defined on a region that includes the new simulation window, then no
+  further action is needed, and \code{simulate(object, window=wsim)} should
+  work. Otherwise, the values of the required covariates inside the new
+  simulation window should also be supplied,
+  using the argument \code{covariates}.
 }
 \examples{
   if(offline <- !interactive()) {

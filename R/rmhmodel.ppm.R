@@ -3,7 +3,7 @@
 #
 #   convert ppm object into format palatable to rmh.default
 #
-#  $Revision: 2.65 $   $Date: 2022/01/03 05:37:32 $
+#  $Revision: 2.67 $   $Date: 2025/09/19 04:44:21 $
 #
 #   .Spatstat.rmhinfo
 #   rmhmodel.ppm()
@@ -374,11 +374,32 @@ rmhmodel.ppm <- function(model, w, ...,
     ## all first order effects are subsumed in Z$trend
     beta <- if(!Y$marked) 1 else rep.int(1, length(Z$types))
     ## predict on window possibly larger than original data window
+    newcovariates <- if(newdata.given) covariates else NULL
     Z$trend <- 
       if(wsim$type == "mask")
-        predict(model, window=wsim, type="trend", locations=wsim)
+        predict(model, window=wsim, type="trend", locations=wsim,
+                covariates=newcovariates)
       else 
-        predict(model, window=wsim, type="trend")
+        predict(model, window=wsim, type="trend",
+                covariates=newcovariates)
+    ## check for substantial fraction of NA's
+    if(!Y$marked) {
+      Atrend <- area(as.owin(Z$trend))
+    } else {
+      Atrend <- mean(sapply(lapply(Z$trend, as.owin), area))
+    }
+    okfrac <- Atrend/area(wsim)
+    if(okfrac < 0.95) {
+      gripe <- paste("The model trend is undefined (NA) at",
+                     percentage(1 - okfrac),
+                     "of locations in the simulation window")
+      if(okfrac < 0.5) 
+        stop(gripe, call.=FALSE)
+      warning(paste(paste0(gripe, ";"),
+                    "simulations will be generated in a sub-window",
+                    "covering only", percentage(okfrac), "of the area"),
+              call.=FALSE)
+    }
   }
     
   Ncif <- length(Z$cif)

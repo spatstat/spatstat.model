@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 3.4-0.009
+        CHANGES IN spatstat.model VERSION 3.4-0.010
 
 OVERVIEW
 
@@ -25,6 +25,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o simulate.ppm, rmh.ppm, rmhmodel.ppm
     New argument 'newdata' allows the model to be simulated
     in a completely different window, or using different covariate values.
+    
+    o simulate.ppm, rmh.ppm, rmhmodel.ppm
+    A warning or error occurs if there are too many NA values
+    of the model trend in the desired window. 
     
 BUG FIXES
 

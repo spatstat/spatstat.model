@@ -6,7 +6,7 @@
 #'    $Revision: 1.14 $ $Date: 2025/05/22 05:25:49 $
 
 simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
-                          window=NULL, covariates=NULL,
+                          w=window, window=NULL, covariates=NULL,
                           n.cond=NULL, w.cond=NULL,
                           verbose=TRUE, retry=10,
                           drop=FALSE) {
@@ -30,9 +30,9 @@ simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
   
   ## ..................................
   ## determine window for simulation results
-  if(!is.null(window)) {
-    stopifnot(is.owin(window))
-    win <- window
+  if(w.given <- !is.null(w)) {
+    stopifnot(is.owin(w))
+    win <- w
   } else {
     win <- as.owin(object)
   }
@@ -57,7 +57,7 @@ simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
   # = parent intensity of cluster process
   # = mean log intensity of log-Gaussian Cox process
   
-  if(is.null(covariates) && (object$stationary || is.null(window))) {
+  if(is.null(covariates) && (object$stationary || !w.given)) {
     # use existing 'mu' (scalar or image)
     mu <- object$mu
   } else {

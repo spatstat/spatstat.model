@@ -214,7 +214,7 @@ local({
 #
 #  tests/rmh.ppm.R
 #
-#  $Revision: 1.5 $ $Date: 2020/05/01 05:29:42 $
+#  $Revision: 1.6 $ $Date: 2025/09/19 02:53:11 $
 #
 #  Examples removed from rmh.ppm.Rd
 #  stripped down to minimal tests of validity
@@ -277,7 +277,7 @@ local({
      fit <- ppm(X ~1, PairPiece(seq(0.02, 0.1, by=0.01)))
      Xsim <- rmh(fit)
    }
-   
+
    ## marked point pattern
    Y <- amacrine
 
@@ -327,6 +327,22 @@ local({
    spatstat.options(op)
  })
 
+local({
+  if(FULLTEST) {
+    ## Simulate a model on a completely different window
+    wleft <- owin(c(0, 300), c(0, 500))
+    wright <- owin(c(700, 1000), c(0, 500))
+    bleft <- bei[wleft]
+    bright <- bei[wright]
+    dleft <- solapply(bei.extra, "[", i=wleft)
+    dright <- solapply(bei.extra, "[", i=wright)
+    mleft <- ppm(bleft ~ elev, data=dleft)
+    mright <- ppm(bright ~ elev, data=dright)
+    ## simulate left model on right window
+    X <- simulate(mleft, w=wright, newdata=dright)
+    Y <- simulate(mright, new.coef=coef(mleft))
+  }
+})
 
 reset.spatstat.options()
 #'

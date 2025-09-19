@@ -15,7 +15,7 @@ cat(paste("--------- Executing",
 #
 # tests/kppm.R
 #
-# $Revision: 1.41 $ $Date: 2025/03/09 10:29:37 $
+# $Revision: 1.42 $ $Date: 2025/09/19 02:53:00 $
 #
 # Test functionality of kppm that once depended on RandomFields
 # Test update.kppm for old style kppm objects
@@ -256,6 +256,20 @@ local({
                    weightfun=NULL, rmax=0.1)
 })
 }
+
+local({
+  if(FULLTEST) {
+    ## Simulate a model on a completely different window
+    wleft <- owin(c(0, 300), c(0, 500))
+    wright <- owin(c(700, 1000), c(0, 500))
+    bleft <- bei[wleft]
+    dleft <- solapply(bei.extra, "[", i=wleft)
+    dright <- solapply(bei.extra, "[", i=wright)
+    mleft <- kppm(bleft ~ elev, data=dleft)
+    ## simulate left model on right window
+    X <- simulate(mleft, w=wright, covariates=dright)
+  }
+})
 
 reset.spatstat.options()
   
