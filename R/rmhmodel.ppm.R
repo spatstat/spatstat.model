@@ -3,7 +3,7 @@
 #
 #   convert ppm object into format palatable to rmh.default
 #
-#  $Revision: 2.67 $   $Date: 2025/09/19 04:44:21 $
+#  $Revision: 2.68 $   $Date: 2025/09/28 04:01:23 $
 #
 #   .Spatstat.rmhinfo
 #   rmhmodel.ppm()
@@ -382,23 +382,25 @@ rmhmodel.ppm <- function(model, w, ...,
       else 
         predict(model, window=wsim, type="trend",
                 covariates=newcovariates)
-    ## check for substantial fraction of NA's
-    if(!Y$marked) {
-      Atrend <- area(as.owin(Z$trend))
-    } else {
-      Atrend <- mean(sapply(lapply(Z$trend, as.owin), area))
-    }
-    okfrac <- Atrend/area(wsim)
-    if(okfrac < 0.95) {
-      gripe <- paste("The model trend is undefined (NA) at",
-                     percentage(1 - okfrac),
-                     "of locations in the simulation window")
-      if(okfrac < 0.5) 
-        stop(gripe, call.=FALSE)
-      warning(paste(paste0(gripe, ";"),
-                    "simulations will be generated in a sub-window",
-                    "covering only", percentage(okfrac), "of the area"),
-              call.=FALSE)
+    if(newdata.given) {
+      ## check for substantial fraction of NA's
+      if(!Y$marked) {
+        Atrend <- area(as.owin(Z$trend))
+      } else {
+        Atrend <- mean(sapply(lapply(Z$trend, as.owin), area))
+      }
+      okfrac <- Atrend/area(wsim)
+      if(okfrac < 0.95) {
+        gripe <- paste("The model trend is undefined (NA) at",
+                       percentage(1 - okfrac),
+                       "of locations in the simulation window")
+        if(okfrac < 0.5) 
+          stop(gripe, call.=FALSE)
+        warning(paste(paste0(gripe, ";"),
+                      "simulations will be generated in a sub-window",
+                      "covering only", percentage(okfrac), "of the area"),
+                call.=FALSE)
+      }
     }
   }
     
