@@ -978,7 +978,7 @@ bt.frame <- function(Q, trend=~1, interaction=NULL,
                      correction=correction, rbord=rbord,
                      use.gam=use.gam, allcovar=allcovar,
                      preponly=TRUE, forcefit=TRUE)
-  class(prep) <- c("bt.frame", class(prep))
+  class(prep) <- unique(c("bt.frame", class(prep)))
   return(prep)
 }
 

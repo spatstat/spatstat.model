@@ -211,7 +211,7 @@ kppm.ppp <- kppm.quad <-
                           callstring=callstring))
   # Detect DPPs
   DPP <- list(...)$DPP
-  class(out) <- c(ifelse(is.null(DPP), "kppm", "dppm"), class(out))
+  class(out) <- unique(c(ifelse(is.null(DPP), "kppm", "dppm"), class(out)))
 
   # Update intensity estimate with improve.kppm if necessary:
   if(improve.type != "none")

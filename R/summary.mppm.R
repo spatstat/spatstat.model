@@ -182,7 +182,7 @@ summary.mppm <- function(object, ..., brief=FALSE) {
 
   y$iprint <- iprint
 
-  class(y) <- c("summary.mppm", class(list))
+  class(y) <- unique(c("summary.mppm", class(y)))
   return(y)
 }
 

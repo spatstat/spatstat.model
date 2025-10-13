@@ -13,7 +13,7 @@
 
 intermaker <- function(f, blank) {
   # f is the creator function like 'Strauss'
-  class(f) <- c("intermaker", class(f))
+  class(f) <- unique(c("intermaker", class(f)))
   # blank is the prototype interaction object: extract some fields
   desired <- c("creator", "name", "par", "parnames", "pardesc")
   avail <- desired[desired %in% names(blank)]

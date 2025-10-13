@@ -379,7 +379,7 @@ summary.slrm <- function(object, ...) {
                               CI95.hi  = hi,
                               Ztest    = psig,
                               Zval     = zval)
-  class(y) <- c(class(y), "summary.slrm")
+  class(y) <- unique(c("summary.slrm", class(y)))
   return(y)
 }
 

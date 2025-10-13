@@ -504,7 +504,7 @@ parres <- function(model, covariate, ...,
   attr(rslt, "dotnames") <- c("h", "hi", "lo", "fit")
   fvnames(rslt, ".s") <- c("hi", "lo")
   # add special class data
-  class(rslt) <- c("parres", class(rslt))
+  class(rslt) <- unique(c("parres", class(rslt)))
   attr(rslt, "stuff") <- list(covname       = paste(covname, collapse=""),
                               covtype       = covtype,
                               mediator      = mediator,

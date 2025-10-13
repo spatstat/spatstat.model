@@ -272,7 +272,7 @@ qqplot.ppm <- local({
     if(fast)
       spatstat.options(npixel=oldnpixel)
     ##
-    class(result) <- c("qqppm", class(result))
+    class(result) <- unique(c("qqppm", class(result)))
     return(invisible(result))
   }
 
