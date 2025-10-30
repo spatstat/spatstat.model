@@ -7,7 +7,7 @@
 }
 \usage{
 slrm(formula, ..., data = NULL, offset = TRUE, link = "logit",
-                   dataAtPoints=NULL, splitby=NULL)
+                   ruleAtPoints=c("s", "r"), dataAtPoints=NULL, splitby=NULL)
 }
 \arguments{
   \item{formula}{The model formula. See Details.}
@@ -30,6 +30,11 @@ slrm(formula, ..., data = NULL, offset = TRUE, link = "logit",
   \item{link}{The link function for the regression model.
     A character string, specifying a link function
     for binary regression.
+  }
+  \item{ruleAtPoints}{
+    Rule for obtaining covariate data at the observed point locations.
+    See Details.
+    Ignored if \code{dataAtPoints} is given.
   }
   \item{dataAtPoints}{Optional.
     Exact values of the covariates at the data points.
@@ -80,7 +85,10 @@ slrm(formula, ..., data = NULL, offset = TRUE, link = "logit",
     window and \code{FALSE} outside it;
     \item a \code{function} in the \R language, with arguments
     \code{x,y}, which can be evaluated at any location to
-    obtain the values of a covariate.
+    obtain the values of a covariate;
+    \item a tessellation (object of class \code{"tess"}), which will be
+    interpreted as a factor-valued covariate, with each level of the
+    factor associated with a tile of the tessellation.
   }
   See the Examples below.
 
@@ -104,12 +112,9 @@ slrm(formula, ..., data = NULL, offset = TRUE, link = "logit",
     \code{spatstat.options("npixel")}.
   }
 
-  The covariates are evaluated at the centre of each pixel.
-  If \code{dataAtPoints} is given, then 
-  the covariate values at the corresponding pixels
-  are overwritten by the entries of \code{dataAtPoints}
-  (and the spatial coordinates are overwritten by the exact spatial
-  coordinates of the data points).
+  The covariates mentioned in the right hand side of the model formula
+  are evaluated at each pixel, as described in the section on
+  \emph{Discretisation rule}.
   
   If \code{link="logit"} (the default), the algorithm fits a Spatial Logistic
   Regression model. This model states that the probability
@@ -129,6 +134,61 @@ slrm(formula, ..., data = NULL, offset = TRUE, link = "logit",
   approximately independent of pixel size.
   If \code{offset=FALSE}, the offset is not included, and the
   traditional form of Spatial Logistic Regression is fitted.
+}
+\section{Discretisation rule}{
+  Results depend on the rule used to convert continuous vector data
+  to pixel data.
+  
+  The model-fitting procedure requires the values of the covariates
+  mentioned on the right hand side of the model formula,
+  evaluated for each pixel.
+
+  Covariates are initially evaluated at the centre of each pixel.
+
+  For pixels which contain a point of the spatial point pattern,
+  the covariate values will be updated if 
+  one of the arguments \code{dataAtPoints} or \code{ruleAtPoints}
+  is given:
+  \itemize{
+    \item 
+    If \code{dataAtPoints} is given, then 
+    the covariate values for pixels which contain a point of the
+    spatial point pattern will be determined by the entries of
+    \code{dataAtPoints}
+    (and the spatial coordinates \code{x} and \code{y}
+    are overwritten by the exact spatial
+    coordinates of the data points).
+    \item
+    If \code{dataAtPoints} is not given, but \code{ruleAtPoints="r"} is
+    specified, then the covariate values for pixels which contain a
+    point of the spatial point pattern are determined by evaluating the
+    covariate at the exact spatial coordinates of the data points.
+    This is called rule R in Baddeley et al (2025).
+    \item
+    If \code{dataAtPoints} is not given and \code{ruleAtPoints="s"}
+    (the defaults), covariate values for all pixels are evaluated
+    at the centre of each pixel, and there is no special treatment
+    of pixels which contain points of the spatial point pattern.
+    This is called rule S in Baddeley et al (2025) and is the
+    standard practice in many software packages.
+  }
+  Rule S and rule R are different if one of the covariates is
+  either a \code{function(x,y)},
+  a polygonal window (object of class \code{"owin"}
+  representing a polygon or rectangle), or a polygonal tessellation
+  (object of class \code{"tess"} whose tiles are polygons or
+  rectangles). In any of these cases, 
+  the exact spatial location of a data point
+  and the centre of the pixel that contains the data point
+  may yield different values of the covariate.
+  For a covariate which is a polygonal window or polygonal tessellation,
+  the discrepancy is enough to cause instability to changes in
+  pixel size when rule S is used, and we recommend rule R in these
+  cases (Baddeley et al 2025).
+
+  The best possible stability against
+  changes in pixel size is achieved by setting \code{ruleAtPoints="r"},
+  \code{link="cloglog"} and \code{offset=TRUE}.
 }
 \value{
   An object of class \code{"slrm"} representing the fitted model.
@@ -156,6 +216,12 @@ slrm(formula, ..., data = NULL, offset = TRUE, link = "logit",
   mineral exploration.
   \emph{Journal of the International Association for Mathematical Geology}
   \bold{6}, 373--395.
+
+  Baddeley, A., Brown, W., Nair, G.M., Milne, R.K., Rakshit, S. and Fu, S.C.
+  (2025)
+  Mineral prospectivity analysis is unstable to changes in pixel size.
+  \emph{Computers and Geosciences}, 105965.
+  \code{DOI: 10.1016/j.cageo.2025.105965}.
 
   Baddeley, A., Berman, M., Fisher, N.I., Hardegen, A., Milne, R.K.,
   Schuhmacher, D., Shah, R. and Turner, R. (2010)
@@ -190,12 +256,14 @@ if(offline <- !interactive()) op <- spatstat.options(npixel=32)
      mur <- solapply(murchison, rescale, s=1000, unitname="km")
      mur$dfault <- distfun(mur$faults)
      slrm(gold ~ dfault, data=mur)
+     slrm(gold ~ dfault, data=mur, ruleAtPoints="r")
      slrm(gold ~ dfault + greenstone, data=mur)
      slrm(gold ~ dfault, data=mur, splitby="greenstone")
 
 if(offline) spatstat.options(op)
 }
-\author{\adrian
+\author{
+  \adrian
   and \rolf.
 }
 \keyword{spatial}

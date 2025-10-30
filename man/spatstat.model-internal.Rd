@@ -511,7 +511,7 @@ safePositiveValue(x, default)
 \method{shift}{msr}(X, \dots)
 signalStatus(x, errors.only)
 \method{simulate}{profilepl}(object, \dots)
-slr.prepare(CallInfo, envir, data, dataAtPoints, splitby, clip)
+slr.prepare(CallInfo, envir, data, ruleAtPoints, dataAtPoints, splitby, clip)
 slrAssemblePixelData(Y, Yname, W, covimages, dataAtPoints, pixelarea)
 slrmInfluence(model, what, \dots)
 \method{spatialCovariateEvidence}{ppm}(model, covariate, \dots, lambdatype,

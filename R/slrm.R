@@ -3,10 +3,11 @@
 #
 #  Spatial Logistic Regression
 #
-#  $Revision: 1.68 $   $Date: 2025/09/11 04:01:17 $
+#  $Revision: 1.70 $   $Date: 2025/10/30 02:47:04 $
 #
 
 slrm <- function(formula, ..., data=NULL, offset=TRUE, link="logit",
+                 ruleAtPoints=c("s", "r"),
                  dataAtPoints=NULL, splitby=NULL) {
   
   # remember call
@@ -19,6 +20,8 @@ slrm <- function(formula, ..., data=NULL, offset=TRUE, link="logit",
                    dotargs=list(...))
   if(!(link %in% c("logit", "cloglog")))
     stop(paste("Unrecognised link", dQuote(link)))
+
+  ruleAtPoints <- match.arg(ruleAtPoints)
 
   ########### INTERPRET FORMULA ##############################
   
@@ -59,7 +62,8 @@ slrm <- function(formula, ..., data=NULL, offset=TRUE, link="logit",
 
   ########  FIND DATA AND RESHAPE #######################
 
-  Data <- slr.prepare(CallInfo, parenv, data, dataAtPoints, splitby)
+  Data <- slr.prepare(CallInfo, parenv, data,
+                      ruleAtPoints, dataAtPoints, splitby)
 
   if(is.NAobject(Data)) return(NAobject("slrm"))
   
@@ -97,8 +101,10 @@ slrm <- function(formula, ..., data=NULL, offset=TRUE, link="logit",
 slr.prepare <- local({
 
   slr.prepare <- function(CallInfo, envir, data,
-                        dataAtPoints=NULL, splitby=NULL,
-                        clip=TRUE) {
+                          ruleAtPoints = c("s", "r"),
+                          dataAtPoints = NULL,
+                          splitby=NULL,
+                          clip=TRUE) {
     ## CallInfo is produced by slrm()
     ## envir is parent environment of model formula
     ## data  is 'data' argument that takes precedence over 'envir'
@@ -113,18 +119,13 @@ slr.prepare <- local({
     if(is.NAobject(Y)) return(NAobject("list"))
     if(!is.ppp(Y))
       stop(paste("The response", sQuote(Yname), "must be a point pattern"))
-    ##
-    if(!is.null(dataAtPoints)) {
-      dataAtPoints <- as.data.frame(dataAtPoints)
-      if(nrow(dataAtPoints) != npoints(Y))
-        stop(paste("dataAtPoints should have one row for each point in",
-                   dQuote(Yname)))
-    }
+    
     ## Find the covariates
     ncov <- length(covnames)
     covlist <- lapply(as.list(covnames), getobj, env = envir, dat=data)
     names(covlist) <- covnames
-    ## Each covariate should be an image, a window, a function, or single number
+    ## Each covariate should be an image, window, tessellation, function,
+    ## or single number
     if(ncov == 0) {
       isim <- isowin <- ismask <- isfun <- isnum <-
         isspatial <- israster <- logical(0)
@@ -133,21 +134,25 @@ slr.prepare <- local({
       isowin  <- sapply(covlist, is.owin)
       ismask  <- sapply(covlist, is.mask)
       isfun  <- sapply(covlist, is.function)
-      isspatial <- isim | isowin | isfun
-      israster <- isim | ismask
+      istes  <- sapply(covlist, is.tess)
+      isimtes <- sapply(covlist, isImageTess)
+      isspatial <- isim | isowin | isfun | istes
+      israster <- isim | ismask | isimtes
       isnum <- sapply(covlist, is.numeric) & (lengths(covlist) == 1)
     }
     if(!all(ok <- (isspatial | isnum))) {
       n <- sum(!ok)
       stop(paste(ngettext(n, "The argument", "Each of the arguments"),
                  commasep(sQuote(covnames[!ok])),
-                 "should be either an image, a window, or a single number"))
+                 "should be either an image, a function, a window,",
+                 "a tessellation, or a single number"),
+           call.=FALSE)
     }
     ## 'splitby' 
     if(!is.null(splitby)) {
       splitwin <- covlist[[splitby]]
       if(!is.owin(splitwin))
-        stop("The splitting covariate must be a window")
+        stop("The splitting covariate must be a window", call.=FALSE)
       ## ensure it is a polygonal window
       covlist[[splitby]] <- splitwin <- as.polygonal(splitwin)
       ## delete splitting covariate from lists to be processed
@@ -168,7 +173,22 @@ slr.prepare <- local({
     spatialnames <- names(spatiallist)
     ##  rasternames <- names(rasterlist)
     ##
-  
+
+    ########  EXTRACT DATA AT POINT LOCATIONS #######################
+
+    ruleAtPoints <- match.arg(ruleAtPoints)
+
+    if(!is.null(dataAtPoints)) {
+      ## data at point locations are given; override 'ruleAtPoints'
+      dataAtPoints <- as.data.frame(dataAtPoints)
+      if(nrow(dataAtPoints) != npoints(Y))
+        stop(paste("dataAtPoints should have one row for each point in",
+                   dQuote(Yname)))
+    } else if(ruleAtPoints == "r") {
+      dataAtPoints <- as.data.frame(lapply(covlist, evaluateAtPoints, Y=Y))
+      dataAtPoints <- cbind(coords(Y), dataAtPoints)
+    }
+    
     ########  CONVERT TO RASTER DATA  ###############################
 
     ## determine spatial domain & common resolution: convert all data to it
@@ -183,9 +203,9 @@ slr.prepare <- local({
         D <- do.call(union.owin, domains)
       }
       ## Create template mask
-      W <- do.call.matched(as.mask, append(list(w=D), dotargs))
+      W <- do.call(AsMaskInternal, append(list(w=D), dotargs))
       ## Convert all spatial objects to this resolution
-      spatiallist <- lapply(spatiallist, convert, W=W)
+      spatiallist <- lapply(spatiallist, convertToImage, W=W, dotargs=dotargs)
     } else {
       ## Pixel resolution is determined implicitly by covariate data
       W <- do.call(commonGrid, rasterlist)
@@ -194,7 +214,7 @@ slr.prepare <- local({
         W <- intersect.owin(W, as.owin(Y))
       }
       ## Adjust spatial objects to this resolution
-      spatiallist <- lapply(spatiallist, convert, W=W)
+      spatiallist <- lapply(spatiallist, convertToImage, W=W)
     }
     ## images containing coordinate values
     xcoordim <- as.im(function(x,y){x}, W=W)
@@ -262,12 +282,30 @@ slr.prepare <- local({
     else return(get(nama, envir=env))
   }
 
-  convert <- function(x,W) {
-    if(is.im(x) || is.function(x)) return(as.im(x,W))
-    if(is.owin(x)) return(as.im(x, W, value=TRUE, na.replace=FALSE))
+  convertToImage <- function(x,W,dotargs) {
+    if(is.im(x) || is.function(x) || is.tess(x)) return(as.im(x,W))
+    if(is.owin(x)) {
+      if(!is.mask(x)) x <- do.call(owin2mask, append(list(W=x), dotargs))
+      return(as.im(x, W, value=TRUE, na.replace=FALSE))
+    }
     return(NULL)
   }
 
+  isImageTess <- function(x) { is.tess(x) && (x$type == "image") }
+
+  evaluateAtPoints <- function(f, Y) {
+    if(is.function(f)) return(f(Y))
+    if(is.im(f)) return(f[Y, drop=FALSE])
+    if(is.owin(f)) return(inside.owin(Y, w=f))
+    if(is.numeric(f) && length(f) == 1) return(rep(f, npoints(Y)))
+    if(is.tess(f)) {
+      z <- tileindex(Y, Z=f)
+      z <- factor(z, levels=seq_len(nobjects(f)), labels=tilenames(f))
+      return(z)
+    }
+    return(NULL)
+  }
+  
   slr.prepare
 })
 
