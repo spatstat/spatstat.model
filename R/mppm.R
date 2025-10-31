@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.111 $   $Date: 2025/09/14 03:14:03 $
+#  $Revision: 1.112 $   $Date: 2025/10/31 01:59:45 $
 #
 
 mppm <- local({
@@ -162,23 +162,18 @@ mppm <- local({
     used.cov.names <- allvars[allvars %in% datanames]
     has.covar <- (length(used.cov.names) > 0) 
     if(has.covar) {
-      dfvar <- used.cov.names %in% data.sumry$dfnames
-      imvar <- data.sumry$types[used.cov.names] == "im"
-      if(any(nbg <- !(dfvar | imvar)))
-        stop(paste("Inappropriate format for",
-                   ngettext(sum(nbg), "covariate", "covariates"),
-                   paste(sQuote(used.cov.names[nbg]), collapse=", "),
-                   ": should contain image objects or vector/factor"))
+      ## extract hyperframe of covariates only
       covariates.hf <- data[, used.cov.names, drop=FALSE]
-      has.design <- any(dfvar)
+      ## check covariates in data frame: vectors/factors
+      dfvar <- used.cov.names %in% data.sumry$dfnames
       dfvarnames <- used.cov.names[dfvar]
+      has.design <- any(dfvar)
       datadf <-
         if(has.design)
           as.data.frame(covariates.hf, discard=TRUE, warn=FALSE)
         else NULL
       if(has.design) {
         ## check for NA's in design covariates
-#        if(any(nbg <- apply(is.na(datadf), 2, any)))
         if(any(nbg <- matcolany(is.na(datadf))))
           stop(paste("There are NA's in the",
                      ngettext(sum(nbg), "covariate", "covariates"),
