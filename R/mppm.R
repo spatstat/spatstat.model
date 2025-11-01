@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.112 $   $Date: 2025/10/31 01:59:45 $
+#  $Revision: 1.113 $   $Date: 2025/11/01 10:13:12 $
 #
 
 mppm <- local({
@@ -164,7 +164,7 @@ mppm <- local({
     if(has.covar) {
       ## extract hyperframe of covariates only
       covariates.hf <- data[, used.cov.names, drop=FALSE]
-      ## check covariates in data frame: vectors/factors
+      ## covariates in data frame: vectors/factors
       dfvar <- used.cov.names %in% data.sumry$dfnames
       dfvarnames <- used.cov.names[dfvar]
       has.design <- any(dfvar)
@@ -172,12 +172,17 @@ mppm <- local({
         if(has.design)
           as.data.frame(covariates.hf, discard=TRUE, warn=FALSE)
         else NULL
-      if(has.design) {
-        ## check for NA's in design covariates
-        if(any(nbg <- matcolany(is.na(datadf))))
-          stop(paste("There are NA's in the",
-                     ngettext(sum(nbg), "covariate", "covariates"),
-                     commasep(dQuote(names(datadf)[nbg]))))
+      ## check classes of spatial covariates
+      varclass <- data.sumry$classes[used.cov.names]
+      known <- dfvar | (varclass %in% c("im", "owin", "tess", "function"))
+      ## Provisionally allow classes ending in 'fun' such as 'distfun'
+      ## They will be checked in mpl.get.covariates
+      known <- known | grepl("fun$", varclass)
+      if(!all(known)) {
+        warning(paste("Unrecognised format for",
+                      ngettext(sum(!known), "covariate", "covariates"),
+                      commasep(sQuote(used.cov.names[!known]))),
+                call.=FALSE)
       }
     } else {
       has.design <- FALSE
