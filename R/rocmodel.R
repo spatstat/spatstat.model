@@ -20,21 +20,21 @@ roc.ppm <- roc.kppm <- roc.slrm <-
            leaveoneout=FALSE, subset=NULL) {
   model <- X
   X <- response(model)
-  leaveoneout <- as.logical(leaveoneout)
+  leaveoneout <- unique(as.logical(leaveoneout))
+  meantype <- if(is.slrm(model)) "probabilities" else "trend"
   if(traditional <- is.null(covariate)) {
     #' discriminant is the fitted model intensity or presence probability
-    predtype <- if(is.slrm(model)) "probabilities" else "trend"
+    covtype <- if(is.slrm(model)) "probability" else "intensity"
     covariate <- do.call.matched(predict,
-                                 list(object=model, type=predtype, ...),
+                                 list(object=model, type=meantype, ...),
                                  c("object", "type",
                                    "ngrid", "dimyx", "eps",
                                    "correction", "new.coef"))
-    covtype <- if(is.slrm(model)) "probability" else "intensity"
   } else {
     #' discriminant is a user-specified covariate
+    covtype <- "covariate"
     covariate <- digestCovariates(covariate, W=Window(model))
     if(length(covariate) == 1) covariate <- covariate[[1L]]
-    covtype <- "covariate"
     if(any(leaveoneout)) {
       warning("Argument leaveoneout=TRUE ignored because covariate is provided",
               call.=FALSE)
@@ -51,10 +51,10 @@ roc.ppm <- roc.kppm <- roc.slrm <-
                        CI=CI, alpha=alpha, subset=subset)
   } else {
     nullmodel <- resolveNullModel(baseline, model)
-    ## leaveoneout can be TRUE, FALSE or c(TRUE, FALSE)
+    ## leaveoneout can be TRUE, FALSE or c(TRUE, FALSE) or c(FALSE,TRUE)
     if(any(leaveoneout)) {
       ## calculate leave-one-out estimate
-      fittedX <- fitted(model, dataonly=TRUE, leaveoneout=TRUE, type=predtype)
+      fittedX <- fitted(model, dataonly=TRUE, leaveoneout=TRUE, type=meantype)
       Rminus <- rocEngine(covariate, nullmodel, method = method,
                           covtype = covtype,
                           fittedmodel = if(traditional) NULL else model,
@@ -63,6 +63,7 @@ roc.ppm <- roc.kppm <- roc.slrm <-
                           high=high,
                           CI = CI, alpha=alpha,
                           subset=subset,
+                          lambdatype=meantype, # for prediction from null model
                           ...)
     } else {
       Rminus <- NULL
@@ -76,6 +77,7 @@ roc.ppm <- roc.kppm <- roc.slrm <-
                          high=high,
                          CI = CI, alpha=alpha,
                          subset=subset,
+                         lambdatype=meantype, # for prediction from null model
                          ...)
     } else {
       Rplus <- NULL
