@@ -3,7 +3,7 @@
 #
 #  Spatial Logistic Regression
 #
-#  $Revision: 1.70 $   $Date: 2025/10/30 02:47:04 $
+#  $Revision: 1.71 $   $Date: 2025/11/07 02:29:27 $
 #
 
 slrm <- function(formula, ..., data=NULL, offset=TRUE, link="logit",
@@ -492,7 +492,7 @@ fitted.slrm <- function(object, ..., type="probabilities",
   ZX <- numeric(nX)
   for(i in seq_len(nX)) {
     model.i <- updateData(object, X[-i])
-    Z.i <- predict(model.i)
+    Z.i <- predict(model.i, type=type)
     ZX[i] <- safelookup(Z.i, X[i])
   }
   return(ZX)

@@ -20,20 +20,26 @@ roc.ppm <- roc.kppm <- roc.slrm <-
            leaveoneout=FALSE, subset=NULL) {
   model <- X
   X <- response(model)
-  traditional <- is.null(covariate)
-  lambda <- do.call.matched(predict,
-                            list(object=model, ...),
-                            c("object", "ngrid", "dimyx", "eps",
-                              "correction", "new.coef"))
-  if(traditional) {
-    #' discriminant is the predicted intensity
-    covariate <- lambda
+  leaveoneout <- as.logical(leaveoneout)
+  if(traditional <- is.null(covariate)) {
+    #' discriminant is the fitted model intensity or presence probability
+    predtype <- if(is.slrm(model)) "probabilities" else "trend"
+    covariate <- do.call.matched(predict,
+                                 list(object=model, type=predtype, ...),
+                                 c("object", "type",
+                                   "ngrid", "dimyx", "eps",
+                                   "correction", "new.coef"))
     covtype <- if(is.slrm(model)) "probability" else "intensity"
   } else {
     #' discriminant is a user-specified covariate
     covariate <- digestCovariates(covariate, W=Window(model))
     if(length(covariate) == 1) covariate <- covariate[[1L]]
     covtype <- "covariate"
+    if(any(leaveoneout)) {
+      warning("Argument leaveoneout=TRUE ignored because covariate is provided",
+              call.=FALSE)
+      leaveoneout <- FALSE
+    }
   }
   if(is.ppp(baseline) || is.lpp(baseline)) {
     if(is.slrm(model) && is.null(model$Data$dataAtPoints)) {
@@ -45,10 +51,10 @@ roc.ppm <- roc.kppm <- roc.slrm <-
                        CI=CI, alpha=alpha, subset=subset)
   } else {
     nullmodel <- resolveNullModel(baseline, model)
-    leaveoneout <- if(!traditional) FALSE else as.logical(leaveoneout)
     ## leaveoneout can be TRUE, FALSE or c(TRUE, FALSE)
     if(any(leaveoneout)) {
-      fittedX <- fitted(model, dataonly=TRUE, leaveoneout=TRUE)
+      ## calculate leave-one-out estimate
+      fittedX <- fitted(model, dataonly=TRUE, leaveoneout=TRUE, type=predtype)
       Rminus <- rocEngine(covariate, nullmodel, method = method,
                           covtype = covtype,
                           fittedmodel = if(traditional) NULL else model,
@@ -62,6 +68,7 @@ roc.ppm <- roc.kppm <- roc.slrm <-
       Rminus <- NULL
     }
     if(any(!leaveoneout)) {
+      ## calculate vanilla estimate
       Rplus <- rocEngine(covariate, nullmodel, method = method,
                          covtype = covtype,
                          fittedmodel = if(traditional) NULL else model,

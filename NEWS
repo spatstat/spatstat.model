@@ -1,11 +1,11 @@
 
-        CHANGES IN spatstat.model VERSION 3.4-2.005
+        CHANGES IN spatstat.model VERSION 3.4-2.006
 
 OVERVIEW
 
     o 'slrm' supports different discretisation rules.
     
-    o Minor fixes and internal improvements.
+    o Bug fixes and internal improvements.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -16,6 +16,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Arguments '...' are now passed to 'owin2mask' to determine the
     polygon-to-raster discretisation rule for a covariate of class 'owin'.
 
+BUG FIXES
+
+    o fitted.slrm
+    Calculation was incorrect when leaveoneout=TRUE and type != "intensity".
+    Fixed.
+    
         CHANGES IN spatstat.model VERSION 3.4-2
 
 OVERVIEW
