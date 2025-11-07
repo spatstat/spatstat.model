@@ -1,11 +1,11 @@
 
-        CHANGES IN spatstat.model VERSION 3.4-2.004
+        CHANGES IN spatstat.model VERSION 3.4-2.005
 
 OVERVIEW
 
     o 'slrm' supports different discretisation rules.
     
-    o Minor fixes.
+    o Minor fixes and internal improvements.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

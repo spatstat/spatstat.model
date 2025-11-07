@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.113 $   $Date: 2025/11/01 10:13:12 $
+#  $Revision: 1.115 $   $Date: 2025/11/07 00:22:34 $
 #
 
 mppm <- local({
@@ -174,15 +174,18 @@ mppm <- local({
         else NULL
       ## check classes of spatial covariates
       varclass <- data.sumry$classes[used.cov.names]
-      known <- dfvar | (varclass %in% c("im", "owin", "tess", "function"))
-      ## Provisionally allow classes ending in 'fun' such as 'distfun'
-      ## They will be checked in mpl.get.covariates
-      known <- known | grepl("fun$", varclass)
+      known <- dfvar | (varclass %in% c("im", "owin", "tess"))
       if(!all(known)) {
-        warning(paste("Unrecognised format for",
-                      ngettext(sum(!known), "covariate", "covariates"),
-                      commasep(sQuote(used.cov.names[!known]))),
-                call.=FALSE)
+        ## catch distfun, linim etc
+        isfun <- sapply(as.list(covariates.hf), AllInherit, what="function")
+        isim  <- sapply(as.list(covariates.hf), AllInherit, what="im")
+        known <- known | isfun | isim
+        if(!all(known)) {
+          warning(paste("Unrecognised format for",
+                        ngettext(sum(!known), "covariate", "covariates"),
+                        commasep(sQuote(used.cov.names[!known]))),
+                  call.=FALSE)
+        }
       }
     } else {
       has.design <- FALSE
@@ -563,7 +566,8 @@ mppm <- local({
     if(missing(quad.args)) quadscheme(data, ...) else do.call(quadscheme, append(list(data, ...), quad.args))
   }
 
-  
+  AllInherit <- function(x, what) { all(sapply(x, inherits, what=what)) }
+    
   mppm
 })
 
