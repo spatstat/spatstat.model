@@ -8,7 +8,7 @@
 ## Copyright (c) 2017-2025 Adrian Baddeley/Ege Rubak/Rolf Turner
 ##
 ##
-## Source file roc.R      $Revision$ $Date$
+## Source file roc.R      $Revision: 1.9 $ $Date: 2025/11/08 08:46:25 $
 ## ..................................................................
 
 
