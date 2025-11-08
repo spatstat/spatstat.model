@@ -12,7 +12,8 @@
 }
 \usage{
  \method{predict}{slrm}(object, ..., type = "intensity",
-                        newdata=NULL, window=NULL)
+                        newdata=NULL, window=NULL,
+                        leaveoneout=FALSE, fast=TRUE)
 }
 \arguments{
   \item{object}{
@@ -36,6 +37,16 @@
     Optional.  New window in which to predict.
     An object of class \code{"owin"}.
   }
+  \item{leaveoneout}{
+    Logical value specifying whether to use leave-one-out prediction.
+    Ignored if \code{newdata}, \code{window} or \code{\dots} are given.
+  }
+  \item{fast}{
+    Logical value indicating whether leave-one-out prediction
+    should be performed using the leverage (Taylor) approximation
+    (\code{fast=TRUE}, the default) or using brute force computation
+    (\code{fast=FALSE}). The leverage approximation is very much faster.
+  }
 }
 \details{
   This is a method for \code{\link[stats]{predict}} for spatial logistic
@@ -53,13 +64,27 @@
   fitted values of the model (based on the data that was originally used
   to fit the model \code{object}). 
 
+  If \code{leaveoneout=TRUE}, the fitted values are computed using the
+  leave-one-out rule. To compute the fitted value at each pixel
+  \code{j},
+  \itemize{
+    \item the model \code{object} is updated by re-fitting it to
+    the dataset \emph{excluding} the data inside pixel \code{j};
+    \item the predicted value at pixel \code{j} is computed from
+    this updated model.
+  }
+
   If \code{newdata} is given, the algorithm computes predicted values
   of the model, using the new values of the covariates provided by
   \code{newdata}. The argument \code{newdata} should be a list;
   names of entries in the list should correspond
   to variables appearing in the model formula of the \code{object}.
   Each list entry may be a pixel image or a single numeric
-  value. 
+  value.
+
+  The argument \code{leaveoneout} is ignored if \code{newdata}
+  or \code{window} are given, or if arguments \code{\dots} specify
+  a change of pixel resolution.
 }
 \value{
   A pixel image (object of class \code{"im"}) containing the predicted
@@ -76,14 +101,15 @@
   X <- copper$SouthPoints
   Y <- copper$SouthLines
   Z <- distmap(Y)
-  fitc <- slrm(X ~ Z)
+  fitc <- slrm(X ~ Z, eps=1)
   pc <- predict(fitc)
+  pcminus <- predict(fitc, leaveoneout=TRUE)
 
   Znew <- distmap(copper$Lines)[copper$SouthWindow]
   pcnew <- predict(fitc, newdata=list(Z=Znew))
 }
-\author{\adrian
-  and \rolf
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{models}

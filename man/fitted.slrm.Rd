@@ -27,16 +27,14 @@
     determining the quantity that should be predicted.
   }
   \item{dataonly}{
-    Logical. If \code{TRUE}, then values will only be computed
+    Logical. If \code{TRUE}, then values will be computed
     at the points of the data point pattern. If \code{FALSE}, then
     values will be computed at the pixels used to fit the model.
   }
   \item{leaveoneout}{
     Logical value
-    specifying whether to perform a leave-one-out calculation
-    when \code{dataonly=TRUE}. If \code{leaveoneout=TRUE},
-    the fitted value at each data point \code{X[i]} is calculated
-    by re-fitting the model to the data with \code{X[i]} removed.
+    specifying whether to perform a leave-one-out calculation.
+    See Details.
   }
 }
 \details{
@@ -46,13 +44,31 @@
   (objects of class \code{"slrm"}, usually obtained
   from the function \code{\link{slrm}}).
 
-  By default, the algorithm computes
-  the fitted probabilities of the presence of a random point in each
-  pixel,
-  and returns them as an image.
-
-  If \code{dataonly=TRUE}, the algorithm computes the fitted
-  presence probabilities only at the locations of the original data points.
+  By default, the fitted presence probabilities in each pixel are
+  computed and returned as a pixel image.
+  \itemize{
+    \item If \code{dataonly=FALSE} (the default), a value is computed
+    for each pixel in a fine grid.
+    \item If \code{dataonly=TRUE}, a value is computed for each
+    of the points in the original spatial point pattern.
+  }
+  If \code{leaveoneout=FALSE} (the default), fitted values are extracted
+  from the fitted model \code{object}.
+  If \code{leaveoneout=TRUE}, then a leave-one-out calculation is
+  performed:
+  \itemize{
+    \item If \code{dataonly=FALSE} and \code{leaveoneout=TRUE},
+    the predicted value in each \bold{pixel} is computed using a leave-one-out
+    calculation. At each pixel \code{j}, the model is re-fitted using all the
+    data \emph{except} the data inside pixel \code{j}, and this updated model is
+    then predicted using the data inside pixel \code{j}.
+    (\sQuote{Leave one pixel out})
+    \item If \code{dataonly=TRUE} and  \code{leaveoneout=TRUE},
+    the predicted value for each \bold{data point} \code{X[i]} is calculated
+    by re-fitting the model to the data with \code{X[i]} removed,
+    and then predicting this model at location \code{X[i]}.
+    (\sQuote{Leave one point out})
+  }
 }
 \value{
   A pixel image (object of class \code{"im"}) containing the
@@ -69,9 +85,7 @@
   plot(fitted(fit))
   fitted(fit, dataonly=TRUE)
 }
-\author{\adrian
-  and \rolf.
-}
+\author{\spatstatAuthors.}
 \keyword{spatial}
 \keyword{models}
 \keyword{methods}

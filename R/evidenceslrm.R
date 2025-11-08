@@ -141,7 +141,7 @@ spatialCovariateEvidence.slrm <- function(model, covariate, ...,
   check.finite(lambda, xname=lambdaname, usergiven=FALSE)
   check.finite(Zvalues, xname="the covariate", usergiven=TRUE)
   
-  #' lambda values at data points
+  #' lambda values at presence pixels (NOT data points!)
   lambdaX <- lambda[presence]
 
   #' lambda image(s)

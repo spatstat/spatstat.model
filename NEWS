@@ -1,14 +1,34 @@
 
-        CHANGES IN spatstat.model VERSION 3.4-2.007
+        CHANGES IN spatstat.model VERSION 3.4-2.009
 
 OVERVIEW
 
-    o 'slrm' supports different discretisation rules.
+    o Extended facilities for spatial logistic regression.
     
+    o Different discretisation rules supported in 'slrm'.
+
+    o Leave-one-pixel-out prediction in 'slrm'
+
     o Bug fixes and internal improvements.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o fitted.slrm
+    Argument 'leaveoneout' is no longer ignored when 'dataonly=FALSE';
+    it now supports 'leave-one-pixel-out' prediction.
+    
+    o predict.slrm
+    New argument 'leaveoneout' supports leave-one-pixel-out calculation
+    of predicted values, and new argument 'fast' determines the algorithm used.
+
+    o print.slrm
+    Now prints information about the pixel raster.
+    
+    o roc.slrm
+    Changed interpretation of argument 'leaveoneout=TRUE'.
+    This now performs 'leave-one-pixel-out' calculation
+    (previously it performed 'leave-one-point-out' calculation).
+    
     o slrm
     New argument 'ruleAtPoints' controls discretisation rule at data points.
 
@@ -16,6 +36,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Arguments '...' are now passed to 'owin2mask' to determine the
     polygon-to-raster discretisation rule for a covariate of class 'owin'.
 
+    o summary.slrm
+    Now prints information about the pixel raster.
+    
 BUG FIXES
 
     o fitted.slrm

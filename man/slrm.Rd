@@ -6,7 +6,7 @@
   to a spatial point pattern. 
 }
 \usage{
-slrm(formula, ..., data = NULL, offset = TRUE, link = "logit",
+slrm(formula, ..., data = NULL, offset = TRUE, link = c("logit", "cloglog"),
                    ruleAtPoints=c("s", "r"), dataAtPoints=NULL, splitby=NULL)
 }
 \arguments{
@@ -28,7 +28,7 @@ slrm(formula, ..., data = NULL, offset = TRUE, link = "logit",
     pixel area.
   }
   \item{link}{The link function for the regression model.
-    A character string, specifying a link function
+    A character string (partially matched), specifying the link function
     for binary regression.
   }
   \item{ruleAtPoints}{
