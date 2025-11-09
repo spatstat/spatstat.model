@@ -2,6 +2,7 @@
 \alias{roc.ppm}
 \alias{roc.slrm}
 \alias{roc.kppm}
+\alias{roc.dppm}
 \title{
   Receiver Operating Characteristic For Fitted Point Process Model
 }
@@ -27,11 +28,17 @@
                   method = "raw",
                   CI = "none", alpha=0.05,
                   leaveoneout=FALSE, subset=NULL)
+
+\method{roc}{dppm}(X, covariate=NULL,
+                  \dots, baseline=NULL, high=TRUE,
+                  method = "raw",
+                  CI = "none", alpha=0.05,
+                  leaveoneout=FALSE, subset=NULL)
 }
 \arguments{
   \item{X}{
     Fitted point process model
-    (object of class \code{"ppm"} or \code{"kppm"})
+    (object of class \code{"ppm"}, \code{"kppm"} or \code{"dppm"})
     or fitted spatial logistic regression model
     (object of class \code{"slrm"}).
   }
@@ -76,14 +83,9 @@
     confidence intervals.
   }
   \item{leaveoneout}{
-    Logical value specifying (for \code{roc.ppm}, \code{roc.slrm},
-    \code{roc.kppm} and \code{roc.lppm}) whether the fitted intensity
-    of the model at each of the original data points should be computed
-    by the leave-one-out procedure 
-    (i.e. by removing the data point in question from the point pattern,
-    re-fitting the model to the reduced point pattern, and computing the
-    intensity of this modified model at the point in question)
-    as described in \rocpapercite.
+    Logical value specifying whether the fitted intensity
+    or presence probability should be computed
+    by the leave-one-out procedure (see Details).
     It is also possible to specify \code{leaveoneout=c(TRUE,FALSE)}
     so that both versions are calculated.
   }
@@ -120,7 +122,30 @@
   probabilities to segregate the spatial domain into pixels
   with high and low probability of presence.
   The ROC is \bold{not} a diagnostic for the goodness-of-fit of the model
-  (Lobo et al, 2007).
+  (Lobo et al, 2007, page 146; \rocpapercitealp, Sections 5.3.3 and 6.5).
+
+  If \code{leaveoneout=TRUE}, then the fitted presence probability
+  or fitted intensity is computed using a leave-one-out procedure
+  proposed in \rocpapercite. 
+  \itemize{
+    \item \emph{leave-one-point-out}:
+    if \code{X} is a point process model
+    (class \code{'ppm'}, \code{'kppm'}, \code{'dppm'} or \code{'lppm'})
+    then the intensity value at each \emph{data} point \code{X[i]}
+    is computed by removing this data point from the point pattern,
+    re-fitting the model to the reduced point pattern \code{X[-i]},
+    and computing the intensity of this modified model at the
+    query point \code{X[i]}. 
+    \item \emph{leave-one-pixel-out}:
+    if \code{X} is a spatial logistic regression model
+    (class \code{'slrm'}, then the presence probability
+    at each \emph{pixel} is computed by removing this pixel
+    from the data, re-fitting the model to the reduced data,
+    and predicting the presence probability at the pixel in question.
+  }
+  The leave-one-out calculation reduces the effects of overfitting.
+  It is possible to specify \code{leaveoneout=c(TRUE,FALSE)} to
+  obtain the results with and without the leave-one-out calculation.
 
   There are currently three methods to estimate the ROC curve:
   \describe{
@@ -144,6 +169,7 @@
     }
   }
 
+  Confidence bands for the ROC curve are not computed by default.
   If \code{CI} is one of the strings \code{'raw'},
   \code{'monotonic'} or \code{'smooth'}, then
   pointwise 95\% confidence intervals for the true ROC curve
@@ -151,7 +177,6 @@
   \code{smooth} estimates, respectively.
   The confidence level is \code{1-alpha}, so that for example
   \code{alpha=0.01} would give 99\% confidence intervals.
-  By default, confidence bands for the ROC curve are not computed.
 }
 \value{
   Function value table (object of class \code{"fv"})
@@ -162,7 +187,7 @@
   \rocpaper.
 
   Lobo, J.M.,
-  \ifelse{latex}{\out{Jim{\'e}nez}}{Jimenez}-Valverde, A.
+  \Jimenez-Valverde, A.
   and Real, R. (2007)
   AUC: a misleading measure of the performance of predictive
   distribution models.
@@ -173,7 +198,7 @@
   Pages 267--279 in
   Huber-Carol, C., Balakrishnan, N., Nikulin, M.S.
   and Mesbah, M., \emph{Goodness-of-fit tests and model validity},
-  \ifelse{latex}{\out{Birkh{\"a}user}}{Birkhauser}, Basel.
+  \Birkhauser, Basel.
 }
 \author{
   \rocketAuthors.

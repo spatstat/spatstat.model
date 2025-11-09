@@ -202,6 +202,7 @@
 \alias{slrAssemblePixelData}
 \alias{slrmInfluence}
 \alias{spatialCovariateEvidence.ppm}
+\alias{spatialCovariateEvidence.dppm}
 \alias{spatialCovariateEvidence.kppm}
 \alias{spatialCovariateEvidence.slrm}
 \alias{spatialCovariateUnderModel}
@@ -517,6 +518,7 @@ slrmInfluence(model, what, \dots)
 \method{spatialCovariateEvidence}{ppm}(model, covariate, \dots, lambdatype,
           dimyx, eps, rule.eps, interpolate, jitter, jitterfactor,
           modelname, covname, dataname, subset, clip.predict, raster.action) 
+\method{spatialCovariateEvidence}{dppm}(model, covariate, \dots)
 \method{spatialCovariateEvidence}{kppm}(model, covariate, \dots)
 \method{spatialCovariateEvidence}{slrm}(model, covariate, \dots, lambdatype,
           jitter, jitterfactor,

@@ -37,6 +37,8 @@
 \newcommand{\Dominguez}{\ifelse{latex}{\out{Dom\'{\i}nguez}}{Dominguez}}
 \newcommand{\Rodriguez}{\ifelse{latex}{\out{Rodr\'{\i}guez}}{Rodriguez}}
 \newcommand{\Gonzalez}{\ifelse{latex}{\out{Gonz\'{a}lez}}{Gonzalez}}
+\newcommand{\Jimenez}{\ifelse{latex}{\out{Jim{\'e}nez}}{Jimenez}}
+\newcommand{\Birkhauser}{\ifelse{latex}{\out{Birkh{\"a}user}}{Birkhauser}}
 %% List of all Gibbs interactions 
 \newcommand{\GibbsInteractionsList}{\code{\link[spatstat.model]{AreaInter}}, \code{\link[spatstat.model]{BadGey}}, \code{\link[spatstat.model]{Concom}}, \code{\link[spatstat.model]{DiggleGatesStibbard}}, \code{\link[spatstat.model]{DiggleGratton}}, \code{\link[spatstat.model]{Fiksel}}, \code{\link[spatstat.model]{Geyer}}, \code{\link[spatstat.model]{Hardcore}}, \code{\link[spatstat.model]{HierHard}}, \code{\link[spatstat.model]{HierStrauss}}, \code{\link[spatstat.model]{HierStraussHard}}, \code{\link[spatstat.model]{Hybrid}}, \code{\link[spatstat.model]{LennardJones}}, \code{\link[spatstat.model]{MultiHard}}, \code{\link[spatstat.model]{MultiStrauss}}, \code{\link[spatstat.model]{MultiStraussHard}}, \code{\link[spatstat.model]{OrdThresh}}, \code{\link[spatstat.model]{Ord}}, \code{\link[spatstat.model]{Pairwise}}, \code{\link[spatstat.model]{PairPiece}}, \code{\link[spatstat.model]{Penttinen}}, \code{\link[spatstat.model]{Poisson}}, \code{\link[spatstat.model]{Saturated}}, \code{\link[spatstat.model]{SatPiece}}, \code{\link[spatstat.model]{Softcore}}, \code{\link[spatstat.model]{Strauss}}, \code{\link[spatstat.model]{StraussHard}} and \code{\link[spatstat.model]{Triplets}}}
 %% List of interactions recognised by RMH code
@@ -50,6 +52,7 @@
 %% ROC paper
 \newcommand{\rocketAuthors}{\adrian, \ege and \suman}
 \newcommand{\rocpapercite}{Baddeley et al (2025)}
+\newcommand{\rocpapercitealp}{Baddeley et al, 2025)}
 \newcommand{\rocpaper}{Baddeley, A., Rubak, E., Rakshit, S. and Nair, G. (2025) ROC curves for spatial point patterns and presence-absence data. \doi{10.48550/arXiv.2506.03414}.}
 
 

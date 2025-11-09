@@ -1,15 +1,22 @@
 
-        CHANGES IN spatstat.model VERSION 3.4-2.010
+        CHANGES IN spatstat.model VERSION 3.4-2.011
 
 OVERVIEW
 
     o Extended facilities for spatial logistic regression.
+
+    o ROC curves for determinantal point process models.
     
     o Different discretisation rules supported in 'slrm'.
 
     o Leave-one-pixel-out prediction in 'slrm'
 
     o Bug fixes and internal improvements.
+
+NEW FUNCTIONS
+
+    o roc.dppm
+    Compute ROC curve for a determinantal point process model.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

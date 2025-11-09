@@ -66,7 +66,7 @@
   \rocpaper.
   
   Lobo, J.M.,
-  \ifelse{latex}{\out{Jim{\'e}nez}}{Jimenez}-Valverde, A.
+  \Jimenez-Valverde, A.
   and Real, R. (2007)
   AUC: a misleading measure of the performance of predictive
   distribution models.
@@ -77,7 +77,7 @@
   Pages 267--279 in 
   Huber-Carol, C., Balakrishnan, N., Nikulin, M.S. 
   and Mesbah, M., \emph{Goodness-of-fit tests and model validity},
-  \ifelse{latex}{\out{Birkh{\"a}user}}{Birkhauser}, Basel.
+  \Birkhauser, Basel.
 }
 \author{
   \rocketAuthors.

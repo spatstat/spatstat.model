@@ -4,7 +4,7 @@
 #'   evaluate covariate values at data points and at pixels
 #'   together with intensity of null/reference model
 #'
-#' $Revision: 1.56 $ $Date: 2025/11/07 05:18:11 $
+#' $Revision: 1.57 $ $Date: 2025/11/09 00:21:11 $
 #'
 
 ## Code for generic spatialCovariateEvidence() is moved to spatstat.explore
@@ -268,6 +268,7 @@ spatialCovariateEvidence.ppm <- local({
   spatialCovariateEvidence.ppm
 })
 
+spatialCovariateEvidence.dppm <- 
 spatialCovariateEvidence.kppm <- function(model, covariate, ...) {
   mname <- singlestring(short.deparse(substitute(model)))
   cname <- singlestring(short.deparse(substitute(covariate)))
