@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 3.4-2.012
+        CHANGES IN spatstat.model VERSION 3.4-2.013
 
 OVERVIEW
 
@@ -23,7 +23,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o fitted.slrm
     Argument 'leaveoneout' is no longer ignored when 'dataonly=FALSE';
     it now supports 'leave-one-pixel-out' prediction.
-    
+
     o predict.slrm
     New argument 'leaveoneout' supports leave-one-pixel-out calculation
     of predicted values, and new argument 'fast' determines the algorithm used.

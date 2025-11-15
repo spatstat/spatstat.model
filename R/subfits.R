@@ -1,6 +1,6 @@
 #
 #
-#  $Revision: 1.58 $   $Date: 2025/09/12 08:43:51 $
+#  $Revision: 1.61 $   $Date: 2025/11/15 08:56:02 $
 #
 #
 
@@ -131,18 +131,22 @@ subfits.new <- local({
     data  <- object$data
     Y     <- object$Y
     Yname <- info$Yname
+    Yclass <- info$Yclass %orifnull% "ppp"
     moadf <- object$Fit$moadf
     fmla  <- object$Fit$fmla
     ## deal with older formats of mppm
     if(is.null(Yname)) Yname <- info$Xname
     if(is.null(Y)) Y <- data[ , Yname, drop=TRUE]
-    ## 
+    ## other stuff
     used.cov.names <- info$used.cov.names
     has.covar <- info$has.covar
     if(has.covar) {
       covariates.hf <- data[, used.cov.names, drop=FALSE]
       dfvar <- used.cov.names %in% names(datadf)
     }
+    ## deal with linear networks
+    if(Yclass == "lpp")
+      Yorig <- data[, Yname, drop=TRUE]
     announce("done.\n")
 
     ## Construct template for fake ppm object
@@ -150,7 +154,7 @@ subfits.new <- local({
     fake.version <- list(major=spv$major,
                          minor=spv$minor,
                          release=spv$patchlevel,
-                         date="$Date: 2025/09/12 08:43:51 $")
+                         date="$Date: 2025/11/15 08:56:02 $")
     fake.call <- call("cannot.update", Q=NULL, trend=trend,
                       interaction=NULL, covariates=NULL,
                       correction=object$Info$correction,
@@ -217,7 +221,19 @@ subfits.new <- local({
       fake.call$Q <- Yi
       fake.call$covariates <- covariates
       fakemodel$call <- fake.call
-      fakemodel$callstring <- short.deparse(fake.call)
+      fakemodel$callstring <- fake.callstring <- short.deparse(fake.call)
+
+      ## deal with linear networks
+      if(Yclass == "lpp") {
+        ## this line comes from lppm.lpp
+        fakemodel <- list(X          = Yorig[[i]], # original lpp object
+                          fit        = fakemodel,
+                          Xname      = Yname,
+                          call       = fake.call,
+                          callstring = fake.callstring,
+                          fake       = TRUE)
+        class(fakemodel) <- "lppm"
+      }
       
       ## store in list
       models[[i]] <- fakemodel
@@ -382,6 +398,7 @@ subfits.old <- local({
     data  <- object$data
     Y     <- object$Y
     Yname <- info$Yname
+    Yclass <- info$Yclass %orifnull% "ppp"
     ## deal with older formats of mppm
     if(is.null(Yname)) Yname <- info$Xname
     if(is.null(Y)) Y <- data[ , Yname, drop=TRUE]
@@ -392,6 +409,9 @@ subfits.old <- local({
       covariates.hf <- data[, used.cov.names, drop=FALSE]
       dfvar <- used.cov.names %in% names(datadf)
     }
+    ## deal with linear networks
+    if(Yclass == "lpp")
+      Yorig <- data[, Yname, drop=TRUE]
     announce("done.\n")
   
     ## Loop through point patterns
@@ -519,6 +539,17 @@ subfits.old <- local({
             fiti$varcov <- vc
           }
         }
+      }
+      ## deal with linear networks
+      if(Yclass == "lpp") {
+        ## this line comes from lppm.lpp
+        fiti <- list(X          = Yorig[[i]], # original lpp object
+                     fit        = fiti,
+                     Xname      = Yname,
+                     call       = fiti$call,
+                     callstring = fiti$callstring,
+                     fake       = TRUE)
+        class(fiti) <- "lppm"
       }
       ## store in list
       results[[i]] <- fiti

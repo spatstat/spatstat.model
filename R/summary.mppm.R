@@ -210,7 +210,14 @@ print.summary.mppm <- function(x, ..., brief=x$brief) {
   terselevel <- spatstat.options("terse")
 #  rownames <- x$Info$rownames
 
-  splat("Point process model fitted to", npat, "point patterns")
+  Yclass <- x$Info$Yclass %orifnull% "ppp"
+  Yplural <- switch(Yclass,
+                    ppp  = "point patterns",
+                    quad = "quadrature schemes",
+                    lpp  = "point patterns on linear networks",
+                    paste("objects of class", sQuote(Yclass)))
+  splat("Point process model fitted to", npat, Yplural)
+  
   if(waxlyrical('gory', terselevel))
     splat("Call:", x$Call$callstring)
   splat("Log trend formula:", pasteFormula(x$trend))

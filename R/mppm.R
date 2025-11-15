@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.115 $   $Date: 2025/11/07 00:22:34 $
+#  $Revision: 1.116 $   $Date: 2025/11/15 08:45:20 $
 #
 
 mppm <- local({
@@ -151,6 +151,11 @@ mppm <- local({
     } else if(Yclass == "quad") {
       Y <- as.solist(Y)
       ## Ydescrip <- "quadrature schemes" ## not used
+    } else if(Yclass == "lpp") {
+      ## convert to quadrature schemes
+      Y <- solapply(Y, quadschemeplus, ...)
+      warning("Support for lpp objects in mppm is experimental",
+              call.=FALSE)
     } else {
       stop(paste("Column", dQuote(Yname), "of data",
                  "does not consist of point patterns (class ppp)",
@@ -477,6 +482,7 @@ mppm <- local({
                      has.covar=has.covar,
                      has.design=has.design,
                      Yname=Yname,
+                     Yclass=Yclass,
                      used.cov.names=used.cov.names,
                      allvars=allvars,
                      names.data=names(data),
@@ -560,10 +566,29 @@ mppm <- local({
          call.=FALSE)
   }
 
-  quadschemeplus <- function(data, ..., quad.args) {
+  quadschemeplus <- function(data, ..., quad.args=list()) {
     if(is.NAobject(data)) return(NAobject("quad"))
     #' catch argument 'quad.args' recognised by ppm
-    if(missing(quad.args)) quadscheme(data, ...) else do.call(quadscheme, append(list(data, ...), quad.args))
+    if(is.ppp(data)) {
+      if(length(quad.args) == 0) {
+        ## for efficiency
+        z <- quadscheme(data, ...)
+      } else {
+        z <- do.call(quadscheme,
+                     resolve.defaults(list(data=data, ...),
+                                      quad.args))
+      }
+    } else if(is.lpp(data)) {
+      if(length(quad.args) == 0) {
+        ## for efficiency
+        z <- linequad(data, ...)
+      } else {
+        z <- do.call(linequad,
+                     resolve.defaults(list(data=data, ...),
+                                      quad.args))
+      }
+    } else stop("Unrecognised type of data for quadrature scheme", call.=FALSE)
+    return(z)
   }
 
   AllInherit <- function(x, what) { all(sapply(x, inherits, what=what)) }
