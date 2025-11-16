@@ -171,7 +171,7 @@ lurking(object, \dots)
   in particular, to reveal that the point pattern depends on the covariate.
 
   The function \code{lurking} is generic, with methods for
-  \code{ppm} and \code{ppp} documented here, and possibly other methods.
+  \code{ppm} and \code{ppp} documented here, and other methods.
 
   The argument \code{object} would usually be a fitted point process model
   (object of class \code{"ppm"}) produced by the

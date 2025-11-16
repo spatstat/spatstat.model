@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.116 $   $Date: 2025/11/15 08:45:20 $
+#  $Revision: 1.117 $   $Date: 2025/11/16 02:20:17 $
 #
 
 mppm <- local({
@@ -654,7 +654,7 @@ quad.mppm <- function(x) {
 }
 
 data.mppm <- function(x) {
-  solapply(quad.mppm(x), elementOrNA, nam="data", cl="ppp")
+  x$data[, x$Info$Yname, drop=TRUE]
 }
 
 is.marked.mppm <- function(X, ...) {
