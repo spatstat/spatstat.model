@@ -1,7 +1,7 @@
 #
 #   quadrattest.R
 #
-#   $Revision: 1.70 $  $Date: 2023/07/17 07:38:30 $
+#   $Revision: 1.71 $  $Date: 2025/11/16 09:34:27 $
 #
 
 ## Code for generic quadrat.test() and quadrat.test.ppp()
