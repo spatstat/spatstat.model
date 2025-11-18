@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.117 $   $Date: 2025/11/16 02:20:17 $
+#  $Revision: 1.118 $   $Date: 2025/11/18 03:42:42 $
 #
 
 mppm <- local({
@@ -143,7 +143,7 @@ mppm <- local({
     ## Extract the list of responses (point pattern/quadscheme)
     Y <- data[, Yname, drop=TRUE]
     if(npat == 1) Y <- solist(Y)
-    Yclass <- data.sumry$classes[Yname]
+    Yclass <- data.sumry$classes[[Yname]]
     if(Yclass == "ppp") {
       ## convert to quadrature schemes, for efficiency's sake
       Y <- solapply(Y, quadschemeplus, ...)

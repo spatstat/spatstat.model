@@ -4,13 +4,16 @@
 # computes residuals for fitted multiple point process model
 #
 #
-#  $Revision: 1.5 $ $Date: 2015/01/29 06:44:26 $
+#  $Revision: 1.6 $ $Date: 2025/11/18 03:36:46 $
 #
 
 residuals.mppm <- function(object, type="raw", ..., 
                           fittedvalues = fitted.mppm(object)) {
   
   verifyclass(object, "mppm")
+  if(object$Info$Yclass == "lpp")
+    stop("Residuals are not yet implemented for linear networks",
+         call.=FALSE)
   userfitted <- !missing(fittedvalues)
   type <- pickoption("type", type,
                      c(inverse="inverse",

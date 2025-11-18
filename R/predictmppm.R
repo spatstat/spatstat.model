@@ -1,7 +1,7 @@
 #
 #    predictmppm.R
 #
-#	$Revision: 1.20 $	$Date: 2025/09/14 03:27:23 $
+#	$Revision: 1.22 $	$Date: 2025/11/18 04:25:56 $
 #
 #
 # -------------------------------------------------------------------
@@ -85,6 +85,73 @@ predict.mppm <- local({
     if(is.list(locations))
       cls <- unique(sapply(locations, class))
 
+
+    ## ......................................................................
+    if(verbose)
+      cat("done.\n")
+    ## ......................................................................
+
+    if(model$Info$Yclass == "lpp") {
+      if(verbose)
+        cat("Linear network data detected.\n")
+      if(is.data.frame(locations)) {
+        if(verbose)
+          cat("Argument 'locations' is a data frame; continue.\n")
+      } else {
+        if(verbose)
+          cat("Handling prediction on linear network using subfits...\n")
+        subs <- subfits(model)
+        nr <- length(subs)
+        if(want.trend) Trends <- rep(list(NA), nr)
+        if(want.cif)   Cifs <- rep(list(NA), nr)
+        for(irow in seq_len(nr)) {
+          model.i <- subs[[irow]]
+          loc.i <- if(is.list(locations)) locations[[irow]] else NULL
+          new.i <-
+            if(is.null(newdata)) {
+              NULL
+            } else if(is.hyperframe(newdata)) {
+              newdata[irow, , drop=TRUE]
+            } else if(is.data.frame(newdata)) {
+              if(depends.on.row) {
+                newdata[newdata$id == irow, , drop=FALSE]
+              } else {
+                newdata
+              }
+            } else if(is.list(newdata)) {
+              newdata[[irow]]
+            } else NULL
+          if(!is.NAobject(model.i)) {
+            if(want.trend)
+              Trends[[irow]] <- predict(model.i,
+                                        locations=loc.i,
+                                        type="trend",
+                                        newdata=new.i)
+            if(want.cif)
+              Cifs[[irow]] <- predict(model.i,
+                                        locations=loc.i,
+                                        type="cif",
+                                        newdata=new.i)
+          }
+        }
+        result <- if(want.trend && want.cif) {
+                    hyperframe(trend=Trends, cif=Cifs)
+                  } else if(want.trend) {
+                    hyperframe(trend=Trends)
+                  } else if(want.cif) {
+                    hyperframe(cif=Cifs)
+                  } else NULL
+        if(verbose)
+          cat("Returning hyperframe of predictions on network.\n")
+        return(result)
+      }
+    }
+    
+    ## ......................................................................
+    if(verbose)
+      cat("Deciding type of locations for prediction...")
+    ## ......................................................................
+    
     loctype <-
       if(is.null(locations)) "null" else
       if(is.data.frame(locations))  "data.frame" else
@@ -98,11 +165,6 @@ predict.mppm <- local({
         } else "unknown"
       } else "unknown"
 
-    ## ......................................................................
-    if(verbose)
-      cat("done.\nDeciding type of locations for prediction...")
-    ## ......................................................................
-    
     need.grid <- switch(loctype,
                         null      =TRUE,
                         data.frame=FALSE,
