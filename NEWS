@@ -1,12 +1,14 @@
 
-        CHANGES IN spatstat.model VERSION 3.4-2.016
+        CHANGES IN spatstat.model VERSION 3.4-2.017
 
 OVERVIEW
 
+    o Replicated point patterns on linear networks.
+    
     o Extended facilities for spatial logistic regression.
 
     o ROC curves for determinantal point process models.
-    
+
     o Different discretisation rules supported in 'slrm'.
 
     o Leave-one-pixel-out prediction in 'slrm'
@@ -23,6 +25,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o fitted.slrm
     Argument 'leaveoneout' is no longer ignored when 'dataonly=FALSE';
     it now supports 'leave-one-pixel-out' prediction.
+
+    o mppm
+    Now accepts point patterns on a linear network.
+    This is experimental code.
 
     o predict.slrm
     New argument 'leaveoneout' supports leave-one-pixel-out calculation

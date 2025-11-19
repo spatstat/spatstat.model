@@ -138,7 +138,11 @@
   }
 
   The column of responses in \code{data}
-  must consist of point patterns (objects of class \code{"ppp"}).
+  must consist of point patterns (objects of class \code{"ppp"}) or
+  quadrature schemes (objects of class \code{"quad"}).
+  (Alternatively they may be point patterns on a linear network,
+  as discussed in the section on Linear Networks).
+  
   The individual point pattern responses 
   can be defined in different spatial windows.
   If some of the point patterns are marked, then they must all be
@@ -207,6 +211,22 @@
   \code{id}, which is a factor representing the
   serial number (\eqn{1} to \eqn{n}) of the point pattern in the
   list \code{X}.
+}
+\section{Replicated Point Patterns on Linear Networks}{
+  The column of responses in \code{data} 
+  may consist of point patterns on linear networks (objects of class
+  \code{"lpp"}).
+
+  The networks may be different in each row of
+  \code{data}. If some of the point patterns have marks, they must all
+  be marked, and must have the same type of marks.
+  
+  This is a recently implemented, experimental extension
+  of the code. We do not guarantee that all the methods
+  and functions available for class \code{"mppm"} will work correctly
+  for models fitted to replicated point patterns on linear networks.
+  We recommend ensuring that the installation of
+  the packages \pkg{spatstat.model} and \pkg{spatstat.linnet} is up to date. 
 }
 \value{
   An object of class \code{"mppm"} representing the

@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.118 $   $Date: 2025/11/18 03:42:42 $
+#  $Revision: 1.119 $   $Date: 2025/11/19 00:56:02 $
 #
 
 mppm <- local({
@@ -252,6 +252,12 @@ mppm <- local({
     }
     ## check for trivial (Poisson) interactions
     trivial <- unlist(lapply(as.list(interaction), allpoisson))
+    ispois <- all(trivial[iused])
+    
+    ## warn about interactions on a network
+    if(!ispois && Yclass == "lpp")
+      warning("Non-Poisson models currently use Euclidean distance",
+              call.=FALSE)
     
     ## check that iformula does not combine two interactions on one row
     nondfnames <- datanames[!(datanames %in% data.sumry$dfnames)]
@@ -524,6 +530,7 @@ mppm <- local({
                    datadf=datadf)
 
     class(result) <- c("mppm", class(result))
+    
     return(result)
   }
 
