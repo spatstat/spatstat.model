@@ -131,6 +131,7 @@
 \alias{parameters.detpointprocfamily}
 \alias{PairPotentialType}
 \alias{partialModelMatrix}
+\alias{partialResidualEngine}
 \alias{pcfmodel.clusterprocess}
 \alias{pcfmodel.slrm}
 \alias{ploterodewin}
@@ -425,6 +426,9 @@ oversize.quad(Q, \dots, nU, nX, p)
 PairPotentialType(pairpot)
 \method{parameters}{detpointprocfamily}(model, \dots)
 partialModelMatrix(X,D,model,callstring,\dots)
+partialResidualEngine(model, covariate, \dots,
+     smooth.effect, subregion, bw, adjust, from, to, n,
+     bw.input, bw.restrict, covname, callstring, modelname, do.variance)
 \method{pcfmodel}{clusterprocess}(model, \dots)
 \method{pcfmodel}{slrm}(model, \dots)
 ploterodewin(W1, W2, col.edge, col.inside, do.plot, \dots)
