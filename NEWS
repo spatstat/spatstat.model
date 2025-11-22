@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 3.4-2.017
+        CHANGES IN spatstat.model VERSION 3.4-2.018
 
 OVERVIEW
 
@@ -11,6 +11,8 @@ OVERVIEW
 
     o Different discretisation rules supported in 'slrm'.
 
+    o Partial residuals for kppm.
+    
     o Leave-one-pixel-out prediction in 'slrm'
 
     o Bug fixes and internal improvements.
@@ -19,7 +21,16 @@ NEW FUNCTIONS
 
     o roc.dppm
     Compute ROC curve for a determinantal point process model.
+
+    o parres.kppm
+    Partial residual plot for fitted cluster process or Cox process models.
+
+    o parres
+    New generic function for partial residuals.
     
+    o parres.ppm
+    The original function 'parres' has now become the method 'parres.ppm'.
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o fitted.slrm

@@ -3,20 +3,26 @@
 #
 # code to plot transformation diagnostic
 #
-#   $Revision: 1.18 $  $Date: 2023/02/28 01:55:09 $
+#   $Revision: 1.23 $  $Date: 2025/11/22 02:35:15 $
 #
 
-parres <- function(model, covariate, ...,
-                   smooth.effect=FALSE, subregion=NULL,
-                   bw="nrd0", adjust=1, from=NULL,to=NULL, n=512,
-                   bw.input = c("points", "quad"),
-                   bw.restrict = FALSE,
-                   covname) {  
-
+parres <- function(model, covariate, ...) {
+  UseMethod("parres")
+}
+  
+parres.ppm <- function(model, covariate, ...,
+                       smooth.effect=FALSE, subregion=NULL,
+                       bw="nrd0", adjust=1, from=NULL,to=NULL, n=512,
+                       bw.input = c("points", "quad"),
+                       bw.restrict = FALSE,
+                       covname) {  
   callstring <- paste(deparse(sys.call()), collapse = "")
   modelname <- short.deparse(substitute(model))
 
   stopifnot(is.ppm(model))
+
+  if(is.marked(model))
+    stop("Sorry, this is not yet implemented for marked models")
   
   if(missing(covariate)) {
     mc <- model.covariates(model)
@@ -25,15 +31,95 @@ parres <- function(model, covariate, ...,
   if(missing(covname)) 
     covname <- sensiblevarname(deparse(substitute(covariate)), "X")
 
-  if(is.marked(model))
-    stop("Sorry, this is not yet implemented for marked models")
-      
-  if(!is.null(subregion)) 
-    stopifnot(is.owin(subregion))
-  
   if(is.null(adjust)) adjust <- 1
 
   bw.input <- match.arg(bw.input)
+  
+  partialResidualEngine(model         = model,
+                        covariate     = covariate,
+                        ...,
+                        smooth.effect = smooth.effect,
+                        subregion     = subregion,
+                        bw            = bw,
+                        adjust        = adjust,
+                        from          = from,
+                        to            = to,
+                        n             = n,
+                        bw.input      = bw.input,
+                        bw.restrict   = bw.restrict,
+                        covname       = covname,
+                        callstring    = callstring,
+                        modelname     = modelname,
+                        do.variance   = is.poisson(model))
+}
+                        
+parres.kppm <- function(model, covariate, ...,
+                       smooth.effect=FALSE, subregion=NULL,
+                       bw="nrd0", adjust=1, from=NULL,to=NULL, n=512,
+                       bw.input = c("points", "quad"),
+                       bw.restrict = FALSE,
+                       covname) {  
+  callstring <- paste(deparse(sys.call()), collapse = "")
+  modelname <- short.deparse(substitute(model))
+
+  stopifnot(is.kppm(model))
+
+  if(is.marked(model))
+    stop("Sorry, this is not yet implemented for marked models")
+  
+  if(missing(covariate)) {
+    mc <- model.covariates(model)
+    if(length(mc) == 1) covariate <- mc else stop("covariate must be provided")
+  }
+  if(missing(covname)) 
+    covname <- sensiblevarname(deparse(substitute(covariate)), "X")
+
+  if(is.null(adjust)) adjust <- 1
+
+  bw.input <- match.arg(bw.input)
+  
+  partialResidualEngine(model         = as.ppm(model),
+                        covariate     = covariate,
+                        ...,
+                        smooth.effect = smooth.effect,
+                        subregion     = subregion,
+                        bw            = bw,
+                        adjust        = adjust,
+                        from          = from,
+                        to            = to,
+                        n             = n,
+                        bw.input      = bw.input,
+                        bw.restrict   = bw.restrict,
+                        covname       = covname,
+                        callstring    = callstring,
+                        modelname     = modelname,
+                        do.variance   = FALSE)
+}
+
+## -------------- main calculation ----------------------------
+                        
+      
+partialResidualEngine <- function(model, covariate, ...,
+                                  smooth.effect=FALSE, subregion=NULL,
+                                  bw="nrd0", adjust=1, from=NULL,to=NULL, n=512,
+                                  bw.input = c("points", "quad"),
+                                  bw.restrict = FALSE,
+                                  covname, callstring, modelname,
+                                  do.variance=FALSE) {
+  ## fallback names 
+  if(missing(covname)) 
+    covname <- sensiblevarname(deparse(substitute(covariate)), "X")
+  if(missing(callstring))
+    callstring <- paste(deparse(sys.call()), collapse = "")
+  if(missing(modelname))
+    modelname <- short.deparse(substitute(model))
+
+  bw.input <- match.arg(bw.input)
+  check.1.real(adjust)
+
+  
+  if(!is.null(subregion)) 
+    stopifnot(is.owin(subregion))
   
   # validate model
   modelcall <- model$callstring
@@ -425,7 +511,7 @@ parres <- function(model, covariate, ...,
   } 
   
   ####################################################
-  # Compute terms 
+  #' Compute terms 
 
   interpolate <- function(x,y) {
     if(inherits(x, "density") && missing(y))
@@ -437,72 +523,95 @@ parres <- function(model, covariate, ...,
   denfun <- interpolate(denom)
   xxx <- numer$x
   yyy <- numfun(xxx)/denfun(xxx)
-  # variance estimation
-  # smooth 1/lambda(u) with smaller bandwidth
-  tau   <- sigma/sqrt(2)
-  varnumer <- unnormdensity(x, weights=w/lam,
-                            bw=tau, adjust=1,
-                            n=n,from=from,to=to, ...)
-  varnumfun <- interpolate(varnumer)
-  varestxxx <- varnumfun(xxx)/(2 * sigma * sqrt(pi) * denfun(xxx)^2)
-  sd <- sqrt(varestxxx)
-  # alternative estimate of variance using data points only
-  if(nZ > 1) {
-    varXnumer <- unnormdensity(x[Z], weights=1/lam[Z]^2,
-                               bw=tau, adjust=1,
-                               n=n,from=from,to=to, ...)
-    varXnumfun <- interpolate(varXnumer)
-    varXestxxx <- varXnumfun(xxx)/(2 * sigma * sqrt(pi) * denfun(xxx)^2)
-    sdX <- sqrt(varXestxxx)
-  } else sdX <- rep(NA, length(xxx))
-  # fitted effect
+  #' fitted effect
   effxxx <- effectFun(xxx)
-  
   # add fitted effect of covariate, if not added before smoothing
   if(!smooth.effect)
     yyy <- yyy + effxxx
+
+  ####################################################
+  #' Variance estimation
+  if(do.variance) {
+    #' smooth 1/lambda(u) with smaller bandwidth
+    tau   <- sigma/sqrt(2)
+    varnumer <- unnormdensity(x, weights=w/lam,
+                              bw=tau, adjust=1,
+                              n=n,from=from,to=to, ...)
+    varnumfun <- interpolate(varnumer)
+    varestxxx <- varnumfun(xxx)/(2 * sigma * sqrt(pi) * denfun(xxx)^2)
+    sd <- sqrt(varestxxx)
+    #' alternative estimate of variance using data points only
+    if(nZ > 1) {
+      varXnumer <- unnormdensity(x[Z], weights=1/lam[Z]^2,
+                                 bw=tau, adjust=1,
+                                 n=n,from=from,to=to, ...)
+      varXnumfun <- interpolate(varXnumer)
+      varXestxxx <- varXnumfun(xxx)/(2 * sigma * sqrt(pi) * denfun(xxx)^2)
+      sdX <- sqrt(varXestxxx)
+    } else sdX <- rep(NA, length(xxx))
+  }
   
   ####################################################
-  # pack into fv object
-  
-  df <- data.frame(xxx=xxx,
-                   h  =yyy,
-                   varh=varestxxx,
-                   hi=yyy+2*sd,
-                   lo=yyy-2*sd,
-                   hiX=yyy+2*sdX,
-                   loX=yyy-2*sdX,
-                   fit=effxxx)
-  # remove any funny characters in name of covariate (e.g. if it is an offset)
+  #' pack into fv object
+
+  #' columns of data
+  data1 <- list(xxx=xxx,
+                h  =yyy)
+  data2 <- if(do.variance) {
+             list(varh=varestxxx,
+                  hi=yyy+2*sd,
+                  lo=yyy-2*sd,
+                  hiX=yyy+2*sdX,
+                  loX=yyy-2*sdX)
+           } else list()
+  data3 <- list(fit=effxxx)
+  df <- as.data.frame(c(data1, data2, data3))
+  #' remove any funny characters in name of covariate (e.g. if it is an offset)
   Covname <- make.names(covname)
   names(df)[1] <- Covname
-  desc <- c(paste("covariate", sQuote(covname)),
-            "Smoothed partial residual",
-            "Variance",
-            "Upper limit of pointwise 5%% significance band (integral)",
-            "Lower limit of pointwise 5%% significance band (integral)",
-            "Upper limit of pointwise 5%% significance band (sum)",
-            "Lower limit of pointwise 5%% significance band (sum)",
-            paste("Parametric fitted effect of", sQuote(covname)))
+
+  #' column descriptions
+  desc1 <- c(paste("covariate", sQuote(covname)),
+             "Smoothed partial residual")
+  desc2 <- if(do.variance) {
+             c("Variance",
+               "Upper limit of pointwise 5%% significance band (integral)",
+               "Lower limit of pointwise 5%% significance band (integral)",
+               "Upper limit of pointwise 5%% significance band (sum)",
+               "Lower limit of pointwise 5%% significance band (sum)")
+           } else character(0)
+  desc3 <- paste("Parametric fitted effect of", sQuote(covname))
+  desc <- c(desc1, desc2, desc3)
+               
+  #' mathgraph labels
+  labl1 <- c(covname,
+             paste("%s", paren(covname), sep=""))
+  labl2 <- if(do.variance) {
+             c(paste("var", paren(covname), sep=""),
+               paste("hi", paren(covname), sep=""),
+               paste("lo", paren(covname), sep=""),
+               paste("hiX", paren(covname), sep=""),
+               paste("loX", paren(covname), sep=""))
+           } else character(0)
+  labl3 <-   paste("fit", paren(covname), sep="")
+  labl <- c(labl1, labl2, labl3)
+  
   rslt <- fv(df,
              argu=Covname,
              ylab=substitute(h(X), list(X=as.name(covname))),
              valu="h",
              fmla= as.formula(paste(". ~ ", Covname)),
              alim=alim,
-             labl=c(covname,
-               paste("%s", paren(covname), sep=""),
-               paste("var", paren(covname), sep=""),
-               paste("hi", paren(covname), sep=""),
-               paste("lo", paren(covname), sep=""),
-               paste("hiX", paren(covname), sep=""),
-               paste("loX", paren(covname), sep=""),
-               paste("fit", paren(covname), sep="")),
+             labl=labl,
              desc=desc,
              fname="h",
              yexp=as.expression(substitute(hat(h)(X), list(X=covname))))
-  attr(rslt, "dotnames") <- c("h", "hi", "lo", "fit")
-  fvnames(rslt, ".s") <- c("hi", "lo")
+  if(do.variance) {
+    attr(rslt, "dotnames") <- c("h", "hi", "lo", "fit")
+    fvnames(rslt, ".s") <- c("hi", "lo")
+  } else {
+    attr(rslt, "dotnames") <- c("h", "fit")
+  }
   # add special class data
   class(rslt) <- unique(c("parres", class(rslt)))
   attr(rslt, "stuff") <- list(covname       = paste(covname, collapse=""),

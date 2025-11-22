@@ -1,5 +1,7 @@
 \name{parres}
 \alias{parres}
+\alias{parres.ppm}
+\alias{parres.kppm}
 \title{
   Partial Residuals for Point Process Model
 }
@@ -8,14 +10,22 @@
   for transformation of a covariate in a Poisson point process model.
 }
 \usage{
-parres(model, covariate, ...,
+parres(model, covariate, \dots)
+
+\method{parres}{ppm}(model, covariate, \dots,
+       smooth.effect=FALSE, subregion=NULL,
+       bw = "nrd0", adjust=1, from = NULL, to = NULL, n = 512,
+       bw.input = c("points", "quad"), bw.restrict=FALSE, covname)
+
+\method{parres}{kppm}(model, covariate, \dots,
        smooth.effect=FALSE, subregion=NULL,
        bw = "nrd0", adjust=1, from = NULL, to = NULL, n = 512,
        bw.input = c("points", "quad"), bw.restrict=FALSE, covname)
 }
 \arguments{
   \item{model}{
-    Fitted point process model (object of class \code{"ppm"}).
+    Fitted point process model (object of class \code{"ppm"} or
+    \code{"kppm"} or possibly other classes).
   }
   \item{covariate}{
     The covariate of interest.
@@ -70,8 +80,9 @@ parres(model, covariate, ...,
   (Baddeley, Chang, Song and Turner, 2012) 
   for the transformation of a covariate
   in a Poisson point process model.
-  
-  The argument \code{model} must be a fitted Poisson point process model.
+
+  The function \code{parres} is generic.  Methods for fitted point
+  process models of class \code{"ppm"} and \code{"kppm"} are documented here.
   
   The diagnostic works in two different ways:
   \describe{
@@ -155,6 +166,13 @@ parres(model, covariate, ...,
   If \code{bw.restrict=TRUE} then the bandwidth selection is performed
   using only data from inside the \code{subregion}.
 }
+\section{Variance estimation and confidence bands}{
+  If the fitted model is a Poisson point process,
+  the variance of the partial residual will also be calculated,
+  and 95 percent confidence bands will be derived from this.
+  The default plot of the result will show the confidence bands in grey
+  shading.
+}
 \section{Slow computation}{
   In a large dataset, computation can be very slow if the default
   settings are used, because the smoothing bandwidth is selected
@@ -167,7 +185,8 @@ parres(model, covariate, ...,
 \value{
   A function value table (object of class \code{"fv"})
   containing the values of the smoothed partial residual,
-  the estimated variance, and the fitted effect of the covariate.
+  the estimated variance and confidence interval if available,
+  and the fitted effect of the covariate.
   Also belongs to the class \code{"parres"}
   which has methods for \code{print} and \code{plot}.
 }
