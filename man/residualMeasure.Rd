@@ -18,8 +18,8 @@ residualMeasure(Q, lambda,
     or quadrature scheme (object of class \code{"quad"}).
   }
   \item{lambda}{
-    Predicted intensity. An image (object of class \code{"im"})
-    or a list of images.
+    Predicted intensity. An image (object of class \code{"im"}),
+    a list of images, a \code{function(x,y)} or a single number.
   }
   \item{type}{
     Character string (partially matched) specifying the type of residuals.
@@ -33,7 +33,7 @@ residualMeasure(Q, lambda,
   This command constructs the residual measure
   for the model in which \code{Q} is the observed point pattern
   or quadrature scheme, and \code{lambda} is the estimated intensity
-  function obtained in some fashion.
+  obtained in some fashion.
 }
 \value{
   A measure (object of class \code{"msr"}).

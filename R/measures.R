@@ -856,8 +856,22 @@ residualMeasure <- function(Q, lambda,
   P <- union.quad(Q)
   Lambda <- if(is.im(lambda)) {
               lambda[P, drop=FALSE]
-            } else {
+            } else if(is.list(lambda) && all(sapply(lambda, is.im))) {
               sapply(lambda, "[", i=unmark(P), drop=FALSE)
+            } else if(is.numeric(lambda) && length(lambda) == 1) {
+              rep(lambda, npoints(P))
+            } else if(is.function(lambda)) {
+              lamP <- lambda(P$x, P$y)
+              if((nl <- length(lamP)) != (nP <- npoints(P)))
+                stop(paste("Function lambda incorrectly returned", nl,
+                           ngettext(nl, "value", "values"),
+                           "when applied to", nP, "data points"),
+                     call.=FALSE)
+              lamP
+            } else {
+              stop(paste("Argument lambda should be an image,",
+                         "a list of images, a function, or a single number"),
+                   call.=FALSE)
             }
   switch(type,
          raw = {

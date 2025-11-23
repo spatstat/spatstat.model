@@ -1,35 +1,31 @@
 
-        CHANGES IN spatstat.model VERSION 3.4-2.020
+        CHANGES IN spatstat.model VERSION 3.4-2.021
 
 OVERVIEW
 
-    o Replicated point patterns on linear networks.
+    o Models for replicated point patterns on linear networks.
     
-    o Extended facilities for spatial logistic regression.
-
     o ROC curves for determinantal point process models.
 
-    o Different discretisation rules supported in 'slrm'.
-
-    o Partial residuals for kppm.
+    o Partial residuals for cluster process and Cox process models.
     
-    o Leave-one-pixel-out prediction in 'slrm'
+    o Extended facilities for spatial logistic regression.
 
     o Bug fixes and internal improvements.
 
 NEW FUNCTIONS
-
-    o roc.dppm
-    Compute ROC curve for a determinantal point process model.
-
-    o parres.kppm
-    Partial residual plot for fitted cluster process or Cox process models.
 
     o parres
     New generic function for partial residuals.
     
     o parres.ppm
     The original function 'parres' has now become the method 'parres.ppm'.
+
+    o parres.kppm
+    Partial residual plot for fitted cluster process or Cox process models.
+
+    o roc.dppm
+    Compute ROC curve for a determinantal point process model.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -38,7 +34,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     it now supports 'leave-one-pixel-out' prediction.
 
     o mppm
-    Now accepts point patterns on a linear network.
+    Now allows the response variable to be a point pattern on a linear network.
     This is experimental code.
 
     o predict.slrm
@@ -47,6 +43,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o print.slrm
     Now prints information about the pixel raster.
+
+    o residualMeasure
+    More options for argument 'lambda'.
     
     o roc.slrm
     Changed interpretation of argument 'leaveoneout=TRUE'.

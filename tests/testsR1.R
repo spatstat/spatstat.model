@@ -17,7 +17,7 @@ cat(paste("--------- Executing",
 #'  Stuff related to residuals and residual diagnostics
 #'           including residual summary functions
 #'
-#'   $Revision: 1.7 $  $Date: 2022/05/22 08:43:31 $
+#'   $Revision: 1.8 $  $Date: 2025/11/23 09:41:53 $
 #'
 
 local({
@@ -73,6 +73,10 @@ local({
 
     #' residual summary functions
     pt <- psst(cells, interaction=Strauss(0.1), fun=nndcumfun)
+
+    #' code blocks in residualMeasure
+    A <- residualMeasure(cells, -42)
+    B <- residualMeasure(cells, function(x,y) { rep(-42, length(x)) })
   }
 })
 
