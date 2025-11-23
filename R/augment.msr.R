@@ -4,7 +4,7 @@
 #'   Given a measure, compute a pixel image of the smoothed density
 #'   and insert it in the object.
 #'
-#'   $Revision: 1.2 $  $Date: 2020/12/19 05:25:06 $
+#'   $Revision: 1.4 $  $Date: 2025/11/23 09:05:40 $
 
 
 augment.msr <- function(x, ..., sigma, recompute=FALSE) {
@@ -15,6 +15,9 @@ augment.msr <- function(x, ..., sigma, recompute=FALSE) {
   xloc <- x$loc
   W <- as.owin(xloc)
   mt <- is.multitype(xloc)
+  ## substrate e.g. linear network constraining the locations?
+  has.substrate <- !is.null(plekken <- attr(x, "plekken"))
+  ## 
   if(missing(sigma)) {
     sigma <- if(!mt) avenndist(xloc) else max(sapply(split(xloc), avenndist))
     if(sigma == 0) sigma <- max(bw.scott(xloc))/5
@@ -51,12 +54,13 @@ augment.msr <- function(x, ..., sigma, recompute=FALSE) {
   ## smooth density unless constant
   ra <- apply(xdensity, 2, range)
   varble <- apply(as.matrix(ra), 2, diff) > sqrt(.Machine$double.eps)
+  varble <- varble | has.substrate
   ##
   if(d == 1) {
     if(!varble) {
       smo <- as.im(mean(xdensity), W=W)
     } else {
-      xmd <- xloc %mark% xdensity
+      xmd <- (plekken %orifnull% xloc) %mark% xdensity
       dont.complain.about(xmd)
       smo <- do.call(Smooth,
                      resolve.defaults(list(X=quote(xmd)),
@@ -67,7 +71,7 @@ augment.msr <- function(x, ..., sigma, recompute=FALSE) {
     smo <- vector(mode="list", length=d)
     names(smo) <- colnames(x)
     if(any(varble)) {
-      xmdv <- xloc %mark% xdensity[,varble, drop=FALSE]
+      xmdv <-  (plekken %orifnull% xloc) %mark% xdensity[,varble, drop=FALSE]
       dont.complain.about(xmdv)
       smo[varble] <- do.call(Smooth,
                              resolve.defaults(list(X=quote(xmdv)),

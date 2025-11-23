@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.106 $  $Date: 2024/06/09 00:01:49 $
+#  $Revision: 1.109 $  $Date: 2025/11/23 09:04:01 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!is.quad(qscheme))
@@ -81,15 +81,19 @@ msr <- function(qscheme, discrete, density, check=TRUE) {
     discretepad <- ok * discretepad
     density     <- ok * density
   }
-  
+
   ## finished
-  out <- list(loc = U,
-              val = val,
-              atoms = Z,
-              discrete = discretepad,
-              density = density,
-              wt = wt)
+  out <- list(loc       = U,
+              val       = val,
+              atoms     = Z,
+              discrete  = discretepad,
+              density   = density,
+              wt        = wt)
   class(out) <- "msr"
+
+  ## possibly add information about the original context (eg linear network)
+  attr(out, "plekken") <- attr(qscheme, "plekken")
+  
   return(out)
 }
 
@@ -204,6 +208,15 @@ split.msr <- function(x, f, drop=FALSE, ...) {
                    SIMPLIFY=FALSE)
   names(result) <- names(locsplit)
   result <- lapply(result, "class<-", value="msr")
+  ## also split the pattern of auxiliary locations if present
+  if(!is.null(plekken <- attr(x, "plekken"))) {
+    pleksplit <- split(plekken, g, drop=drop)
+    result <- mapply("attr<-",
+                     x=result,
+                     which="plekken",
+                     value=pleksplit,
+                     SIMPLIFY=FALSE)
+  }
   if(drop && any(isnul <- (sapply(locsplit, npoints) == 0)))
     result[isnul] <- NULL
   result <- as.solist(result)
@@ -444,6 +457,8 @@ plot.msr <- function(x, ..., add=FALSE,
               density=dens,
               wt=wt)
   class(out) <- "msr"
+  if(!is.null(plekken <- attr(x, "plekken")))
+    attr(out, "plekken") <- if(missing(i)) plekken else plekken[id]
   return(out)    
 }
 
@@ -701,7 +716,7 @@ harmonise.msr <- local({
     if(!any(ismeasure))
       stop("No measures supplied")
     if(!all(ismeasure))
-    stop("All arguments should be measures (objects of class msr)")
+      stop("All arguments should be measures (objects of class msr)")
     if(n < 2) return(argz)
     result <- vector(mode="list", length=n)
     ## extract entries
