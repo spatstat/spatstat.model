@@ -5,7 +5,7 @@
 #         resid1plot       one or more unrelated individual plots 
 #         resid1panel      one panel of resid1plot
 #
-#   $Revision: 1.39 $    $Date: 2020/12/19 05:25:06 $
+#   $Revision: 1.44 $    $Date: 2025/11/24 03:10:38 $
 #
 #
 
@@ -50,11 +50,12 @@ resid4plot <- local({
   plot.neg <- match.arg(plot.neg)
   if(missing(rlab)) rlab <- NULL
   rlablines <- if(is.null(rlab)) 1 else sum(nzchar(rlab))
-  clip     <- RES$clip
-  Yclip    <- RES$Yclip
+  Y        <- RES$Y
+  clip     <- RES$clip %orifnull% FALSE
+  Yclip    <- RES$Yclip %orifnull% Y
   Z        <- RES$smooth$Z
   W        <- RES$W
-  Wclip    <- Yclip$window
+  Wclip    <- Window(Yclip)
   type     <- RES$type
   typename <- RES$typename
   Ydens    <- RES$Ydens[Wclip, drop=FALSE]
@@ -73,8 +74,8 @@ resid4plot <- local({
   # determine colour map for background
   nullvalue <- if(type == "eem") 1 else 0
   if(is.null(srange)) {
-    Yrange <- if(!is.null(Ydens)) summary(Ydens)$range else NULL
-    Zrange <- if(!is.null(Z)) summary(Z)$range else NULL
+    Yrange <- if(!is.null(Ydens)) range(Ydens) else NULL
+    Zrange <- if(!is.null(Z)) range(Z) else NULL
     srange <- range(c(Yrange, Zrange, nullvalue), na.rm=TRUE)
   } else check.range(srange)
   backcols <- beachcolours(srange, nullvalue, monochrome)
@@ -91,11 +92,11 @@ resid4plot <- local({
 
   # determine whether pre-plotting the window(s) is redundant
   redundant <- 
-    (plot.neg == "image") && (type != "eem") && (Yclip$window$type == "mask")
+    (plot.neg == "image") && (type != "eem") && is.mask(Window(Yclip))
 
   # pre-plot the window(s)
   if(!redundant) {
-    YsWin <- Ys$window
+    YsWin <- Window(Ys)
     if(!clip) 
       do.clean(plot, YsWin, add=TRUE, ...)
     else
@@ -110,12 +111,12 @@ resid4plot <- local({
   
   switch(plot.neg,
          discrete={
-           neg <- (Ys$marks < 0)
+           neg <- (marks(Ys) < 0)
            ## plot negative masses of discretised measure as squares
            if(any(c("maxsize","meansize","markscale") %in% names(list(...)))) {
              plot(Ys[neg], add=TRUE, legend=FALSE, ...)
            } else {
-             hackmax <- 0.5 * sqrt(area(Wclip)/Yclip$n)
+             hackmax <- 0.5 * sqrt(area(Wclip)/npoints(Yclip))
              plot(Ys[neg], add=TRUE, legend=FALSE, maxsize=hackmax, ...)
            }
            ## plot positive masses at atoms
@@ -363,12 +364,12 @@ resid1plot <- local({
       }
     }
     ## extract info
-    clip  <- RES$clip
+    clip  <- RES$clip %orifnull% FALSE
     Y     <- RES$Y
-    Yclip <- RES$Yclip
+    Yclip <- RES$Yclip %orifnull% Y
     Z     <- RES$smooth$Z
-    W     <- RES$W
-    Wclip <- Yclip$window
+    W     <- RES$W %orifnull% Window(Y)
+    Wclip <- Window(Yclip)
     type  <- RES$type
     Ydens <- RES$Ydens[Wclip, drop=FALSE]
     Ymass <- RES$Ymass[Wclip]
@@ -376,8 +377,8 @@ resid1plot <- local({
     if(opt$all || opt$marks || opt$smooth) {
       nullvalue <- if(type == "eem") 1 else 0
       if(is.null(srange)) {
-        Yrange <- if(!is.null(Ydens)) summary(Ydens)$range else NULL
-        Zrange <- if(!is.null(Z)) summary(Z)$range else NULL
+        Yrange <- if(!is.null(Ydens)) range(Ydens) else NULL
+        Zrange <- if(!is.null(Z)) range(Z) else NULL
         srange <- range(c(Yrange, Zrange, nullvalue), na.rm=TRUE)
       } else check.range(srange)
       backcols <- beachcolours(srange, nullvalue, monochrome)
@@ -398,7 +399,7 @@ resid1plot <- local({
     if(opt$marks) {
       ## determine whether pre-plotting the window(s) is redundant
       redundant <- (plot.neg == "image") &&
-                   (type != "eem") && (Yclip$window$type == "mask")
+                   (type != "eem") && is.mask(Window(Yclip))
       ## pre-plot the window(s)
       if(redundant && !add) {
         z <- do.clean(plot,
