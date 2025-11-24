@@ -31,6 +31,7 @@
 \alias{dppmFixIntensity}
 \alias{DPPSaddle}
 \alias{DPPSaddlePairwise}
+\alias{eem.exactppm}
 \alias{enet.engine}
 \alias{equalpairs}          
 \alias{evalInteraction}
@@ -185,6 +186,7 @@
 \alias{reduceformula}
 \alias{reincarnate.interact}
 \alias{rescale.msr}
+\alias{residuals.exactppm}
 \alias{resid4plot}
 \alias{resid1plot}
 \alias{resid1panel}
@@ -285,6 +287,7 @@ dppmFixIntensity(DPP, lambda, po)
 dppmFixAlgorithm(algorithm, changealgorithm, clusters, startpar)
 DPPSaddle(beta, fi, invert)
 DPPSaddlePairwise(beta, fi, invert)
+\method{eem}{exactppm}(fit, \dots)
 enet.engine(model, \dots, standardize, lambda, alpha, adaptive) 
 equalpairs(U, X, marked=FALSE)
 evalInteraction(X,P,E,interaction,correction,splitInf,\dots,
@@ -496,6 +499,7 @@ quadBlockSizes(nX, nD, p, nMAX, announce)
 reduceformula(fmla, deletevar, verbose)
 reincarnate.interact(object)
 \method{rescale}{msr}(X, s, unitname)
+\method{residuals}{exactppm}(object, type, \dots)
 resid4plot(RES, plot.neg, plot.smooth,
            spacing, outer, srange, monochrome, main,
            xlab, ylab, rlab, col.neg, col.smooth, \dots)
