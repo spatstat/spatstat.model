@@ -16,8 +16,9 @@ cat(paste("--------- Executing",
 #'
 #'  Stuff related to residuals and residual diagnostics
 #'           including residual summary functions
+#'           and residual measures
 #'
-#'   $Revision: 1.8 $  $Date: 2025/11/23 09:41:53 $
+#'   $Revision: 1.9 $  $Date: 2025/11/23 09:57:47 $
 #'
 
 local({

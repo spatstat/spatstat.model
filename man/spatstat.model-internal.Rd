@@ -22,7 +22,7 @@
 \alias{data.mppm}
 \alias{deltasuffstat}
 \alias{dfbetas.ppmInfluence}
-\alias{diagnose.ppm.engine}
+\alias{diagppmEngine}
 \alias{dim.msr}
 \alias{dimnames.msr}
 \alias{doMultiStraussHard}
@@ -273,10 +273,10 @@ deltasuffstat(model, \dots,
               restrict, dataonly, sparseOK, quadsub,
               force, warn.forced, verbose, use.special)
 \method{dfbetas}{ppmInfluence}(model, \dots)
-diagnose.ppm.engine(object, \dots, type, typename, opt,
-                         sigma, rbord, compute.sd, compute.cts,
-                         envelope, nsim, nrank,
-                         rv, oldstyle, splineargs, verbose)
+diagppmEngine(object, \dots, type, typename, opt,
+              sigma, rbord, compute.sd, compute.cts,
+              envelope, nsim, nrank,
+              rv, oldstyle, splineargs, verbose)
 \method{dim}{msr}(x)
 \method{dimnames}{msr}(x)
 doMultiStraussHard(iradii, hradii, types)

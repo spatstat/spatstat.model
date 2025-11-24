@@ -1,4 +1,5 @@
 \name{diagnose.ppm}
+\alias{diagnose}
 \alias{diagnose.ppm}
 \alias{plot.diagppm}
 \title{
@@ -9,7 +10,10 @@
   produce diagnostic plots based on residuals.
 }
 \usage{
-  diagnose.ppm(object, \dots, type="raw", which="all", sigma=NULL, 
+
+  diagnose(object, \dots)
+
+  \method{diagnose}{ppm}(object, \dots, type="raw", which="all", sigma=NULL, 
                rbord=reach(object), cumulative=TRUE,
                plot.it=TRUE, rv = NULL,
                compute.sd=is.poisson(object), compute.cts=TRUE,
@@ -163,6 +167,9 @@
   and to reveal departures from the fitted model.
   See also the companion function \code{\link{qqplot.ppm}}.
 
+  The function \code{diagnose} is generic, with a method for
+  class \code{"ppm"} which is documented in this page.
+  
   The argument \code{object} must be a fitted point process model
   (object of class \code{"ppm"}) typically produced by the maximum
   pseudolikelihood fitting algorithm \code{\link{ppm}}).
@@ -389,19 +396,19 @@
 }
 \examples{
     fit <- ppm(cells ~x, Strauss(r=0.15))
-    diagnose.ppm(fit)
+    diagnose(fit)
     \donttest{
-    diagnose.ppm(fit, type="pearson")
+    diagnose(fit, type="pearson")
     }
 
-    diagnose.ppm(fit, which="marks")
+    diagnose(fit, which="marks")
 
-    diagnose.ppm(fit, type="raw", plot.neg="discrete")
+    diagnose(fit, type="raw", plot.neg="discrete")
 
-    diagnose.ppm(fit, type="pearson", which="smooth")
+    diagnose(fit, type="pearson", which="smooth")
 
     # save the diagnostics and plot them later
-    u <- diagnose.ppm(fit, rbord=0.15, plot.it=FALSE)
+    u <- diagnose(fit, rbord=0.15, plot.it=FALSE)
     if(interactive()) {
     plot(u)
     plot(u, which="marks")

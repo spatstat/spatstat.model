@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 3.4-2.021
+        CHANGES IN spatstat.model VERSION 3.4-2.022
 
 OVERVIEW
 
@@ -15,6 +15,9 @@ OVERVIEW
 
 NEW FUNCTIONS
 
+    o diagnose
+    New generic function for model diagnostics.
+
     o parres
     New generic function for partial residuals.
     
@@ -29,6 +32,9 @@ NEW FUNCTIONS
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o diagnose.ppm
+    This is now a method for the generic function 'diagnose'.
+    
     o fitted.slrm
     Argument 'leaveoneout' is no longer ignored when 'dataonly=FALSE';
     it now supports 'leave-one-pixel-out' prediction.

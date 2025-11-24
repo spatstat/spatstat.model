@@ -1,12 +1,143 @@
-#
-#                            diagnoseppm.R
-#
-# Makes diagnostic plots based on residuals or energy weights
-#
-# $Revision: 1.45 $ $Date: 2024/01/09 02:27:11 $
-#
+##
+##                            diagnoseppm.R
+##
+## Makes diagnostic plots based on residuals or energy weights
+##
+## $Revision: 2.1 $ $Date: 2025/11/24 00:34:15 $
+##
 
-diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
+diagnose <- function(object, ...) {
+  UseMethod("diagnose")
+}
+
+diagnose.ppm <- function(object, ..., type="raw", which="all", 
+                         sigma=NULL, 
+                         rbord =reach(object), cumulative=TRUE,
+                         plot.it = TRUE, rv = NULL, 
+                         compute.sd=is.poisson(object), compute.cts=TRUE,
+                         envelope=FALSE, nsim=39, nrank=1,
+                         typename, check=TRUE, repair=TRUE, oldstyle=FALSE,
+                         splineargs=list(spar=0.5))
+{
+  asked.newstyle <- !missing(oldstyle) && !oldstyle
+
+  if(is.marked.ppm(object))
+    stop("Sorry, this is not yet implemented for marked models")
+  
+  ## check whether model originally came from replicated data
+  is.subfit <- (object$method == "mppm")
+
+  Coefs <- coef(object)
+  if(check && damaged.ppm(object)) {
+    if(!repair)
+      stop("object format corrupted; try update(object, use.internal=TRUE)")
+    message("object format corrupted; repairing it.")
+    object <- update(object, use.internal=TRUE)
+    object <- tweak.coefs(object, Coefs)
+  } else if(compute.sd && is.null(getglmfit(object))) {
+    object <- update(object, forcefit=TRUE, use.internal=TRUE)
+    object <- tweak.coefs(object, Coefs)
+  }
+
+  ## -------------  Interpret arguments --------------------------
+
+  ## Edge-effect avoidance
+  if(missing(rbord) && !is.finite(rbord)) {
+    ## Model has infinite reach
+    ## Use correction rule employed when fitting
+    rbord <- if(object$correction == "border") object$rbord else 0
+  }
+  
+  ## match type argument
+  type <- pickoption("type", type,
+                     c(eem="eem",
+                       raw="raw",
+                       inverse="inverse",
+                       pearson="pearson",
+                       Pearson="pearson"))
+  if(missing(typename))
+    typename <- switch(type,
+                       eem="exponential energy weights",
+                       raw="raw residuals",
+                       inverse="inverse-lambda residuals",
+                       pearson="Pearson residuals")
+
+  ## 'which' is multiple choice with exact matching 
+  optionlist <- c("all", "marks", "smooth", "x", "y", "sum")
+
+  if(!all(m <- which %in% optionlist))
+    stop(paste("Unrecognised choice(s) of",
+               paste(sQuote("which"), ":", sep=""),
+               paste(which[!m], collapse=", ")))
+
+  opt <- list()
+  opt$all <- "all" %in% which
+  opt$marks <-  ("marks" %in% which)   | opt$all
+  opt$smooth <- ("smooth" %in% which)  | opt$all
+  opt$xmargin <- (("x" %in% which)       | opt$all) && !cumulative
+  opt$ymargin <- (("y" %in% which)       | opt$all) && !cumulative
+  opt$xcumul <-  (("x" %in% which)       | opt$all) && cumulative
+  opt$ycumul <-  (("y" %in% which)       | opt$all) && cumulative
+  opt$sum <-     ("sum" %in% which)      | opt$all
+
+  ## compute and plot estimated standard deviations?
+  ## yes for Poisson, no for other models, unless overridden
+  if(!missing(compute.sd))
+    plot.sd <- compute.sd
+  else
+    plot.sd <- list(...)$plot.sd
+  if(is.null(plot.sd))
+    plot.sd <- is.poisson.ppm(object)
+  if(missing(compute.sd))
+    compute.sd <- plot.sd
+
+  ## default for mppm objects is oldstyle=TRUE
+  if(compute.sd && is.subfit) {
+    if(!asked.newstyle) {
+      ## silently change default
+      oldstyle <- TRUE
+    } else {
+      stop(paste("Variance calculation for a subfit of an mppm object",
+                 "is only implemented for oldstyle=TRUE"),
+           call.=FALSE)
+    }
+  }
+    
+  ## interpolate the density of the residual measure?
+  if(missing(compute.cts)) {
+    plot.neg <- resolve.defaults(list(...),
+                                 formals(plot.diagppm)["plot.neg"])$plot.neg
+    ## only if it is needed for the mark plot
+    compute.cts <- opt$marks && (plot.neg != "discrete")
+  }
+
+  ## -------  DO THE CALCULATIONS -----------------------------------
+  RES <-  diagppmEngine(object, type=type, typename=typename,
+                              opt=opt, sigma=sigma, rbord=rbord,
+                              compute.sd=compute.sd,
+                              compute.cts=compute.cts,
+                              envelope=envelope, nsim=nsim, nrank=nrank,
+                              rv=rv, oldstyle=oldstyle,
+                              splineargs=splineargs,
+                              ...)
+
+  RES$typename <- typename
+  RES$opt <- opt
+  RES$compute.sd <- compute.sd
+  RES$compute.cts <- compute.cts
+  
+  class(RES) <- "diagppm"
+
+  ## -------  PLOT --------------------------------------------------
+  if(plot.it) 
+    plot(RES, ...)
+
+  return(RES)
+}
+
+## >>>>>>>>>>>>>>>>>>> main calculation code <<<<<<<<<<<<<<<<<<<<<<<<<
+
+diagppmEngine <- function(object, ..., type="eem", typename, opt,
                                 sigma=NULL,
                                 rbord=reach(object),
                                 compute.sd=is.poisson(object),
@@ -19,14 +150,14 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
   if(is.marked.ppm(object))
     stop("Sorry, this is not yet implemented for marked models")
 
-  # quadrature points
+  ## quadrature points
   Q <- quad.ppm(object)
   U <- union.quad(Q)
   Qweights <- w.quad(Q)
 
-  # -------------- Calculate residuals/weights -------------------
+  ## -------------- Calculate residuals/weights -------------------
 
-  # Discretised residuals
+  ## Discretised residuals
 
   if(type == "eem") {
     residval <- if(!is.null(rv)) rv else eem(object, check=FALSE)
@@ -44,7 +175,7 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
     Y <- U %mark% residval
   }
 
-  # Atoms and density of measure
+  ## Atoms and density of measure
 
   Ymass <- NULL
   Ycts  <- NULL
@@ -62,18 +193,18 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
       if(!is.null(atoms) && !is.null(masses) && !is.null(cts)) {
         Ymass <- (U %mark% masses)[atoms]
         Ycts    <- U %mark% cts
-        # remove NAs (as opposed to zero cif points)
+        ## remove NAs (as opposed to zero cif points)
         if(!all(ok <- is.finite(cts))) {
           U <- U[ok]
           Ycts <- Ycts[ok]
           cts  <- cts[ok]
           Qweights <- Qweights[ok]
         }
-        # interpolate continuous part to yield an image for plotting
+        ## interpolate continuous part to yield an image for plotting
         if(type == "inverse" && all(cts != 0)) {
           Ydens <- as.im(-1, Y$window)
         } else if(is.stationary.ppm(object) && is.poisson.ppm(object)) {
-          # all values of `cts' will be equal
+          ## all values of `cts' will be equal
           Ydens <- as.im(cts[1L], Y$window)
         } else {
           smallsigma <- maxnndist(Ycts)
@@ -90,12 +221,12 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
   }
     
 
-  #----------------  Erode window ---------------------------------
-  #
+  ##----------------  Erode window ---------------------------------
+  ##
   ## Compute windows 
   W <- Y$window
 
-  # Erode window if required
+  ## Erode window if required
   clip <- !is.null(rbord) && is.finite(rbord) && (rbord > 0) 
   if(clip) {
     Wclip <- erosion.owin(W, rbord)
@@ -110,7 +241,7 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
     Yclip <- Y
   }
   
-  # ------------ start collecting results -------------------------
+  ## ------------ start collecting results -------------------------
   
   result <- list(type=type,
                  clip=clip,
@@ -121,7 +252,7 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
                  Ycts=Ycts,
                  Ydens=Ydens)
 
-  # ------------- smoothed field ------------------------------
+  ## ------------- smoothed field ------------------------------
 
   Z <- NULL
   if(opt$smooth || opt$xcumul || opt$ycumul || opt$xmargin || opt$ymargin) {
@@ -141,7 +272,7 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
       result$smooth$sdp <- 1/(2 * sigma * sqrt(pi))
   }
 
-  # -------------- marginals of smoothed field ------------------------
+  ## -------------- marginals of smoothed field ------------------------
   
   if(opt$xmargin) {
     xZ <- apply(Z$v, 2, sum, na.rm=TRUE) * Z$xstep
@@ -161,7 +292,7 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
     result$ymargin <- list(y=Z$yrow, yZ=yZ, EyZ=EyZ)
   }
   
-  # -------------- cumulative (lurking variable) plots --------------
+  ## -------------- cumulative (lurking variable) plots --------------
 
   ## precompute simulated patterns for envelopes
   if(identical(envelope, TRUE))
@@ -199,7 +330,7 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
             splineargs=splineargs,
             ...)
 
-  # -------------- summary numbers --------------
+  ## -------------- summary numbers --------------
   
   if(opt$sum) 
     result$sum <- list(marksum=sum(Yclip$marks, na.rm=TRUE),
@@ -211,133 +342,7 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
 }
 
 
-########################################################################
-
-
-diagnose.ppm <- function(object, ..., type="raw", which="all", 
-                         sigma=NULL, 
-                         rbord =reach(object), cumulative=TRUE,
-                         plot.it = TRUE, rv = NULL, 
-                         compute.sd=is.poisson(object), compute.cts=TRUE,
-                         envelope=FALSE, nsim=39, nrank=1,
-                         typename, check=TRUE, repair=TRUE, oldstyle=FALSE,
-                         splineargs=list(spar=0.5))
-{
-  asked.newstyle <- !missing(oldstyle) && !oldstyle
-
-  if(is.marked.ppm(object))
-    stop("Sorry, this is not yet implemented for marked models")
-  
-  # check whether model originally came from replicated data
-  is.subfit <- (object$method == "mppm")
-
-  Coefs <- coef(object)
-  if(check && damaged.ppm(object)) {
-    if(!repair)
-      stop("object format corrupted; try update(object, use.internal=TRUE)")
-    message("object format corrupted; repairing it.")
-    object <- update(object, use.internal=TRUE)
-    object <- tweak.coefs(object, Coefs)
-  } else if(compute.sd && is.null(getglmfit(object))) {
-    object <- update(object, forcefit=TRUE, use.internal=TRUE)
-    object <- tweak.coefs(object, Coefs)
-  }
-
-  # -------------  Interpret arguments --------------------------
-
-  # Edge-effect avoidance
-  if(missing(rbord) && !is.finite(rbord)) {
-    ## Model has infinite reach
-    ## Use correction rule employed when fitting
-    rbord <- if(object$correction == "border") object$rbord else 0
-  }
-  
-  # match type argument
-  type <- pickoption("type", type,
-                     c(eem="eem",
-                       raw="raw",
-                       inverse="inverse",
-                       pearson="pearson",
-                       Pearson="pearson"))
-  if(missing(typename))
-    typename <- switch(type,
-                       eem="exponential energy weights",
-                       raw="raw residuals",
-                       inverse="inverse-lambda residuals",
-                       pearson="Pearson residuals")
-
-  # 'which' is multiple choice with exact matching 
-  optionlist <- c("all", "marks", "smooth", "x", "y", "sum")
-
-  if(!all(m <- which %in% optionlist))
-    stop(paste("Unrecognised choice(s) of",
-               paste(sQuote("which"), ":", sep=""),
-               paste(which[!m], collapse=", ")))
-
-  opt <- list()
-  opt$all <- "all" %in% which
-  opt$marks <-  ("marks" %in% which)   | opt$all
-  opt$smooth <- ("smooth" %in% which)  | opt$all
-  opt$xmargin <- (("x" %in% which)       | opt$all) && !cumulative
-  opt$ymargin <- (("y" %in% which)       | opt$all) && !cumulative
-  opt$xcumul <-  (("x" %in% which)       | opt$all) && cumulative
-  opt$ycumul <-  (("y" %in% which)       | opt$all) && cumulative
-  opt$sum <-     ("sum" %in% which)      | opt$all
-
-  # compute and plot estimated standard deviations?
-  # yes for Poisson, no for other models, unless overridden
-  if(!missing(compute.sd))
-    plot.sd <- compute.sd
-  else
-    plot.sd <- list(...)$plot.sd
-  if(is.null(plot.sd))
-    plot.sd <- is.poisson.ppm(object)
-  if(missing(compute.sd))
-    compute.sd <- plot.sd
-
-  # default for mppm objects is oldstyle=TRUE
-  if(compute.sd && is.subfit) {
-    if(!asked.newstyle) {
-      # silently change default
-      oldstyle <- TRUE
-    } else {
-      stop(paste("Variance calculation for a subfit of an mppm object",
-                 "is only implemented for oldstyle=TRUE"),
-           call.=FALSE)
-    }
-  }
-    
-  # interpolate the density of the residual measure?
-  if(missing(compute.cts)) {
-    plot.neg <- resolve.defaults(list(...),
-                                 formals(plot.diagppm)["plot.neg"])$plot.neg
-    # only if it is needed for the mark plot
-    compute.cts <- opt$marks && (plot.neg != "discrete")
-  }
-
-  # -------  DO THE CALCULATIONS -----------------------------------
-  RES <-  diagnose.ppm.engine(object, type=type, typename=typename,
-                              opt=opt, sigma=sigma, rbord=rbord,
-                              compute.sd=compute.sd,
-                              compute.cts=compute.cts,
-                              envelope=envelope, nsim=nsim, nrank=nrank,
-                              rv=rv, oldstyle=oldstyle,
-                              splineargs=splineargs,
-                              ...)
-
-  RES$typename <- typename
-  RES$opt <- opt
-  RES$compute.sd <- compute.sd
-  RES$compute.cts <- compute.cts
-  
-  class(RES) <- "diagppm"
-
-  # -------  PLOT --------------------------------------------------
-  if(plot.it) 
-    plot(RES, ...)
-
-  return(RES)
-}
+################# support for class 'diagppm' ##########################
 
 plot.diagppm <-
   function(x, ..., which,
