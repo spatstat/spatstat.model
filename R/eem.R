@@ -2,7 +2,7 @@
 #
 # Computes the Stoyan-Grabarnik "exponential energy weights" 
 #
-# $Revision: 1.7 $ $Date: 2025/11/24 04:01:55 $
+# $Revision: 1.8 $ $Date: 2025/11/24 06:56:23 $
 #
 
 eem <- function(fit, ...) {
@@ -20,7 +20,8 @@ eem.ppm <- function(fit, check=TRUE, ...) {
 
 eem.exactppm <- function(fit, ...) {
   verifyclass(fit, "exactppm")
-  lambda <- fitted(fit)
+  ## lambda <- fitted(fit)
+  lambda <- predict(fit, locations=fit$X)
   eemarks <- 1/lambda
   attr(eemarks, "type") <- "eem"
   attr(eemarks, "typename") <- "exponential energy marks"
