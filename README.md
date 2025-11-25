@@ -6,7 +6,8 @@
 [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.model)](https://github.com/spatstat/spatstat.model)
 
 The original `spatstat` package has been split into
-several sub-packages (See [spatstat/spatstat](https://github.com/spatstat/spatstat))
+several sub-packages
+(see [spatstat/spatstat](https://github.com/spatstat/spatstat))
 
 This package `spatstat.model` is one of the
 sub-packages. It contains all the main user-level functions that perform
@@ -16,6 +17,10 @@ with the exception of data on linear networks.
 Most of the functionality is for spatial point patterns in two dimensions.
 There is a very modest amount of functionality for 3D and higher dimensional patterns
 and space-time patterns.
+
+You are viewing the GitHub repository which holds
+the latest **development version** of `spatstat.model`.
+For the latest public release on CRAN, click the green badge above.
 
 ### Overview 
 
@@ -59,4 +64,22 @@ likelihood ratio test, envelope tests, Dao-Genton test, balanced independent two
 - pseudoscore residual plots
 - model compensators of summary functions
 - Q-Q plots
+
+### Installing the package
+
+This repository contains the _development version_ of
+`spatstat.model`. The easiest way to install the development version
+is to start R and type
+
+```R
+repo <- c('https://spatstat.r-universe.dev', 'https://cloud.r-project.org')
+install.packages("spatstat.model", dependencies=TRUE, repos=repo)
+```
+
+To install the latest _public release_ of `spatstat.model`,
+type
+
+```R
+install.packages("spatstat.model")
+```
 
