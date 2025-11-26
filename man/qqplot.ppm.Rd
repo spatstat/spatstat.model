@@ -23,14 +23,14 @@
     The fitted point process model, which is to be assessed
     using the Q-Q plot. An object of class \code{"ppm"}.
     Smoothed residuals obtained from this fitted model will provide the
-    ``data'' quantiles for the Q-Q plot.
+    \dQuote{data} quantiles for the Q-Q plot.
   }
   \item{nsim}{
-    The number of simulations from the ``reference'' point process model.
+    The number of simulations from the \dQuote{reference} point process model.
   }
   \item{expr}{
     Determines the simulation mechanism
-    which provides the ``theoretical'' quantiles for the
+    which provides the \dQuote{theoretical} quantiles for the
     Q-Q plot. See Details.
   }
   \item{\dots}{
@@ -140,12 +140,12 @@
   by the maximum pseudolikelihood fitting algorithm \code{\link{ppm}}).
   Residuals will be computed for this fitted model using
   \code{\link{residuals.ppm}},
-  and the residuals will be kernel-smoothed to produce a ``residual
-  field''. The values of this residual field will provide the
-  ``data'' quantiles for the Q-Q plot.
+  and the residuals will be kernel-smoothed to produce a
+  \dQuote{residual field}. The values of this residual field will provide the
+  \dQuote{data} quantiles for the Q-Q plot.
 
   The argument \code{expr} is not usually specified.
-  It provides a way to modify the ``theoretical'' or ``reference''
+  It provides a way to modify the \dQuote{theoretical} or \dQuote{reference}
   quantiles for the Q-Q plot.
 
   In normal usage we set \code{expr=NULL}. The default
@@ -167,8 +167,8 @@
   original fitted model \code{fit} will be fitted to this new point
   pattern using \code{\link{update.ppm}}, to yield another fitted
   model. Smoothed residuals obtained from these
-  \code{nsim} fitted models will yield the ``theoretical'' quantiles for the
-  Q-Q plot.
+  \code{nsim} fitted models will yield the \dQuote{theoretical}
+  quantiles for the Q-Q plot.
 
   Alternatively \code{expr} can be a list of point patterns,
   or an \code{envelope} object that contains a list of point patterns

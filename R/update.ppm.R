@@ -400,7 +400,7 @@ damaged.ppm <- function(object) {
   return(badQ)
 }
 
-updateData.ppm <- function(model, X, ..., warn=TRUE) {
+updateData.ppm <- function(model, X, ..., warn=TRUE, use.internal) {
   ## wrapper to refit the 'model' to new data 'X'
   if(is.marked(X) && !is.multitype(X)) {
     if(warn) warning("Marks were ignored when re-fitting the model,",
@@ -408,5 +408,9 @@ updateData.ppm <- function(model, X, ..., warn=TRUE) {
                      call.=FALSE)
     X <- unmark(X)
   }
-  update(model, Q=X)
+  ## use the internal model data to update,
+  ## unless the model is a 'fake' object produced by 'subfits'
+  if(missing(use.internal))
+    use.internal <- (model$method != "mppm")
+  update(model, Q=X, ..., use.internal=use.internal)
 }

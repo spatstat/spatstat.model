@@ -9,9 +9,7 @@
 qqplot.ppm <- local({
 
   ## How to refit the model
-  refit <- function(fit, pattern) {
-    update.ppm(fit, Q=pattern, use.internal=(fit$method != "mppm"))
-  }
+  refit <- function(fit, pattern) {  updateData(fit, pattern) }
   
   ## how to compute the residual field
   residualfield <- function(fit, ..., addtype=FALSE) {
@@ -50,6 +48,7 @@ qqplot.ppm <- local({
       if(is.null(dimyx)) 
         dimyx <- pmin(40, rev(oldnpixel))
       spatstat.options(npixel=rev(dimyx))
+      on.exit(spatstat.options(npixel=oldnpixel))
     } 
     
     ################   How to evaluate residuals ##########################
@@ -268,9 +267,7 @@ qqplot.ppm <- local({
       result$sim <- NULL
     }
          
-    ## reset npixel
-    if(fast)
-      spatstat.options(npixel=oldnpixel)
+    ## reset npixel is done by on.exit
     ##
     class(result) <- unique(c("qqppm", class(result)))
     return(invisible(result))

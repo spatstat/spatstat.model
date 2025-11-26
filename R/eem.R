@@ -18,6 +18,9 @@ eem.ppm <- function(fit, check=TRUE, ...) {
   return(eemarks)
 }
 
+## Note: class 'exactppm' is defined in spatstat.explore
+## but eem() is a generic defined in spatstat.model
+
 eem.exactppm <- function(fit, ...) {
   verifyclass(fit, "exactppm")
   ## lambda <- fitted(fit)
