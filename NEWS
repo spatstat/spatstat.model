@@ -1,4 +1,20 @@
 
+        CHANGES IN spatstat.model VERSION 3.5-0.001
+
+OVERVIEW
+
+    o Convert a recursively partitioned point process model to a tessellation.
+    
+NEW FUNCTIONS
+
+    o as.tess.rppm
+    Convert a recursively partitioned point process model
+    to a spatial tessellation.
+
+    o formula.rppm
+    Extract the model formula for a recursively partitioned point process model.
+
+
         CHANGES IN spatstat.model VERSION 3.5-0
 
 OVERVIEW

@@ -21,8 +21,7 @@
 }
 \details{
   This function attempts to find a simple rule for predicting
-  low and high intensity regions of points in a point pattern,
-  using explanatory covariates.
+  the intensity of a point process using explanatory covariates.
   
   The arguments \code{\dots} specify the point pattern data
   and explanatory covariates in the same way as they would be
@@ -30,6 +29,29 @@
 
   The recursive partitioning algorithm \code{\link[rpart]{rpart}}
   is then used to find a partitioning rule.
+  
+  In the resulting model, a recursively partitioned point process model,
+  the intensity function 
+  of the point process can be evaluated at any spatial location
+  by following a decision tree. Each fork in the tree is defined by a split
+  on the value of one of the spatial covariates at the query location.
+  For example, for a numerical covariate \eqn{Z}, the left branch of the fork
+  is followed if \eqn{Z < c} and the right fork is followed if
+  \eqn{Z \ge c}{Z >= c}, where \eqn{c} is the critical value of the
+  split.
+  For a categorical covariate, the left branch of the fork is followed
+  if the value of \eqn{Z} is one of a specified set of levels of
+  \eqn{Z}, and the right branch is followed otherwise.
+  The tree is followed until reaching a leaf (terminal node)
+  and this determines the value of the intensity.
+  
+  The decision tree can be visualised as a tree by
+  \code{\link{plot.rppm}}.
+  The split rules are printed in text form by \code{print.rppm}.
+  The predicted intensity at all spatial locations
+  is computed by \code{\link{predict.rppm}}. The division of space
+  into subsets with different predicted intensities is
+  computed by \code{\link{as.tess.rppm}}.
 }
 \value{
   An object of class \code{"rppm"}. There are methods
@@ -47,14 +69,17 @@
   \code{\link{plot.rppm}}, 
   \code{\link{predict.rppm}}, 
   \code{\link{update.rppm}}, 
-  \code{\link{prune.rppm}}.
+  \code{\link{prune.rppm}},
+  \code{\link{as.tess.rppm}}.
 }
 \examples{
     # New Zealand trees data: trees planted along border
     # Use covariates 'x', 'y'
     nzfit <- rppm(nztrees ~ x + y)
     nzfit
-    prune(nzfit, cp=0.035)
+    nzfit2 <- prune(nzfit, cp=0.035)
+    nzfit2
+    plot(nzfit2)
     # Murchison gold data: numeric and logical covariates
     mur <- solapply(murchison, rescale, s=1000, unitname="km")
     mur$dfault <- distfun(mur$faults)

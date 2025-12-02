@@ -146,10 +146,13 @@ residuals.rppm <- function(object,
   residualMeasure(Q, lambda, type)
 }
 
-terms.rppm <- function(x, ...) { terms(x$pfit) }
+terms.rppm <- function(x, ...) { terms(as.ppm(x)) }
+
+formula.rppm <- function(x, ...) { formula(as.ppm(x)) }
 
 update.rppm <- function(object, ..., envir=environment(terms(object))) {
-  pfit <- update(object$pfit, ..., envir=envir)
+  pfit <- as.ppm(object)
+  pfit <- update(pfit, ..., envir=envir)
   if(!is.poisson(pfit))
     warning("Interpoint interaction will be ignored", call.=FALSE)
   df <- getglmdata(pfit)

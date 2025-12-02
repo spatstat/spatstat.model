@@ -49,6 +49,7 @@
 \alias{flipxy.msr}
 \alias{forbid.logi}
 \alias{formula.hackglmmPQL} 
+\alias{formula.rppm} 
 \alias{getdataname}
 \alias{getglmdata}
 \alias{getglmdata.ppm}
@@ -129,8 +130,9 @@
 \alias{optimNsteps}
 \alias{outdated.interact}
 \alias{oversize.quad}
-\alias{parameters.detpointprocfamily}
 \alias{PairPotentialType}
+\alias{parameters.detpointprocfamily}
+\alias{parseRPPM}
 \alias{partialModelMatrix}
 \alias{partialResidualEngine}
 \alias{pcfmodel.clusterprocess}
@@ -307,6 +309,7 @@ fii(interaction, coefs, Vnames, IsOffset, vnameprefix)
 \method{flipxy}{msr}(X)
 forbid.logi(object)
 \method{formula}{hackglmmPQL}(x, \dots)
+\method{formula}{rppm}(x, \dots)
 getdataname(defaultvalue, \dots, dataname)
 getglmdata(object, \dots)
 \method{getglmdata}{ppm}(object, \dots, drop=FALSE)
@@ -428,6 +431,7 @@ outdated.interact(object)
 oversize.quad(Q, \dots, nU, nX, p)
 PairPotentialType(pairpot)
 \method{parameters}{detpointprocfamily}(model, \dots)
+parseRPPM(X, \dots, weed, result, verbose)
 partialModelMatrix(X,D,model,callstring,\dots)
 partialResidualEngine(model, covariate, \dots,
      smooth.effect, subregion, bw, adjust, from, to, n,
