@@ -1,7 +1,7 @@
 #'
 #'       summary.kppm.R
 #'
-#'   $Revision: 1.41 $  $Date: 2022/11/21 02:52:46 $
+#'   $Revision: 1.42 $  $Date: 2025/12/04 11:04:46 $
 #' 
 
 summary.kppm <- function(object, ..., quick=FALSE) {
@@ -16,6 +16,7 @@ summary.kppm <- function(object, ..., quick=FALSE) {
                 clik  =,
                 clik2 = Fit$clfit,
                 palm = Fit$clfit,
+                waag = Fit$clfit,
                 adapcl = Fit$cladapfit,
                 warning(paste("Unrecognised fitting method",
                               sQuote(Fit$method)))
@@ -154,7 +155,7 @@ print.summary.kppm <- function(x, ...) {
            },
            clik  =,
            clik2 = {
-             splat(fittedby, "maximum second order composite likelihood")
+             splat(fittedby, "maximum Guan's second order composite likelihood")
              splat("\trmax =", Fit$rmax)
              if(!is.null(wtf <- Fit$weightfun)) {
                a <- attr(wtf, "selfprint") %orifnull% pasteFormula(wtf)
@@ -164,6 +165,15 @@ print.summary.kppm <- function(x, ...) {
            },
            palm = {
              splat(fittedby, "maximum Palm likelihood")
+             splat("\trmax =", Fit$rmax)
+             if(!is.null(wtf <- Fit$weightfun)) {
+               a <- attr(wtf, "selfprint") %orifnull% pasteFormula(wtf)
+               splat("\tweight function:", a)
+             }
+             printStatus(x$optim.status)
+           },
+           waag = {
+             splat(fittedby, "maximum Waagepetersen's second order composite likelihood")
              splat("\trmax =", Fit$rmax)
              if(!is.null(wtf <- Fit$weightfun)) {
                a <- attr(wtf, "selfprint") %orifnull% pasteFormula(wtf)

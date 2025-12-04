@@ -27,7 +27,7 @@
        ...,
        covariates=data,
        subset,
-       method = c("mincon", "clik2", "palm", "adapcl"),
+       method = c("mincon", "clik2", "palm", "waag", "adapcl"),
        penalised = FALSE,
        improve.type = c("none", "clik1", "wclik1", "quasi"),
        improve.args = list(),
@@ -53,7 +53,7 @@
        ...,
        covariates=data,
        subset,
-       method = c("mincon", "clik2", "palm", "adapcl"),
+       method = c("mincon", "clik2", "palm", "waag", "adapcl"),
        penalised = FALSE,
        improve.type = c("none", "clik1", "wclik1", "quasi"),
        improve.args = list(),
@@ -109,9 +109,11 @@
   \item{method}{
     The fitting method. Either 
     \code{"mincon"} for minimum contrast,
-    \code{"clik2"} for second order composite likelihood,
-    \code{"adapcl"} for adaptive second order composite likelihood,
-    or \code{"palm"} for Palm likelihood.
+    \code{"palm"} for Palm likelihood,
+    \code{"clik2"} for Guan's (2006) second order composite likelihood,
+    \code{"waag"} for Waagepetersen's (2007) second order composite
+    likelihood,
+    or \code{"adapcl"} for adaptive second order composite likelihood,
     Partially matched.
   }
   \item{penalised}{
@@ -155,15 +157,13 @@
   \item{algorithm}{
     Character string determining the mathematical algorithm
     to be used to solve the fitting problem.
-    If \code{method="mincon", "clik2"} or \code{"palm"} this argument
-    is passed to the generic optimization function
-    \code{\link[stats]{optim}}
-    (renamed as the argument \code{method} to \code{\link[stats]{optim}})
+    If \code{method="mincon", "clik2", "palm"} or \code{"waag"} then
+    the argument \code{algorithm} is passed to the generic optimization function
+    \code{\link[stats]{optim}} as its argument \code{method},
     with default \code{"Nelder-Mead"}.
-    If \code{method="adapcl"} the argument is passed to the
+    If \code{method="adapcl"} the argument \code{algorithm} is passed to the
     equation solver \code{\link[nleqslv]{nleqslv}}
-    (renamed as the argument \code{method} to \code{\link[nleqslv]{nleqslv}})
-    with default \code{"Bryden"}.
+    as its argument \code{method}, with default \code{"Bryden"}.
   }
   \item{trajectory}{
     Logical value specifying whether to save the history of all
@@ -241,7 +241,7 @@
   
   The cluster parameters of the model are then fitted
   either by minimum contrast estimation,
-  or by a composite likelihood method (maximum
+  or by a composite likelihood method (maximum second order
   composite likelihood, maximum Palm likelihood, or by solving the adaptive 
   composite likelihood estimating equation).
 
@@ -283,7 +283,7 @@
       The optimisation is performed by the generic
       optimisation algorithm \code{\link[stats]{optim}}.
     }
-    \item{Second order composite likelihood:}{
+    \item{Guan's second order composite likelihood:}{
       If \code{method = "clik2"} the clustering parameters of the
       model will be fitted by maximising the second-order composite likelihood
       (Guan, 2006). The log composite likelihood is
@@ -327,7 +327,7 @@
     \item{Palm likelihood:}{
       If \code{method = "palm"} the clustering parameters of the
       model will be fitted by maximising the Palm loglikelihood
-      (Tanaka et al, 2008)
+      (Tanaka et al, 2008; Baddeley et al, 2015, page 485)
       \deqn{
 	\sum_{i,j} w(x_i, x_j) \log \lambda_P(x_j \mid x_i; \theta)
 	- \int_D w(x_i, u) \lambda_P(u \mid x_i; \theta) {\rm d} u
@@ -339,6 +339,24 @@
       \eqn{\lambda_P(u|v;\theta)}{lambdaP(u|v;theta)} is the Palm intensity of
       the model at location \eqn{u} given there is a point at \eqn{v}.
 
+      The optimisation is performed by the generic
+      optimisation algorithm \code{\link[stats]{optim}}.
+    }
+    \item{Waagepetersen's second order composite likelihood:}{
+      If \code{method = "waag"} the clustering parameters of the
+      model will be fitted by maximising the second order composite
+      loglikelihood proposed by Waagepetersen (2007, page 256)
+      \deqn{
+	\sum_{i,j} w(x_i, x_j) \log \lambda_2(x_j, x_i; \theta)
+	- \int_D \int_D w(v, u) \lambda_2(v, u; \theta) {\rm d} u {\rm d} v
+      }{
+	sum[i,j] w(x[i], x[j]) log(lambda2(x[j], x[i]; theta))
+	- integral[D] integral[D] w(v, u) lambda2(v, u ; theta) du dv
+      }
+      with the same notation as above. Here
+      \eqn{\lambda_2(u,v;\theta)}{lambda2(u,v;theta)} is the second
+      order intensity function of the model.
+      
       The optimisation is performed by the generic
       optimisation algorithm \code{\link[stats]{optim}}.
     }
@@ -634,6 +652,8 @@
   process models. \emph{Spatial Statistics} \bold{52}, 100709.
   DOI: \code{10.1016/j.spasta.2022.100709}
 
+  \baddrubaturnbook
+  
   Guan, Y. (2006) 
   A composite likelihood approach in fitting spatial point process models.
   \emph{Journal of the American Statistical Association}
@@ -696,7 +716,7 @@
 }
 \author{
   \spatstatAuthors,
-  with contributions from \abdollah and \rasmus.
+  with contributions from \abdollah, \rasmus and Bethany McDonald.
   Adaptive composite likelihood method contributed by Chiara Fend
   and modified by Adrian Baddeley.
   Penalised optimization developed by Adrian Baddeley, \tilman

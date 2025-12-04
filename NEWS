@@ -1,8 +1,10 @@
 
-        CHANGES IN spatstat.model VERSION 3.5-0.001
+        CHANGES IN spatstat.model VERSION 3.5-0.002
 
 OVERVIEW
 
+    o Waagepetersen's composite likelihood for cluster processes.
+    
     o Convert a recursively partitioned point process model to a tessellation.
     
 NEW FUNCTIONS
@@ -14,6 +16,12 @@ NEW FUNCTIONS
     o formula.rppm
     Extract the model formula for a recursively partitioned point process model.
 
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o kppm
+    New option: method="waag" fits the model by maximising
+    Waagepetersen's (2007) second order composite likelihood
+    
 
         CHANGES IN spatstat.model VERSION 3.5-0
 
