@@ -137,6 +137,7 @@ kppm.ppp <- kppm.quad <-
       X <- X[W]
     }
   }
+
   po <- ppm(Q=X, trend=trend, covariates=covariates,
             forcefit=TRUE, rename.intercept=FALSE,
             covfunargs=covfunargs, use.gam=use.gam, nd=nd, eps=eps,

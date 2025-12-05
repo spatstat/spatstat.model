@@ -14,7 +14,7 @@
 #' An estimating function approach to inference for inhomogeneous
 #' Neyman-Scott processes. Biometrics 63, 252-258.
 #'
-#'  $Revision: 1.1 $ $Date: 2025/12/04 10:46:31 $
+#'  $Revision: 1.2 $ $Date: 2025/12/05 02:01:24 $
 #'
 #'  Copyright (c) 2001-2025 Adrian Baddeley, Rolf Turner, Ege Rubak
 #'                and Bethany McDonald
@@ -34,54 +34,50 @@ kppmWaagLik <- function(X, Xname, po, clusters, control=list(),
   W <- as.owin(X)
   if(is.null(rmax))
     rmax <- rmax.rule("K", W, intensity(X))
-  ## identify unordered pairs of points that contribute
+  
+  #' identify unordered pairs of points { i, j} that contribute
+  #' listing each pair only once, with i < j
   cl <- closepairs(X, rmax, twice=FALSE, neat=FALSE)
   dIJ <- cl$d
-  ## compute weights for unordered pairs of points. Must be symmetric.
-  if(is.function(weightfun)) {
-    wIJ <- weightfun(dIJ)
-  } else {
-    npairs <- length(dIJ)
-    wIJ <- rep.int(1, npairs)
-  }
-  ## first point in each *ordered* pair
-  J <- c(cl$i, cl$j)
+  npairs <- length(dIJ)
+  #' compute weights for unordered pairs of points. Must be symmetric.
+  wIJ <- if(is.function(weightfun)) weightfun(dIJ) else rep.int(1, npairs)
   
-  ## convert window to mask, saving other arguments for later
+  #' convert window to mask, saving other arguments for later
   dcm <- do.call.matched(as.mask,
                          append(list(w=W), list(...)),
                          sieve=TRUE)
   M         <- dcm$result
   otherargs <- dcm$otherargs
 
-  ## Detect DPP usage
+  #' Detect DPP usage
   isDPP <- inherits(clusters, "detpointprocfamily")
 
-  # compute intensity at data points
-  # and c.d.f. of interpoint distance in window
+  #' compute intensity at data points, intensity in window,
+  #' and c.d.f. of interpoint distance in window (for Borel's method)
   if(stationary <- is.stationary(po)) {
-    # stationary unmarked Poisson process
+    #' constant intensity
     lambda <- intensity(X)
-    lambdaI <- lambdaJ <- rep(lambda, length(J))
-    # compute cdf of distance between two uniformly random points in W
-    g <- distcdf(M, delta=rmax/4096)
-    # scaling constant is (intensity * area)^2
-    gscale <- (lambda * area(M))^2
+    #' compute cdf of distance between two uniformly random points in W
+    PairDistCDF <- distcdf(M, delta=rmax/4096)
+    #' scaling constant is (intensity * area)^2
+    PairDistCDFScale <- (lambda * area(M))^2
   } else {
-    # compute fitted intensity at data points and in window
+    #' spatially-varying intensity -- compute at data points and in window
     lambdaX <- fitted(po, dataonly=TRUE)
     lambda <- lambdaM <- predict(po, locations=M)
-    lambdaI <- lambdaX[I] 
-    lambdaJ <- lambdaX[J] 
-    # compute cdf of distance between two randomly-selected points in W
-    # density proportional to intensity function
-    g <- distcdf(M, dW=lambdaM, delta=rmax/4096)
-    # scaling constant is (integral of intensity)^2
-    gscale <- safePositiveValue(integral.im(lambdaM)^2,
-                                default=npoints(X)^2)
+    #' extract intensity at close pairs (listed only with i < j)
+    lambdaI <- lambdaX[cl$i] 
+    lambdaJ <- lambdaX[cl$j] 
+    #' compute cdf of distance between two random points in W,
+    #' i.i.d. with density proportional to intensity function
+    PairDistCDF <- distcdf(M, dW=lambdaM, delta=rmax/4096)
+   #' scaling constant is (integral of intensity)^2
+    PairDistCDFScale <- safePositiveValue(integral.im(lambdaM)^2,
+                                    default=npoints(X)^2)
   }
 
-  # Detect DPP model and change clusters and intensity correspondingly
+  #' Detect DPP model and change clusters and intensity correspondingly
   isDPP <- !is.null(DPP)
   if(isDPP){
     tmp <- dppmFixIntensity(DPP, lambda, po)
@@ -90,27 +86,27 @@ kppmWaagLik <- function(X, Xname, po, clusters, control=list(),
     po <- tmp$po
   }
 
-  # trim 'g' to [0, rmax] 
-  g <- g[with(g, .x) <= rmax,]
-  # get pair correlation function (etc) for model
+  #' trim 'PairDistCDF' to [0, rmax] 
+  PairDistCDF <- PairDistCDF[with(PairDistCDF, .x) <= rmax,]
+  #' get pair correlation function (etc) for model
   info <- spatstatClusterModelInfo(clusters)
   pcfun        <- info$pcf
   selfstart    <- info$selfstart
   isPCP        <- info$isPCP
   resolveshape <- info$resolveshape
   modelname    <- info$modelname
-  # Assemble information required for computing pair correlation
+  #' Assemble information required for computing pair correlation
   if(is.function(resolveshape)) {
-    # Additional 'shape' parameters of cluster model are required.
-    # These may be given as individual arguments,
-    # or in a list called 'covmodel'
+    #' Additional 'shape' parameters of cluster model are required.
+    #' These may be given as individual arguments,
+    #' or in a list called 'covmodel'
     clustargs <- if("covmodel" %in% names(otherargs))
                  otherargs[["covmodel"]] else otherargs
     shapemodel <- do.call(resolveshape, clustargs)$covmodel
   } else shapemodel <- NULL
   pcfunargs <- shapemodel
   margs <- pcfunargs$margs
-  # determine starting parameter values
+  #' determine starting parameter values
   startpar <- selfstart(X)
   
   pspace.given <- pspace
@@ -155,17 +151,17 @@ kppmWaagLik <- function(X, Xname, po, clusters, control=list(),
   penal.args <- pspace$penal.args
   tau <- pspace$tau %orifnull% 1
   if(is.function(penalty)) {
-    ## penalised optimisation
+    #' penalised optimisation
     if(usecanonical) {
       penalty.human <- penalty
       penalty <- function(par, ...) { penalty.human(tohuman(par, ...), ...) }
     }
-    ## data-dependent arguments in penalty
+    #' data-dependent arguments in penalty
     if(is.function(penal.args)) 
       penal.args <- penal.args(X)
-    ## exchange rate (defer evaluation if it is a function)
+    #' exchange rate (defer evaluation if it is a function)
     if(!is.function(tau)) check.1.real(tau)
-    ## reinsert in 'pspace' for insurance
+    #' reinsert in 'pspace' for insurance
     pspace$penalty <- penalty
     pspace$penal.args <- penal.args
     pspace$tau <- tau
@@ -177,7 +173,7 @@ kppmWaagLik <- function(X, Xname, po, clusters, control=list(),
     assign("h", NULL, envir=saveplace)
   } else saveplace <- NULL
 
-  ## >>>>>>>>>>>>>>>>> CREATE OBJECTIVE FUNCTION <<<<<<<<<<<<<<<<<<<<<<<
+  #' >>>>>>>>>>>>>>>>> CREATE OBJECTIVE FUNCTION <<<<<<<<<<<<<<<<<<<<<<<
   #'
   #' create local function to evaluate pair correlation
   #'  (with additional parameters 'pcfunargs' in its environment)
@@ -190,43 +186,50 @@ kppmWaagLik <- function(X, Xname, po, clusters, control=list(),
     #' First calculate the term which is not dependent on cluster parameters
     #' \sum\sum_{i \neq j} C(x_i, x_j) log(lambda(x_i) * lambda(x_j))
     #' where C(u, v) = 1 iff ||u - v|| <= rmax.
-    #' Factor 2 is present below because close pairs were listed only once (with I < J)
-    sumloglamlam <- 2 * safeFiniteValue(sum(log(safePositiveValue(lambdaI * lambdaJ))))
+    #' Factor 2 is present below because close pairs were listed only once
+    #' (with I < J)
+    sumloglamlam <- 2 * 
+      if(stationary) {
+        npairs * safeFiniteValue(2 * log(lambda))
+      } else {
+        safeFiniteValue(sum(log(safePositiveValue(lambdaI * lambdaJ))))
+      }
     #' pack up necessary information for objective function
-    objargs <- list(dIJ=dIJ,
-                    g=g,
-                    gscale=gscale,
-                    sumloglamlam=sumloglamlam,
-                    envir=environment(paco),
-                    ## The following variables are temporarily omitted
-                    ## in order to calculate the objective function
-                    ## without using them, or their side effects.
-                    penalty=NULL,   # updated below
-                    penal.args=NULL,   # updated below
-                    tau=NULL,   # updated below
-                    TRACE=FALSE, # updated below
-                    saveplace=NULL, # updated below
-                    BIGVALUE=1, # updated below
-                    SMALLVALUE=.Machine$double.eps)
-    # define OBJECTIVE FUNCTION (with 'paco' in its environment)
-    # This evaluates the log Waagepetersen composite likelihood
+    objargs <- list(dIJ              = dIJ,
+                    PairDistCDF      = PairDistCDF,
+                    PairDistCDFScale = PairDistCDFScale,
+                    sumloglamlam     = sumloglamlam,
+                    envir            = environment(paco),
+                    #' The following variables are temporarily omitted
+                    #' in order to calculate the objective function
+                    #' without using them, or their side effects.
+                    penalty          = NULL,   # updated below
+                    penal.args       = NULL,   # updated below
+                    tau              = NULL,   # updated below
+                    TRACE            = FALSE, # updated below
+                    saveplace        = NULL, # updated below
+                    BIGVALUE         = 1, # updated below
+                    SMALLVALUE       = .Machine$double.eps)
+    #' Define OBJECTIVE FUNCTION (with 'paco' in its environment)
+    #' This evaluates the log Waagepetersen composite likelihood
     obj <- function(par, objargs) {
       with(objargs, {
-        ## calculate \sum\sum_{i \neq j} C(x_i, x_j) log pcf(x_i, x_j)
+        #' calculate \sum\sum_{i \neq j} C(x_i, x_j) log pcf(x_i, x_j)
+        #' Factor 2 is present because close pairs were listed only once in dIJ
         sumlogpaco <- 2 * sum(log(safePositiveValue(paco(dIJ, par)))) 
         #' calculate \int_W \int_W pcf(u - v) du dv using Borel's method
-        integ <- unlist(stieltjes(paco, g, par=par))
-        integ <- gscale * pmax(SMALLVALUE, integ)
+        integ <- unlist(stieltjes(paco, PairDistCDF, par=par))
+        integ <- PairDistCDFScale * pmax(SMALLVALUE, integ)
         #' evaluate surrogate likelihood
         logwlik <- safeFiniteValue(
           sumloglamlam + sumlogpaco - integ,
           default=-BIGVALUE)
-        ## penalty
+        #' penalty
         if(hasPenalty <- is.function(penalty)) {
           straf <- do.call(penalty, append(list(par), penal.args))
           logwlikPEN <- logwlik - tau * straf
         }
-        ## debugger
+        #' debugger
         if(isTRUE(TRACE)) {
           cat("Parameters:", fill=TRUE)
           print(par)
@@ -248,14 +251,14 @@ kppmWaagLik <- function(X, Xname, po, clusters, control=list(),
       },
       enclos=objargs$envir)
     }
-    ## Determine the values of some parameters
-    ## (1) Determine a suitable large number to replace Inf
+    #' Determine the values of some parameters
+    #' (1) Determine a suitable large number to replace Inf
     objargs$BIGVALUE <- bigvaluerule(obj, objargs, startpar)
-    ## (2) Evaluate exchange rate 'tau'
+    #' (2) Evaluate exchange rate 'tau'
     if(is.function(penalty) && is.function(tau)) {
-      ## data-dependent exchange rate 'tau': evaluate now
+      #' data-dependent exchange rate 'tau': evaluate now
       if("poisval" %in% names(formals(tau))) {
-        ## New style: requires value of (unpenalised) objective function at Poisson process
+        #' New style: requires value of (unpenalised) objective function at Poisson process
         poisval <- obj(poispar, objargs)
         tau <- tau(X, poisval=poisval)
       } else {
@@ -283,37 +286,48 @@ kppmWaagLik <- function(X, Xname, po, clusters, control=list(),
     #' \sum \sum_{i \neq j} C(x_i, x_j) w(x_i, x_j) log(lambda(x_i) * lambda(x_j))
     #' where C(u, v) = 1 iff ||u - v|| <= rmax.
     #' Factor 2 is present below because close pairs were listed only once (with I < J)
-    sumwloglamlam <- 2 * safeFiniteValue(sum(wIJ * safePositiveValue(log(lambdaI * lambdaJ))))
-    # pack up information necessary for objective function
-    objargs <- list(dIJ=dIJ, wIJ=wIJ, g=g, gscale=gscale,
-                    sumwloglamlam=sumwloglamlam,
-                    envir=environment(wpaco),
-                    penalty=NULL,   # updated below
-                    penal.args=NULL,   # updated below
-                    tau=NULL,   # updated below
-                    TRACE=FALSE, # updated below
-                    saveplace=NULL, # updated below
-                    BIGVALUE=1, # updated below
-                    SMALLVALUE=.Machine$double.eps)
-    # define objective function (with 'paco', 'wpaco' in its environment)
-    # This is the log Waagepetersen likelihood
+    sumwloglamlam <- 2 *
+      if(stationary) {
+        safeFiniteValue(sum(wIJ) * 2 * log(safePositiveValue(lambda)))
+      } else {
+        safeFiniteValue(sum(wIJ * log(safePositiveValue(lambdaI * lambdaJ))))
+      }
+    #' pack up information necessary for objective function
+    objargs <- list(dIJ              = dIJ,
+                    wIJ              = wIJ,
+                    PairDistCDF      = PairDistCDF,
+                    PairDistCDFScale = PairDistCDFScale,
+                    sumwloglamlam    = sumwloglamlam,
+                    envir            = environment(wpaco),
+                    penalty          = NULL,   # updated below
+                    penal.args       = NULL,   # updated below
+                    tau              = NULL,     # updated below
+                    TRACE            = FALSE, # updated below
+                    saveplace        = NULL, # updated below
+                    BIGVALUE         = 1, # updated below
+                    SMALLVALUE       = .Machine$double.eps)
+    #' define objective function (with 'paco', 'wpaco' in its environment)
+    #' This is the log Waagepetersen likelihood
     obj <- function(par, objargs) {
       with(objargs, {
-        ## calculate \sum\sum_{i \neq j} C(x_i, x_j) w(x_i, x_j) log pcf(x_i, x_j)
-        sumwlogpaco <- 2 * safeFiniteValue(sum(wIJ * log(safePositiveValue(paco(dIJ, par)))))
+        #' calculate \sum\sum_{i \neq j} w(x_i, x_j) log pcf(x_i, x_j)
+        #' Factor 2 is present below because close pairs
+        #' were listed only once (with I < J)
+        sumwlogpaco <- 2 * safeFiniteValue(
+                       sum(wIJ * log(safePositiveValue(paco(dIJ, par)))))
         #' calculate \int_W \int_W w(u,v) pcf(u, v) \lambda(u) \lambda(v) du dv
         #' using Borel's method        
-        integ <- unlist(stieltjes(wpaco, g, par=par))
-        integ <- gscale * pmax(SMALLVALUE, integ)
+        integ <- unlist(stieltjes(wpaco, PairDistCDF, par=par))
+        integ <- PairDistCDFScale * pmax(SMALLVALUE, integ)
         #' evaluate surrogate likelihood
         logwlik <- safeFiniteValue(sumwloglamlam + sumwlogpaco - integ,
                                    default=-BIGVALUE)
-        ## penalty
+        #' penalty
         if(hasPenalty <- is.function(penalty)) {
           straf <- do.call(penalty, append(list(par), penal.args))
           logwlikPEN <- logwlik - tau * straf
         }
-        ## debugger
+        #' debugger
         if(isTRUE(TRACE)) {
           cat("Parameters:", fill=TRUE)
           print(par)
@@ -335,14 +349,14 @@ kppmWaagLik <- function(X, Xname, po, clusters, control=list(),
       },
       enclos=objargs$envir)
     }
-    ## Determine the values of some parameters
-    ## (1) Determine a suitable large number to replace Inf
+    #' Determine the values of some parameters
+    #' (1) Determine a suitable large number to replace Inf
     objargs$BIGVALUE <- bigvaluerule(obj, objargs, startpar)
-    ## (2) Evaluate exchange rate 'tau'
+    #' (2) Evaluate exchange rate 'tau'
     if(is.function(penalty) && is.function(tau)) {
-      ## data-dependent exchange rate 'tau': evaluate now
+      #' data-dependent exchange rate 'tau': evaluate now
       if("poisval" %in% names(formals(tau))) {
-        ## New style: requires value of (unpenalised) objective function at Poisson process
+        #' New style: requires value of (unpenalised) objective function at Poisson process
         poisval <- obj(poispar, objargs)
         tau <- tau(X, poisval=poisval)
       } else {
@@ -350,7 +364,7 @@ kppmWaagLik <- function(X, Xname, po, clusters, control=list(),
       }
       check.1.real(tau)
     }
-    ## Now insert penalty, etc.
+    #' Now insert penalty, etc.
     objargs <- resolve.defaults(list(penalty    = penalty,
                                      penal.args = penal.args,
                                      tau        = tau,
@@ -359,13 +373,13 @@ kppmWaagLik <- function(X, Xname, po, clusters, control=list(),
                                 objargs)
   }
 
-  ## ......................  Optimization settings  ........................
+  #' ......................  Optimization settings  ........................
 
   if(stabilize) {
-    ## Numerical stabilisation 
-    ## evaluate objective at starting state
+    #' Numerical stabilisation 
+    #' evaluate objective at starting state
     startval <- obj(startpar, objargs)
-    ## use to determine appropriate global scale
+    #' use to determine appropriate global scale
     smallscale <- sqrt(.Machine$double.eps)
     fnscale <- -max(abs(startval), smallscale)
     parscale <- pmax(abs(startpar), smallscale)
@@ -374,14 +388,14 @@ kppmWaagLik <- function(X, Xname, po, clusters, control=list(),
     scaling <- list(fnscale=-1)
   }
 
-  ## Update list of algorithm control arguments
+  #' Update list of algorithm control arguments
   control.updated <- resolve.defaults(control, scaling, list(trace=0))
 
-  ## Initialise list of all arguments to 'optim'
+  #' Initialise list of all arguments to 'optim'
   optargs <- list(par=startpar, fn=obj, objargs=objargs,
                   control=control.updated, method=algorithm)
 
-  ## DPP case: check startpar and modify algorithm
+  #' DPP case: check startpar and modify algorithm
   changealgorithm <- length(startpar)==1 && algorithm=="Nelder-Mead"
   if(isDPP){
     alg <- dppmFixAlgorithm(algorithm, changealgorithm, clusters,
@@ -393,19 +407,19 @@ kppmWaagLik <- function(X, Xname, po, clusters, control=list(),
     }
   }
 
-  ## .......................................................................
+  #' .......................................................................
   
   if(isTRUE(pspace$debug)) {
     splat("About to optimize... Objective function arguments:")
     print(objargs)
   }
 
-  # optimize it
+  #' optimize it
   opt <- do.call(optim, optargs)
-  # raise warning/error if something went wrong
+  #' raise warning/error if something went wrong
   signalStatus(optimStatus(opt), errors.only=TRUE)
   
-  ## Extract optimal values of parameters
+  #' Extract optimal values of parameters
   if(!usecanonical) {
     optpar.canon <- NULL
     optpar.human <- opt$par
@@ -418,12 +432,12 @@ kppmWaagLik <- function(X, Xname, po, clusters, control=list(),
   }
   opt$par            <- optpar.human
   opt$par.canon      <- optpar.canon
-  ## save starting values in 'opt' for consistency with minconfit()
+  #' save starting values in 'opt' for consistency with minconfit()
   opt$startpar       <- startpar.human
 
-  ## Finish in DPP case
+  #' Finish in DPP case
   if(!is.null(DPP)){
-    ## all info that depends on the fitting method:
+    #' all info that depends on the fitting method:
     Fit <- list(method       = "waag",
                 clfit        = opt,
                 weightfun    = weightfun,
@@ -433,7 +447,7 @@ kppmWaagLik <- function(X, Xname, po, clusters, control=list(),
                 maxlogcl     = opt$value,
                 pspace.given = pspace.given,
                 pspace.used  = pspace)
-    # pack up
+    #' pack up
     clusters <- update(clusters, as.list(optpar.human))
     result <- list(Xname      = Xname,
                    X          = X,
@@ -450,22 +464,22 @@ kppmWaagLik <- function(X, Xname, po, clusters, control=list(),
     }
     return(result)
   }
-  # meaningful model parameters
+  #' meaningful model parameters
   modelpar <- info$interpret(optpar.human, lambda)
-  # infer parameter 'mu'
+  #' infer parameter 'mu'
   if(isPCP) {
-    # Poisson cluster process: extract parent intensity kappa
+    #' Poisson cluster process: extract parent intensity kappa
     kappa <- optpar.human[["kappa"]]
-    # mu = mean cluster size
+    #' mu = mean cluster size
     mu <- if(stationary) lambda/kappa else eval.im(lambda/kappa)
   } else {
-    # LGCP: extract variance parameter sigma2
+    #' LGCP: extract variance parameter sigma2
     sigma2 <- optpar.human[["sigma2"]]
-    # mu = mean of log intensity 
+    #' mu = mean of log intensity 
     mu <- if(stationary) log(lambda) - sigma2/2 else
           eval.im(log(lambda) - sigma2/2)    
   }
-  # all info that depends on the fitting method:
+  #' all info that depends on the fitting method:
   Fit <- list(method       = "waag",
               clfit        = opt,
               weightfun    = weightfun,
@@ -475,7 +489,7 @@ kppmWaagLik <- function(X, Xname, po, clusters, control=list(),
               maxlogcl     = opt$value,
               pspace.given = pspace.given,
               pspace.used  = pspace)
-  # pack up
+  #' pack up
   result <- list(Xname      = Xname,
                  X          = X,
                  stationary = stationary,
