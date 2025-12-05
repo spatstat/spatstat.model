@@ -2,7 +2,7 @@
 #'
 #' Create tessellation from rppm object
 #'
-#' $Revision: 1.4 $ $Date: 2025/12/02 09:40:05 $
+#' $Revision: 1.6 $ $Date: 2025/12/05 06:12:30 $
 
 as.tess.rppm <- function(X) {
   verifyclass(X, "rppm")
@@ -92,6 +92,7 @@ parseRPPM <- function(X, ..., weed=TRUE,
       cov.i <- spatialcovariates[[var.i]]
       switch(gdtype[[var.i]],
              numeric = {
+               ## ---------------- NUMERIC VALUED ------------------
                splitLabels[irow, ] <- splab <- paste(var.i, lab.i)
                critval <- gsub(">", "", gsub("<", "", gsub("=", "", lab.i[1L])))
                critval <- as.numeric(critval)
@@ -101,7 +102,9 @@ parseRPPM <- function(X, ..., weed=TRUE,
                                       } else {
                                         list(c(critval, Inf), c(-Inf, critval))
                                       }
-               if(is.function(cov.i) && !inherits(cov.i, "distfun")) {
+               if(is.function(cov.i) &&
+                  !inherits(cov.i, c("distfun", "tessfun"))) {
+                    ## convert function(x,y) to pixel image
                  cov.i <- as.im(cov.i, W=W)
                }
                if(is.im(cov.i)) {
@@ -123,6 +126,27 @@ parseRPPM <- function(X, ..., weed=TRUE,
                    above <- setminus.owin(W, below)
                  }
                  til <- list(below, above)
+                 if(whichbelow == 2) til <- rev(til)
+                 names(til) <- splab
+                 splitTess[[irow]] <- tess(tiles=til, window=W)
+               } else if(inherits(cov.i, "tessfun")) {
+                 env.i <- environment(cov.i)
+                 Tess <- get("V", envir=env.i)
+                 W <- Window(Tess)
+                 funvalues <- tessfunvalues(cov.i)
+                 leftsplit <- eval(parse(text=paste("funvalues", lab.i[1L])))
+                 if(all(leftsplit)) {
+                   leftset <- W
+                   rightset <- emptywindow(Frame(W))
+                 } else if(!any(leftsplit)) {
+                   leftset <- emptywindow(Frame(W))
+                   rightset <- W
+                 } else {
+                   til <- tiles(Tess)
+                   leftset <- do.call(union.owin, til[leftsplit])
+                   rightset <- setminus.owin(W, leftset)
+                 }
+                 til <- list(leftset, rightset)
                  if(whichbelow == 2) til <- rev(til)
                  names(til) <- splab
                  splitTess[[irow]] <- tess(tiles=til, window=W)
@@ -151,6 +175,7 @@ parseRPPM <- function(X, ..., weed=TRUE,
                }
              },
              factor = {
+               ## ---------------- FACTOR VALUED ------------------
                lev.i <- levels(cov.i)
                ## lab.i contains levels mapped to a, b, c,...
                levcode <- strsplit(unname(lab.i), "")
@@ -168,7 +193,9 @@ parseRPPM <- function(X, ..., weed=TRUE,
                                     paste("==", levQstring),
                                     paste0("%in% c(", levQstring, ")"))
                splab <- paste(var.i, levstring)
-               if(is.function(cov.i))
+               if(is.function(cov.i) && !inherits(cov.i, "tessfun")) 
+                 cov.i <- as.im(cov.i, W=W)
+               if(inherits(cov.i, "tessfun") && as.tess(cov.i)$type == "image")
                  cov.i <- as.im(cov.i, W=W)
                if(is.im(cov.i)) {
                  ## factor valued image.
@@ -179,33 +206,47 @@ parseRPPM <- function(X, ..., weed=TRUE,
                  levels(isleft) <- splab
                  splitTess[[irow]] <- tess(image=isleft)
                } else if(is.tess(cov.i)) {
-                 if(cov.i$type == "image") {
-                   cov.i <- as.im(cov.i)
-                   isleft <- eval(parse(text=paste("eval.im(factor(cov.i",
-                                                   levQstring[1L],
-                                                   ", levels=c(TRUE, FALSE)))")))
-                   levels(isleft) <- splab
-                   splitTess[[irow]] <- tess(image=isleft)
+                 til <- tiles(cov.i)
+                 if(nlev[1L] == 1) {
+                   leftlev <- levactual[[1L]]
+                   left <- til[[leftlev]]
+                   right <- setminus.owin(W, left)
+                 } else if(nlev[2L] == 1) {
+                   rightlev <- levactual[[2L]]
+                   right <- til[[rightlev]]
+                   left <- setminus.owin(W, right)
                  } else {
-                   til <- tiles(cov.i)
-                   if(nlev[1L] == 1) {
-                     leftlev <- levactual[[1L]]
-                     left <- til[[leftlev]]
-                     right <- setminus.owin(W, left)
-                   } else if(nlev[2L] == 1) {
-                     rightlev <- levactual[[2L]]
-                     right <- til[[rightlev]]
-                     left <- setminus.owin(W, right)
-                   } else {
-                     leftlevs <- levactual[[1L]]
-                     rightlevs <- levactual[[2L]]
-                     left <- do.call(union.owin, til[leftlevs])
-                     right <- do.call(union.owin, til[rightlevs])
-                   }
-                   splittiles <- list(left, right)
-                   names(splittiles) <- splab
-                   splitTess[[irow]] <- tess(tiles=splittiles, window=W)
+                   leftlevs <- levactual[[1L]]
+                   rightlevs <- levactual[[2L]]
+                   left <- do.call(union.owin, til[leftlevs])
+                   right <- do.call(union.owin, til[rightlevs])
                  }
+                 splittiles <- list(left, right)
+                 names(splittiles) <- splab
+                 splitTess[[irow]] <- tess(tiles=splittiles, window=W)
+               } else if(inherits(cov.i, "tessfun")) {
+                 ## original covariate object was a logical valued function
+                 ## that is constant on each tlle of a tessellation
+                 Tess <- get("V", envir=environment(cov.i))
+                 val <- tessfunvalues(cov.i)
+                 til <- tiles(Tess)
+                 if(nlev[1L] == 1) {
+                   leftlev <- levactual[[1L]]
+                   left <- til[[leftlev]]
+                   right <- setminus.owin(W, left)
+                 } else if(nlev[2L] == 1) {
+                   rightlev <- levactual[[2L]]
+                   right <- til[[rightlev]]
+                   left <- setminus.owin(W, right)
+                 } else {
+                   leftlevs <- levactual[[1L]]
+                   rightlevs <- levactual[[2L]]
+                   left <- do.call(union.owin, til[leftlevs])
+                   right <- do.call(union.owin, til[rightlevs])
+                 }
+                 splittiles <- list(left, right)
+                 names(splittiles) <- splab
+                 splitTess[[irow]] <- tess(tiles=splittiles, window=W)
                } else {
                  stop(paste("Unable to interpret covariate", sQuote(var.i),
                             "(expecting factor)"),
@@ -214,6 +255,7 @@ parseRPPM <- function(X, ..., weed=TRUE,
                splitLabels[irow, ] <- splab
              },
              logical = {
+               ## ---------------- LOGICAL VALUED ------------------
                whichbelow <- grep("<", lab.i)
                logique <- c("FALSE", "TRUE")
                lab.i <- if(whichbelow == 1) logique else rev(logique)
@@ -223,9 +265,10 @@ parseRPPM <- function(X, ..., weed=TRUE,
                                       } else {
                                         list(TRUE, FALSE)
                                       }
-               if(is.function(cov.i)) {
+               if(is.function(cov.i) && !inherits(cov.i, "tessfun")) 
                  cov.i <- as.im(cov.i, W=W)
-               }
+               if(inherits(cov.i, "tessfun") && as.tess(cov.i)$type == "image")
+                 cov.i <- as.im(cov.i, W=W)
                if(is.im(cov.i)) {
                  istrue <- eval.im(factor(cov.i, levels=c(TRUE, FALSE)))
                  levels(istrue) <- splab
@@ -242,6 +285,25 @@ parseRPPM <- function(X, ..., weed=TRUE,
                  splitLabels[irow, ] <- splab
                  names(til) <- splab
                  splitTess[[irow]] <- tess(tiles=til, window=W)
+               } else if(inherits(cov.i, "tessfun")) {
+                 ## original covariate object was a logical valued function
+                 ## that is constant on each tlle of a tessellation
+                 Tess <- get("V", envir=environment(cov.i))
+                 truetiles <- as.logical(tessfunvalues(cov.i))
+                 if(!any(truetiles)) {
+                   trueset <- emptywindow(W)
+                   falseset <- W
+                 } else if(all(truetiles)) {
+                   trueset <- W
+                   falseset <- emptywindow(W)
+                 } else {
+                   trueset <- do.call(union.owin, tiles(Tess)[truetiles])
+                   falseset <- setminus.owin(W, trueset)
+                 }
+                 splittiles <- list(falseset, trueset)
+                 if(whichbelow == 2) splittiles <- rev(splittiles)
+                 names(splittiles) <- splab
+                 splitTess[[irow]] <- tess(tiles=splittiles, window=W)
                } else {
                  stop(paste("Unable to interpret covariate",
                             sQuote(var.i),
