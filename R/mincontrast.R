@@ -3,7 +3,7 @@ c#'
 #'
 #'  Functions for estimation by minimum contrast
 #'
-#'  $Revision: 1.123 $ $Date: 2022/11/13 06:45:30 $
+#'  $Revision: 1.124 $ $Date: 2025/12/07 10:18:23 $
 #' 
 
 ##################  base ################################
@@ -503,19 +503,20 @@ optimConverged <- function(x) { x$convergence == 0 }
 optimNsteps <- function(x) { x$counts[["function"]] }
 
 optimStatus <- function(x, call=NULL) {
-  cgce <- x$convergence
+  cgce  <- x$convergence
   neval <- x$counts[["function"]]
+  when <- if(is.na(neval)) "" else paste("after", neval, "function evaluations")
   switch(paste(cgce),
          "0" = {
            simpleMessage(
-                         paste("Converged successfully after", 
-                               neval, "function evaluations"),
-                         call)
+             paste("Converged successfully", when),
+             call)
          },
-         "1" = simpleWarning(
-           paste("Iteration limit maxit was reached after",
-                 neval, "function evaluations"),
-           call),
+         "1" = {
+           simpleWarning(
+             paste("Iteration limit maxit was reached", when),
+             call)
+         },
          "10" = simpleWarning("Nelder-Mead simplex was degenerate", call),
          "51"= {
            simpleWarning(

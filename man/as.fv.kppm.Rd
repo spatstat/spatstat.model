@@ -20,23 +20,36 @@
   An object of class \code{"fv"} (see \code{\link[spatstat.explore]{fv.object}}).
 }
 \details{
-  The generic command \code{as.fv} converts data \code{x}, that
+  The generic command \code{\link[spatstat.explore]{as.fv}} converts data \code{x}, that
   could be interpreted as the values of a function,
   into a function value table (object of the class \code{"fv"}
   as described in \code{\link[spatstat.explore]{fv.object}}). This object can then
   be plotted easily using \code{\link[spatstat.explore]{plot.fv}}.
 
-  Objects of class \code{"kppm"} (and related classes) represent
-  a model that has been fitted to a dataset 
+  Objects of class \code{"kppm"} and \code{"dppm"} represent
+  a point process model that has been fitted to a point pattern dataset.
+  By default, the fitting is performed by the method of moments,
   by computing a summary function of the dataset and
   matching it to the corresponding summary function of the model.
   The methods for \code{as.fv} for classes \code{"kppm"},
   \code{"dppm"} and \code{"minconfit"} extract this information:
   the result is a function table containing the
-  observed summary function and the best fit summary function.
+  observed summary function and the theoretical summary function
+  for the model of best fit.
+
+  If the object \code{x} was created by 
+  \code{\link{kppm}} or \code{\link{dppm}}
+  using a non-default value of the argument \code{method},
+  then the model was fitted in a different way (namely by maximising a
+  surrogate for the likelihood). In this case \code{as.fv(x)}
+  computes an empirical estimate of the pair correlation function
+  using \code{\link[spatstat.explore]{pcf}} or \code{\link[spatstat.explore]{pcfinhom}},
+  and computes the theoretical pair correlation function of the fitted
+  model using \code{\link{pcfmodel.kppm}}. Again these two functions are
+  returned in a function table.
 }
 \examples{
-  as.fv(kppm(redwood))
+  as.fv(kppm(redwood3))
 }
 \author{
   \spatstatAuthors

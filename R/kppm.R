@@ -3,7 +3,7 @@
 #'
 #'  kluster/kox point process models
 #'
-#'  $Revision: 1.236 $ $Date: 2025/12/07 02:25:34 $
+#'  $Revision: 1.237 $ $Date: 2025/12/07 09:51:21 $
 #'
 #'  Copyright (c) 2001-2025 Adrian Baddeley, Rolf Turner, Ege Rubak,
 #'                Abdollah Jalilian and Rasmus Plenge Waagepetersen
@@ -807,9 +807,12 @@ as.fv.kppm <- as.fv.dppm <- function(x) {
   if(x$Fit$method == "mincon") 
     return(as.fv(x$Fit$mcfit))
   gobs <- if(is.stationary(x)) {
-            pcf(x$X, correction="good")
+            pcf(x$X,
+                correction="good", divisor="a", zerocor="J")
           } else {
-            pcfinhom(x$X, lambda=x, correction="good", update=FALSE)
+            pcfinhom(x$X,
+                     lambda=x, update=FALSE,
+                     correction="good", divisor="a", zerocor="J")
           }
   gname <- attr(gobs, "fname")
   gfit <- (pcfmodel(x))(gobs$r)

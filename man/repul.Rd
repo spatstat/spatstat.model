@@ -59,7 +59,8 @@ repul(model, \dots)
   \adrian.
 }
 \seealso{
-  \code{\link{dppm}}
+  \code{\link{dppm}},
+  \code{\link{psib}}.
 }
 \examples{
   jpines <- residualspaper$Fig1

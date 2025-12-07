@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 3.5-0.006
+        CHANGES IN spatstat.model VERSION 3.5-0.007
 
 OVERVIEW
 
@@ -29,6 +29,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     The user only needs to provide values for those covariates which
     are used in the decision tree. If the entire tree involves only one
     variable, then 'covname' is not needed.
+
+    o as.fv.kppm
+    Improved arguments for empirical estimation of pair correlation function
+    when the model was fitted with a non-default value of 'method'.
 
 
         CHANGES IN spatstat.model VERSION 3.5-0
