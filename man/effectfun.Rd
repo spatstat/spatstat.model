@@ -16,7 +16,7 @@
   }
   \item{covname}{
     The name of the covariate. A character string.
-    (Needed only if the model has more than one covariate.)
+    (Needed only if the model involves more than one covariate.)
   }
   \item{\dots}{
     The fixed values of other covariates (in the form
@@ -53,7 +53,11 @@
   If the model also involves covariates other than \code{covname},
   then these covariates will be held fixed. Values for
   these other covariates must be provided as arguments
-  to \code{effectfun} in the form \code{name=value}. 
+  to \code{effectfun} in the form \code{name=value}.
+  A value must be given for every variable appearing on the right hand side
+  of the model formula, unless the model is a recursive partition model
+  (object of class \code{"rppm"}), when the algorithm only requires those
+  variables which are actually used in the decision tree.
 
   If \code{se.fit=TRUE}, the algorithm also calculates
   the asymptotic standard error of the fitted trend,

@@ -1,7 +1,7 @@
 #
 #  effectfun.R
 #
-#   $Revision: 1.25 $ $Date: 2020/01/23 05:36:51 $
+#   $Revision: 1.26 $ $Date: 2025/12/05 09:15:35 $
 #
 
 effectfun <- local({
@@ -20,6 +20,14 @@ effectfun <-  function(model, covname, ..., se.fit=FALSE, nvalues=256) {
   intern.names <-
     if(is.marked.ppm(model)) c("x", "y", "marks") else c("x", "y")
   needed.names <- variablesinformula(rhs.of.formula(formula(model)))
+  if(is.rppm(orig.model)) {
+    ## not all variables are used in splits
+    splitvariables <- setdiff(unique(orig.model$rp$frame$var), "<leaf>")
+    defaultable.names <- setdiff(needed.names, splitvariables)
+    needed.names <- splitvariables
+  } else {
+    defaultable.names <- character(0)
+  }
   #' check for clashes/quirks
   if("lambda" %in% needed.names) {
     if(is.dppm(orig.model) && (
@@ -33,13 +41,17 @@ effectfun <-  function(model, covname, ..., se.fit=FALSE, nvalues=256) {
   ## validate the relevant covariate 
   if(missing(covname) || is.null(covname)) {
     mc <- model.covariates(model)
-    if(length(mc) == 1) covname <- mc else stop("covname must be provided")
+    if(length(mc) == 1) {
+      covname <- mc
+    } else if(length(needed.names) == 1) {
+      covname <- needed.names
+    } else stop("covname must be provided", call.=FALSE)
   }
   if(!is.character(covname))
     stop("covname should be a character string", call.=FALSE)
   if(length(covname) != 1L)
     stop("covname should be a single character string", call.=FALSE)
-  # check that fixed values for all other covariates are provided 
+  #' check that fixed values for all other covariates are provided 
   given.covs <- names(dotargs)
   if(any(uhoh <- !(needed.names %in% c(given.covs, covname)))) {
     nuh <- sum(uhoh)
@@ -134,10 +146,23 @@ effectfun <-  function(model, covname, ..., se.fit=FALSE, nvalues=256) {
   }
   fakeloc <- lapply(fakeloc, padout, N=N)
   fakecov <- lapply(dotargs, padout, N=N)
-  # Overwrite value for covariate of interest
+  #' Overwrite value for covariate of interest
   if(covname %in% intern.names)
     fakeloc[[covname]] <- Zvals
   else fakecov[[covname]] <- Zvals
+  #' Fill in any covariates which are ignored by the model but must be given
+  if(!all(ok <- defaultable.names %in% names(fakecov))) {
+    gd <- getglmdata(model)
+    for(nam in defaultable.names[!ok]) {
+      vals <- gd[[nam]]
+      if(is.null(vals))
+        stop(paste("Unable to determine a default value for covariate",
+                   sQuote(nam)),
+             call.=FALSE)
+      val <- sample(vals, 1L)
+      fakecov[[nam]] <- val
+    }
+  }
   # convert to data frame
   fakeloc <- do.call(data.frame, fakeloc)
   fakecov <- if(length(fakecov) > 0) do.call(data.frame, fakecov) else NULL

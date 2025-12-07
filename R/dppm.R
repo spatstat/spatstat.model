@@ -1,13 +1,13 @@
 #'
 #'     dppm.R
 #'
-#'     $Revision: 1.18 $   $Date: 2025/11/21 02:05:33 $
+#'     $Revision: 1.19 $   $Date: 2025/12/07 02:29:17 $
 
 dppm <-
   function(formula, family, data=NULL,
            ...,
            startpar = NULL,
-           method = c("mincon", "clik2", "palm", "adapcl"),
+           method = c("mincon", "clik2", "palm", "waag", "adapcl"),
            weightfun=NULL,
            control=list(),
            algorithm,

@@ -131,6 +131,8 @@ response.rppm <- function(object) {
   data.ppm(as.ppm(object))
 }
 
+is.rppm <- function(x) { inherits(x, "rppm") }
+
 is.poisson.rppm <- function(x) { is.poisson(as.ppm(x)) }
 
 is.marked.rppm <- function(X, ...) { is.marked(as.ppm(X)) }

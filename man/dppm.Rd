@@ -10,7 +10,7 @@
   dppm(formula, family, data=NULL,
        ...,
        startpar = NULL,
-       method = c("mincon", "clik2", "palm", "adapcl"),
+       method = c("mincon", "clik2", "palm", "waag", "adapcl"),
        weightfun = NULL,
        control =  list(),
        algorithm,
@@ -56,9 +56,10 @@
   \item{method}{
     The fitting method. Either
     \code{"mincon"} for minimum contrast,
-    \code{"clik2"} for second order composite likelihood,
-    \code{"adapcl"} for adaptive second order composite likelihood,
-    or \code{"palm"} for Palm likelihood.
+    \code{"palm"} for Palm likelihood,
+    \code{"clik2"} for Guan's second order composite likelihood,
+    \code{"waag"} for Waagepetersen's second order composite likelihood
+    or \code{"adapcl"} for adaptive second order composite likelihood,
     Partially matched.
   }
   \item{weightfun}{
@@ -74,7 +75,7 @@
   \item{algorithm}{
     Character string determining the mathematical algorithm
     to be used to solve the fitting problem.
-    If \code{method="mincon", "clik2"} or \code{"palm"} this argument
+    If \code{method="mincon", "clik2", "waag"} or \code{"palm"} this argument
     is passed to the generic optimization function
     \code{\link[stats]{optim}} (renamed as the argument \code{method})
     with default \code{"Nelder-Mead"}.
@@ -216,6 +217,24 @@
       a threshold weight function,
       \eqn{w(d) = 1(d \le R)}{w(d) = 1(d \le R)}, where \eqn{R} is \code{rmax/2}.
     }
+    \item{Waagepetersen's second order composite likelihood:}{
+      If \code{method = "waag"} the clustering parameters of the
+      model will be fitted by maximising the second order composite
+      loglikelihood proposed by Waagepetersen (2007, page 256)
+      \deqn{
+	\sum_{i,j} w(x_i, x_j) \log \lambda_2(x_j, x_i; \theta)
+	- \int_D \int_D w(v, u) \lambda_2(v, u; \theta) {\rm d} u {\rm d} v
+      }{
+	sum[i,j] w(x[i], x[j]) log(lambda2(x[j], x[i]; theta))
+	- integral[D] integral[D] w(v, u) lambda2(v, u ; theta) du dv
+      }
+      with the same notation as above. Here
+      \eqn{\lambda_2(u,v;\theta)}{lambda2(u,v;theta)} is the second
+      order intensity function of the model.
+      
+      The optimisation is performed by the generic
+      optimisation algorithm \code{\link[stats]{optim}}.
+    }
     \item{Palm likelihood:}{
       If \code{method = "palm"} the interaction parameters of the
       model will be fitted by maximising the Palm loglikelihood
@@ -281,8 +300,8 @@
   The following details allow greater control over the fitting
   procedure.
   
-  For the first three fitting methods
-  (\code{method="mincon", "clik2"} and \code{"palm"}), 
+  For the first four fitting methods
+  (\code{method="mincon", "clik2", "waag"} and \code{"palm"}), 
   the optimisation is performed by the generic
   optimisation algorithm \code{\link[stats]{optim}}.
   The behaviour of this algorithm can be modified using the

@@ -4,7 +4,7 @@
 #'
 #'   Including default penalty for cluster scale
 #'
-#'   $Revision: 1.8 $ $Date: 2022/11/21 02:36:46 $
+#'   $Revision: 1.10 $ $Date: 2025/12/07 02:33:43 $
 #' 
 #'   Copyright (c) Tilman Davies, Martin Hazelton and Adrian Baddeley 2022
 #'  GNU Public Licence >= 2.0
@@ -23,7 +23,7 @@ make.pspace <- function(...,
                         penal.args=NULL,
                         tau=NULL,
                         clusters="Thomas",
-                        fitmethod=c("mincon", "clik2", "palm"),
+                        fitmethod=c("mincon", "clik2", "waag", "palm"),
                         flatness=2,
                         C0factor=0.05,
                         xval=FALSE,
@@ -79,6 +79,7 @@ make.pspace <- function(...,
       tau <- switch(fitmethod,
                     mincon = function(X, poisval, f=C0factor) { f * poisval },
                     palm = 1,
+                    waag = 1,
                     clik2 = 1)
     }
     ## add arguments of penalty to pspace

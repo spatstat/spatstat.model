@@ -1,7 +1,7 @@
 #'
 #'  summary.dppm.R
 #'
-#'  $Revision: 1.5 $ $Date: 2021/07/05 08:48:33 $
+#'  $Revision: 1.6 $ $Date: 2025/12/07 02:38:10 $
 
 summary.dppm <- function(object, ..., quick=FALSE) {
   nama <- names(object)
@@ -38,6 +38,15 @@ print.summary.dppm <- function(x, ...) {
            clik  =,
            clik2 = {
              splat("Fitted by maximum second order composite likelihood")
+             splat("\trmax =", Fit$rmax)
+             if(!is.null(wtf <- Fit$weightfun)) {
+               a <- attr(wtf, "selfprint") %orifnull% pasteFormula(wtf)
+               splat("\tweight function:", a)
+             }
+             printStatus(optimStatus(Fit$clfit))
+           },
+           waag  = {
+             splat("Fitted by maximum Waagepetersen composite likelihood")
              splat("\trmax =", Fit$rmax)
              if(!is.null(wtf <- Fit$weightfun)) {
                a <- attr(wtf, "selfprint") %orifnull% pasteFormula(wtf)

@@ -1,11 +1,13 @@
 
-        CHANGES IN spatstat.model VERSION 3.5-0.004
+        CHANGES IN spatstat.model VERSION 3.5-0.006
 
 OVERVIEW
 
     o Waagepetersen's composite likelihood for cluster processes.
     
     o Convert a recursively partitioned point process model to a tessellation.
+
+    o Minor improvements.
     
 NEW FUNCTIONS
 
@@ -21,7 +23,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o kppm
     New option: method="waag" fits the model by maximising
     Waagepetersen's (2007) second order composite likelihood
-    
+
+    o effectfun
+    Improved defaults for a recursive partition model (class 'rppm').
+    The user only needs to provide values for those covariates which
+    are used in the decision tree. If the entire tree involves only one
+    variable, then 'covname' is not needed.
+
 
         CHANGES IN spatstat.model VERSION 3.5-0
 

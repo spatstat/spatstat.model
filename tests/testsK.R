@@ -15,7 +15,7 @@ cat(paste("--------- Executing",
 #
 # tests/kppm.R
 #
-# $Revision: 1.43 $ $Date: 2025/12/05 02:15:36 $
+# $Revision: 1.44 $ $Date: 2025/12/07 02:48:05 $
 #
 # Test functionality of kppm that once depended on RandomFields
 # Test update.kppm for old style kppm objects
@@ -27,8 +27,9 @@ local({
 
  fit <- kppm(redwood ~1, "Thomas") # sic
  fitx <- kppm(redwood ~x, "Thomas", verbose=TRUE)
+
  if(FULLTEST) {
-   fitx <- update(fit, ~ . + x)
+   fit1x <- update(fit, ~ . + x)
    fitM <- update(fit, clusters="MatClust")
    fitC <- update(fit, cells)
    fitCx <- update(fit, cells ~ x)
@@ -55,9 +56,17 @@ local({
    fat <- kppm(redwood ~x, method="mincon") 
    fat <- kppm(redwood ~x, method="palm") 
    fat <- kppm(redwood ~x, method="clik2") 
-   fat <- kppm(redwood ~x, method="waag") 
+   fat <- kppm(redwood ~x, method="waag")
+   #' check code coverage of recently implemented option: method = 'waag'
+   nobs(fat)
+   logLik(fat)
+   extractAIC(fat)
+   AIC(fat)
+   step(fat)
  }
+ 
  if(ALWAYS) {
+   #' simulate.kppm
    Y <- simulate(fitx, seed=42, saveLambda=TRUE)[[1]]
    stopifnot(is.im(attr(Y, "Lambda")))
  }

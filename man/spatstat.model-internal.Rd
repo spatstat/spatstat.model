@@ -97,6 +97,7 @@
 \alias{is.poisson.mppm}
 \alias{is.poisson.rppm}
 \alias{is.poissonclusterprocess.clusterprocess}
+\alias{is.rppm}
 \alias{Kpcf.kppm}
 \alias{Kmodel.clusterprocess}
 \alias{Kmodel.slrm}
@@ -358,6 +359,7 @@ is.mppm(x)
 \method{is.poisson}{mppm}(x)
 \method{is.poisson}{rppm}(x)
 \method{is.poissonclusterprocess}{clusterprocess}(model)
+is.rppm(x)
 Kpcf.kppm(model, what)
 \method{Kmodel}{clusterprocess}(model, \dots)
 \method{Kmodel}{slrm}(model, \dots)

@@ -3,7 +3,7 @@
 #'
 #'  kluster/kox point process models
 #'
-#'  $Revision: 1.235 $ $Date: 2025/12/04 05:48:10 $
+#'  $Revision: 1.236 $ $Date: 2025/12/07 02:25:34 $
 #'
 #'  Copyright (c) 2001-2025 Adrian Baddeley, Rolf Turner, Ege Rubak,
 #'                Abdollah Jalilian and Rasmus Plenge Waagepetersen
@@ -548,12 +548,12 @@ print.kppm <- print.dppm <- function(x, ...) {
   }
 
   if(!is.null(mu <- x$mu)) {
+    moo <- signif(mean(mu), digits)
+    if(is.im(moo)) moo <- paste0("[pixel image] [mean = ", moo, "]")
     if(isPCP) {
-      splat("Mean cluster size: ",
-            if(!is.im(mu)) paste(signif(mu, digits), "points") else "[pixel image]")
+      splat("Mean cluster size: ", moo, if(!is.im(mu)) "points" else NULL)
     } else {
-      splat("Fitted mean of log of random intensity:",
-            if(!is.im(mu)) signif(mu, digits) else "[pixel image]")
+      splat("Fitted mean of log of random intensity:", moo)
     }
   }
   if(isDPP) {

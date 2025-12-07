@@ -3,7 +3,7 @@
 #'  poisson.fits.better()
 #'  and underlying calculations
 #'
-#'  $Revision: 1.1 $  $Date: 2022/11/10 06:51:16 $
+#'  $Revision: 1.2 $  $Date: 2025/12/07 02:36:59 $
 #' 
 #'  Copyright (c) Adrian Baddeley 2022
 #'  GNU Public Licence >= 2.0
@@ -30,6 +30,7 @@ PoissonCompareCalc <- function(object) {
            maximising <- FALSE
          },
          palm = ,
+         waag = ,
          clik2 = {
            canonical <- !is.null(object$par.canon)
            optpar  <- if(canonical) object$par.canon else object$par

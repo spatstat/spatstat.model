@@ -38,9 +38,10 @@
   These methods apply only when the model was fitted
   by maximising a composite likelihood:
   either the Palm likelihood (Tanaka et al, 2008)
-  or the second order composite likelihood (Guan, 2006),
-  by calling \code{\link{kppm}} with the argument \code{method="palm"}
-  or \code{method="clik2"} respectively. 
+  the second order composite likelihood (Guan, 2006),
+  or Waagepetersen's (2007) second order composite likelihood,
+  by calling \code{\link{kppm}} with the argument \code{method="palm"},
+  \code{method="clik2"} or \code{method="waag"} respectively. 
   
   The method \code{logLik.kppm} computes the 
   maximised value of the log composite likelihood
@@ -67,7 +68,7 @@
   The values of log-likelihood and AIC returned by these functions
   are based on the \emph{composite likelihood} of the cluster process or Cox
   process model. They are available only when the model was fitted
-  using \code{method="palm"} or \code{method="clik2"}.
+  using \code{method="palm"}, \code{method="clik2"} or \code{method="waag"}.
 
   For model comparison and model selection,
   it is valid to compare the \code{logLik} values,
@@ -101,6 +102,11 @@
   Parameter estimation and model selection for
   Neyman-Scott point processes.
   \emph{Biometrical Journal} \bold{50}, 43--57.
+
+  Waagepetersen, R. (2007)
+  An estimating function approach to inference for
+  inhomogeneous Neyman-Scott processes.
+  \emph{Biometrics} \bold{63}, 252--258.
 }
 \seealso{
   \code{\link{kppm}}, 

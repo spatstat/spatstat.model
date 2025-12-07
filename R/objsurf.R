@@ -3,7 +3,7 @@
 #
 #  surface of the objective function for an M-estimator
 #
-#  $Revision: 1.33 $ $Date: 2022/11/13 07:08:49 $
+#  $Revision: 1.34 $ $Date: 2025/12/07 02:35:48 $
 #
 
 objsurf <- function(x, ...) {
@@ -42,6 +42,7 @@ objsurf.kppm <- objsurf.dppm <- function(x, ...,
                              verbose=verbose)
          },
          palm = ,
+         waag = ,
          clik2 = {
            optpar  <- x$par.canon %orifnull% x$par
            objfun  <- Fit$objfun
@@ -50,6 +51,11 @@ objsurf.kppm <- objsurf.dppm <- function(x, ...,
                                     objname = "log composite likelihood",
                                     ngrid=ngrid, xlim=xlim, ylim=ylim,
                                     ratio=ratio, verbose=verbose)
+         },
+         adapcl = {
+           stop(paste("Sorry, objective function is not available for",
+                      "adaptive composite likelihood method"),
+                call.=FALSE)
          },
          stop(paste("Unrecognised fitting method", dQuote(Fit$method)),
               call.=FALSE)

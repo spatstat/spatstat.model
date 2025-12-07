@@ -1,7 +1,7 @@
 #'
 #'       summary.kppm.R
 #'
-#'   $Revision: 1.42 $  $Date: 2025/12/04 11:04:46 $
+#'   $Revision: 1.43 $  $Date: 2025/12/07 02:25:28 $
 #' 
 
 summary.kppm <- function(object, ..., quick=FALSE) {
@@ -238,12 +238,12 @@ print.summary.kppm <- function(x, ...) {
   }
 
   if(!is.null(mu <- x$mu)) {
+    moo <- signif(mean(mu), digits)
+    if(is.im(moo)) moo <- paste0("[pixel image] [mean = ", moo, "]")
     if(isPCP) {
-      splat("Mean cluster size: ",
-            if(!is.im(mu)) paste(signif(mu, digits), "points") else "[pixel image]")
+      splat("Mean cluster size: ", moo, if(!is.im(mu)) "points" else NULL)
     } else {
-      splat("Fitted mean of log of random intensity:",
-            if(!is.im(mu)) signif(mu, digits) else "[pixel image]")
+      splat("Fitted mean of log of random intensity:", moo)
     }
   }
   #' table of coefficient estimates with SE and 95% CI
