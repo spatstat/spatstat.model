@@ -1,13 +1,15 @@
 
-        CHANGES IN spatstat.model VERSION 3.5-0.007
+        CHANGES IN spatstat.model VERSION 3.5-0.008
 
 OVERVIEW
 
+    o We thank Gabriela Calana Somoza for contributions.
+    
     o Waagepetersen's composite likelihood for cluster processes.
     
     o Convert a recursively partitioned point process model to a tessellation.
 
-    o Minor improvements.
+    o Bug fixes and minor improvements.
     
 NEW FUNCTIONS
 
@@ -33,6 +35,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o as.fv.kppm
     Improved arguments for empirical estimation of pair correlation function
     when the model was fitted with a non-default value of 'method'.
+
+BUG FIXES
+
+   o lurking
+   Crashed in some cases when 'envelope=TRUE' with message 'Xsim not found'.
+   [Spotted by Gabriela Calana Somoza.]
+   Fixed.
 
 
         CHANGES IN spatstat.model VERSION 3.5-0

@@ -2,7 +2,7 @@
 #  update.ppm.R
 #
 #
-#  $Revision: 1.69 $    $Date: 2023/02/16 02:35:40 $
+#  $Revision: 1.70 $    $Date: 2025/12/18 04:42:18 $
 #
 #
 #
@@ -400,8 +400,9 @@ damaged.ppm <- function(object) {
   return(badQ)
 }
 
-updateData.ppm <- function(model, X, ..., warn=TRUE, use.internal) {
+updateData.ppm <- function(model, X, ..., envir=NULL, warn=TRUE, use.internal) {
   ## wrapper to refit the 'model' to new data 'X'
+  force(X)
   if(is.marked(X) && !is.multitype(X)) {
     if(warn) warning("Marks were ignored when re-fitting the model,",
                      "because they were not a factor",
@@ -412,5 +413,6 @@ updateData.ppm <- function(model, X, ..., warn=TRUE, use.internal) {
   ## unless the model is a 'fake' object produced by 'subfits'
   if(missing(use.internal))
     use.internal <- (model$method != "mppm")
-  update(model, Q=X, ..., use.internal=use.internal)
+  if(is.null(envir)) envir <- sys.frame(sys.nframe())
+  update(model, Q=X, ..., envir=envir, use.internal=use.internal)
 }

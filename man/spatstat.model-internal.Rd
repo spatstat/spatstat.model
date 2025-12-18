@@ -561,7 +561,7 @@ tweak.coefs(model, new.coef)
 \method{unitname}{msr}(x) <- value 
 \method{update}{ippm}(object, \dots, envir) 
 \method{update}{msr}(object, \dots)
-\method{updateData}{ppm}(model, X, \dots, warn, use.internal)
+\method{updateData}{ppm}(model, X, \dots, envir, warn, use.internal)
 \method{updateData}{kppm}(model, X, \dots)
 \method{updateData}{dppm}(model, X, \dots)
 \method{updateData}{slrm}(model, X, \dots)

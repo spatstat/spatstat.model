@@ -13,64 +13,64 @@
   Cox point process model to a point pattern.
 }
 \usage{
-  kppm(X, \dots)
+kppm(X, \dots)
 
-  \method{kppm}{formula}(X,
-                clusters = c("Thomas","MatClust","Cauchy","VarGamma","LGCP"),
-                \dots,
-                data=NULL)
+\method{kppm}{formula}(X,
+    clusters = c("Thomas","MatClust","Cauchy","VarGamma","LGCP"),
+    \dots,
+    data=NULL)
 
-  \method{kppm}{ppp}(X,
-       trend = ~1,
-       clusters = c("Thomas","MatClust","Cauchy","VarGamma","LGCP"),
-       data = NULL,
-       ...,
-       covariates=data,
-       subset,
-       method = c("mincon", "clik2", "palm", "waag", "adapcl"),
-       penalised = FALSE,
-       improve.type = c("none", "clik1", "wclik1", "quasi"),
-       improve.args = list(),
-       weightfun=NULL,
-       control=list(),
-       stabilize=TRUE,
-       algorithm,
-       trajectory=FALSE,
-       statistic="K",
-       statargs=list(),
-       rmax = NULL,
-       epsilon=0.01,
-       covfunargs=NULL,
-       use.gam=FALSE,
-       nd=NULL, eps=NULL,
-       ppm.improve.type=c("none", "ho", "enet"),
-       ppm.improve.args=list())
+\method{kppm}{ppp}(X,
+    trend = ~1,
+    clusters = c("Thomas","MatClust","Cauchy","VarGamma","LGCP"),
+    data = NULL,
+    \dots,
+    covariates=data,
+    subset,
+    method = c("mincon", "clik2", "palm", "waag", "adapcl"),
+    penalised = FALSE,
+    improve.type = c("none", "clik1", "wclik1", "quasi"),
+    improve.args = list(),
+    weightfun=NULL,
+    control=list(),
+    stabilize=TRUE,
+    algorithm,
+    trajectory=FALSE,
+    statistic="K",
+    statargs=list(),
+    rmax = NULL,
+    epsilon=0.01,
+    covfunargs=NULL,
+    use.gam=FALSE,
+    nd=NULL, eps=NULL,
+    ppm.improve.type=c("none", "ho", "enet"),
+    ppm.improve.args=list())
 
 \method{kppm}{quad}(X,
-       trend = ~1,
-       clusters = c("Thomas","MatClust","Cauchy","VarGamma","LGCP"),
-       data = NULL,
-       ...,
-       covariates=data,
-       subset,
-       method = c("mincon", "clik2", "palm", "waag", "adapcl"),
-       penalised = FALSE,
-       improve.type = c("none", "clik1", "wclik1", "quasi"),
-       improve.args = list(),
-       weightfun=NULL,
-       control=list(),
-       stabilize=TRUE,
-       algorithm,
-       trajectory=FALSE,
-       statistic="K",
-       statargs=list(),
-       rmax = NULL,
-       epsilon=0.01,
-       covfunargs=NULL,
-       use.gam=FALSE,
-       nd=NULL, eps=NULL,
-       ppm.improve.type=c("none", "ho", "enet"),
-       ppm.improve.args=list())
+    trend = ~1,
+    clusters = c("Thomas","MatClust","Cauchy","VarGamma","LGCP"),
+    data = NULL,
+    \dots,
+    covariates=data,
+    subset,
+    method = c("mincon", "clik2", "palm", "waag", "adapcl"),
+    penalised = FALSE,
+    improve.type = c("none", "clik1", "wclik1", "quasi"),
+    improve.args = list(),
+    weightfun=NULL,
+    control=list(),
+    stabilize=TRUE,
+    algorithm,
+    trajectory=FALSE,
+    statistic="K",
+    statargs=list(),
+    rmax = NULL,
+    epsilon=0.01,
+    covfunargs=NULL,
+    use.gam=FALSE,
+    nd=NULL, eps=NULL,
+    ppm.improve.type=c("none", "ho", "enet"),
+    ppm.improve.args=list())
 }
 \arguments{
   \item{X}{
@@ -361,7 +361,7 @@
       optimisation algorithm \code{\link[stats]{optim}}.
     }
     \item{Adaptive Composite likelihood:}{
-      If \code{method = "cladap"} the clustering parameters of the
+      If \code{method = "adapcl"} the clustering parameters of the
       model will be fitted by solving the adaptive second order 
       composite likelihood estimating equation (Lavancier et al, 2021).
       The estimating function is
@@ -378,14 +378,15 @@
 	\sum[u,v] w(epsilon |g(0; theta)-1|/(g(||u-v||; theta)-1)) 
 	g'(||u-v||; theta) / g(||u-v||; theta) - integral[D,D] 
 	w(epsilon |g(0; theta)-1|/(g(||u-v||; theta)-1))
-	g'(||u-v||; theta) rho(u) rho(v) du dv
+	g' (||u-v||; theta) rho(u) rho(v) du dv
       }
       where the sum is taken over all distinct pairs of points.
       Here \eqn{g(d;\theta)}{g(d; theta)} is the
       pair correlation function  with
       parameters \eqn{\theta}{theta}.
       The partial derivative with respect to \eqn{\theta}{theta} 
-      is \eqn{g'(d; \theta)}{g'(d; theta)}, and \eqn{\rho(u)}{rho(u)} denotes
+      is \eqn{\nabla_\theta g(d; \theta)}{g'(d; theta)},
+      and \eqn{\rho(u)}{rho(u)} denotes
       the fitted intensity function of the model.
       
       The tuning parameter \eqn{\epsilon}{epsilon} is 

@@ -1,7 +1,7 @@
 # Lurking variable plot for arbitrary covariate.
 #
 #
-# $Revision: 1.75 $ $Date: 2022/02/12 09:11:35 $
+# $Revision: 1.76 $ $Date: 2025/12/18 04:34:48 $
 #
 
 lurking <- function(object, ...) {
@@ -527,16 +527,17 @@ LurkEngine <- function(object, type, cumulative=TRUE, plot.sd=TRUE,
       cat("Processing.. ")
       state <- list()
     }
-    for(i in seq_len(nsim)) {
+    env.here <- sys.frame(sys.nframe())
+    for(isim in seq_len(nsim)) {
       ## evaluate lurking variable plot for simulated pattern
-      cl$object <- update(object, Xsim[[i]])
+      cl$object <- update(object, Q=Xsim[[isim]], envir=env.here)
       result.i <- eval(cl, clenv)
       ## interpolate empirical values onto common sequence
       f.i <- with(result.i$empirical,
                   approxfun(covariate, value, rule=2))
       val.i <- f.i(theoretical$covariate)
       values <- cbind(values, val.i)
-      if(verbose) state <- progressreport(i, nsim, state=state)
+      if(verbose) state <- progressreport(isim, nsim, state=state)
     }
     if(verbose) cat("Done.\n")
     hilo <- if(nrank == 1) apply(values, 1, range) else
