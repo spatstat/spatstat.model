@@ -1,7 +1,7 @@
 # Lurking variable plot for arbitrary covariate.
 #
 #
-# $Revision: 1.76 $ $Date: 2025/12/18 04:34:48 $
+# $Revision: 1.77 $ $Date: 2025/12/19 07:02:23 $
 #
 
 lurking <- function(object, ...) {
@@ -219,7 +219,8 @@ LurkEngine <- function(object, type, cumulative=TRUE, plot.sd=TRUE,
                        verbose=FALSE, nx, splineargs,
                        envelope=FALSE, nsim=39, nrank=1, Xsim=list(),
                        internal=list(), checklength=TRUE) {
-  stopifnot(is.ppm(object) || is.slrm(object))
+  if(!inherits(object, c("ppm", "slrm", "lppm")))
+    stop("The model should have class ppm, slrm or lppm", call.=FALSE)
   ## validate covariate values
   covvalues <- as.numeric(covvalues)
   resvalues <- as.numeric(resvalues)
@@ -405,6 +406,14 @@ LurkEngine <- function(object, type, cumulative=TRUE, plot.sd=TRUE,
     } else if(is.slrm(object)) {
       ## Fitted intensity at quadrature points
       lambda <- predict(object, type="intensity")[quadpoints, drop=FALSE]
+      ## Fisher information for coefficients
+      Fisher <- Fisher %orifnull% vcov(object, what="Fisher")
+      ## Sufficient statistic at quadrature points
+      suff <- model.matrix(object)
+      if(!allok && !is.null(suff)) suff <- suff[ok, , drop=FALSE]
+    } else if(inherits(object, "lppm")) {
+      ## Fitted intensity at quadrature points
+      lambda <- predict(object, type="trend")[quadpoints, drop=FALSE]
       ## Fisher information for coefficients
       Fisher <- Fisher %orifnull% vcov(object, what="Fisher")
       ## Sufficient statistic at quadrature points
