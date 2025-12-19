@@ -3,7 +3,7 @@
 #'
 #'  kluster/kox point process models
 #'
-#'  $Revision: 1.237 $ $Date: 2025/12/07 09:51:21 $
+#'  $Revision: 1.240 $ $Date: 2025/12/19 02:52:53 $
 #'
 #'  Copyright (c) 2001-2025 Adrian Baddeley, Rolf Turner, Ege Rubak,
 #'                Abdollah Jalilian and Rasmus Plenge Waagepetersen
@@ -983,3 +983,22 @@ is.poissonclusterprocess.default <- function(model) { FALSE }
   
 is.poissonclusterprocess.kppm <- function(model) { isTRUE(model$isPCP) }
 
+#' cluster strength
+
+clusterstrength <- function(object) {
+  verifyclass(object, "kppm")
+  g <- pcfmodel(object)
+  phi <- g(0) - 1
+  return(phi)
+}
+
+#' spatial persistence index
+
+persist <- function(object, W=Window(object)) {
+  verifyclass(object, "kppm")
+  stopifnot(is.owin(W))
+  g <- pcfmodel(object)
+  d <- diameter(W)
+  v <- (g(d)-1)/(g(0)-1)
+  return(v)
+}

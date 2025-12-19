@@ -45,7 +45,7 @@ panysib(object)
   \adrian.
 }
 \seealso{
-  \code{\link{psib}}
+  \code{\link{psib}}, \code{\link{persist}}, \code{\link{repul}}.
 }
 \references{
   Baddeley, A., Davies, T.M., Hazelton, M.L., Rakshit, S. and Turner, R. 
@@ -55,8 +55,27 @@ panysib(object)
   DOI: \code{10.1016/j.spasta.2022.100709}
 }
 \examples{
-  fit <- kppm(redwood ~ polynom(x,y,2))
-  plot(panysib(fit))
+  #' clustered region of full redwood data
+  Xc <- redwoodfull[redwoodfull.extra$regionII]
+  fitc <- kppm(Xc)
+  panysib(fitc)
+
+  if(interactive()) {
+     psib(fitc)
+     ##' conclusion: strong clustering in region II
+
+     Xr <- redwoodfull[redwoodfull.extra$regionI]
+     fitr <- kppm(Xr)
+     panysib(fitr)
+     psib(fitr)
+     ##' panysib is high, psib is low
+     unlist(parameters(fitr))
+     ##' 
+     ##' conclusion: not clustered in region I
+  } 
+
+  fitxy <- kppm(redwoodfull ~ polynom(x,y,2))
+  plot(panysib(fitxy))
 }
 \keyword{spatial}
 \keyword{models}

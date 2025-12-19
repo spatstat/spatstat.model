@@ -56,7 +56,8 @@
   \adrian.
 }
 \seealso{
-  \code{\link{kppm}}, \code{\link{panysib}}, \code{\link{repul}}.
+  \code{\link{kppm}}, \code{\link{panysib}}, \code{\link{persist}},
+  \code{\link{repul}}.
 }
 \examples{
   fit <- kppm(redwood3 ~1, "Thomas")

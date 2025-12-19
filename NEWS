@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 3.5-0.009
+        CHANGES IN spatstat.model VERSION 3.5-0.010
 
 OVERVIEW
 
@@ -9,6 +9,8 @@ OVERVIEW
     
     o Convert a recursively partitioned point process model to a tessellation.
 
+    o Cluster strength index and spatial persistence index.
+
     o Bug fixes and minor improvements.
     
 NEW FUNCTIONS
@@ -17,9 +19,15 @@ NEW FUNCTIONS
     Convert a recursively partitioned point process model
     to a spatial tessellation.
 
+    o clusterstrength
+    Cluster strength index for a cluster process or Cox process.
+
     o formula.rppm
     Extract the model formula for a recursively partitioned point process model.
 
+    o persist
+    Spatial persistence index for a cluster process.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o kppm
