@@ -134,7 +134,7 @@ local({
 ##
 ##  Check validity of update.ppm
 ##
-##  $Revision: 1.8 $ $Date: 2022/10/23 01:19:19 $
+##  $Revision: 1.9 $ $Date: 2025/12/19 00:37:21 $
 
 local({
   if(ALWAYS) {
@@ -223,6 +223,21 @@ local({
     fut <- ppm(X ~ Z + x + y, nd=8)
     fut0 <- step(fut, trace=0)
     cat("OK\n")
+  }
+  if(FULLTEST) {
+    ## thanks to Gabriela Calana Somoza
+    cat("\nUpdate model using point pattern with different window...")
+    fum <- ppm(cells ~ x)
+    g <- function(model, method=c("a", "b")) {
+      Y <- data.ppm(model)
+      Window(Y) <- grow.rectangle(Window(X), 0.05)
+      e <- sys.frame(sys.nframe())
+      switch(method,
+             a = update(model, Y),
+             b = update(model, Y, envir=e))
+    }
+    g(fum, "b")
+    g(fum, "a")
   }
   
 })

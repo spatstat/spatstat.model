@@ -122,11 +122,12 @@ reset.spatstat.options()
 #'
 #'  Diagnostic tools such as diagnose.ppm, qqplot.ppm
 #'
-#'  $Revision: 1.6 $  $Date: 2020/04/28 12:58:26 $
+#'  $Revision: 1.7 $  $Date: 2025/12/19 01:33:20 $
 #'
 
 if(FULLTEST) {
 local({
+  cat("Testing diagnose.ppm on Poisson model...")
   fit <- ppm(cells ~ x)
   diagE <- diagnose.ppm(fit, type="eem")
   diagI <- diagnose.ppm(fit, type="inverse")
@@ -140,6 +141,7 @@ local({
   plot(diagP, which="smooth", plot.smooth="contour")
   plot(diagP, which="smooth", plot.smooth="image")
 
+  cat("Testing diagnose.ppm on Strauss model...")
   fitS <- ppm(cells ~ x, Strauss(0.08))
   diagES <- diagnose.ppm(fitS, type="eem", clip=FALSE)
   diagIS <- diagnose.ppm(fitS, type="inverse", clip=FALSE)
@@ -152,14 +154,17 @@ local({
   plot(diagPS, which="smooth", plot.smooth="persp")
   
   #' infinite reach, not border-corrected
+  cat("Testing diagnose.ppm on Softcore model...")
   fut <- ppm(cells ~ x, Softcore(0.5), correction="isotropic")
   diagnose.ppm(fut)
 
   #' 
+  cat("Testing diagnose.ppm with cumulative=FALSE...")
   diagPX <- diagnose.ppm(fit, type="Pearson", cumulative=FALSE)
   plot(diagPX, which="y")
 
   #' simulation based
+  cat("Testing qqplot.ppm...")
   e <- envelope(cells, nsim=4, savepatterns=TRUE, savefuns=TRUE)
   Plist <- rpoispp(40, nsim=5)
 
@@ -173,6 +178,7 @@ local({
   print(qg)
   
   #' lurking.ppm
+  cat("Testing lurking.ppm...")
   #' covariate is numeric vector
   fitx <- ppm(cells ~ x)
   yvals <- coords(as.ppp(quad.ppm(fitx)))[,"y"]
@@ -186,6 +192,11 @@ local({
   stuff <- lurking(fit, expression(x), envelope=Plist, plot.sd=FALSE)
   #' plot.lurk
   plot(stuff, shade=NULL)
+  #' problem raised by Gabriela Calana Somoza
+  A <- cells
+  attr(Window(A), "vvv") <- 42
+  fut <- ppm(A ~ x)
+  lurking(fut, expression(x), type="raw", envelope=TRUE, nsim=3)
 })
 }
 

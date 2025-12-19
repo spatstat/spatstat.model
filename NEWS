@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 3.5-0.008
+        CHANGES IN spatstat.model VERSION 3.5-0.009
 
 OVERVIEW
 
@@ -39,10 +39,15 @@ SIGNIFICANT USER-VISIBLE CHANGES
 BUG FIXES
 
    o lurking
-   Crashed in some cases when 'envelope=TRUE' with message 'Xsim not found'.
+   Crashed in rare cases when 'envelope=TRUE' with message 'Xsim not found'.
    [Spotted by Gabriela Calana Somoza.]
    Fixed.
 
+   o update.ppm
+   update(object, X) crashed sometimes if X was a point pattern
+   whose observation window was not identical to the window of the
+   original point pattern dataset.
+   Fixed.
 
         CHANGES IN spatstat.model VERSION 3.5-0
 

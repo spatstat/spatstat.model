@@ -2,7 +2,7 @@
 #  update.ppm.R
 #
 #
-#  $Revision: 1.70 $    $Date: 2025/12/18 04:42:18 $
+#  $Revision: 1.72 $    $Date: 2025/12/19 00:25:46 $
 #
 #
 #
@@ -302,26 +302,31 @@ update.ppm <- local({
     ## *************************************************************
     ## ****** Special action when Q is a point pattern *************
     ## *************************************************************
-    if(X.is.new && fixdummy && oldstyle &&
-       is.ppp(newX) && identical(Window(newX), Window(data.ppm(object)))) {
-      ## Instead of allowing default.dummy(X) to occur,
-      ## explicitly create a quadrature scheme from X,
-      ## using the same dummy points and weight parameters
-      ## as were used in the fitted model 
-      Qold <- quad.ppm(object)
-      if(is.marked(Qold)) {
-        dpar <- Qold$param$dummy
-        wpar <- Qold$param$weight
-        Qnew <- do.call(quadscheme, append(list(newX), append(dpar, wpar)))
+    if(X.is.new && is.ppp(newX) && oldstyle) {
+      samewindow <-  identical(as.owin(Window(newX)),
+                               as.owin(Window(data.ppm(object))))
+      if(fixdummy && samewindow) {
+        ## Instead of allowing default.dummy(X) to occur,
+        ## explicitly create a quadrature scheme from X,
+        ## using the same dummy points and weight parameters
+        ## as were used in the fitted model 
+        Qold <- quad.ppm(object)
+        if(is.marked(Qold)) {
+          dpar <- Qold$param$dummy
+          wpar <- Qold$param$weight
+          Qnew <- do.call(quadscheme, append(list(newX), append(dpar, wpar)))
+        } else {
+          Dum <- Qold$dummy
+          wpar <- Qold$param$weight
+          Qnew <- do.call(quadscheme, append(list(newX, Dum), wpar))
+        }
+        ## replace X by new Q
+        call$Q <- Qnew
       } else {
-        Dum <- Qold$dummy
-        wpar <- Qold$param$weight
-        Qnew <- do.call(quadscheme, append(list(newX, Dum), wpar))
+        ## insert the evaluated point pattern object 
+        call$Q <- newX
       }
-      ## replace X by new Q
-      call$Q <- Qnew
     }
-
     ## finally call ppm
     call[[1]] <- as.name('ppm')
     result <- eval(call, as.list(envir), enclos=callframe)
@@ -401,7 +406,8 @@ damaged.ppm <- function(object) {
 }
 
 updateData.ppm <- function(model, X, ..., envir=NULL, warn=TRUE, use.internal) {
-  ## wrapper to refit the 'model' to new data 'X'
+  ## wrapper to refit the 'model' to new point pattern 'X'
+  ## If 'X' is an expression then it should be evaluated now
   force(X)
   if(is.marked(X) && !is.multitype(X)) {
     if(warn) warning("Marks were ignored when re-fitting the model,",
