@@ -1,7 +1,7 @@
 # Lurking variable plot for arbitrary covariate.
 #
 #
-# $Revision: 1.80 $ $Date: 2025/12/20 04:26:46 $
+# $Revision: 1.81 $ $Date: 2025/12/20 06:16:25 $
 #
 
 lurking <- function(object, ...) {
@@ -544,17 +544,21 @@ LurkEngine <- function(object, type, cumulative=TRUE, plot.sd=TRUE,
     ## trap numerical errors
     nbg <- (varR < 0)
     if(any(nbg)) {
-      ran <- range(varR)
-      varR[nbg] <- 0
-      relerr <- abs(ran[1L]/ran[2L])
-      nerr <- sum(nbg)
-      if(relerr > 1e-6) {
+      #' assess whether to report
+      vRn <- varR[nbg]
+      vIn <- varI[nbg]
+      relerr <- vRn/vIn
+      relerr[!is.finite(relerr)] <- 0
+      if(max(abs(relerr)) > 1e-4) {
+        nerr <- sum(nbg)
         warning(paste(nerr, "negative",
                       ngettext(nerr, "value (", "values (min="),
-                      signif(ran[1L], 4), ")",
+                      signif(min(vRn), 4), ")",
                       "of residual variance reset to zero",
                       "(out of", length(varR), "values)"))
       }
+      #' replace numerical errors by 0
+      varR[nbg] <- 0
     }
     theoretical$sd <- sqrt(varR)
   }
