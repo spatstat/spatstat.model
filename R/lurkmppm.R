@@ -1,6 +1,6 @@
 #' lurkmppm.R
 #'    Lurking variable plot for mppm
-#'    $Revision: 1.9 $ $Date: 2022/01/04 05:30:06 $
+#'    $Revision: 1.11 $ $Date: 2025/12/20 04:29:45 $
 
 lurking.mppm <- local({
 
@@ -31,7 +31,10 @@ lurking.mppm <- local({
            })
   }
 
-  acceptable <- function(x) { is.im(x) || is.numeric(x) || is.expression(x) }
+  acceptable <- function(x) {
+    is.im(x) || is.numeric(x) || is.expression(x) ||
+    is.function(x) || (is.character(x) && length(x) == 1)
+  }
 
   approxcumul <- function(yin, xin, xout) {
     if(length(yin) > 1) {
@@ -64,7 +67,10 @@ lurking.mppm <- local({
     if(missing(covname)) {
       co <- cl$covariate
       covname <- if(is.name(co)) as.character(co) else
-                 if(is.expression(co)) format(co[[1]]) else "covariate"
+                 if(is.expression(co)) format(co[[1]]) else 
+                 if(is.character(co) && 
+                    length(co) == 1 &&
+                    co %in% c("x", "y")) paste(co, "coordinate") else NULL
     }
 
     Fisher <- vcov(object, what="fisher")
@@ -78,7 +84,8 @@ lurking.mppm <- local({
                      all(sapply(covariate, acceptable))
       if(!cov.is.list) 
         stop(paste("Argument 'covariate' should be",
-                   "a pixel image, a numeric vector, an expression",
+                   "a pixel image, a numeric vector, an expression,",
+                   "a function(x,y), one of the strings 'x' or 'y',",
                    "or a list of such arguments",
                    "with one entry for each row of original data"),
              call.=FALSE)

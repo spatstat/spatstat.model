@@ -1,7 +1,7 @@
 # Lurking variable plot for arbitrary covariate.
 #
 #
-# $Revision: 1.77 $ $Date: 2025/12/19 07:02:23 $
+# $Revision: 1.80 $ $Date: 2025/12/20 04:26:46 $
 #
 
 lurking <- function(object, ...) {
@@ -38,7 +38,10 @@ lurking.ppp <- lurking.ppm <- function(object, covariate,
   if(missing(covname) || is.null(covname)) {
     co <- cl$covariate
     covname <- if(is.name(co)) as.character(co) else
-               if(is.expression(co)) format(co[[1]]) else NULL
+               if(is.expression(co)) format(co[[1]]) else 
+               if(is.character(co) && 
+                  length(co) == 1 &&
+                  co %in% c("x", "y")) paste(co, "coordinate") else NULL
   }
   
     
@@ -94,17 +97,48 @@ lurking.ppp <- lurking.ppm <- function(object, covariate,
   if(is.null(subQset)) subQset <- rep.int(TRUE, n.quad(Q))
   
   #################################################################
+  #' trap case where covariate = "<name>"
+  if(is.character(covariate) && (length(covariate) == 1)) {
+    #' covariate is a single string
+    is.cartesian <- covariate %in% c("x", "y")
+    if(!is.cartesian) {
+      #' not a reserved name; convert to an expression and evaluate later
+      covariate <- str2expression(covariate)
+    }
+  } else {
+    is.cartesian <- FALSE
+  }
+
+  #################################################################
   ## compute the covariate
-    
-  if(is.im(covariate)) {
+  covunits <- NULL
+  if(is.cartesian) {
+    #' covariate is name of cartesian coordinate
+    switch(covariate,
+           x = {
+             covvalues <- quadpoints$x
+             covrange <- Frame(quadpoints)$xrange
+           },
+           y = {
+             covvalues <- quadpoints$y
+             covrange <- Frame(quadpoints)$yrange
+           })
+    covunits <- unitname(quadpoints)
+  } else if(is.im(covariate)) {
     covvalues <- covariate[quadpoints, drop=FALSE]
     covrange <- internal$covrange %orifnull% range(covariate, finite=TRUE)
+  } else if(is.function(covariate)) {
+    covvalues <- pointweights(quadpoints,
+                              weights=covariate,
+                              weightsname="covariate")
+    covrange <- internal$covrange %orifnull% range(covvalues, finite=TRUE)
+    if(inherits(covariate, "distfun"))
+      covunits <- unitname(quadpoints)
   } else if(is.vector(covariate) && is.numeric(covariate)) {
     covvalues <- covariate
-    covrange <- internal$covrange %orifnull% range(covariate, finite=TRUE)
-    if(length(covvalues) != quadpoints$n)
-      stop("Length of covariate vector,", length(covvalues), "!=",
-           quadpoints$n, ", number of quadrature points")
+    covrange <- internal$covrange %orifnull% range(covvalues, finite=TRUE)
+    check.nvector(covvalues, npoints(quadpoints),
+                  things="quadrature points", vname="covariate")
   } else if(is.expression(covariate)) {
     ## Expression involving covariates in the model
     glmdata <- getglmdata(object)
@@ -142,7 +176,8 @@ lurking.ppp <- lurking.ppm <- function(object, covariate,
       stop("The evaluated covariate is not numeric")
   } else 
     stop(paste("The", sQuote("covariate"), "should be either",
-               "a pixel image, an expression or a numeric vector"))
+               "a pixel image, an expression, a function(x,y),",
+               "a numeric vector or one of the strings 'x' or 'y'"))
 
   #################################################################
   ## Secret exit
@@ -192,6 +227,7 @@ lurking.ppp <- lurking.ppm <- function(object, covariate,
                       covrange=covrange,
                       typename=typename,
                       covname=covname,
+                      covunits=covunits,
                       cl=cl, clenv=clenv,
                       oldstyle=oldstyle, check=check, verbose=verbose,
                       nx=nx, splineargs=splineargs,
@@ -213,7 +249,7 @@ LurkEngine <- function(object, type, cumulative=TRUE, plot.sd=TRUE,
                        quadpoints, wts, Z, subQset, 
                        covvalues, resvalues, 
                        clip, clipwindow, cov.is.im=FALSE, covrange, 
-                       typename, covname,
+                       typename, covname, covunits=NULL,
                        cl, clenv,
                        oldstyle=FALSE, check=TRUE,
                        verbose=FALSE, nx, splineargs,
@@ -561,6 +597,7 @@ LurkEngine <- function(object, type, cumulative=TRUE, plot.sd=TRUE,
                               cumulative=cumulative,
                               covrange=covrange,
                               covname=covname,
+                              covunits=covunits,
                               oldstyle=oldstyle)
   if(saveworking) attr(stuff, "working") <- working
   class(stuff) <- "lurk"
@@ -572,6 +609,7 @@ LurkEngine <- function(object, type, cumulative=TRUE, plot.sd=TRUE,
 
 plot.lurk <- function(x, ..., shade="grey") {
   xplus <- append(x, attr(x, "info"))
+  xplus$covunits <- as.unitname(xplus$covunits) # in case it's absent
   with(xplus, {
     ## work out plot range
     mr <- range(0, empirical$value, theoretical$mean, na.rm=TRUE)
@@ -585,12 +623,12 @@ plot.lurk <- function(x, ..., shade="grey") {
 
     ## start plot
     vname <- paste(if(cumulative)"cumulative" else "marginal", typename)
+    covlabel <- pasteN(covname, summary(covunits)$axis)
     do.call(plot,
             resolve.defaults(
-              list(covrange, mr),
-              list(type="n"),
+              list(x=covrange, y=mr, type="n"),
               list(...),
-              list(xlab=covname, ylab=vname)))
+              list(xlab=covlabel, ylab=vname)))
     ## Envelopes
     if(!is.null(theoretical$upper)) {
       Upper <- theoretical$upper

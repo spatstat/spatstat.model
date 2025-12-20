@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 3.5-0.011
+        CHANGES IN spatstat.model VERSION 3.5-0.012
 
 OVERVIEW
 
@@ -43,6 +43,14 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o as.fv.kppm
     Improved arguments for empirical estimation of pair correlation function
     when the model was fitted with a non-default value of 'method'.
+
+    o lurking.ppm, lurking.ppp, lurking.slrm
+    Argument 'covariate' can be a function(x,y)
+    or one of the strings "x" or "y".
+
+    o lurking.ppm, lurking.ppp, lurking.slrm, plot.lurk
+    When the covariate is a cartesian coordinate or a distance function,
+    the unit of length is stated on the x axis label of the plot.
 
 BUG FIXES
 

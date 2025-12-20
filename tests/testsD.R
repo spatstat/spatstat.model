@@ -179,16 +179,21 @@ local({
   
   #' lurking.ppm
   cat("Testing lurking.ppm...")
+  fitx <- ppm(japanesepines ~ x)
+  #' covariate is name of coordinate (and has a unit name)
+  lurking(fitx, "y")
   #' covariate is numeric vector
-  fitx <- ppm(cells ~ x)
   yvals <- coords(as.ppp(quad.ppm(fitx)))[,"y"]
   lurking(fitx, yvals)
+  #' covariate is function(x,y) and has a unit name
+  D <- distfun(runifpoint(ex=japanesepines))
+  lurking(fitx, D)
   #' covariate is stored but is not used in model
-  Z <- as.im(function(x,y){ x+y }, Window(cells))
-  fitxx <- ppm(cells ~ x, data=solist(Zed=Z), allcovar=TRUE)
+  Z <- as.im(function(x,y){ x+y }, Window(japanesepines))
+  fitxx <- ppm(japanesepines ~ x, data=solist(Zed=Z), allcovar=TRUE)
   lurking(fitxx, expression(Zed))
-  #' envelope is a ppplist; length < nsim; glmdata=NULL
-  fit <- ppm(cells ~ 1)
+  #' envelope is a ppplist; length < nsim default; glmdata=NULL
+  fit <- ppm(japanesepines ~ 1)
   stuff <- lurking(fit, expression(x), envelope=Plist, plot.sd=FALSE)
   #' plot.lurk
   plot(stuff, shade=NULL)
