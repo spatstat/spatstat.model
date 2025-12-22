@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.124 $ $Date: 2023/02/28 01:56:34 $
+#  $Revision: 1.125 $ $Date: 2025/12/22 08:06:34 $
 #
 
 leverage <- function(model, ...) {
@@ -957,19 +957,19 @@ plot.leverage.ppm <- function(x, ...,
   cutinfo <- list(addcontour=showcut,
                   args.contour=args.contour)
   if(is.im(smo)) {
-    do.call(plot.im,
-            resolve.defaults(list(quote(smo)),
-                             cutinfo,
-                             list(...),
-                             list(main=defaultmain)))
+    z <- do.call(plot.im,
+                 resolve.defaults(list(quote(smo)),
+                                  cutinfo,
+                                  list(...),
+                                  list(main=defaultmain)))
   } else if(inherits(smo, "imlist")) {
-    do.call(plot.solist,
-            resolve.defaults(list(quote(smo)),
-                             cutinfo,
-                             list(...),
-                             list(main=defaultmain)))
+    z <- do.call(plot.solist,
+                 resolve.defaults(list(quote(smo)),
+                                  cutinfo,
+                                  list(...),
+                                  list(main=defaultmain)))
   } 
-  invisible(NULL)
+  return(invisible(z))
 }
 
 

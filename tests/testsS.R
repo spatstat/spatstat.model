@@ -12,6 +12,54 @@ ALWAYS   <- TRUE
 cat(paste("--------- Executing",
           if(FULLTEST) "** ALL **" else "**RESTRICTED** subset of",
           "test code -----------\n"))
+#'
+#'   spatstat.model/tests/sidefx.R
+#'
+#' Test whether plot(do.plot=FALSE) has no side effects on graphics system
+#'
+#'  $Revision: 1.4 $  $Date: 2025/12/22 08:29:32 $
+
+local({
+  if(FULLTEST) {
+    ## test whether a graphics device has been started
+    deviceExists <- function() { length(dev.list()) != 0 }
+    ## check whether executing 'expr' causes creation of a graphics device
+    chk <- function(expr) {
+      ename <- sQuote(deparse(substitute(expr)))
+      if(deviceExists()) {
+        ## try switching off the graphics
+        graphics.off()
+        if(deviceExists()) {
+          ## Dang
+          warning(paste("Cannot check", ename, 
+                        "as a graphics device already exists"),
+                  call.=FALSE)
+          return(FALSE)
+        }
+      }
+      eval(expr)
+      if(deviceExists()) {
+        stop(paste("Evaluating", ename, 
+                   "caused a graphics device to be started"),
+             call.=FALSE)
+      }
+      return(TRUE)
+    }
+    
+
+
+
+    fit <- ppm(redwood ~ x)
+    ## class 'msr'
+    chk(plot(residuals(fit, type="raw"), do.plot=FALSE))
+    ## class 'leverage.ppm'
+    chk(plot(leverage(fit), do.plot=FALSE))
+    ## class 'influence.ppm'
+    chk(plot(influence(fit), do.plot=FALSE))
+
+
+  }
+})
 #
 # tests/slrm.R
 #

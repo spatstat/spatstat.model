@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 3.5-0.013
+        CHANGES IN spatstat.model VERSION 3.5-0.015
 
 OVERVIEW
 
@@ -50,7 +50,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o lurking.ppm, lurking.ppp, lurking.slrm, plot.lurk
     When the covariate is a cartesian coordinate or a distance function,
-    the unit of length is stated on the x axis label of the plot.
+    the unit of length is stated on the horizontal axis label of the plot.
 
 BUG FIXES
 
@@ -59,6 +59,10 @@ BUG FIXES
    [Spotted by Gabriela Calana Somoza.]
    Fixed.
 
+   o plot.leverage.ppm
+   Return value was NULL.
+   Fixed.
+   
    o update.ppm
    update(object, X) crashed sometimes if X was a point pattern
    whose observation window was not identical to the window of the

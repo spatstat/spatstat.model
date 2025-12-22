@@ -508,7 +508,7 @@ reincarnate.interact(object)
 \method{residuals}{exactppm}(object, type, \dots)
 resid4plot(RES, plot.neg, plot.smooth,
            spacing, outer, srange, monochrome, main,
-           xlab, ylab, rlab, col.neg, col.smooth, \dots)
+           xlab, ylab, rlab, col.neg, col.smooth, do.plot, \dots)
 resid1plot(RES, opt, plot.neg, plot.smooth,
               srange, monochrome, main,
               add, show.all, do.plot, col.neg, col.smooth, \dots)

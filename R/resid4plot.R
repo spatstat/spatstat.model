@@ -5,7 +5,7 @@
 #         resid1plot       one or more unrelated individual plots 
 #         resid1panel      one panel of resid1plot
 #
-#   $Revision: 1.44 $    $Date: 2025/11/24 03:10:38 $
+#   $Revision: 1.47 $    $Date: 2025/12/22 09:05:43 $
 #
 #
 
@@ -44,7 +44,7 @@ resid4plot <- local({
              plot.smooth=c("imagecontour", "image", "contour", "persp"),
              spacing=0.1, outer=3, srange=NULL, monochrome=FALSE, main=NULL,
              xlab="x coordinate", ylab="y coordinate", rlab,
-             col.neg=NULL, col.smooth=NULL,
+             col.neg=NULL, col.smooth=NULL, do.plot=TRUE, 
              ...)
 {
   plot.neg <- match.arg(plot.neg)
@@ -60,7 +60,8 @@ resid4plot <- local({
   typename <- RES$typename
   Ydens    <- RES$Ydens[Wclip, drop=FALSE]
   Ymass    <- RES$Ymass[Wclip]
-  # set up 2 x 2 plot with space
+
+  #' set up 2 x 2 plot with space
   wide <- diff(W$xrange)
   high <- diff(W$yrange)
   space <- spacing * max(wide,high)
@@ -68,10 +69,10 @@ resid4plot <- local({
   height <- high + space + high
   outerspace <- outer * space
   outerRspace <- (outer - 1 + rlablines) * space
-  plot(c(0, width) + c(-outerRspace, outerspace),
-       c(0, height) + c(-outerspace, outerRspace),
-       type="n", asp=1.0, axes=FALSE, xlab="", ylab="")
-  # determine colour map for background
+  BB <- owin(c(0, width) + c(-outerRspace, outerspace),
+             c(0, height) + c(-outerspace, outerRspace))
+
+  #' determine colour map for background
   nullvalue <- if(type == "eem") 1 else 0
   if(is.null(srange)) {
     Yrange <- if(!is.null(Ydens)) range(Ydens) else NULL
@@ -81,7 +82,17 @@ resid4plot <- local({
   backcols <- beachcolours(srange, nullvalue, monochrome)
   if(is.null(col.neg)) col.neg <- backcols
   if(is.null(col.smooth)) col.smooth <- backcols
-  
+
+  #' Preparations finished
+  result <- col.smooth
+  attr(result, "bbox") <- BB
+
+  if(!do.plot) 
+    return(invisible(result))
+
+  #' ------ initialise plot -------
+  plot(BB, main="", type="n")
+
   # ------ plot residuals/marks (in top left panel) ------------
   Xlowleft <- c(W$xrange[1],W$yrange[1])
   vec <- c(0, high) + c(0, space) - Xlowleft
@@ -308,7 +319,7 @@ resid4plot <- local({
   #
   if(!is.null(main))
     title(main=main)
-  invisible(NULL)
+  return(invisible(result))
 }
 
   resid4plot
