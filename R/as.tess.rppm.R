@@ -2,7 +2,7 @@
 #'
 #' Create tessellation from rppm object
 #'
-#' $Revision: 1.6 $ $Date: 2025/12/05 06:12:30 $
+#' $Revision: 1.7 $ $Date: 2026/01/01 01:27:30 $
 
 as.tess.rppm <- function(X) {
   verifyclass(X, "rppm")
@@ -59,6 +59,7 @@ parseRPPM <- function(X, ..., weed=TRUE,
   ##     e.g. ">= 1.2", "< 1.2" for numerical variable
   ##          "ac", "bde" for categorical variable with 5 levels
   labe <- labels(rp, collapse=FALSE)
+  labe <- gsub(">=", ">= ", labe)
   ## Each split is a division of space into 2 tiles.
   ## Create these tessellations and text labels
   splitTess <- rep(list(NAobject("tess")), nnodes)
