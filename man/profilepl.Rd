@@ -65,19 +65,33 @@ profilepl(s, f, \dots, aic=FALSE, rbord=NULL, verbose = TRUE, fast=TRUE)
   \describe{
     \item{interaction parameters:}{
       in a call to \code{\link{ppm}}, the argument \code{interaction}
-      determines the interaction between points. It is usually
-      a call to a function such as \code{\link{Strauss}}. The
+      determines the interaction between points. It is usually given
+      as a call to a function such as \code{\link{Strauss}}. The
       arguments of this call are irregular parameters.
       For example, the interaction radius parameter \eqn{r} of the Strauss
       process, determined by the argument \code{r}
       to the function \code{\link{Strauss}}, is an irregular parameter.
     }
-    \item{trend parameters:}{
-      in a call to \code{\link{ppm}}, the spatial trend may depend on
-      covariates, which are supplied by the argument \code{covariates}.
-      These covariates may be functions written by the user,
-      of the form \code{function(x,y,...)}, and the extra arguments
-      \code{\dots} are irregular parameters.
+    \item{trend parameters not shown in the formula:}{
+      the form of the spatial trend is specified by a model formula
+      involving the names of spatial covariates. Spatial covariates may
+      take many forms; in particular they may be functions in the
+      \R language (written by the user) of the form \code{function(x,y)}
+      or \code{function(x,y, a, b, c, ...)}; then the extra named arguments
+      \code{a,b,c} are irregular parameters. The model formula includes
+      only the name of the function, without parentheses and
+      without its arguments. When calling \code{\link{ppm}} we would
+      pass the irregular parameters through the argument \code{covfunargs}.
+    }
+    \item{trend parameters shown in the formula:}{
+      in \code{\link{ppm}}
+      a covariate is permitted to be a single numerical value
+      (and is interpreted as a covariate which takes the same value
+      at all locations).
+      So for example \code{ppm(X ~ pmin(x, thresh), covariates=list(thresh=3))}
+      and \code{ppm(X ~ I(x < thresh), covariates=list(thresh=3))}
+      are permissible; the threshold value \code{thresh} can be
+      regarded as an irregular parameter. 
     }
   }
       
@@ -99,24 +113,48 @@ profilepl(s, f, \dots, aic=FALSE, rbord=NULL, verbose = TRUE, fast=TRUE)
   Alternatively it could be a function written by the user.
 
   Columns of \code{s} which match the names of arguments of \code{f}
-  will be interpreted as interaction parameters. Other columns will be
+  will be interpreted as interaction parameters. Columns of \code{s}
+  which match the names of variables in the model formula
+  will be interpreted as spatially constant covariates. Other columns will be
   interpreted as trend parameters.
 
   The data frame \code{s} must provide values for each argument of
   \code{f}, except for the optional arguments, which are those arguments of
-  \code{f} that have the default value \code{NA}.  
+  \code{f} that have the default value \code{NA}.
 
   To find the best fit,
-  each row of \code{s} will be taken in turn. Interaction parameters in this
-  row will be passed to \code{f}, resulting in an interaction object. 
+  each row of \code{s} will be taken in turn. The parameters
+  in this row are used as follows:
+  \itemize{
+    \item Parameters which match the name of arguments of \code{f}
+    will be interpreted as interaction parameters and passed to \code{f},
+    resulting in an interaction object.
+    \item Any parameter in \code{s} which matches the name of a
+    variable in the model formula will be passed to \code{\link{ppm}}
+    as a covariate consisting of a single number.
+    \item 
+    Any remaining parameters will be interpreted as trend parameters
+    (irregular parameters of covariate functions)
+    and passed to \code{\link{ppm}} through the argument
+    \code{covfunargs}.
+
+    Note that the additional arguments \code{...} may include an
+    argument called \code{covfunargs} which provides the values of some
+    of the trend parameters. In that case, the trend parameters
+    given in the current row of \code{s} will be combined with those given
+    in the argument \code{covfunargs} with conflicts resolved by
+    giving priority to the entries in \code{s}. This makes it possible
+    to fix some of the irregular parameters and vary the others.
+  }
   Then \code{\link{ppm}} will be applied to the data \code{...}
-  using this interaction. Any trend parameters will be passed to
-  \code{\link{ppm}} through the argument \code{covfunargs}.
+  using this interaction object, along with covariates
+  and \code{covfunargs}.
+  
   This results in a fitted point process model.
   The value of the log pseudolikelihood or AIC from this model is stored.
   After all rows of \code{s} have been processed in this way, the
   row giving the maximum value of log pseudolikelihood will be found.
-
+  
   The object returned by \code{profilepl} contains the profile
   pseudolikelihood (or profile AIC) function,
   the best fitting model, and other data.
@@ -208,6 +246,9 @@ profilepl(s, f, \dots, aic=FALSE, rbord=NULL, verbose = TRUE, fast=TRUE)
     pm <- profilepl(RR, MS, amacrine ~marks)
     }
 
+    ## Easiest way to estimate a threshold
+    tdf <- data.frame(thresh=seq(0, 153, by=if(human) 1 else 3))
+    pt <- profilepl(tdf, Poisson, nztrees ~ I(x < thresh))
 }
 \references{
   Baddeley, A. and Turner, R. (2000)

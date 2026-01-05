@@ -1,7 +1,7 @@
 #
 # profilepl.R
 #
-#  $Revision: 1.47 $  $Date: 2020/11/17 03:47:24 $
+#  $Revision: 1.50 $  $Date: 2026/01/05 08:43:51 $
 #
 #  computes profile log pseudolikelihood
 #
@@ -19,11 +19,16 @@ profilepl <- local({
   
   profilepl <- function(s, f, ..., aic=FALSE, rbord=NULL, verbose=TRUE,
                         fast=TRUE) {
+
     callenv <- parent.frame()
+    
+    dotargs <- list(...)
+
     s <- as.data.frame(s)
     n <- nrow(s)
     stopifnot(is.function(f))
-    ## validate 's'
+
+    ## 's' must contain values for every argument of 'f' which has no default
     parms <- names(s)
     fargs <- names(formals(f))
     if(!all(fargs %in% parms)) {
@@ -38,14 +43,56 @@ profilepl <- local({
                    "not provided in the data frame s"))
       }
     }
-    ## extra columns in 's' are assumed to be parameters of covariate functions
+    ## classify columns of 's'
+    ## (1) argument of 'f'
     is.farg <- parms %in% fargs
-    pass.cfa <- any(!is.farg)
-    got.cfa <- "covfunargs" %in% names(list(...))
-    if(pass.cfa && got.cfa)
-      stop("Some columns in s are superfluous")
-    ##
-    criterion <- numeric(n)
+    ## (2) variable in the model formula (spatially constant covariate)
+    fmlas <- dotargs[sapply(dotargs, inherits, what="formula")]
+    cnames <- unlist(lapply(lapply(fmlas, rhs.of.formula), variablesinformula))
+    is.cov <- parms %in% cnames
+    pass.cov <- any(is.cov)
+    ## (3) otherwise assumed to be a parameter of a covariate function
+    is.cfarg <- !is.farg & !is.cov
+    pass.cfa <- any(is.cfarg)
+
+    ## do covariates depend on row?
+    covariates.are.not.conserved <- (pass.cov || pass.cfa)
+
+    ## Detect 'covfunargs' argument
+    CFA <- dotargs$covfunargs
+    got.cfa <- (length(CFA) > 0)
+    resolve.cfa <- pass.cfa && got.cfa
+    if(resolve.cfa) {
+      a <- intersect(parms[is.cov], names(dotargs$covfunargs))
+      if((na <- length(a))) {
+        warning(paste(ngettext(na,
+                               "The value of the irregular parameter",
+                               "The values of the irregular parameters"),
+                      commasep(sQuote(a)),
+                      "given in argument", sQuote("covfunargs"),
+                      "will be overridden by values in the data frame",
+                      sQuote("s")),
+                call.=FALSE)
+      }
+    }
+
+    ## ppm has equivalent arguments 'covariates' and 'data'
+    nda <- names(dotargs)
+    if(all(c("covariates", "data") %in% nda)) {
+      ## collision
+      ## issue warning unless 'data' is vacuous
+      if(length(dotargs$data)) {
+        stop(paste("Warning: argument", sQuote("data"),
+                   "was ignored because", sQuote("covariates"),
+                   "was also present"),
+             call.=FALSE)
+      }
+      dotargs <- dotargs[nda != "data"]
+    } else if("data" %in% nda) {
+      #' ensure we use 'covariates'
+      names(dotargs) <- sub("data", "covariates", nda)
+    }
+
     ## make a fake call
     pseudocall <- match.call()
     pseudocall[[1]] <- as.symbol("ppm")
@@ -88,54 +135,80 @@ profilepl <- local({
       }
     } 
     ## determine whether computations can be saved
-    if(pass.cfa || got.cfa) {
-      savecomp <- FALSE
-    } else {
-      Q <- do.call(ppm,
-                   append(list(...), list(rbord=rbord, justQ=TRUE)),
-                   envir=callenv)
-      savecomp <- !oversize.quad(Q)
-    }
-    ## go
+    Q <- do.call(ppm,
+                 append(dotargs, list(rbord=rbord, justQ=TRUE)),
+                 envir=callenv)
+    savecomp <- !oversize.quad(Q)
+
+    ## ................... READY ................................
+    ## storage for loglikelihood / AIC
+    criterion <- numeric(n)
+    ## arguments used in each call
+    commonargs <- append(dotargs,
+                         list(
+                           rbord=rbord, 
+                           warn.illegal=FALSE,
+                           callstring="",
+                           skip.border=TRUE,
+                           clip.interaction=!fast)
+                         )
+    
+    ## ................... GO .................................
     gc()
     if(verbose) {
       message(paste("comparing", n, "models..."))
       pstate <- list()
     }
+    #' 
     for(i in 1:n) {
       if(verbose)
         pstate <- progressreport(i, n, state=pstate)
+
+      ## ......... make argument list for i-th call ................
+      if(i == 1) {
+        argi <- append(commonargs,
+                       list(savecomputed = savecomp))
+      } else {
+        argi <- savedargs
+      }
+
+      ## interaction object
       fi <- do.call(f, as.list(s[i, is.farg, drop=FALSE]))
       if(!inherits(fi, "interact"))
         stop(paste("f did not yield an object of class", sQuote("interact")))
-      if(pass.cfa)
-        cfai <- list(covfunargs=as.list(s[i, !is.farg, drop=FALSE])) 
-      ## fit model
-      if(i == 1) {
-        ## fit from scratch
-        arg1 <- list(...,
-                     interaction=fi, 
-                     rbord=rbord, savecomputed=savecomp,
-                     warn.illegal=FALSE,
-                     callstring="",
-                     skip.border=TRUE,
-                     clip.interaction=!fast)
-        if(pass.cfa) arg1 <- append(arg1, cfai)
-        fiti <- do.call(ppm, arg1, envir=callenv)
-        ## save intermediate computations (pairwise distances, etc)
-        precomp <- fiti$internal$computed
-        savedargs <- list(...,
-                          rbord=rbord, precomputed=precomp,
-                          warn.illegal=FALSE,
-                          callstring="",
-                          skip.border=TRUE,
-                          clip.interaction=!fast)
-      } else {
-        ## use precomputed data
-        argi <- append(savedargs, list(interaction=fi))
-        if(pass.cfa) argi <- append(argi, cfai)
-        fiti <- do.call(ppm, argi, envir=callenv)
+      argi$interaction <- fi
+      
+      ## include irregular parameters of covariate functions
+      if(pass.cfa) {
+        #' get irregular parameters from row i
+        newcfa <- as.list(s[i, is.cfarg, drop=FALSE])
+        if(got.cfa) {
+          ## include fixed values of other irregular parameters
+          newcfa <- resolve.defaults(newcfa, CFA)
+        }
+        argi$covfunargs <- newcfa
       }
+
+      ## include spatially constant covariates 
+      if(pass.cov) {
+        covi <- as.list(s[i, is.cov, drop=FALSE])
+        argi$covariates <- replace(as.list(argi$covariates), names(covi), covi)
+      }
+
+      ## ...........   fit model  ..............................
+      fiti <- do.call(ppm, argi, envir=callenv)
+      
+      ## ............... save re-usable internal data ................
+      if(i == 1) {
+        ## intermediate computations (pairwise distances, etc) 
+        precomp <- fiti$internal$computed
+        ## but don't save precomputed covariate values if they could change
+        if(covariates.are.not.conserved)
+          precomp <- precomp[names(precomp) != "covariates.df"]
+        savedargs <- append(commonargs,
+                            list(precomputed=precomp))
+      }
+      ## .............. save results ..................................
       ## save log pl for each fit
       criterion[i] <-
           if(aic) -AIC(fiti) else as.numeric(logLik(fiti, warn=FALSE))
@@ -147,18 +220,48 @@ profilepl <- local({
       } else
         allcoef <- rbind(allcoef, co)
     }
-    if(verbose) message("fitting optimal model...")
-    opti <- which.max(criterion)
+
+    ## .................. FINISHED LOOP - OPTIMIZE ..............
+    ##
     gc()
-    optint <- do.call(f, as.list(s[opti, is.farg, drop=FALSE]))
-    optarg <- list(..., interaction=optint, rbord=rbord)
-    if(pass.cfa) {
-      optcfa <- as.list(s[opti, !is.farg, drop=FALSE])
-      attr(optcfa, "fitter") <- "profilepl"
-      optarg <- append(optarg, list(covfunargs=optcfa))
+    bad <- !is.finite(criterion)
+    if(all(bad)) {
+      warning("Something's wrong: all fitted models were invalid!", call.=FALSE)
+    } else if(any(bad)) {
+      nb <- sum(bad)
+      warning(paste(sum(bad), "fitted",
+                    ngettext(nb, "model was", "models were"),
+                    "invalid",
+                    paren(paste("out of", n, "models"))),
+              call.=FALSE)
     }
+    opti <- which.max(criterion)
+    
+    ## .................. FIT OPTIMAL  ...................
+    ## 
+    if(verbose) message("fitting optimal model...")
+    ## set up call for optimal model
+    optint <- do.call(f, as.list(s[opti, is.farg, drop=FALSE]))
+    optarg <- append(dotargs, list(interaction=optint, rbord=rbord))
+    ## add covfunargs if required
+    if(pass.cfa) {
+      optcfa <- as.list(s[opti, is.cfarg, drop=FALSE])
+      if(got.cfa) optcfa <- resolve.defaults(optcfa, CFA)
+      attr(optcfa, "fitter") <- "profilepl"
+      optarg$covfunargs <- optcfa
+    }
+    ## add covariates if required
+    if(pass.cov) {
+      optcov <- as.list(s[opti, is.cov, drop=FALSE])
+      optarg$covariates <- replace(as.list(optarg$covariates),
+                                   names(optcov), optcov)
+    }
+    ## execute call to ppm 
     optfit <- do.call(ppm, optarg, envir=callenv)
     if(verbose) message("done.")
+
+    ## .............. PACK UP ................................
+    
     critname <- if(aic) "-AIC" else
                 if(is.poisson(optfit)) "log l" else
                 if(optfit$method == "logi") "log CL" else "log PL"
@@ -170,7 +273,7 @@ profilepl <- local({
                    rbord=rbord,
                    fname=as.interact(optfit)$name,
                    allcoef=allcoef,
-                   otherstuff=list(...),
+                   otherstuff=dotargs,
                    pseudocall=pseudocall)
     class(result) <- c("profilepl", class(result))
     return(result)

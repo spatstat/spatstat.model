@@ -323,7 +323,7 @@ grep#
 #
 #   Test backdoor exits, hidden options, internals and tricks in ppm
 #
-#   $Revision: 1.19 $  $Date: 2020/04/30 05:23:52 $
+#   $Revision: 1.22 $  $Date: 2026/01/05 11:17:13 $
 #
 local({
 
@@ -430,6 +430,24 @@ local({
     M <- mpl.prepare(Q, cells, as.ppp(Q), trend=~1, covariates=NULL,
                      interaction=Hardcore(0.3), correction="none")
   }
+
+  ## (12) different kinds of irregular parameters in profilepl
+  if(FULLTEST) {
+    ## irregular parameters present in 's' and 'covfunargs'
+    h <- function(x,y,a,b) { pmax(x-a, 0) + abs(y-b) }
+    df <- data.frame(a = seq(0, 1, length=33))
+    m <- profilepl(df, Poisson, cells ~ h, covfunargs=list(b=0.5))
+    ## explicit function arguments, constant covariates
+    ## (NOT WORKING)
+    ## mm <- profilepl(df, Poisson, cells ~ h(x,y,a,b),
+    ##                covariates=list(b=0.5, h=h))
+    ## plot(effectfun(mm, "x", y=0.5))
+    ## constant terms present in both 's' and 'covariates'
+    mmm <- profilepl(df, Poisson, cells ~ pmax(x-a, 0) + abs(y-b),
+              covariates=list(b=0.5))
+    plot(effectfun(mmm, "x", y=0.5))
+  }
+
 })
 
 reset.spatstat.options()

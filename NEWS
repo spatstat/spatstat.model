@@ -1,14 +1,17 @@
 
-        CHANGES IN spatstat.model VERSION 3.5-0.017
+        CHANGES IN spatstat.model VERSION 3.5-0.018
 
 OVERVIEW
 
-    o We thank Gabriela Calana Somoza for contributions.
+    o We thank Gabriela Calana Somoza, Bethany Macdonald
+    and Rasmus Waagepetersen for contributions.
     
     o Waagepetersen's composite likelihood for cluster processes.
     
     o Convert a recursively partitioned point process model to a tessellation.
 
+    o Improvements to 'profilepl' and 'effectfun'.
+    
     o Cluster strength index and spatial persistence index.
 
     o Bug fixes and minor improvements.
@@ -33,12 +36,17 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o kppm
     New option: method="waag" fits the model by maximising
     Waagepetersen's (2007) second order composite likelihood
+    [Suggested by Bethany Macdonald]
 
     o effectfun
     Improved defaults for a recursive partition model (class 'rppm').
     The user only needs to provide values for those covariates which
     are used in the decision tree. If the entire tree involves only one
     variable, then 'covname' is not needed.
+
+    o effectfun
+    If a spatial covariate is constant, its value does not need to be
+    provided in the call to effectfun().
 
     o as.fv.kppm
     Improved arguments for empirical estimation of pair correlation function
@@ -52,8 +60,17 @@ SIGNIFICANT USER-VISIBLE CHANGES
     When the covariate is a cartesian coordinate or a distance function,
     the unit of length is stated on the horizontal axis label of the plot.
 
+    o profilepl
+    It is now possible to fit a model with a formula like ~ pmax(x, thresh)
+    where 'thresh' is the irregular parameter.
+
 BUG FIXES
 
+   o effectfun
+   Crashed if the model involved a covariate function
+   with extra arguments passed through 'covfunargs'.
+   Fixed.
+   
    o lurking
    Crashed in rare cases when 'envelope=TRUE' with message 'Xsim not found'.
    [Spotted by Gabriela Calana Somoza.]
