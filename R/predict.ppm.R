@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.118 $	$Date: 2024/02/04 08:04:51 $
+#	$Revision: 1.119 $	$Date: 2026/01/07 09:33:29 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -734,9 +734,13 @@ model.se.image <- function(fit, W=as.owin(fit), ..., what="sd", new.coef=NULL) {
 GLMpredict <- function(fit, data, coefs, changecoef=TRUE,
                        type=c("response", "link")) {
   type <- match.arg(type)
-  if(!changecoef && all(is.finite(unlist(coefs)))) {
-    answer <- predict(fit, newdata=data, type=type)
-  } else {
+  do.by.hand <- changecoef || any(!is.finite(unlist(coefs)))
+  if(!do.by.hand) {
+    answer <- try(predict(fit, newdata=data, type=type),
+                  silent=TRUE)
+    do.by.hand <- inherits(answer, "try-error")
+  }
+  if(do.by.hand) {
     if(inherits(fit, "gam"))
       stop("This calculation is not supported for GAM fits", call.=FALSE)
     # do it by hand

@@ -323,7 +323,7 @@ grep#
 #
 #   Test backdoor exits, hidden options, internals and tricks in ppm
 #
-#   $Revision: 1.22 $  $Date: 2026/01/05 11:17:13 $
+#   $Revision: 1.23 $  $Date: 2026/01/07 09:37:00 $
 #
 local({
 
@@ -432,16 +432,18 @@ local({
   }
 
   ## (12) different kinds of irregular parameters in profilepl
+  ##      and their handling in 'effectfun'
   if(FULLTEST) {
     ## irregular parameters present in 's' and 'covfunargs'
     h <- function(x,y,a,b) { pmax(x-a, 0) + abs(y-b) }
     df <- data.frame(a = seq(0, 1, length=33))
     m <- profilepl(df, Poisson, cells ~ h, covfunargs=list(b=0.5))
+    plot(effectfun(m))
     ## explicit function arguments, constant covariates
-    ## (NOT WORKING)
-    ## mm <- profilepl(df, Poisson, cells ~ h(x,y,a,b),
-    ##                covariates=list(b=0.5, h=h))
-    ## plot(effectfun(mm, "x", y=0.5))
+    ## function 'h' is not in global environment
+    mm <- profilepl(df, Poisson, cells ~ h(x,y,a,b),
+                    covariates=list(b=0.5))
+    plot(effectfun(mm, "x", y=0.5))
     ## constant terms present in both 's' and 'covariates'
     mmm <- profilepl(df, Poisson, cells ~ pmax(x-a, 0) + abs(y-b),
               covariates=list(b=0.5))

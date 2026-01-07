@@ -110,10 +110,15 @@ mpl.engine <-
     if(is.null(trend)) {
       trend <- ~1
       environment(trend) <- parent.frame()
+      want.trend <- FALSE
+    } else {
+      want.trend <- !identical.formulae(trend, ~1)
     }
-    want.trend <- !identical.formulae(trend, ~1)
     want.inter <- !is.null(interaction) && !is.null(interaction$family)
 
+    ## environment (should only be needed to find functions)
+    env.trend <- environment(trend)
+    
     ## Stamp with spatstat version number
     spv <- package_version(versionstring.spatstat())
     the.version <- list(major=spv$major,
@@ -814,6 +819,9 @@ mpl.prepare <- local({
     fmla <- paste(".mpl.Y ", rhs)
     fmla <- as.formula(fmla)
 
+    ## experimental - attempt to include functions in scope
+    environment(fmla) <- environment(trend)
+    
     ##  character string of trend formula (without Vnames)
     trendfmla <- paste(".mpl.Y ", trendpart)
 
