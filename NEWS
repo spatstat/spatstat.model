@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 3.5-0.019
+        CHANGES IN spatstat.model VERSION 3.5-0.020
 
 OVERVIEW
 
@@ -60,6 +60,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     When the covariate is a cartesian coordinate or a distance function,
     the unit of length is stated on the horizontal axis label of the plot.
 
+    o Penttinen
+    Computation of interaction terms has been accelerated.
+    
     o profilepl
     It is now possible to fit a model with a formula like ~ pmax(x, thresh)
     where 'thresh' is the irregular parameter.

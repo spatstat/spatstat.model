@@ -21,6 +21,7 @@ void ESdiggra(int *, double *, double *, int *, int *, double *, double *, int *
 void Ediggatsti(int *, double *, double *, int *, int *, double *, double *, int *, double *, double *);
 void Efiksel(int *, double *, double *, int *, double *, double *, double *, double *, double *);
 void Egeyer(int *, double *, double *, int *, int *, double *, double *, int *, double *, double *, double *);
+void Epent(int *, double *, double *, int *, int *, double *, double *, int *, double *, double *);
 void Cclosepaircounts(int *, double *, double *, double *, int *); 
 void Ccrosspaircounts(int *, double *, double *, int *, double *, double *, double *, int *);
 /*

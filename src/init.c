@@ -22,6 +22,7 @@ static const R_CMethodDef CEntries[] = {
     {"Ediggra",          (DL_FUNC) &Ediggra,          11},
     {"Efiksel",          (DL_FUNC) &Efiksel,           9},
     {"Egeyer",           (DL_FUNC) &Egeyer,           11},
+    {"Epent",            (DL_FUNC) &Epent,            10},
     {"ESdiggra",         (DL_FUNC) &ESdiggra,         12},
     {NULL, NULL, 0}
 };

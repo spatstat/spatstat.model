@@ -133,43 +133,54 @@ local({
   envelopeTest(X, exponent=3, clamp=TRUE, nsim=9)
 })
 }
-#
-#    tests/fastgeyer.R
-#
-# checks validity of fast C implementation of Geyer interaction
-#
-#    $Revision: 1.4 $  $Date: 2020/04/28 12:58:26 $
-#
+#'
+#'    tests/fastgeyer.R
+#'
+#'    Checks validity of fast C implementation of Geyer interaction
+#'    (and other interactions)
+#'
+#'    $Revision: 1.6 $  $Date: 2026/01/08 10:25:03 $
+#'
 if(FULLTEST) {  # depends on hardware
 local({
   X <- redwood
   Q <- quadscheme(X)
   U <- union.quad(Q)
-  EP <- equalpairs.quad(Q)
-  G <- Geyer(0.11, 2)
-# The value r=0.11 is chosen to avoid hardware numerical effects (gcc bug 323).
-# It avoids being close any value of pairdist(redwood).
-# The nearest such values are 0.1077.. and 0.1131..
-# By contrast if r = 0.1 there are values differing from 0.1 by 3e-17
-  a <- pairsat.family$eval(X,U,EP,G$pot,G$par,"border")
-  b <-          G$fasteval(X,U,EP,G$pot,G$par,"border")
+  E <- equalpairs.quad(Q)
+  #' ................. Geyer interaction ...........................
+  R <- 0.11
+  G <- Geyer(R, 2)
+  #' r=0.11 is chosen to avoid hardware numerical effects (gcc bug 323).
+  #' It avoids being close any value of pairdist(redwood).
+  #' The nearest such values are 0.1077.. and 0.1131..
+  #' By contrast if r = 0.1 there are values differing from 0.1 by 3e-17
+  a <- pairsat.family$eval(X,U,E,G$pot,G$par,"border")
+  b <-          G$fasteval(X,U,E,G$pot,G$par,"border")
   if(!all(a==b))
     stop("Results of Geyer()$fasteval and pairsat.family$eval do not match")
-# ...
-# and again for a non-integer value of 'sat'
-# (spotted by Thordis Linda Thorarinsdottir)  
-  G <- Geyer(0.11, 2.5)
-  a <- pairsat.family$eval(X,U,EP,G$pot,G$par,"border")
-  b <-          G$fasteval(X,U,EP,G$pot,G$par,"border")
+  #' ...
+  #' and again for a non-integer value of 'sat'
+  #' (spotted by Thordis Linda Thorarinsdottir)  
+  G <- Geyer(R, 2.5)
+  a <- pairsat.family$eval(X,U,E,G$pot,G$par,"border")
+  b <-          G$fasteval(X,U,E,G$pot,G$par,"border")
   if(!all(a==b))
     stop("Results of Geyer()$fasteval and pairsat.family$eval do not match when sat is not an integer")
-# and again for sat < 1
-# (spotted by Rolf)  
-  G <- Geyer(0.11, 0.5)
-  a <- pairsat.family$eval(X,U,EP,G$pot,G$par,"border")
-  b <-          G$fasteval(X,U,EP,G$pot,G$par,"border")
+  #' and again for sat < 1
+  #' (spotted by Rolf)  
+  G <- Geyer(R, 0.5)
+  a <- pairsat.family$eval(X,U,E,G$pot,G$par,"border")
+  b <-          G$fasteval(X,U,E,G$pot,G$par,"border")
   if(!all(a==b))
     stop("Results of Geyer()$fasteval and pairsat.family$eval do not match when sat < 1")
+  #' ................. Penttinen interaction ...........................
+  P <- Penttinen(R/2)
+  a <- pairwise.family$eval(X,U,E,P$pot,P$par,"border")
+  b <-           P$fasteval(X,U,E,P$pot,P$par,"border")
+  print(range(a-b))
+  print(range(a))
+  if(max(abs(a-b)) > sqrt(.Machine$double.eps))
+    stop("Results of Penttinen()$fasteval and pairwise.family$eval dont match")
 })
 }
 
