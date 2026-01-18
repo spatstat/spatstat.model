@@ -2,7 +2,7 @@
 #
 #    triplets.R
 #
-#    $Revision: 1.18 $	$Date: 2018/03/15 07:37:41 $
+#    $Revision: 1.19 $	$Date: 2026/01/09 01:29:55 $
 #
 #    The triplets interaction
 #
@@ -30,7 +30,7 @@ Triplets <- local({
     nX <- npoints(X)
     nU <- npoints(U)
     XinU <- if(length(EqualPairs) == 0) integer(0) else EqualPairs[,1]
-    missX <- which(table(factor(XinU, levels=1:nX)) == 0)
+    missX <- which(tabulate(XinU, nbins=nX) == 0)
     if((nmiss <- length(missX)) > 0) {
       # add missing points to (the end of) U
       U <- superimpose(U, X[missX], W=as.owin(X), check=FALSE)
@@ -73,8 +73,7 @@ Triplets <- local({
       return(rep.int(0, nU-nmiss))
     }
     # count triangles containing a given quadrature point
-    tcount <- apply(tri, 2,
-                    function(x, n) { table(factor(x, levels=1:n)) }, n=nU)
+    tcount <- apply(tri, 2, tabulate, nbins=nU)
     tcount <- .rowSums(tcount, nrow(tcount), ncol(tcount))
     # select triangles consisting only of data points
     triX <- matrix(mapUX[tri], nrow=nrow(tri))
@@ -83,8 +82,7 @@ Triplets <- local({
     #
     if(nrow(triX) > 0) {
       # count triangles of data points containing each given data point
-      tXcount <- apply(triX, 2,
-                       function(x, n) { table(factor(x, levels=1:n)) }, n=nX)
+      tXcount <- apply(triX, 2, tabulate, nbins=nX)
       tXcount <- .rowSums(tXcount, nrow(tXcount), ncol(tXcount))
     } else {
       # there are no triangles of data points

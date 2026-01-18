@@ -2,7 +2,7 @@
 #
 #    fiksel.R
 #
-#    $Revision: 1.21 $	$Date: 2022/05/21 08:53:38 $
+#    $Revision: 1.22 $	$Date: 2026/01/09 01:34:35 $
 #
 #    Fiksel interaction 
 #    
@@ -18,9 +18,9 @@ Fiksel <- local({
   fikselterms <- function(U, X, r, kappa, EqualPairs=NULL) {
     answer <- crossfikselterms(U, X, r, kappa)
     nU <- npoints(U)
-    # subtract contrinbutions from identical pairs (exp(-0) = 1 for each)
+    # subtract contributions from identical pairs (exp(-0) = 1 for each)
     if(length(EqualPairs) > 0) {
-      idcount <- as.integer(table(factor(EqualPairs[,2L], levels=1:nU)))
+      idcount <- tabulate(EqualPairs[,2L], nbins=nU)
       answer <- answer - idcount
     }
     return(answer)

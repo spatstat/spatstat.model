@@ -2,11 +2,11 @@
 #
 #    strauss.R
 #
-#    $Revision: 2.48 $	$Date: 2022/05/22 10:52:48 $
+#    $Revision: 2.50 $	$Date: 2026/01/16 01:56:20 $
 #
-#    The Strauss process
+#    The Strauss process interaction
 #
-#    Strauss()    create an instance of the Strauss process
+#    Strauss()    create an instance of the Strauss process interaction
 #                 [an object of class 'interact']
 #	
 #
@@ -127,7 +127,7 @@ strausscounts <- function(U, X, r, EqualPairs=NULL) {
   # subtract counts of identical pairs
   if(length(EqualPairs) > 0) {
     nU <- npoints(U)
-    idcount <- as.integer(table(factor(EqualPairs[,2L], levels=1:nU)))
+    idcount <- tabulate(EqualPairs[,2L], nbins=nU)
     answer <- answer - idcount
   }
   return(answer)

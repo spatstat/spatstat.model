@@ -2,7 +2,7 @@
 #
 #    strausshard.S
 #
-#    $Revision: 2.38 $	$Date: 2022/05/23 02:33:06 $
+#    $Revision: 2.39 $	$Date: 2026/01/09 01:37:28 $
 #
 #    The Strauss/hard core process
 #
@@ -156,7 +156,7 @@ StraussHard <- local({
 
          if(is.ppp(X)) {
            #' count conflicts between data points
-           nhit <- as.integer(table(factor(jhit, levels=seq_len(nU))))
+           nhit <- tabulate(jhit, nbins=nU)
            #' for a conflicting pair X[i], X[j],
            #' status of X[j] will change when X[i] is deleted
            #' iff X[j] is only in conflict with X[i]
@@ -170,8 +170,7 @@ StraussHard <- local({
            #' count conflicts with existing data points
            izdat <- is.data(X)
            hitdata <- izdat[ihit]
-           nhitdata <- as.integer(table(factor(jhit[hitdata],
-                                               levels=seq_len(nU))))
+           nhitdata <- tabulate(jhit[hitdata], nbins=nU)
            #' for a conflicting pair U[i], U[j],
            #' status of U[j] will change when U[i] is added/deleted
            #' iff EITHER

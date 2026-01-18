@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 3.5-0.020
+        CHANGES IN spatstat.model VERSION 3.5-0.022
 
 OVERVIEW
 
@@ -65,8 +65,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o profilepl
     It is now possible to fit a model with a formula like ~ pmax(x, thresh)
-    where 'thresh' is the irregular parameter.
+    where 'thresh' is an irregular parameter.
 
+    o Strauss
+    Computation of interaction terms has been slightly accelerated.
+    
 BUG FIXES
 
    o effectfun
