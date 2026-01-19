@@ -3,7 +3,7 @@
 #
 #    summary() method for class "ppm"
 #
-#    $Revision: 1.81 $   $Date: 2023/02/02 00:07:00 $
+#    $Revision: 1.82 $   $Date: 2026/01/19 08:00:31 $
 #
 #    summary.ppm()
 #    print.summary.ppm()
@@ -139,10 +139,10 @@ summary.ppm <- local({
 
     if(!antiquated) {
       covars <- x$covariates
-      y$has.covars <- hc <- !is.null(covars) && (length(covars) > 0)
+      y$has.covars <- hc <- (length(covars) > 0)
       if(hc) {
-        y$covnames <- names(covars)
-        used <- (y$trendvar %in% names(covars))
+        y$covnames <- cnames <- names(covars)
+        used <- (y$trendvar %in% cnames)
         y$covars.used <- y$trendvar[used]
         y$uses.covars <- any(used)
         y$covars.are.df <- is.data.frame(covars)

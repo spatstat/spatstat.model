@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.253 $	$Date: 2026/01/18 10:07:47 $
+#	$Revision: 5.255 $	$Date: 2026/01/19 08:00:41 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -54,8 +54,8 @@ mpl.engine <-
            rename.intercept=TRUE,
            justQ = FALSE,
            weightfactor = NULL,
-           Xweights=1)
-  {
+           Xweights=1
+ ) {
     GLMname <- if(!missing(GLM)) short.deparse(substitute(GLM)) else NULL
     ## Extract precomputed data if available
     if(!is.null(precomputed$Q)) {
@@ -85,12 +85,12 @@ mpl.engine <-
       if(is.data.frame(covariates)) 
         covariates <- covariates[inside.owin(P, w=clipwin), , drop=FALSE]
       #' catch information used by 'linequad'
-      plekken <- attr(Q, "plekken")
+      situ <- attr(Q, "situ")
       Q <- Q[clipwin]
       X <- X[clipwin]
       P <- P[clipwin]
-      if(!is.null(plekken))
-        attr(Q, "plekken") <- plekken[clipwin]
+      if(!is.null(situ))
+        attr(Q, "situ") <- situ[clipwin]
     }
     ## secret exit  
     if(justQ) return(Q)
@@ -128,7 +128,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2026/01/18 10:07:47 $")
+                        date="$Date: 2026/01/19 08:00:41 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -193,7 +193,8 @@ mpl.engine <-
                    varcov      = varcov,
                    version     = the.version,
                    problems    = list(),
-                   Xweights    = Xweights)
+                   Xweights    = Xweights
+                   )
       class(rslt) <- "ppm"
       return(rslt)
     }
@@ -343,7 +344,9 @@ mpl.engine <-
            rbord        = rbord,
            terms        = terms(trend),
            version      = the.version,
-           problems     = problems)
+           problems     = problems,
+           Xweights     = Xweights
+        )
     class(rslt) <- "ppm"
     return(rslt)
   }  
@@ -393,13 +396,11 @@ mpl.prepare <- local({
       }
     }
 
-    #' recognise whether Q is the result of 'linequad'
-    islinequad <- !is.null(plekken <- attr(Q, "plekken"))
-
     #' reserved names for coordinates
-    reserved.vars <- c(c("x", "y"),
-                       if(is.marked(Q)) "marks" else NULL,
-                       if(islinequad) c("seg", "tp") else NULL)
+    reserved.vars <- c("x", "y", if(is.marked(Q)) "marks" else NULL)
+    #' add local coordinates e.g. in linear network
+    if(has.insitu <- !is.null(situ <- attr(Q, "situ"))) 
+      reserved.vars <- union(reserved.vars, names(coords(situ)))
     
     computed <- list()
     problems <- list()
@@ -528,13 +529,13 @@ mpl.prepare <- local({
       reqd <- if(allcovar) reserved.vars else
               intersect(reserved.vars, trendvariables)
       if(length(reqd)) {
-        avail <-
-          c(
-            list(x = P$x,
-                 y = P$y),
-            if(is.marked(Q)) list(marks = .mpl$MARKS) else NULL,
-            if(islinequad) as.list(coords(plekken))[c("seg", "tp")] else NULL
-          )
+        avail <- list(x = P$x,
+                      y = P$y,
+                      marks = .mpl$MARKS)
+        if(has.insitu) {
+          avail <- resolve.defaults(as.list(coords(situ)),
+                                    avail)
+        }
         glmdata <- cbind(glmdata,
                          as.data.frame(avail[reqd]))
       }

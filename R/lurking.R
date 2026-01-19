@@ -1,7 +1,7 @@
 # Lurking variable plot for arbitrary covariate.
 #
 #
-# $Revision: 1.81 $ $Date: 2025/12/20 06:16:25 $
+# $Revision: 1.82 $ $Date: 2026/01/19 08:47:44 $
 #
 
 lurking <- function(object, ...) {
@@ -567,6 +567,7 @@ LurkEngine <- function(object, type, cumulative=TRUE, plot.sd=TRUE,
   if(envelope) {
     ## compute envelopes by simulation
     cl$plot.it <- FALSE
+    cl$plot.sd <- FALSE
     cl$envelope <- FALSE
     cl$rv <- NULL
     if(is.null(Xsim))

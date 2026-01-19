@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.119 $	$Date: 2026/01/07 09:33:29 $
+#	$Revision: 1.121 $	$Date: 2026/01/19 07:41:07 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -16,7 +16,7 @@ predict.ppm <- local({
   ##  extract undocumented/outdated arguments, and trap others
   ##
   xtract <- function(..., newdata=NULL, sumobj=NULL, E=NULL, total=NULL,
-                     getoutofjail=FALSE) {
+                     getoutofjail=FALSE, extracovariates=NULL) {
     if(!is.null(newdata))
       warning(paste("The use of the argument", sQuote("newdata"),
                     "is out-of-date. See help(predict.ppm)"))
@@ -24,7 +24,11 @@ predict.ppm <- local({
       message(paste("The use of the argument", sQuote("total"),
                     "is out-of-date. See help(predict.ppm)"))
     trap.extra.arguments(..., .Context="In predict.ppm")
-    return(list(sumobj=sumobj, E=E, total=total, getoutofjail=getoutofjail))
+    return(list(sumobj=sumobj,
+                E=E,
+                total=total,
+                getoutofjail=getoutofjail,
+                extracovariates=extracovariates))
   }
   ##
   ## confidence/prediction intervals for number of points
@@ -80,6 +84,7 @@ predict.ppm <- local({
     E      <- xarg$E
     total  <- xarg$total
     getoutofjail <- xarg$getoutofjail
+    extracovariates <- xarg$extracovariates
     ## match 'type' argument including 'legacy' options
     seonly <- FALSE
     if(missing(type)) type <- type[1] else {
@@ -137,12 +142,13 @@ predict.ppm <- local({
     marked      <- sumobj$marked
     multitype   <- sumobj$multitype
     notrend     <- sumobj$no.trend
+    trendvars   <- sumobj$trendvar
     changedcoef <- sumobj$changedcoef || !is.null(new.coef)
     trivial     <- poisson && notrend
   
-    need.covariates <- sumobj$uses.covars
-    covnames.needed <- sumobj$covars.used
-
+    covnames.needed <- setdiff(trendvars, c("x", "y", "marks"))
+    need.covariates <- (length(covnames.needed) > 0)
+    
     if(sumobj$antiquated)
       warning("The model was fitted by an out-of-date version of spatstat")  
 
@@ -278,6 +284,8 @@ predict.ppm <- local({
     
     ## ##############   Determine prediction points  #####################
 
+    extrapredict <- NULL
+    
     if(!want.image) {
       ## (A) list of (x,y) coordinates given by `locations'
       xpredict <- locations$x
@@ -318,6 +326,11 @@ predict.ppm <- local({
                        "do not have the same values as the marks in the model"))
         }
       }
+      ## include local coordinates (eg on network) if provided
+      if(!is.null(situ <- attr(locations, "situ"))) {
+        cosi <- as.list(coords(situ))
+        extrapredict <- cosi[setdiff(names(cosi), c("x", "y", "marks"))]
+      }
     } else {
       ## (B) pixel grid of points
       if(!make.grid) 
@@ -352,7 +365,7 @@ predict.ppm <- local({
       ## Finally, determine x and y vectors for grid
       rxy <- rasterxy.mask(masque, drop=TRUE)
       xpredict <- rxy$x
-      ypredict <- rxy$y 
+      ypredict <- rxy$y
     }
 
     ## ################  CREATE DATA FRAME  ##########################
@@ -376,32 +389,61 @@ predict.ppm <- local({
                             y = ypredict,
                             marks=mpredict)
     }
-
+    if(!is.null(extrapredict)) 
+      newdata <- cbind(newdata, extrapredict)
+    
     ## ## Next the external covariates, if any
     ##
     if(need.covariates) {
+      ## covariates may be supplied in 'covariates' or 'extracovariates'
       if(is.null(covariates)) {
         ## Extract covariates from fitted model object
-        ## They have to be images.
+        ## They have to be images/functions.
         oldcov <- model$covariates
-        if(is.null(oldcov))
-          stop("External covariates are required, and are not available")
         if(is.data.frame(oldcov))
-          stop(paste("External covariates are required.",
-                     "Prediction is not possible at new locations"))
+          stop(paste("Model was fitted to a data frame of covariate values.",
+                     "Prediction is not possible at new locations"),
+               call.=FALSE)
         covariates <- oldcov
       }
-      ## restrict to covariates actually required for formula
-      covariates <- if(is.data.frame(covariates)) {
-        covariates[,covnames.needed, drop=FALSE]
-      } else covariates[covnames.needed]
-      covfunargs <- model$covfunargs
-      covariates.df <-
-        mpl.get.covariates(covariates,
-                           list(x=xpredict, y=ypredict),
-                           "prediction points",
-                           covfunargs)
-      newdata <- cbind(newdata, covariates.df)
+      ## identify names of external covariates which are provided
+      covars.provided <- union(names(covariates), names(extracovariates))
+      if(anyNA(m <- match(covnames.needed, covars.provided))) {
+        bad <- which(is.na(m))
+        stop(paste("No values were provided for the",
+                   ngettext(length(bad), "covariate", "covariates"),
+                   commasep(sQuote(covnames.needed[bad]))),
+             call.=FALSE)
+      }
+      ## evaluate/convert covariates from argument 'covariates'
+      cn <- intersect(covnames.needed, names(covariates))
+      if(length(cn)) {
+        ## restrict to covariates actually required for formula
+        covariates <- if(is.data.frame(covariates)) {
+                        covariates[,cn, drop=FALSE]
+                      } else covariates[cn]
+        covfunargs <- model$covfunargs
+        covariates.df <-
+          mpl.get.covariates(covariates,
+                             list(x=xpredict, y=ypredict),
+                             "prediction points",
+                             covfunargs)
+        newdata <- cbind(newdata, covariates.df)
+      }
+      ## evaluate/convert covariates from undocumented 'extracovariates'
+      cnx <- setdiff(covnames.needed, cn)
+      if(length(cnx)) {
+        extracovariates <- if(is.data.frame(extracovariates)) {
+                             extracovariates[,cnx, drop=FALSE]
+                           } else extracovariates[cnx]
+        covfunargs <- model$covfunargs
+        extracovariates.df <-
+          mpl.get.covariates(extracovariates,
+                             list(x=xpredict, y=ypredict),
+                             "prediction points",
+                             covfunargs)
+        newdata <- cbind(newdata, extracovariates.df)
+      }
     }
 
     ## ###### Set up prediction variables ################################

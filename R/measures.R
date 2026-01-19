@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.109 $  $Date: 2025/11/23 09:04:01 $
+#  $Revision: 1.110 $  $Date: 2026/01/19 05:50:21 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!is.quad(qscheme))
@@ -92,7 +92,7 @@ msr <- function(qscheme, discrete, density, check=TRUE) {
   class(out) <- "msr"
 
   ## possibly add information about the original context (eg linear network)
-  attr(out, "plekken") <- attr(qscheme, "plekken")
+  attr(out, "situ") <- attr(qscheme, "situ")
   
   return(out)
 }
@@ -209,12 +209,12 @@ split.msr <- function(x, f, drop=FALSE, ...) {
   names(result) <- names(locsplit)
   result <- lapply(result, "class<-", value="msr")
   ## also split the pattern of auxiliary locations if present
-  if(!is.null(plekken <- attr(x, "plekken"))) {
-    pleksplit <- split(plekken, g, drop=drop)
+  if(!is.null(z <- attr(x, "situ"))) {
+    zsplit <- split(z, g, drop=drop)
     result <- mapply("attr<-",
                      x=result,
-                     which="plekken",
-                     value=pleksplit,
+                     which="situ",
+                     value=zsplit,
                      SIMPLIFY=FALSE)
   }
   if(drop && any(isnul <- (sapply(locsplit, npoints) == 0)))
@@ -457,8 +457,8 @@ plot.msr <- function(x, ..., add=FALSE,
               density=dens,
               wt=wt)
   class(out) <- "msr"
-  if(!is.null(plekken <- attr(x, "plekken")))
-    attr(out, "plekken") <- if(missing(i)) plekken else plekken[id]
+  if(!is.null(z <- attr(x, "situ")))
+    attr(out, "situ") <- if(missing(i)) z else z[id]
   return(out)    
 }
 
