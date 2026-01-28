@@ -3,7 +3,7 @@
 #
 #  qqplot.ppm()       QQ plot (including simulation)
 #
-#  $Revision: 1.33 $   $Date: 2022/05/23 02:33:06 $
+#  $Revision: 1.34 $   $Date: 2026/01/21 06:26:39 $
 #
 
 qqplot.ppm <- local({

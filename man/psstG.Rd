@@ -11,7 +11,7 @@
   clustered or moderately inhibited alternatives of saturation type.
 }
 \usage{
-psstG(object, r = NULL, breaks = NULL, \dots,
+psstG(object, r = NULL, breaks = NULL, rmax=NULL, \dots,
       model=NULL,
       trend = ~1, interaction = Poisson(), rbord = reach(interaction),
       truecoef = NULL, hi.res = NULL)
@@ -31,6 +31,10 @@ psstG(object, r = NULL, breaks = NULL, \dots,
   }
   \item{breaks}{
     Optional alternative to \code{r} for advanced use. 
+  }
+  \item{rmax}{
+    Optional. Maximum desired value of the argument \eqn{r}.
+    A single numeric value. There is a sensible default.
   }
   \item{\dots}{
     Ignored.

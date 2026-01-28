@@ -3,12 +3,12 @@
 #
 #   model compensated K-function
 #
-# $Revision: 1.19 $ $Date: 2023/02/02 02:39:43 $
+# $Revision: 1.20 $ $Date: 2026/01/21 06:26:39 $
 #
 
 Kcom <- local({
 
-  Kcom <- function(object, r=NULL, breaks=NULL, ..., 
+  Kcom <- function(object, r=NULL, breaks=NULL, ..., rmax=NULL,
                    correction=c("border", "isotropic", "translate"),
                    conditional=!is.poisson(object),
                    restrict=FALSE,
@@ -117,7 +117,7 @@ Kcom <- local({
   }
   
   # 'r' values
-  rmaxdefault <- rmax.rule("K", if(restrict) Wfree else Win, npts/areaW)
+  rmaxdefault <- rmax %orifnull% rmax.rule("K", if(restrict) Wfree else Win, npts/areaW)
   breaks <- handle.r.b.args(r, breaks, Wfree, rmaxdefault=rmaxdefault)
   r <- breaks$r
 #  nr <- length(r)

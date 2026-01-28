@@ -12,7 +12,7 @@
 #'  in fitting spatial point process models.
 #'  Journal of the American Statistical Association 101, 1502–1512.
 #'
-#'  $Revision: 1.1 $ $Date: 2025/12/04 05:36:35 $
+#'  $Revision: 1.2 $ $Date: 2026/01/21 06:26:39 $
 #'
 #'  Copyright (c) 2001-2025 Adrian Baddeley, Rolf Turner, Ege Rubak,
 #'                Abdollah Jalilian and Rasmus Plenge Waagepetersen

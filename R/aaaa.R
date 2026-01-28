@@ -3,7 +3,7 @@
 #'
 #'   Code that must be read before the rest of the R code in spatstat
 #' 
-#'    $Revision: 1.6 $  $Date: 2020/11/30 13:17:22 $
+#'    $Revision: 1.7 $  $Date: 2026/01/21 06:26:39 $
 #' 
 #' ...................................................................
 #'   intermaker:

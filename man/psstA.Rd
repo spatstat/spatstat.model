@@ -11,7 +11,7 @@
   clustered or moderately inhibited alternatives of area-interaction type.
 }
 \usage{
-psstA(object, r = NULL, breaks = NULL, \dots,
+psstA(object, r = NULL, breaks = NULL, rmax=NULL, \dots,
       model = NULL, 
       trend = ~1, interaction = Poisson(),
       rbord = reach(interaction), ppmcorrection = "border",
@@ -35,6 +35,10 @@ psstA(object, r = NULL, breaks = NULL, \dots,
   }
   \item{breaks}{
 	This argument is for internal use only.
+  }
+  \item{rmax}{
+    Optional. Maximum desired value of the argument \eqn{r}.
+    A single numeric value. There is a sensible default.
   }
   \item{\dots}{
     Extra arguments passed to \code{\link[spatstat.geom]{quadscheme}} to determine

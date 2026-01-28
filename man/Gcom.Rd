@@ -15,7 +15,7 @@
   functions serves as a diagnostic for the model.
 }
 \usage{
-Gcom(object, r = NULL, breaks = NULL, ...,
+Gcom(object, r = NULL, rmax=NULL, breaks = NULL, ...,
      correction = c("border", "Hanisch"),
      conditional = !is.poisson(object),
      restrict=FALSE,
@@ -37,6 +37,10 @@ Gcom(object, r = NULL, breaks = NULL, ...,
     Vector of values of the argument \eqn{r} at which the
     function \eqn{G(r)} should be computed.
     This argument is usually not specified. There is a sensible default.
+  }
+  \item{rmax}{
+    Optional. Maximum desired value of the argument \eqn{r}.
+    A single numeric value. There is a sensible default.
   }
   \item{breaks}{
     This argument is for internal use only.

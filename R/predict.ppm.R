@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.121 $	$Date: 2026/01/19 07:41:07 $
+#	$Revision: 1.122 $	$Date: 2026/01/21 06:26:39 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	

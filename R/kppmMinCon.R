@@ -6,7 +6,7 @@
 #'                M  i  n  i  m  u  m       C  o  n  t  r  a  s  t
 #' <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 #' 
-#'  $Revision: 1.1 $ $Date: 2025/12/04 05:31:37 $
+#'  $Revision: 1.2 $ $Date: 2026/01/21 06:26:39 $
 #'
 #'  Copyright (c) 2001-2025 Adrian Baddeley, Rolf Turner, Ege Rubak,
 #'  GNU Public Licence (>= 2.0)

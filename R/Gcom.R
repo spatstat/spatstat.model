@@ -3,13 +3,13 @@
 #
 #	Model compensator of G 
 #
-#	$Revision: 1.12 $	$Date: 2023/02/02 02:39:48 $
+#	$Revision: 1.13 $	$Date: 2026/01/21 06:26:39 $
 #
 ################################################################################
 #
 
 
-Gcom <- function(object, r=NULL, breaks=NULL, ...,
+Gcom <- function(object, r=NULL, rmax=NULL, breaks=NULL, ...,
                  correction=c("border", "Hanisch"),
                  conditional=!is.poisson(object),
                  restrict=FALSE,
@@ -104,7 +104,7 @@ Gcom <- function(object, r=NULL, breaks=NULL, ...,
   }
   
   #  determine breakpoints for r values
-  rmaxdefault <- rmax.rule("G", if(restrict) Wfree else Win, lambda)
+  rmaxdefault <- rmax %orifnull% rmax.rule("G", if(restrict) Wfree else Win, lambda)
   breaks <- handle.r.b.args(r, breaks, Wfree, rmaxdefault=rmaxdefault)
   rvals <- breaks$r
   rmax  <- breaks$max

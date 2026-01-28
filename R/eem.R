@@ -2,7 +2,7 @@
 #
 # Computes the Stoyan-Grabarnik "exponential energy weights" 
 #
-# $Revision: 1.8 $ $Date: 2025/11/24 06:56:23 $
+# $Revision: 1.9 $ $Date: 2026/01/21 06:26:39 $
 #
 
 eem <- function(fit, ...) {

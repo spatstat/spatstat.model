@@ -3,7 +3,7 @@
 #'
 #'   method for 'spatialCovariateEvidence' for class 'slrm'
 #'
-#'   $Revision: 1.9 $ $Date: 2025/11/07 05:17:34 $
+#'   $Revision: 1.10 $ $Date: 2026/01/21 06:26:39 $
 
 spatialCovariateEvidence.slrm <- function(model, covariate, ...,
                            lambdatype=c("probabilities", "intensity"),

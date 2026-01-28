@@ -14,7 +14,7 @@
   functions serves as a diagnostic for the model.
 }
 \usage{
-Kcom(object, r = NULL, breaks = NULL, ...,
+Kcom(object, r = NULL, breaks = NULL, ..., rmax=NULL,
      correction = c("border", "isotropic", "translate"),
      conditional = !is.poisson(object),
      restrict = FALSE,
@@ -38,6 +38,10 @@ Kcom(object, r = NULL, breaks = NULL, ...,
   }
   \item{breaks}{
 	This argument is for advanced use only.
+  }
+  \item{rmax}{
+    Optional. Maximum desired value of the argument \eqn{r}.
+    A single numeric value. There is a sensible default.
   }
   \item{\dots}{
     Ignored.

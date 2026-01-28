@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 3.5-0.023
+        CHANGES IN spatstat.model VERSION 3.6-0
 
 OVERVIEW
 
@@ -11,6 +11,8 @@ OVERVIEW
     o Convert a recursively partitioned point process model to a tessellation.
 
     o Improvements to 'profilepl' and 'effectfun'.
+
+    o Diagnostic functions have argument 'rmax'.
     
     o Cluster strength index and spatial persistence index.
 
@@ -52,6 +54,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Improved arguments for empirical estimation of pair correlation function
     when the model was fitted with a non-default value of 'method'.
 
+    o Gcom, Kcom, psstA, psstG, psst
+    These diagnostic functions have a new formal argument 'rmax'.
+
+    o Gres, Kres
+    These diagnostic functions accept argument 'rmax'.
+    
     o lurking.ppm, lurking.ppp, lurking.slrm
     Argument 'covariate' can be a function(x,y)
     or one of the strings "x" or "y".

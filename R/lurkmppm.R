@@ -1,6 +1,6 @@
 #' lurkmppm.R
 #'    Lurking variable plot for mppm
-#'    $Revision: 1.11 $ $Date: 2025/12/20 04:29:45 $
+#'    $Revision: 1.12 $ $Date: 2026/01/21 06:26:39 $
 
 lurking.mppm <- local({
 

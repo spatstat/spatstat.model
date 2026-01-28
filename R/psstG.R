@@ -3,12 +3,12 @@
 #
 #	Pseudoscore residual for unnormalised G (saturation process)
 #
-#	$Revision: 1.12 $	$Date: 2023/02/02 02:39:29 $
+#	$Revision: 1.13 $	$Date: 2026/01/21 06:26:39 $
 #
 ################################################################################
 #
 
-psstG <- function(object, r=NULL, breaks=NULL, ...,
+psstG <- function(object, r=NULL, breaks=NULL, rmax=NULL, ...,
                   model=NULL, 
                   trend=~1, interaction=Poisson(),
                   rbord=reach(interaction),
@@ -69,7 +69,7 @@ psstG <- function(object, r=NULL, breaks=NULL, ...,
 #  }
   
   #  determine breakpoints for r values
-  rmaxdefault <- rmax.rule("G", Win, lambda)
+  rmaxdefault <- rmax %orifnull% rmax.rule("G", Win, lambda)
   breaks <- handle.r.b.args(r, breaks, Win, rmaxdefault=rmaxdefault)
   rvals <- breaks$r
   rmax  <- breaks$max

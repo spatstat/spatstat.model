@@ -10,7 +10,7 @@
   of goodness-of-fit for the model.
 }
 \usage{
-psst(object, fun, r = NULL, breaks = NULL, ...,
+psst(object, fun, r = NULL, breaks = NULL, rmax=NULL, ...,
      model=NULL,
      trend = ~1, interaction = Poisson(), rbord = reach(interaction),
      truecoef=NULL, hi.res=NULL, funargs = list(correction="best"),
@@ -34,6 +34,10 @@ psst(object, fun, r = NULL, breaks = NULL, ...,
   }
   \item{breaks}{
     Optional alternative to \code{r} for advanced use.
+  }
+  \item{rmax}{
+    Optional. Maximum desired value of the argument \eqn{r}.
+    A single numeric value. There is a sensible default.
   }
   \item{\dots}{
     Ignored.

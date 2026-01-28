@@ -3,12 +3,12 @@
 #
 #	Pseudoscore residual for unnormalised F (area-interaction)
 #
-#	$Revision: 1.10 $	$Date: 2023/02/02 02:39:33 $
+#	$Revision: 1.11 $	$Date: 2026/01/21 06:26:39 $
 #
 ################################################################################
 #
 
-psstA <- function(object, r=NULL, breaks=NULL, ...,
+psstA <- function(object, r=NULL, breaks=NULL, rmax=NULL, ...,
                   model=NULL,
                   trend=~1, interaction=Poisson(),
                   rbord=reach(interaction), ppmcorrection="border",
@@ -71,7 +71,7 @@ psstA <- function(object, r=NULL, breaks=NULL, ...,
   lambda <- npts/areaW
 
   #  determine breakpoints for r values
-  rmaxdefault <- rmax.rule("F", Win, lambda)
+  rmaxdefault <- rmax %orifnull% rmax.rule("F", Win, lambda)
   if(rfixed) 
     breaks <- handle.r.b.args(r, breaks, Win, rmaxdefault=rmaxdefault)
   else {

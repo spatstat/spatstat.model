@@ -3,7 +3,7 @@
 #' 
 #'  Recursive Partitioning for Point Process Models
 #'
-#'  $Revision: 1.24 $  $Date: 2023/02/14 04:25:45 $
+#'  $Revision: 1.25 $  $Date: 2026/01/21 06:26:39 $
 
 rppm <- function(..., rpargs=list()) {
   ## do the equivalent of ppm(...)

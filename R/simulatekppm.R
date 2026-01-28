@@ -3,7 +3,7 @@
 #'
 #'    simulate.kppm
 #'
-#'    $Revision: 1.14 $ $Date: 2025/05/22 05:25:49 $
+#'    $Revision: 1.15 $ $Date: 2026/01/21 06:26:39 $
 
 simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
                           w=window, window=NULL, covariates=NULL,
