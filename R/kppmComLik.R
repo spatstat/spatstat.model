@@ -10,9 +10,9 @@
 #' 
 #'  Guan, Y. (2006) A composite likelihood approach
 #'  in fitting spatial point process models.
-#'  Journal of the American Statistical Association 101, 1502–1512.
+#'  Journal of the American Statistical Association 101, 1502-1512.
 #'
-#'  $Revision: 1.2 $ $Date: 2026/01/21 06:26:39 $
+#'  $Revision: 1.3 $ $Date: 2026/01/29 01:08:50 $
 #'
 #'  Copyright (c) 2001-2025 Adrian Baddeley, Rolf Turner, Ege Rubak,
 #'                Abdollah Jalilian and Rasmus Plenge Waagepetersen

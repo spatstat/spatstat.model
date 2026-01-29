@@ -17,9 +17,9 @@
 #' 
 #' Tanaka, U., Ogata, Y. and Stoyan, D. (2008)
 #' Parameter estimation and model selection for Neyman-Scott point processes.
-#' Biometrical Journal 50, 43–57.
+#' Biometrical Journal 50, 43-57.
 #'
-#'  $Revision: 1.1 $ $Date: 2025/12/04 05:48:49 $
+#'  $Revision: 1.2 $ $Date: 2026/01/29 01:08:34 $
 #'
 #'  Copyright (c) 2001-2025 Adrian Baddeley, Rolf Turner, Ege Rubak,
 #'             Abdollah Jalilian and Rasmus Plenge Waagepetersen
