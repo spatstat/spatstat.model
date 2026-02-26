@@ -68,7 +68,10 @@ which can then be fitted to point pattern data.
 \seealso{
   \code{\link{ppm}},
   \code{\link{triplet.family}},
-  \code{\link{ppm.object}}
+  \code{\link{ppm.object}}.
+
+  The nonparametric summary function \code{\link[spatstat.explore]{Tstat}} counts the
+  number of triples of points that are closer than \eqn{r} apart.
 }
 \references{
   Geyer, C.J. (1999)
@@ -83,6 +86,9 @@ which can then be fitted to point pattern data.
 \examples{
    Triplets(r=0.1)
    # prints a sensible description of itself
+
+   plot(Tstat(cells))
+   ## suggests a distance r = 0.2 may be appropriate for 'cells' data
 
    ppm(cells ~1, Triplets(r=0.2))
    # fit the stationary Triplets process to `cells'

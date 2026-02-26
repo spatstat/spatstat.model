@@ -210,7 +210,8 @@ function(x, ...,
              })
     
     if(s$old)
-      warning(paste("Model fitted by old spatstat version", s$version))
+      warning(paste("Model fitted by old spatstat version", s$version),
+              call.=FALSE)
         
   # ---- Algorithm status ----------------------------
 
@@ -500,7 +501,7 @@ emend.ppm <- project.ppm <- local({
     if(is.null(proj)) {
       whinge <- "Internal error: interaction has no projection operator"
       if(fatal) stop(whinge) 
-      warning(whinge)
+      warning(whinge, call.=FALSE)
       leaving(td)
       return(object)
     }
@@ -748,7 +749,7 @@ model.frame.ppm <- function(formula, ...) {
   object <- formula
   gf <- getglmfit(object)
   if(is.null(gf)) {
-    warning("Model re-fitted with forcefit=TRUE")
+    warning("Model re-fitted with forcefit=TRUE", call.=FALSE)
     object <- update(object, forcefit=TRUE)
     gf <- getglmfit(object)
   }
@@ -858,7 +859,7 @@ PPMmodelmatrix <- function(object,
   #' extract GLM fit 
   gf <- getglmfit(object)
   if(is.null(gf)) {
-    warning("Model re-fitted with forcefit=TRUE")
+    warning("Model re-fitted with forcefit=TRUE", call.=FALSE)
     object <- update(object, forcefit=TRUE)
     gf <- getglmfit(object)
     if(is.null(gf))

@@ -3,7 +3,7 @@
 #'
 #'  kluster/kox point process models
 #'
-#'  $Revision: 1.240 $ $Date: 2025/12/19 02:52:53 $
+#'  $Revision: 1.241 $ $Date: 2026/02/26 09:46:28 $
 #'
 #'  Copyright (c) 2001-2025 Adrian Baddeley, Rolf Turner, Ege Rubak,
 #'                Abdollah Jalilian and Rasmus Plenge Waagepetersen
@@ -830,6 +830,12 @@ coef.kppm <- coef.dppm <- function(object, ...) {
 
 Kmodel.kppm <- function(model, ...) {
   Kpcf.kppm(model, what="K")
+}
+
+Lmodel.kppm <- function(model, ...) {
+  Kfun <- Kpcf.kppm(model, what="K")
+  Lfun <- function(r) { sqrt(Kfun(r)/pi) }
+  return(Lfun)
 }
 
 pcfmodel.kppm <- function(model, ...) {

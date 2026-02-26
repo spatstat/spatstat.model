@@ -15,6 +15,10 @@ Kmodel.dppm <- function (model, ...){
     Kmodel(model$fitted, W=model$window)
 }
 
+Lmodel.dppm <- function (model, ...){
+    Lmodel(model$fitted, W=model$window)
+}
+
 pcfmodel.dppm <- function (model, ...){
     pcfmodel(model$fitted, W=model$window)
 }

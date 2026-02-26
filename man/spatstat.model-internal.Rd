@@ -109,6 +109,8 @@
 \alias{labels.ppm}
 \alias{leverage.ppmInfluence}
 \alias{lines.objsurf}
+\alias{Lmodel.clusterprocess}
+\alias{Lmodel.slrm}
 \alias{logi.engine}
 \alias{logLik.vblogit}
 \alias{LurkEngine}
@@ -376,6 +378,8 @@ kppmCLadap(X, Xname, po, clusters, control, weightfun,
 \method{labels}{ppm}(object, \dots)
 \method{leverage}{ppmInfluence}(model, \dots)
 \method{lines}{objsurf}(x, \dots, directed)
+\method{Lmodel}{clusterprocess}(model, \dots)
+\method{Lmodel}{slrm}(model, \dots)
 logi.engine(Q, trend, interaction, \dots,
             quad.args,
             covariates, subsetexpr, clipwin,

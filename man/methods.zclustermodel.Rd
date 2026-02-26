@@ -1,6 +1,7 @@
 \name{methods.zclustermodel}
 \alias{methods.zclustermodel} % DoNotExport
 \alias{pcfmodel.zclustermodel}
+\alias{Lmodel.zclustermodel}
 \alias{Kmodel.zclustermodel}
 \alias{predict.zclustermodel}
 \alias{intensity.zclustermodel}
@@ -18,6 +19,8 @@
  \method{pcfmodel}{zclustermodel}(model, \dots)
 
  \method{Kmodel}{zclustermodel}(model, \dots)
+
+ \method{Lmodel}{zclustermodel}(model, \dots)
 
  \method{intensity}{zclustermodel}(X, \dots)
 

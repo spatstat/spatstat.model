@@ -180,3 +180,8 @@ Kmodel.zclustermodel <- function(model, ...) {
   return(f)
 }
 
+Lmodel.zclustermodel <- function(model, ...) {
+  Kfun <- Kmodel(model, ...)
+  Lfun <- function(r) { sqrt(Kfun(r)/pi) }
+  return(Lfun)
+}

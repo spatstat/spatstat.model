@@ -1,5 +1,6 @@
 \name{Kmodel.kppm}
 \alias{Kmodel.kppm}
+\alias{Lmodel.kppm}
 \alias{pcfmodel.kppm}
 \title{K Function or Pair Correlation Function of Cluster Model or Cox model}
 \description{
@@ -8,6 +9,8 @@
 }
 \usage{
    \method{Kmodel}{kppm}(model, \dots)
+
+   \method{Lmodel}{kppm}(model, \dots)
 
    \method{pcfmodel}{kppm}(model, \dots)
 }
@@ -32,7 +35,8 @@
   is possible for a fitted cluster point process model 
   (object of class \code{"kppm"} obtained from \code{\link{kppm}}).
   
-  The functions \code{\link{Kmodel}} and \code{\link{pcfmodel}} are generic.
+  The functions \code{\link{Kmodel}}, \code{\link{Lmodel}}
+  and \code{\link{pcfmodel}} are generic.
   The functions documented here are the methods for the class \code{"kppm"}.
   
   The return value is a \code{function} in the \R language,

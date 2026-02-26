@@ -10,6 +10,10 @@ Kmodel <- function(model, ...) {
   UseMethod("Kmodel")
 }
 
+Lmodel <- function(model, ...) {
+  UseMethod("Lmodel")
+}
+
 pcfmodel <- function(model, ...) {
   UseMethod("pcfmodel")
 }

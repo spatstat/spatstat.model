@@ -1,7 +1,9 @@
 \name{Kmodel.dppm}
 \alias{Kmodel.detpointprocfamily}
+\alias{Lmodel.detpointprocfamily}
 \alias{pcfmodel.detpointprocfamily}
 \alias{Kmodel.dppm}
+\alias{Lmodel.dppm}
 \alias{pcfmodel.dppm}
 \title{
   K-function or Pair Correlation Function of a
@@ -14,9 +16,13 @@
 \usage{
    \method{Kmodel}{dppm}(model, \dots)
 
+   \method{Lmodel}{dppm}(model, \dots)
+
    \method{pcfmodel}{dppm}(model, \dots)
 
    \method{Kmodel}{detpointprocfamily}(model, \dots)
+
+   \method{Lmodel}{detpointprocfamily}(model, \dots)
 
    \method{pcfmodel}{detpointprocfamily}(model, \dots)
 }

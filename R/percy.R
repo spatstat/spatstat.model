@@ -1,8 +1,8 @@
 ## percus.R
 ##
-## Percus-Yevick style approximations to pcf and K
+## Percus-Yevick style approximations to pcf and K and L
 ##
-##  $Revision: 1.6 $ $Date: 2022/01/20 00:47:44 $
+##  $Revision: 1.7 $ $Date: 2026/02/26 09:46:10 $
 
 pcfmodel.ppm <- local({
 
@@ -98,3 +98,8 @@ Kmodel.ppm <- local({
   Kmodel.ppm
 })
                     
+Lmodel.ppm <- function(model, ...) {
+  Kfun <- Kmodel(model, ...)
+  Lfun <- function(r) { sqrt(Kfun(r)/pi) }
+  return(Lfun)
+}

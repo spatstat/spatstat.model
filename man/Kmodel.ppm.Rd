@@ -1,5 +1,6 @@
 \name{Kmodel.ppm}
 \alias{Kmodel.ppm}
+\alias{Lmodel.ppm}
 \alias{pcfmodel.ppm}
 \title{K Function or Pair Correlation Function of Gibbs Point Process model}
 \description{
@@ -8,6 +9,8 @@
 }
 \usage{
    \method{Kmodel}{ppm}(model, \dots)
+
+   \method{Lmodel}{ppm}(model, \dots)
 
    \method{pcfmodel}{ppm}(model, \dots)
 }
@@ -29,7 +32,8 @@
   This function computes an \emph{approximation} to the \eqn{K} function
   or the pair correlation function of a Gibbs point process.
   
-  The functions \code{\link{Kmodel}} and \code{\link{pcfmodel}} are generic.
+  The functions \code{\link{Kmodel}}, \code{\link{Lmodel}}
+  and \code{\link{pcfmodel}} are generic.
   The functions documented here are the methods for the class
   \code{"ppm"}.
   

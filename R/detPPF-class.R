@@ -192,6 +192,12 @@ dppapproxpcf <- function(model, trunc = .99, W = NULL){
   return(f)
 }
 
+Lmodel.detpointprocfamily <- function(model, ...) {
+  Kfun <- Kmodel(model, ...)
+  Lfun <- function(r) { sqrt(Kfun(r)/pi) }
+  return(Lfun)
+}
+
 Kmodel.detpointprocfamily <- function(model, ...){
   if(length(model$freepar)>0)
     stop("Cannot extract the K function of a partially specified model. Please supply all parameters.")

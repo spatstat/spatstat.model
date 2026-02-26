@@ -302,7 +302,7 @@ reset.spatstat.options()
 #'
 #'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.45 $  $Date: 2025/03/15 11:29:33 $
+#'   $Revision: 1.49 $  $Date: 2026/02/15 08:40:38 $
 #'
 #'   Assumes 'EveryStart.R' was run
 
@@ -350,31 +350,31 @@ if(FULLTEST) {
     Zed <- predict(fat)
     Lum <- fitted(fat, dataonly=TRUE)
     moff <- (marks(Amacrine) == "off")
-    a <- localLcross.inhom(Amacrine, from="off", to="on", lambdaX=Zed)
-    a <- localLcross.inhom(Amacrine, from="off", to="on", lambdaX=Lum)
     a <- localLcross.inhom(Amacrine, from="off", to="on", lambdaX=fat)
     a <- localLcross.inhom(Amacrine, from="off", to="on",
-                           lambdaFrom=Lum[moff], lambdaTo=Lum[!moff])
-    a <- localLcross.inhom(Amacrine, from="off", to="on", lambdaX=Zed,
-                           correction="none")
-    a <- localLcross.inhom(Amacrine, from="off", to="on", lambdaX=Zed,
+                           lambdaFrom=Lum[moff], lambdaTo=Lum[!moff],
                            correction="translate")
     #' cases of resolve.lambdacross
-    h <- resolve.lambdacross(Amacrine, moff, !moff, lambdaX=fat)
-    h <- resolve.lambdacross(Amacrine, moff, !moff, lambdaX=fat, update=FALSE)
     h <- resolve.lambdacross(Amacrine, moff, !moff,
-                              lambdaI=fat, lambdaJ=fat)
+                             lambdaX=fat,
+                             Ilevels="off", Jlevels="on")
     h <- resolve.lambdacross(Amacrine, moff, !moff,
-                              lambdaI=fat, lambdaJ=fat,
-                              update=FALSE)
+                             lambdaX=fat, update=FALSE,
+                             Ilevels="off", Jlevels="on")
+    h <- resolve.lambdacross(Amacrine, moff, !moff,
+                             lambdaI=fat, lambdaJ=fat,
+                             Ilevels="off", Jlevels="on")
+    h <- resolve.lambdacross(Amacrine, moff, !moff,
+                             lambdaI=fat, lambdaJ=fat,
+                             update=FALSE,
+                             Ilevels="off", Jlevels="on")
     #' lohboot
-    b <- lohboot(Amacrine, Lcross.inhom, from="off", to="on", lambdaX=Zed)
-    b <- lohboot(Amacrine, Lcross.inhom, from="off", to="on", lambdaX=Lum)
     b <- lohboot(Amacrine, Lcross.inhom, from="off", to="on", lambdaX=fat)
     b <- lohboot(Amacrine, Lcross.inhom, from="off", to="on", 
                  lambdaFrom=Lum[moff], lambdaTo=Lum[!moff])
     #'
-    #'  residual K functions etc
+    #'  residual K functions et                              lambdaI=fat, lambdaJ=fat)
+c
     #'
     rco <- compareFit(Cells, Kcom,
                       interaction=anylist(P=Poisson(), S=Strauss(0.08)),

@@ -1,7 +1,7 @@
 #'
 #'   clusterprocess.R
 #'
-#'   $Revision: 1.2 $ $Date: 2025/05/16 07:14:33 $
+#'   $Revision: 1.3 $ $Date: 2026/02/26 10:00:57 $
 #'
 
 #' clusterprocess() is defined in spatstat.random
@@ -29,3 +29,10 @@ Kmodel.clusterprocess <- function(model, ...) {
   }
   return(f)
 }
+
+Lmodel.clusterprocess <- function(model, ...) {
+  Kfun <- Kmodel(model, ...)
+  Lfun <- function(r) { sqrt(Kfun(r)/pi) }
+  return(Lfun)
+}
+

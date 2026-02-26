@@ -3,7 +3,7 @@
 #
 #  Spatial Logistic Regression
 #
-#  $Revision: 1.79 $   $Date: 2025/11/08 05:17:16 $
+#  $Revision: 1.80 $   $Date: 2026/02/26 09:56:35 $
 #
 
 slrm <- function(formula, ..., data=NULL, offset=TRUE,
@@ -921,6 +921,8 @@ reach.slrm <- function(x, ...) { 0 }
 ## pseudoR2.slrm is defined in ppmclass.R
 
 Kmodel.slrm <- function(model, ...) { function(r) { pi * r^2 } }
+
+Lmodel.slrm <- function(model, ...) { function(r) { r } }
 
 pcfmodel.slrm <- function(model, ...) { function(r) { rep.int(1, length(r)) } }
 
