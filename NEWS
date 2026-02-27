@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 3.6-1.002
+        CHANGES IN spatstat.model VERSION 3.6-1.003
 
 OVERVIEW
 
@@ -17,6 +17,11 @@ NEW FUNCTIONS
    Calculate the theoretical K-function, L-function or pair correlation
    function for a model of class 'clustermodel'.
    
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o psib, persist, clusterstrength, varcount
+    These functions now accept an object of class 'clustermodel'.
+    
         CHANGES IN spatstat.model VERSION 3.6-1
 
 OVERVIEW

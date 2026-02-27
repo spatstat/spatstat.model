@@ -992,7 +992,9 @@ is.poissonclusterprocess.kppm <- function(model) { isTRUE(model$isPCP) }
 #' cluster strength
 
 clusterstrength <- function(object) {
-  verifyclass(object, "kppm")
+  if(!inherits(object, c("kppm", "clusterprocess")))
+    stop("'object' should have class 'kppm' or 'clusterprocess'",
+         call.=FALSE)
   g <- pcfmodel(object)
   phi <- g(0) - 1
   return(phi)
@@ -1001,7 +1003,12 @@ clusterstrength <- function(object) {
 #' spatial persistence index
 
 persist <- function(object, W=Window(object)) {
-  verifyclass(object, "kppm")
+  if(!inherits(object, c("kppm", "clusterprocess")))
+    stop("'object' should have class 'kppm' or 'clusterprocess'",
+         call.=FALSE)
+  if((missing(W) || is.null(W)) && inherits(object, "clusterprocess"))
+    stop("A window W is required when the model is a 'clusterprocess'",
+         call.=FALSE)
   stopifnot(is.owin(W))
   g <- pcfmodel(object)
   d <- diameter(W)

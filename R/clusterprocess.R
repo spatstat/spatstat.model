@@ -1,7 +1,7 @@
 #'
 #'   clusterprocess.R
 #'
-#'   $Revision: 1.3 $ $Date: 2026/02/26 10:00:57 $
+#'   $Revision: 1.4 $ $Date: 2026/02/27 06:37:01 $
 #'
 
 #' clusterprocess() is defined in spatstat.random

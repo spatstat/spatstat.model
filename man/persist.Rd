@@ -4,16 +4,21 @@
   Spatial Persistence Index
 }
 \description{
-  Given a cluster process model fitted to point pattern data,
-  calculate the spatial persistence index for the model
-  over the observation window.
+  Given a cluster process model,
+  calculate the spatial persistence index \eqn{v} for the model
+  over a specified window.
 }
 \usage{
 persist(object, W=Window(object))
 }
 \arguments{
   \item{object}{
-    Fitted cluster process model (object of class \code{"kppm"}).
+    Clustered point process model.
+    Either an object of class \code{"kppm"}
+    representing a cluster point process or Cox point process model
+    fitted to point pattern data, or
+    an object of class \code{"clusterprocess"}
+    representing a cluster process model with specified parameters.
   }
   \item{W}{
     Spatial region (object of class \code{"owin"}) for which the
@@ -34,8 +39,7 @@ persist(object, W=Window(object))
     v = (g(d) - 1)/(g(0) - 1)
   }
   where \eqn{g} is the pair correlation function of the
-  cluster process, and \eqn{d} is the diameter of the observation window
-  of the original point pattern dataset to which the model was fitted.
+  cluster process, and \eqn{d} is the diameter of the window.
 
   The index \eqn{v} is dimensionless and takes values between 0 and 1.
   It depends on both the fitted cluster process, and on the
@@ -50,6 +54,13 @@ persist(object, W=Window(object))
   Values of \eqn{v} close to 1 indicate that the
   clusters are so large that the model (observed within the observation window)
   is effectively a mixed Poisson process.
+
+  The spatial persistence index is calculated for the window
+  specified by the argument \code{W}. For a model of class
+  \code{"kppm"}, the default for \code{W} is the window of the
+  original point pattern dataset to which the model was fitted.
+  For a model of class \code{"clusterprocess"}, the argument \code{W}
+  must be provided.
 }
 \value{
   A single numerical value between 0 and 1.
@@ -71,7 +82,7 @@ persist(object, W=Window(object))
   DOI: \code{10.1016/j.spasta.2022.100709}
 }
 \examples{
-  #' non-clustered region of full redwood data
+  #' Fit model to NON-clustered region of full redwood data
   X <- redwoodfull[redwoodfull.extra$regionI]
   fit <- kppm(X)
 
@@ -81,6 +92,10 @@ persist(object, W=Window(object))
   panysib(fit)
 
   ## conclusion: fitted model is approximately a mixed Poisson process
+
+  #' Create a Thomas model
+  m <- clusterprocess("Thomas", kappa=10, mu=5, scale=0.1)
+  persist(m, square(1))
 }
 \keyword{spatial}
 \keyword{models}
