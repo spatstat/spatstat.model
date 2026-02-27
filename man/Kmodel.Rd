@@ -36,8 +36,10 @@
   function for a point process model.
   
   The functions \code{Kmodel}, \code{Lmodel} and \code{pcfmodel} are generic,
-  with methods for the classes \code{"kppm"} (cluster processes
-  and Cox processes) and \code{"ppm"} (Gibbs processes).
+  with methods for the classes \code{"kppm"} (fitted cluster processes
+  and Cox processes), \code{"ppm"} (fitted Gibbs processes)
+  and \code{"clusterprocess"} (cluster process models with
+  specified values of the parameters).
   
   The return value is a \code{function} in the \R language,
   which takes one argument \code{r}.
@@ -50,10 +52,13 @@
   to estimate the \eqn{K} function or pair correlation function
   nonparametrically from data.
 
-  \code{\link{Kmodel.kppm}} for the method for cluster processes
+  \code{\link{Kmodel.kppm}} for the method for fitted cluster processes
   and Cox processes.
   
-  \code{\link{Kmodel.ppm}} for the method for Gibbs processes.
+  \code{\link{Kmodel.clusterprocess}} for the method for
+  cluster process models with specified parameter values.
+  
+  \code{\link{Kmodel.ppm}} for the method for fitted Gibbs processes.
 }
 \author{
   \spatstatAuthors.

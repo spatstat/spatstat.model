@@ -34,6 +34,8 @@ zclustermodel(name = "Thomas", \dots, mu, kappa, scale)
 }
 \details{
   Experimental.
+
+  Will soon be deprecated in favour of \code{\link[spatstat.random]{clusterprocess}}.
 }
 \value{
   Object of the experimental class \code{"zclustermodel"}.

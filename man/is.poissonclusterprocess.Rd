@@ -1,6 +1,7 @@
 \name{is.poissonclusterprocess}
 \alias{is.poissonclusterprocess}
 \alias{is.poissonclusterprocess.kppm}
+\alias{is.poissonclusterprocess.clusterprocess}
 \alias{is.poissonclusterprocess.zclustermodel}
 \alias{is.poissonclusterprocess.default}
 \title{
@@ -14,6 +15,7 @@
 \usage{
 is.poissonclusterprocess(model)
 \method{is.poissonclusterprocess}{kppm}(model)
+\method{is.poissonclusterprocess}{clusterprocess}(model)
 \method{is.poissonclusterprocess}{zclustermodel}(model)
 \method{is.poissonclusterprocess}{default}(model)
 }
@@ -33,8 +35,8 @@ is.poissonclusterprocess(model)
   process, and \code{FALSE} otherwise.
   
   The function \code{is.poissonclusterprocess} is generic, with methods
-  for classes \code{kppm} and \code{zclustermodel}, and a default
-  method. 
+  for classes \code{kppm}, \code{clusterprocess} and
+  \code{zclustermodel}, and a default method. 
 }
 \value{
   A logical value.

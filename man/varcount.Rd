@@ -13,7 +13,9 @@ varcount(model, B=Window(model), \dots, dimyx = NULL, relative=FALSE)
 \arguments{
   \item{model}{
     A fitted point process model
-    (object of class \code{"ppm"}, \code{"kppm"} or \code{"dppm"}).
+    (object of class \code{"ppm"}, \code{"kppm"}, \code{"dppm"},
+    \code{"slrm"}) or a theoretical point process model
+    (object of class \code{"clusterprocess"}).
   }
   \item{B}{
     A window (object of class \code{"owin"} specifying the region in

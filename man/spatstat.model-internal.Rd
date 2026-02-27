@@ -96,10 +96,8 @@
 \alias{is.multitype.slrm}    
 \alias{is.poisson.mppm}
 \alias{is.poisson.rppm}
-\alias{is.poissonclusterprocess.clusterprocess}
 \alias{is.rppm}
 \alias{Kpcf.kppm}
-\alias{Kmodel.clusterprocess}
 \alias{Kmodel.slrm}
 \alias{killinteraction}
 \alias{kppmComLik}
@@ -109,7 +107,6 @@
 \alias{labels.ppm}
 \alias{leverage.ppmInfluence}
 \alias{lines.objsurf}
-\alias{Lmodel.clusterprocess}
 \alias{Lmodel.slrm}
 \alias{logi.engine}
 \alias{logLik.vblogit}
@@ -138,7 +135,6 @@
 \alias{parseRPPM}
 \alias{partialModelMatrix}
 \alias{partialResidualEngine}
-\alias{pcfmodel.clusterprocess}
 \alias{pcfmodel.slrm}
 \alias{ploterodewin}
 \alias{ploterodeimage}
@@ -360,10 +356,8 @@ is.mppm(x)
 \method{is.multitype}{slrm}(X, \dots)
 \method{is.poisson}{mppm}(x)
 \method{is.poisson}{rppm}(x)
-\method{is.poissonclusterprocess}{clusterprocess}(model)
 is.rppm(x)
 Kpcf.kppm(model, what)
-\method{Kmodel}{clusterprocess}(model, \dots)
 \method{Kmodel}{slrm}(model, \dots)
 killinteraction(model)
 kppmComLik(X, Xname, po, clusters, control, stabilize, weightfun, rmax,
@@ -378,7 +372,6 @@ kppmCLadap(X, Xname, po, clusters, control, weightfun,
 \method{labels}{ppm}(object, \dots)
 \method{leverage}{ppmInfluence}(model, \dots)
 \method{lines}{objsurf}(x, \dots, directed)
-\method{Lmodel}{clusterprocess}(model, \dots)
 \method{Lmodel}{slrm}(model, \dots)
 logi.engine(Q, trend, interaction, \dots,
             quad.args,
@@ -442,7 +435,6 @@ partialModelMatrix(X,D,model,callstring,\dots)
 partialResidualEngine(model, covariate, \dots,
      smooth.effect, subregion, bw, adjust, from, to, n,
      bw.input, bw.restrict, covname, callstring, modelname, do.variance)
-\method{pcfmodel}{clusterprocess}(model, \dots)
 \method{pcfmodel}{slrm}(model, \dots)
 ploterodewin(W1, W2, col.edge, col.inside, do.plot, \dots)
 ploterodeimage(W, Z, \dots, Wcol, rangeZ, colsZ, do.plot)

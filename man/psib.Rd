@@ -1,6 +1,7 @@
 \name{psib}
 \alias{psib}
 \alias{psib.kppm}
+\alias{psib.clusterprocess}
 \title{
   Sibling Probability of Cluster Point Process
 }
@@ -11,11 +12,15 @@
   psib(object)
 
   \method{psib}{kppm}(object)
+
+  \method{psib}{clusterprocess}(object)
 }
 \arguments{
   \item{object}{
     Fitted cluster point process model
-    (object of class \code{"kppm"}).
+    (object of class \code{"kppm"})
+    or theoretical cluster process model
+    (object of class \code{"clusterprocess"}).
   }
 }
 \details{

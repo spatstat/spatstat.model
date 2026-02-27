@@ -1,16 +1,22 @@
 
-        CHANGES IN spatstat.model VERSION 3.6-1.001
+        CHANGES IN spatstat.model VERSION 3.6-1.002
 
 OVERVIEW
 
     o New generic 'Lmodel'.
+
+    o Methods for class 'clustermodel'
     
 NEW FUNCTIONS
 
-   o Lmodel, Lmodel.kppm, Lmodel.dppm, Lmodel.ppm, Lmodel.zclustermodel
+   o Lmodel, Lmodel.kppm, Lmodel.dppm, Lmodel.ppm
    Given a point process model, return a function in the R language
    which computes the theoretical L-function of the model.
 
+   o Kmodel.clustermodel, pcfmodel.clustermodel, Lmodel.clustermodel
+   Calculate the theoretical K-function, L-function or pair correlation
+   function for a model of class 'clustermodel'.
+   
         CHANGES IN spatstat.model VERSION 3.6-1
 
 OVERVIEW

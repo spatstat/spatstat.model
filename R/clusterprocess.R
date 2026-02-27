@@ -10,6 +10,12 @@
 
 is.poissonclusterprocess.clusterprocess <- function(model) { TRUE }
 
+psib.clusterprocess <- function(object) {
+  g <- pcfmodel(object)
+  p <- 1 - 1/g(0)
+  return(p)
+}
+
 pcfmodel.clusterprocess <- function(model, ...) {
   p <- model$rules$pcf
   mpar <- model$par.idio

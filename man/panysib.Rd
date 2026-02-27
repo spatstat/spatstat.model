@@ -12,7 +12,9 @@ panysib(object)
 }
 \arguments{
   \item{object}{
-    Fitted cluster process model (object of class \code{"kppm"}).
+    Fitted cluster process model (object of class \code{"kppm"})
+    or theoretical cluster process model
+    (object of class \code{"clusterprocess"}).
   }
 }
 \details{
