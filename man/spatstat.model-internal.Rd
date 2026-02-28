@@ -112,6 +112,11 @@
 \alias{logLik.vblogit}
 \alias{LurkEngine}
 \alias{make.pspace}
+\alias{make.simulrecipe.ppm}
+\alias{make.simulrecipe.kppm}
+\alias{make.simulrecipe.dppm}
+\alias{make.simulrecipe.detpointprocfamily}
+\alias{make.simulrecipe.slrm}
 \alias{mapInterVars}
 \alias{Mayer}
 \alias{model.se.image}
@@ -395,6 +400,12 @@ make.pspace(\dots, canonical, adjusted, trace, save, trajectory,
              penal.args, tau, clusters, fitmethod,
              flatness, C0factor, xval, xval.args,
              debug, transfo)
+\method{make.simulrecipe}{ppm}(object, envir, \dots,
+            fix.n, fix.marks, start, control, nrep)
+\method{make.simulrecipe}{kppm}(object, envir, \dots)
+\method{make.simulrecipe}{dppm}(object, envir, \dots)
+\method{make.simulrecipe}{detpointprocfamily}(object, envir, \dots, W)
+\method{make.simulrecipe}{slrm}(object, envir, \dots)
 mapInterVars(object, subs, mom)
 Mayer(fi, exponent)
 model.se.image(fit, W, \dots, what, new.coef)

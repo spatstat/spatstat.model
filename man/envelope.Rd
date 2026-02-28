@@ -1,6 +1,7 @@
 \name{envelope.ppm} 
 \alias{envelope.ppm}
 \alias{envelope.kppm}
+\alias{envelope.dppm}
 \alias{envelope.slrm}
 \title{Simulation Envelopes of Summary Function}
 \description{
@@ -34,6 +35,18 @@
   maxnerr=nsim, rejectNA=FALSE, silent=FALSE,
   do.pwrong=FALSE, envir.simul=NULL)
 
+  \method{envelope}{dppm}(Y, fun=Kest, nsim=99, nrank=1, \dots, 
+  funargs=list(), funYargs=funargs,
+  simulate=NULL,
+  verbose=TRUE, clipdata=TRUE,
+  transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL, 
+  alternative=c("two.sided", "less", "greater"), 
+  scale=NULL, clamp=FALSE, 
+  savefuns=FALSE, savepatterns=FALSE,
+  nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL, 
+  maxnerr=nsim, rejectNA=FALSE, silent=FALSE,
+  do.pwrong=FALSE, envir.simul=NULL)
+
   \method{envelope}{slrm}(Y, fun=Kest, nsim=99, nrank=1, \dots, 
   funargs=list(), funYargs=funargs,
   simulate=NULL,
@@ -51,7 +64,8 @@
     Object containing point pattern data.
     A point pattern (object of class
     \code{"ppp"}) or a fitted point process model
-    (object of class \code{"ppm"}, \code{"kppm"} or \code{"slrm"}).
+    (object of class \code{"ppm"}, \code{"kppm"}, \code{"dppm"}
+    or \code{"slrm"}).
   }
   \item{fun}{
     Function that computes the desired summary statistic
@@ -89,7 +103,12 @@
     in this list will be treated as the simulated patterns from which
     the envelopes are computed.
     Alternatively \code{simulate} may be an object produced by the
-    \code{envelope} command: see Details.
+    \code{envelope} command, from which simulated patterns will be
+    extracted: see Details.
+    If \code{simulate} is a point process model (of class
+    \code{"ppm"}, \code{"kppm"}, \code{"dppm"}, \code{"slrm"},
+    \code{"clusterprocess"} or \code{"detpointprocfamily"})
+    then this process will be simulated \code{nsim} times.
   }
   \item{fix.n}{
     Logical. If \code{TRUE}, simulated patterns will have the

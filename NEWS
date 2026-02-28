@@ -1,15 +1,22 @@
 
-        CHANGES IN spatstat.model VERSION 3.6-1.003
+        CHANGES IN spatstat.model VERSION 3.6-1.004
 
 OVERVIEW
 
     o New generic 'Lmodel'.
 
     o Methods for class 'clustermodel'
-    
+
+    o 'envelope' method for 'dppm'
+
+    o More options for 'simulate' argument in 'envelope' 
+
 NEW FUNCTIONS
 
-   o Lmodel, Lmodel.kppm, Lmodel.dppm, Lmodel.ppm
+   o envelope.dppm
+   Method for 'envelope' for fitted models of class 'dppm'
+   
+   o Lmodel, Lmodel.kppm, Lmodel.dppm, Lmodel.ppm, Lmodel.detpointprocfamily
    Given a point process model, return a function in the R language
    which computes the theoretical L-function of the model.
 
@@ -21,6 +28,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o psib, persist, clusterstrength, varcount
     These functions now accept an object of class 'clustermodel'.
+
+    o envelope.ppm, envelope.kppm, envelope.slrm
+    Argument 'simulate' can be a point process model of class
+    'ppm', 'kppm', 'dppm', 'slrm', 'clusterprocess' or 'detpointprocfamily'.
+
     
         CHANGES IN spatstat.model VERSION 3.6-1
 
