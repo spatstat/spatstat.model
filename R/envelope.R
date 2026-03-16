@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.134 $  $Date: 2026/02/28 12:22:18 $
+#   $Revision: 2.135 $  $Date: 2026/03/15 23:50:16 $
 #
 
 ## Code for envelope() and envelope.ppp() is moved to spatstat.explore
@@ -18,7 +18,8 @@ envelope.ppm <-
            verbose=TRUE, clipdata=TRUE, 
            start=NULL,
            control=update(default.rmhcontrol(Y), nrep=nrep), nrep=1e5, 
-           transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL, 
+           transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL,
+           theoryfun=NULL,
            alternative=c("two.sided", "less", "greater"),
            scale=NULL, clamp=FALSE, 
            savefuns=FALSE, savepatterns=FALSE, nsim2=nsim,
@@ -57,6 +58,7 @@ envelope.ppm <-
                  verbose=verbose, clipdata=clipdata,
                  transform=transform,
                  global=global, ginterval=ginterval, use.theory=use.theory,
+                 theoryfun=theoryfun,
                  alternative=alternative, scale=scale, clamp=clamp, 
                  savefuns=savefuns, savepatterns=savepatterns, nsim2=nsim2,
                  VARIANCE=VARIANCE, nSD=nSD,
@@ -120,6 +122,7 @@ envelope.kppm <-
            funargs=list(), funYargs=funargs,
            simulate=NULL, verbose=TRUE, clipdata=TRUE, 
            transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL,
+           theoryfun=NULL,
            alternative=c("two.sided", "less", "greater"),
            scale=NULL, clamp=FALSE,
            savefuns=FALSE, savepatterns=FALSE, nsim2=nsim,
@@ -150,6 +153,7 @@ envelope.kppm <-
                  verbose=verbose, clipdata=clipdata,
                  transform=transform,
                  global=global, ginterval=ginterval, use.theory=use.theory,
+                 theoryfun=theoryfun,
                  alternative=alternative, scale=scale, clamp=clamp,
                  savefuns=savefuns, savepatterns=savepatterns, nsim2=nsim2,
                  VARIANCE=VARIANCE, nSD=nSD,
@@ -186,6 +190,7 @@ envelope.dppm <-
            funargs=list(), funYargs=funargs,
            simulate=NULL, verbose=TRUE, clipdata=TRUE, 
            transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL,
+           theoryfun=NULL,
            alternative=c("two.sided", "less", "greater"),
            scale=NULL, clamp=FALSE,
            savefuns=FALSE, savepatterns=FALSE, nsim2=nsim,
@@ -216,6 +221,7 @@ envelope.dppm <-
                  verbose=verbose, clipdata=clipdata,
                  transform=transform,
                  global=global, ginterval=ginterval, use.theory=use.theory,
+                 theoryfun=theoryfun,
                  alternative=alternative, scale=scale, clamp=clamp,
                  savefuns=savefuns, savepatterns=savepatterns, nsim2=nsim2,
                  VARIANCE=VARIANCE, nSD=nSD,
@@ -268,6 +274,7 @@ envelope.slrm <-
            funargs=list(), funYargs=funargs,
            simulate=NULL, verbose=TRUE, clipdata=TRUE, 
            transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL,
+           theoryfun=NULL,
            alternative=c("two.sided", "less", "greater"),
            scale=NULL, clamp=FALSE,
            savefuns=FALSE, savepatterns=FALSE, nsim2=nsim,
@@ -300,6 +307,7 @@ envelope.slrm <-
                  verbose=verbose, clipdata=clipdata,
                  transform=transform,
                  global=global, ginterval=ginterval, use.theory=use.theory,
+                 theoryfun=theoryfun,
                  alternative=alternative, scale=scale, clamp=clamp,
                  savefuns=savefuns, savepatterns=savepatterns, nsim2=nsim2,
                  VARIANCE=VARIANCE, nSD=nSD,

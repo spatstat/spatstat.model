@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 3.6-1.004
+        CHANGES IN spatstat.model VERSION 3.6-1.006
 
 OVERVIEW
 
@@ -9,20 +9,22 @@ OVERVIEW
 
     o 'envelope' method for 'dppm'
 
-    o More options for 'simulate' argument in 'envelope' 
+    o More options for 'simulate' argument in 'envelope'
+
+    o Specify the 'theoretical' value of the summary function in 'envelope'
 
 NEW FUNCTIONS
 
-   o envelope.dppm
-   Method for 'envelope' for fitted models of class 'dppm'
+    o envelope.dppm
+    Method for 'envelope' for fitted models of class 'dppm'
    
-   o Lmodel, Lmodel.kppm, Lmodel.dppm, Lmodel.ppm, Lmodel.detpointprocfamily
-   Given a point process model, return a function in the R language
-   which computes the theoretical L-function of the model.
+    o Lmodel, Lmodel.kppm, Lmodel.dppm, Lmodel.ppm, Lmodel.detpointprocfamily
+    Given a point process model, return a function in the R language
+    which computes the theoretical L-function of the model.
 
-   o Kmodel.clustermodel, pcfmodel.clustermodel, Lmodel.clustermodel
-   Calculate the theoretical K-function, L-function or pair correlation
-   function for a model of class 'clustermodel'.
+    o Kmodel.clustermodel, pcfmodel.clustermodel, Lmodel.clustermodel
+    Calculate the theoretical K-function, L-function or pair correlation
+    function for a model of class 'clustermodel'.
    
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -33,6 +35,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Argument 'simulate' can be a point process model of class
     'ppm', 'kppm', 'dppm', 'slrm', 'clusterprocess' or 'detpointprocfamily'.
 
+    o envelope.ppm, envelope.kppm, envelope.slrm
+    New argument 'theoryfun' can be used to provide the theoretical value
+    of the summary function.
     
         CHANGES IN spatstat.model VERSION 3.6-1
 
