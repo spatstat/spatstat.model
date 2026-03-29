@@ -51,7 +51,7 @@
   function at these distance values.
 }
 \seealso{
-  \code{\link{clusterprocess}}.
+  \code{\link[spatstat.random]{clusterprocess}}.
 
   \code{\link[spatstat.explore]{Kest}}, \code{\link[spatstat.explore]{Lest}} or \code{\link[spatstat.explore]{pcf}}
   to estimate the \eqn{K} function, \eqn{L} function
