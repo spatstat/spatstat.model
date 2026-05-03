@@ -395,7 +395,7 @@ LurkEngine(object, type, cumulative, plot.sd,
            verbose, nx, splineargs,
            envelope, nsim, nrank, Xsim,
            internal, checklength)
-make.pspace(\dots, canonical, adjusted, trace, save, trajectory,
+make.pspace(\dots, fixedpar, canonical, adjusted, trace, save, trajectory,
              nhalfgrid, strict, penalised, penalty,
              penal.args, tau, clusters, fitmethod,
              flatness, C0factor, xval, xval.args,

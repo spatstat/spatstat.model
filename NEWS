@@ -1,4 +1,23 @@
 
+        CHANGES IN spatstat.model VERSION 3.7-0.001
+
+OVERVIEW
+
+    o Bug fixes and minor improvements.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Kcom, Kres
+    Computation accelerated when using Ripley isotropic correction.
+
+BUG FIXES
+
+   o vcov.ppm
+   There was a loophole in the code which *could* have caused
+   the result of vcov.ppm to be incorrect for pairwise interaction models
+   in a very rare case. No examples have been found.
+   Fixed.
+   
         CHANGES IN spatstat.model VERSION 3.7-0
 
 OVERVIEW
