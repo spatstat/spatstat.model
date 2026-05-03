@@ -11,6 +11,7 @@
 
 
 make.pspace <- function(...,
+                        fixedpar=NULL,
                         canonical=FALSE,
                         adjusted=FALSE,
                         trace=FALSE,
@@ -30,8 +31,17 @@ make.pspace <- function(...,
                         xval.args=list(),
                         debug=FALSE,
                         transfo=NULL) {
+  ## validate
+  if("strength" %in% names(fixedpar)) {
+    ## Fixed cluster strength implies use of canonical parameters
+    if(!missing(canonical) && !isTRUE(canonical))
+      warning("Re-setting canonical=TRUE, because cluster strength is fixed",
+              call.=FALSE)
+    canonical <- TRUE
+  }
   ## assemble all recognised arguments
-  p <- list(canonical = isTRUE(canonical),
+  p <- list(fixedpar  = fixedpar,
+            canonical = isTRUE(canonical),
             adjusted  = isTRUE(adjusted),
             trace     = isTRUE(trace),
             save      = isTRUE(save),
@@ -41,6 +51,7 @@ make.pspace <- function(...,
             xval.args = as.list(xval.args),
             debug     = debug,
             transfo   = transfo)
+    
   ## penalise cluster scale?
   penalised <- isTRUE(penalised)
   if(is.function(penalty)) {
