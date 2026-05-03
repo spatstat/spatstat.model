@@ -3,7 +3,7 @@
 #
 #   model compensated K-function
 #
-# $Revision: 1.20 $ $Date: 2026/01/21 06:26:39 $
+# $Revision: 1.21 $ $Date: 2026/05/01 02:29:02 $
 #
 
 Kcom <- local({
@@ -94,8 +94,10 @@ Kcom <- local({
   E <- equalsfun.quad(Q)
   WQ <- w.quad(Q)  # quadrature weights
 
+  bdistU <- bdist.points(U)
+
   # quadrature points used 
-  USED <- if(algo == "reweighted") (bdist.points(U) > rbord) else rep.int(TRUE, U$n)
+  USED <- if(algo == "reweighted") (bdistU > rbord) else rep.int(TRUE, U$n)
 
   # basic statistics
   npts <- npoints(X)
@@ -177,7 +179,7 @@ Kcom <- local({
     # border method
     # Compute distances to boundary
     # (in restricted case, the window of U has been adjusted)
-    b <- bdist.points(U)
+    b <- bdistU
     bI <- b[I]
     # reduced sample for K(r) of data only
     RSX <- Kount(dIJ[DD & okI], bI[DD & okI], b[Z & USED], breaks)
@@ -227,7 +229,7 @@ Kcom <- local({
   }
   if(opt$ripl) {
     # Ripley isotropic correction
-    edgewt <- edge.Ripley(UI, matrix(dIJ, ncol=1))
+    edgewt <- edge.Ripley(UI, matrix(dIJ, ncol=1), bdistX=bdistU[I])
     wh   <- whist(dIJ[okI],     breaks$val, (edgewt * wcIJ)[okI])
     whDD <- whist(dIJ[DD & okI], breaks$val, edgewt[DD & okI])    
 #    Kiso <- cumsum(whDD)/(lambda2.used * area.used)
