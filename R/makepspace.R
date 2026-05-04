@@ -4,9 +4,9 @@
 #'
 #'   Including default penalty for cluster scale
 #'
-#'   $Revision: 1.10 $ $Date: 2025/12/07 02:33:43 $
+#'   $Revision: 1.11 $ $Date: 2026/05/04 06:49:57 $
 #' 
-#'   Copyright (c) Tilman Davies, Martin Hazelton and Adrian Baddeley 2022
+#'   Copyright (c) Tilman Davies, Martin Hazelton and Adrian Baddeley 2022-2026
 #'  GNU Public Licence >= 2.0
 
 
@@ -31,13 +31,29 @@ make.pspace <- function(...,
                         xval.args=list(),
                         debug=FALSE,
                         transfo=NULL) {
-  ## validate
-  if("strength" %in% names(fixedpar)) {
-    ## Fixed cluster strength implies use of canonical parameters
-    if(!missing(canonical) && !isTRUE(canonical))
-      warning("Re-setting canonical=TRUE, because cluster strength is fixed",
+  ## validate cluster model
+  info <- spatstatClusterModelInfo(clusters)
+  ## validate fixed parameters
+  if(length(fixedpar)) {
+    nam <- names(fixedpar)
+    if(!all(nzchar(nam))) stop("fixedpar must be a named list", call.=FALSE)
+    can.be.native <- all(nam %in% info$parnames)
+    can.be.canon <- all(nam %in% info$pn.canonical)
+    must.be.native <- can.be.native && !can.be.canon
+    must.be.canon <- can.be.canon && !can.be.native
+    if(missing(canonical)) {
+      canonical <- must.be.canon
+    } else if(isFALSE(canonical) && must.be.canon) {
+      ## given canonical=FALSE but fixedpar implies canonical parameters
+      warning("Re-setting canonical=TRUE (implied by fixedpar)",
               call.=FALSE)
-    canonical <- TRUE
+      canonical <- TRUE
+    } else if(isTRUE(canonical) && must.be.native) {
+      ## given canonical=TRUE but fixedpar implies native parameters
+      warning("Re-setting canonical=FALSE (implied by fixedpar)",
+              call.=FALSE)
+      canonical <- FALSE
+    }
   }
   ## assemble all recognised arguments
   p <- list(fixedpar  = fixedpar,
@@ -62,7 +78,7 @@ make.pspace <- function(...,
     if(flatness <= 0 || flatness %% 2 != 0)
       stop("'flatness' of penalty must be even and positive", call.=FALSE)
     ## penalty is applied to generic 'scale' parameter
-    native2generic <- spatstatClusterModelInfo(clusters)[["native2generic"]]
+    native2generic <- info[["native2generic"]]
     if(!is.function(native2generic))
       stop(paste("Unable to determine generic scale parameter, for clusters=", sQuote(clusters)),
            call.=FALSE)
