@@ -3,7 +3,7 @@
 #'
 #'  kluster/kox point process models
 #'
-#'  $Revision: 1.241 $ $Date: 2026/02/26 09:46:28 $
+#'  $Revision: 1.242 $ $Date: 2026/05/04 09:03:46 $
 #'
 #'  Copyright (c) 2001-2025 Adrian Baddeley, Rolf Turner, Ege Rubak,
 #'                Abdollah Jalilian and Rasmus Plenge Waagepetersen
@@ -556,19 +556,19 @@ print.kppm <- print.dppm <- function(x, ...) {
       splat("Fitted mean of log of random intensity:", moo)
     }
   }
+  parbreak(terselevel)
   if(isDPP) {
     rx <- repul(x)
     splat(if(is.im(rx)) "(Average) strength" else "Strength",
           "of repulsion:", signif(mean(rx), 4))
-  }
-  if(isPCP) {
-    parbreak(terselevel)
+  } else {
     g <- pcfmodel(x)
     phi <- g(0) - 1
     splat("Cluster strength: phi = ", signif(phi, 4))
-    psib <- phi/(1+phi)
-    splat("Sibling probability: psib = ", signif(psib, 4))
-    
+    if(isPCP) {
+      psib <- phi/(1+phi)
+      splat("Sibling probability: psib = ", signif(psib, 4))
+    }
   }
   invisible(NULL)
 }

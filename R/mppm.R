@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.119 $   $Date: 2025/11/19 00:56:02 $
+#  $Revision: 1.121 $   $Date: 2026/05/11 08:09:47 $
 #
 
 mppm <- local({
@@ -380,8 +380,10 @@ mppm <- local({
     ## Get trend part from the last-computed prep0
     fmla  <- prep0$trendfmla
     ## Tack on the RHS of the interaction formula
-    if(!all(trivial))
-      fmla <- paste(fmla, "+", as.character(iformula)[[2]])
+    if(!all(trivial)) {
+      rh <- rhs.of.formula(iformula, tilde=FALSE)
+      fmla <- paste(fmla, "+", pasteFormula(rh))
+    }
     ## Make it a formula
     fmla <- as.formula(fmla)
 

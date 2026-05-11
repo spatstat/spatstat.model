@@ -4,7 +4,7 @@
 #'
 #'   Including default penalty for cluster scale
 #'
-#'   $Revision: 1.11 $ $Date: 2026/05/04 06:49:57 $
+#'   $Revision: 1.13 $ $Date: 2026/05/11 08:04:39 $
 #' 
 #'   Copyright (c) Tilman Davies, Martin Hazelton and Adrian Baddeley 2022-2026
 #'  GNU Public Licence >= 2.0
@@ -37,19 +37,36 @@ make.pspace <- function(...,
   if(length(fixedpar)) {
     nam <- names(fixedpar)
     if(!all(nzchar(nam))) stop("fixedpar must be a named list", call.=FALSE)
-    can.be.native <- all(nam %in% info$parnames)
+    pn.native    <- info$parnames
+    pn.generic   <- info$pn.generic
+    pn.canonical <- info$pn.canonical
+    unknown <- setdiff(nam, c(pn.native, pn.generic, pn.canonical))
+    if(length(unknown)) {
+      if(length(unknown) == 1) {
+        stop(paste("Name of fixed parameter", sQuote(unknown), "is not recognised"), call.=FALSE)
+      } else {
+        stop(paste("Names of fixed parameters", commasep(sQuote(unknown)),
+                   "are not recognised"), call.=FALSE)
+      }
+    }
+    can.be.native <- all(nam %in% pn.native)
+    can.be.generic <- all(nam %in% info$pn.generic)
     can.be.canon <- all(nam %in% info$pn.canonical)
-    must.be.native <- can.be.native && !can.be.canon
-    must.be.canon <- can.be.canon && !can.be.native
+    if(!(can.be.native || can.be.generic || can.be.canon))
+      stop(paste("The combination of parameters", sQuote(nam),
+                 "does not match any of the standard parametrisations"),
+           call.=FALSE)
+    must.be.canon <- can.be.canon && !can.be.native && !can.be.generic
     if(missing(canonical)) {
+      ## use canonical parametrisation only when it is implied 
       canonical <- must.be.canon
     } else if(isFALSE(canonical) && must.be.canon) {
       ## given canonical=FALSE but fixedpar implies canonical parameters
       warning("Re-setting canonical=TRUE (implied by fixedpar)",
               call.=FALSE)
       canonical <- TRUE
-    } else if(isTRUE(canonical) && must.be.native) {
-      ## given canonical=TRUE but fixedpar implies native parameters
+    } else if(isTRUE(canonical) && !can.be.canon) {
+      ## given canonical=TRUE but fixedpar does not match canonical parameters
       warning("Re-setting canonical=FALSE (implied by fixedpar)",
               call.=FALSE)
       canonical <- FALSE

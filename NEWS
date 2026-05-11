@@ -1,8 +1,10 @@
 
-        CHANGES IN spatstat.model VERSION 3.7-0.002
+        CHANGES IN spatstat.model VERSION 3.7-0.003
 
 OVERVIEW
 
+    o We thank Martin Emons for contributions.
+    
     o Bug fixes and minor improvements.
 
 SIGNIFICANT USER-VISIBLE CHANGES
@@ -10,12 +12,23 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o Kcom, Kres
     Computation accelerated when using Ripley isotropic correction.
 
+    o print.kppm
+    The index of clustering strength is now printed when 'x' is
+    a log-Gaussian Cox process
+    (as well as when 'x' is a Neyman-Scott cluster process).
+    
 BUG FIXES
 
    o vcov.ppm
    There was a loophole in the code which *could* have caused
    the result of vcov.ppm to be incorrect for pairwise interaction models
    in a very rare case. No examples have been found.
+   Fixed.
+
+   o mppm
+   Generated an error about a subscript out of bounds,
+   if the package 'formula.tools' was loaded.
+   [Spotted by Martin Emons.]
    Fixed.
    
         CHANGES IN spatstat.model VERSION 3.7-0
