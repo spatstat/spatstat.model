@@ -67,12 +67,12 @@ likelihood ratio test, envelope tests, Dao-Genton test, balanced independent two
 
 #### Informal validation
 
-- residuals (methods for `residuals` for point process models)
-- leverage (generic `leverage` and methods for point process models)
-- influence (methods for `influence` for point process models)
-- partial residual plot (generic `parres` and methods for point process models)
+- residuals (`residuals`)
+- leverage (`leverage`)
+- influence (`influence`)
+- partial residual plot (`parres`)
 - added variable plot (`addvar`)
-- diagnostic plots (generic `diagnose` and methods for point process models)
+- diagnostic plots (`diagnose`)
 - pseudoscore residual plots (`psst`, `psstA`, `psstG`)
 - model compensators of summary functions (`Kcom`, `Gcom`)
 - model residuals of summary functions (`Kres`, `Gres`)
