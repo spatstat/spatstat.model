@@ -1,10 +1,11 @@
 \name{intensity.ppm}  
 \alias{intensity.ppm}
 \title{
-  Intensity of Fitted Point Process Model
+  Intensity of Fitted Point Process Model (Poisson or Gibbs Process)
 }
 \description{
-  Computes the intensity of a fitted point process model.
+  Computes the intensity of a fitted point process model
+  (Poisson process or Gibbs process).
 }
 \usage{
  \method{intensity}{ppm}(X, \dots, approx=c("Poisson", "DPP"))
@@ -24,7 +25,8 @@
 }
 \details{
   This is a method for the generic function \code{\link[spatstat.geom]{intensity}}
-  for fitted point process models (class \code{"ppm"}).
+  for fitted point process models (class \code{"ppm"}, created by
+  the model-fitting function \code{\link{ppm}}).
 
   The intensity of a point process model is the expected
   number of random points per unit area. 
@@ -98,7 +100,15 @@
 }
 \seealso{
   \code{\link[spatstat.geom]{intensity}},
-  \code{\link[spatstat.geom]{intensity.ppp}}
+  \code{\link[spatstat.geom]{intensity.ppp}},
+  \code{\link[spatstat.model]{intensity.kppm}},
+  \code{\link[spatstat.model]{intensity.dppm}},
+  \code{\link[spatstat.model]{intensity.slrm}},
+  % \code{\link[spatstat.linnet]{intensity.lppm}},
+  \code{\link[spatstat.linnet]{intensity.lpp}}.
+  
+  Type \code{methods(intensity)} to see methods for other classes.
+
 }
 \examples{
   d <- if(interactive()) 32 else 128

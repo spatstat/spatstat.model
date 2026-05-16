@@ -275,3 +275,13 @@ dim.detpointprocfamily <- function(x){
         return(getElement(x$fixedpar, d))
     }
 }
+
+repul.detpointprocfamily <- function(model, ...) {
+  g <- pcfmodel(model)
+  f <- function(x) { 2 * pi * x * (1 - g(x)) }
+  rmax <- reach(model)
+  h <- integrate(f, 0, rmax)$value
+  lam <- intensity(model)
+  ans <- h * lam
+  return(ans)
+}

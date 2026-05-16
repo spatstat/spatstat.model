@@ -3,7 +3,7 @@
 #'
 #'  kluster/kox point process models
 #'
-#'  $Revision: 1.242 $ $Date: 2026/05/04 09:03:46 $
+#'  $Revision: 1.244 $ $Date: 2026/05/16 03:45:10 $
 #'
 #'  Copyright (c) 2001-2025 Adrian Baddeley, Rolf Turner, Ege Rubak,
 #'                Abdollah Jalilian and Rasmus Plenge Waagepetersen
@@ -641,6 +641,9 @@ plot.kppm <- local({
   plot.kppm
 })
 
+intensity.kppm <- function(X, ...) {
+  intensity(as.ppm(X), ...)
+}
 
 predict.kppm <- predict.dppm <- function(object, ...) {
   se <- resolve.1.default(list(se=FALSE), list(...))
@@ -1014,4 +1017,17 @@ persist <- function(object, W=Window(object)) {
   d <- diameter(W)
   v <- (g(d)-1)/(g(0)-1)
   return(v)
+}
+
+repul.kppm <- function(model, ...) {
+  if(isTRUE(model$isPCP) && !is.null(mu <- model$mu)) {
+    return(-mu)
+  }
+  g <- pcfmodel(model)
+  f <- function(x) { 2 * pi * x * (1 - g(x)) }
+  rmax <- reach(model)
+  h <- integrate(f, 0, rmax)$value
+  lam <- intensity(model)
+  ans <- h * lam
+  return(ans)
 }

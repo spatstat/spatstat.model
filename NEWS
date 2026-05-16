@@ -1,12 +1,26 @@
 
-        CHANGES IN spatstat.model VERSION 3.7-0.003
+        CHANGES IN spatstat.model VERSION 3.7-0.005
 
 OVERVIEW
 
     o We thank Martin Emons for contributions.
+
+    o More methods for 'intensity'.
     
     o Bug fixes and minor improvements.
 
+NEW FUNCTIONS
+
+    o repul.detpointprocfamily
+    Repulsion index for determinantal point process models.
+    A new method for the generic 'repul'.
+
+    o intensity.kppm
+    Method for 'intensity' for fitted cluster processes and Cox processes.
+
+    o intensity.mppm
+    Method for 'intensity' for models fitted to multiple point patterns.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o Kcom, Kres

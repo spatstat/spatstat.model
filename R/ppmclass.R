@@ -1026,6 +1026,8 @@ as.ppm.ppm <- function(object) {
   object
 }
 
+repul.ppm <- function(model, ...) { return(0) }
+
 ## method for as.owin
 
 as.owin.ppm <- function(W, ..., from=c("points", "covariates"), fatal=TRUE) {

@@ -1,6 +1,7 @@
 \name{repul.dppm}
 \alias{repul}
 \alias{repul.dppm}
+\alias{repul.detpointprocfamily}
 \title{
   Repulsiveness Index of a Determinantal Point Process Model
 }
@@ -12,11 +13,15 @@
 repul(model, \dots)
 
 \method{repul}{dppm}(model, \dots)
+
+\method{repul}{detpointprocfamily}(model, \dots)
 }
 \arguments{
   \item{model}{
     A fitted point process model
-    of determinantal type (object of class \code{"dppm"}).
+    of determinantal type (object of class \code{"dppm"})
+    or a determinantal point process specified by its
+    parameters (object of class \code{"detpointprocfamily"}).
   }
   \item{\dots}{
     Ignored.
@@ -70,6 +75,9 @@ repul(model, \dots)
   }
   fit <- dppm(jpines ~ 1, dppGauss)
   repul(fit)
+
+  m <- dppGauss(lambda=10, alpha=0.1, d=2)
+  repul(m)
 }
 \keyword{spatial}
 \keyword{models}

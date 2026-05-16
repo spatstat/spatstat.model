@@ -1,11 +1,24 @@
 #
 #    predictmppm.R
 #
-#	$Revision: 1.22 $	$Date: 2025/11/18 04:25:56 $
+#	$Revision: 1.23 $	$Date: 2026/05/16 02:58:02 $
 #
 #
 # -------------------------------------------------------------------
 
+intensity.mppm <- function(X, ...) {
+  v <- lapply(subfits(X), intensity, ...)
+  if(all(isim <- sapply(v, is.im)))
+    return(as.solist(v))
+  if(all(isnum <- sapply(v, is.numeric)))
+    return(simplify2array(v))
+  if(all(isnum | isim)) {
+    ## convert numbers to images
+    return(harmonise(v))
+  }
+  return(v)
+}
+     
 predict.mppm <- local({
 
   predict.mppm <- function(object, ..., newdata=NULL, type=c("trend", "cif"),

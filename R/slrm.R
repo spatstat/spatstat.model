@@ -928,6 +928,8 @@ pcfmodel.slrm <- function(model, ...) { function(r) { rep.int(1, length(r)) } }
 
 parameters.slrm <- function(model, ...) { list(trend=coef(model)) }  
 
+repul.slrm <- function(model, ...) { return(0) }
+
 ## ............ SIMULATION ..............................
   
 simulate.slrm <- function(object, nsim=1, seed=NULL, ...,

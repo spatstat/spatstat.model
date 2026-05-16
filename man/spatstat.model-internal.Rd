@@ -191,6 +191,9 @@
 \alias{reach.slrm}
 \alias{reduceformula}
 \alias{reincarnate.interact}
+\alias{repul.kppm}
+\alias{repul.ppm}
+\alias{repul.slrm}
 \alias{rescale.msr}
 \alias{residuals.exactppm}
 \alias{resid4plot}
@@ -509,6 +512,9 @@ quadBlockSizes(nX, nD, p, nMAX, announce)
 \method{reach}{slrm}(x, \dots)
 reduceformula(fmla, deletevar, verbose)
 reincarnate.interact(object)
+\method{repul}{kppm}(model, \dots)
+\method{repul}{ppm}(model, \dots)
+\method{repul}{slrm}(model, \dots)
 \method{rescale}{msr}(X, s, unitname)
 \method{residuals}{exactppm}(object, type, \dots)
 resid4plot(RES, plot.neg, plot.smooth,
