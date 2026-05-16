@@ -1019,6 +1019,8 @@ persist <- function(object, W=Window(object)) {
   return(v)
 }
 
+#' repulsion index (originally defined for dpp)
+
 repul.kppm <- function(model, ...) {
   if(isTRUE(model$isPCP) && !is.null(mu <- model$mu)) {
     return(-mu)

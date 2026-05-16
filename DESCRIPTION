@@ -55,7 +55,7 @@ Authors@R: c(person("Adrian", "Baddeley",
 	     person("Hangsheng", "Wang",
 	            role = "ctb"))
 Maintainer: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>
-Depends: R (>= 3.5.0),  spatstat.data (>= 3.1-9), spatstat.univar (>= 3.1-7.008), spatstat.geom (>= 3.7-3.008), spatstat.random (>= 3.4-5.008), spatstat.explore (>= 3.8-0.017), stats, graphics, grDevices, utils, methods, nlme, rpart
+Depends: R (>= 3.5.0),  spatstat.data (>= 3.1-9), spatstat.univar (>= 3.1-7.008), spatstat.geom (>= 3.7-3.010), spatstat.random (>= 3.4-5.008), spatstat.explore (>= 3.8-0.017), stats, graphics, grDevices, utils, methods, nlme, rpart
 Imports: spatstat.utils (>= 3.2-3), spatstat.sparse (>= 3.1-0.011), mgcv, Matrix, abind, tensor, goftest (>= 1.2-2)
 Suggests: sm, gsl, locfit, spatial, fftwtools (>= 0.9-8), nleqslv, glmnet, spatstat.linnet (>= 3.5-0), spatstat (>= 3.6-0)
 Description: Functionality for parametric statistical modelling and inference for spatial data,
