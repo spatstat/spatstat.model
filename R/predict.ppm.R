@@ -75,9 +75,11 @@ predict.ppm <- local({
                           ...,
                           dimyx=NULL, eps=NULL,
                           rule.eps=c("adjust.eps","grow.frame","shrink.frame"),
+                          rule.pix=c("sample", "cover"),
                           new.coef=NULL, check=TRUE, repair=TRUE) {
     interval <- match.arg(interval)
     rule.eps <- match.arg(rule.eps)
+    rule.pix <- match.arg(rule.pix)
     ## extract undocumented arguments 
     xarg <- xtract(...)
     sumobj <- xarg$sumobj
@@ -341,7 +343,8 @@ predict.ppm <- local({
         if(is.null(window))
           window <- sumobj$entries$data$window
         ngrid <- ngrid %orifnull% dimyx
-        masque <- as.mask(window, dimyx=ngrid, eps=eps, rule.eps=rule.eps)
+        masque <- as.mask(window, dimyx=ngrid, eps=eps,
+                          rule.eps=rule.eps, rule.pix=rule.pix)
       }
       ## Hack -----------------------------------------------
       ## gam with lo() will not allow extrapolation beyond the range of x,y

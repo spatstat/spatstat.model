@@ -1,11 +1,13 @@
 
-        CHANGES IN spatstat.model VERSION 3.7-0.005
+        CHANGES IN spatstat.model VERSION 3.7-0.006
 
 OVERVIEW
 
     o We thank Martin Emons for contributions.
 
     o More methods for 'intensity'.
+
+    o Improved handling of boundary pixels.
     
     o Bug fixes and minor improvements.
 
@@ -23,13 +25,19 @@ NEW FUNCTIONS
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o predict.ppm, predict.kppm, predict.dppm, predict.rppm, predict.mppm
+    These methods now recognise argument 'rule.pix' passed to owin2mask.
+    When the original point pattern dataset was observed in a polygonal window,
+    setting rule.pix="cover" ensures that pixels which partially intersect
+    the polygon will be included in the resulting pixel image.
+
     o Kcom, Kres
     Computation accelerated when using Ripley isotropic correction.
 
     o print.kppm
     The index of clustering strength is now printed when 'x' is
-    a log-Gaussian Cox process
-    (as well as when 'x' is a Neyman-Scott cluster process).
+    a log-Gaussian Cox process (as well as when 'x' is a Neyman-Scott
+    cluster process).
     
 BUG FIXES
 

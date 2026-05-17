@@ -3,7 +3,7 @@
 #
 #  Spatial Logistic Regression
 #
-#  $Revision: 1.80 $   $Date: 2026/02/26 09:56:35 $
+#  $Revision: 1.81 $   $Date: 2026/05/17 04:04:47 $
 #
 
 slrm <- function(formula, ..., data=NULL, offset=TRUE,
@@ -212,7 +212,7 @@ slr.prepare <- local({
       W <- do.call(commonGrid, rasterlist)
       if(clip) {
         ## Restrict data to spatial extent of response point pattern
-        W <- intersect.owin(W, as.owin(Y))
+        W <- intersect.owin(W, as.owin(Y), rescue=FALSE)
       }
       ## Adjust spatial objects to this resolution
       spatiallist <- lapply(spatiallist, convertToImage, W=W)
@@ -343,6 +343,11 @@ slrAssemblePixelData <- local({
     df <- as.data.frame(pixdata)
     serial <- seq_len(nrow(df))
     ## add log(pixel area) column
+    if(length(pixelarea) == 0) {
+      warning("Internal error: pixelarea had length zero; recomputing",
+              call.=FALSE)
+      pixelarea <- PY$xstep * PY$ystep
+    }
     if(length(pixelarea) == 1) {
       df <- cbind(df, logpixelarea=log(pixelarea))
     } else {

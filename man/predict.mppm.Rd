@@ -114,6 +114,19 @@
     to row \code{k} of the original data, where \code{k = newdata$id[i]}.
   }
 }
+\section{Boundary pixels}{
+  When one of the original point pattern datasets
+  was observed within a rectangular or polygonal window,
+  the default behaviour is to represent the window as the set of pixels
+  whose \emph{centres} fall inside the polygon. A pixel which contains
+  part of the interior of the polygon, but whose centre falls outside
+  the polygon, is excluded by default, for the sake of efficiency.
+
+  To ensure that all pixels which intersect the interior of the
+  polygon are included in the resulting pixel image, use the argument
+  \code{rule.pix="cover"} which will be passed to
+  \code{\link[spatstat.geom]{owin2mask}}.
+}
 \value{
   A hyperframe with columns named \code{trend} and/or \code{cif}.
 

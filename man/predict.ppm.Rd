@@ -17,6 +17,7 @@
    \dots,
    dimyx=NULL, eps=NULL,
    rule.eps = c("adjust.eps", "grow.frame", "shrink.frame"),
+   rule.pix = c("sample", "cover"),
    new.coef=NULL, check=TRUE, repair=TRUE)
 }
 \arguments{
@@ -106,6 +107,10 @@
   \item{rule.eps}{
     Argument passed to \code{\link[spatstat.geom]{as.mask}} controlling the
     discretisation. See \code{\link[spatstat.geom]{as.mask}}.
+  }
+  \item{rule.pix}{
+    Argument passed to \code{\link[spatstat.geom]{owin2mask}} controlling the
+    discretisation. See \code{\link[spatstat.geom]{owin2mask}}.
   }
   \item{new.coef}{
     Numeric vector of parameter values to replace the 
@@ -384,6 +389,19 @@
 
   For more information, see Sections 13.3.3, 13.3.6 and 13.12.6 of
   Baddeley, Rubak and Turner (2015).
+}
+\section{Boundary pixels}{
+  When the original point pattern dataset
+  was observed within a rectangular or polygonal window,
+  the default behaviour is to represent the window as the set of pixels
+  whose \emph{centres} fall inside the polygon. A pixel which contains
+  part of the interior of the polygon, but whose centre falls outside
+  the polygon, is excluded by default, for the sake of efficiency.
+
+  To ensure that all pixels which intersect the interior of the
+  polygon are included in the resulting pixel image, use the argument
+  \code{rule.pix="cover"} which will be passed to
+  \code{\link[spatstat.geom]{owin2mask}}.
 }
 \references{
   Baddeley, A. and Nair, G. (2012) 
