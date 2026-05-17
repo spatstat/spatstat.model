@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 3.7-0.006
+        CHANGES IN spatstat.model VERSION 3.7-0.007
 
 OVERVIEW
 
@@ -27,6 +27,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o predict.ppm, predict.kppm, predict.dppm, predict.rppm, predict.mppm
     These methods now recognise argument 'rule.pix' passed to owin2mask.
+    When the original point pattern dataset was observed in a polygonal window,
+    setting rule.pix="cover" ensures that pixels which partially intersect
+    the polygon will be included in the resulting pixel image.
+
+    o relrisk.ppm
+    Now recognises argument 'rule.pix' passed to owin2mask.
     When the original point pattern dataset was observed in a polygonal window,
     setting rule.pix="cover" ensures that pixels which partially intersect
     the polygon will be included in the resulting pixel image.

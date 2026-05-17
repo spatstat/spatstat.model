@@ -1,7 +1,7 @@
 ##
 ##  relrisk.ppm.R
 ##
-##  $Revision: 1.9 $ $Date: 2019/01/08 07:44:07 $
+##  $Revision: 1.10 $ $Date: 2026/05/17 04:33:56 $
 ##
 
 relrisk.ppm <- local({
@@ -15,6 +15,7 @@ relrisk.ppm <- local({
     control.given <- !missing(control)
     case.given <- !missing(case)
     at <- match.arg(at)
+    rule.pix <- list(...)$rule.pix
     if(!relative && (control.given || case.given)) {
       aa <- c("control", "case")[c(control.given, case.given)]
       nn <- length(aa)
@@ -59,7 +60,8 @@ relrisk.ppm <- local({
              pixels= {
                ## estimate is a single image
                ## compute images of intensities of each mark
-               lambda.each <- predict(model, ngrid=ngrid, window=window)
+               lambda.each <- predict(model, ngrid=ngrid, window=window,
+                                      rule.pix=rule.pix)
                if(!relative) {
                  ## compute probabilities..
                  ## total intensity (image)
@@ -144,7 +146,8 @@ relrisk.ppm <- local({
              pixels={
                ## estimate is a list of images
                ## Compute images of intensities of each type
-               lambda.each <- predict(model, ngrid=ngrid, window=window)
+               lambda.each <- predict(model, ngrid=ngrid, window=window,
+                                      rule.pix=rule.pix)
                if(!relative) {
                  ## compute probabilities...
                  ## image of total intensity
