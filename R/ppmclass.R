@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.159 $	$Date: 2024/10/06 10:32:04 $
+#	$Revision: 2.160 $	$Date: 2026/05/27 05:59:46 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -1026,7 +1026,16 @@ as.ppm.ppm <- function(object) {
   object
 }
 
-repul.ppm <- function(model, ...) { return(0) }
+repul.ppm <- function(model, ...) {
+  if(is.poisson(model)) return(0)
+  g <- pcfmodel(model)
+  f <- function(x) { 2 * pi * x * (1 - g(x)) }
+  rmax <- reach(model)
+  h <- integrate(f, 0, rmax)$value
+  lam <- intensity(model)
+  ans <- h * lam
+  return(ans)
+}
 
 ## method for as.owin
 

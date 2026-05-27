@@ -2,13 +2,17 @@
 ##
 ## Percus-Yevick style approximations to pcf and K and L
 ##
-##  $Revision: 1.7 $ $Date: 2026/02/26 09:46:10 $
+##  $Revision: 1.9 $ $Date: 2026/05/27 07:04:46 $
 
 pcfmodel.ppm <- local({
 
   pcfmodel.ppm <- function(model, ...) {
     if(is.multitype(model))
       stop("Not yet implemented for multitype models")
+    if(!valid.ppm(model)) {
+      warning("Model is invalid -- projecting it", call.=FALSE)
+      model <- emend(model)
+    }
     if(is.poisson(model)) return(function(r) rep(1, length(r)))
     if(!is.stationary(model))
       stop("Not implemented for non-stationary Gibbs models")
@@ -20,35 +24,41 @@ pcfmodel.ppm <- local({
     par <- inte$par
     pot <- inte$pot
     f <- fitin(model)
-    Vcoefs <- f$coefs[f$Vnames]
-    Mayer <- inte$Mayer
-    G <- Mayer(Vcoefs, inte)
+    IsOffset <- f$IsOffset
+    Vnames <- f$Vnames[!IsOffset]
+    Vcoefs <- f$coefs[Vnames]
+    Mfun <- inte$Mayer %orifnull% Mayer
+    G <- Mfun(Vcoefs, inte)
     irange <- reach(inte, epsilon=1e-6)
     G2fun <- inte$Percy
     testit <- resolve.1.default(list(testit=FALSE), list(...))
     if(testit || is.null(G2fun))
       G2fun <- pairwisePercy
     fun <- function(r) {
-      pcfapprox(r, beta, lambda, pot, par, Vcoefs, G, G2fun, irange)
+      pcfapprox(r, beta, lambda, pot, par, Vcoefs, IsOffset, G, G2fun, irange)
     }
     return(fun)
   }
 
-  pcfapprox <- function(r, beta, lambda, pot, par, Vcoefs, G, G2fun, irange) {
+  pcfapprox <- function(r, beta, lambda, pot, par,
+                        Vcoefs, IsOffset, G, G2fun, irange) {
     as.numeric((beta/lambda)^2 *
-               exp(logpairpot(r, pot, par, Vcoefs)
+               exp(logpairpot(r, pot, par, Vcoefs, IsOffset)
                    - lambda * G2fun(r, Vcoefs, par, pot=pot,
                                     irange=irange, G=G)))
   }
 
-  logpairpot <- function(r, pot, par, Vcoefs) {
-    as.numeric(pot(matrix(r, ncol=1), par) %*% Vcoefs)
+  logpairpot <- function(r, pot, par, Vcoefs, IsOffset) {
+    potvals <- pot(matrix(r, ncol=1), par) 
+    vc <- rep(1, ncol(potvals))
+    vc[!IsOffset] <- Vcoefs
+    as.numeric(potvals %*% vc)
   }
   
-  negpair <- function(x,y, pot, par, Vcoefs) {
+  negpair <- function(x,y, pot, par, Vcoefs, IsOffset) {
     ## evaluate 1 - g(x,y)
     ## where g(x,y) is pair interaction between (0,0) and (x,y)
-    1 - exp(logpairpot(sqrt(x^2+y^2), pot, par, Vcoefs))
+    1 - exp(logpairpot(sqrt(x^2+y^2), pot, par, Vcoefs, IsOffset))
   }
   
   pairwisePercy <- function(r, Vcoefs, par, ..., G, pot, irange, dimyx=256) {

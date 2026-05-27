@@ -3,7 +3,7 @@
 #'
 #'  kluster/kox point process models
 #'
-#'  $Revision: 1.244 $ $Date: 2026/05/16 03:45:10 $
+#'  $Revision: 1.245 $ $Date: 2026/05/27 05:58:31 $
 #'
 #'  Copyright (c) 2001-2025 Adrian Baddeley, Rolf Turner, Ege Rubak,
 #'                Abdollah Jalilian and Rasmus Plenge Waagepetersen
@@ -1025,6 +1025,18 @@ repul.kppm <- function(model, ...) {
   if(isTRUE(model$isPCP) && !is.null(mu <- model$mu)) {
     return(-mu)
   }
+  g <- pcfmodel(model)
+  f <- function(x) { 2 * pi * x * (1 - g(x)) }
+  rmax <- reach(model)
+  h <- integrate(f, 0, rmax)$value
+  lam <- intensity(model)
+  ans <- h * lam
+  return(ans)
+}
+
+#' also for class 'clusterprocess' defined in spatstat.random
+
+repul.clusterprocess <- function(model, ...) {
   g <- pcfmodel(model)
   f <- function(x) { 2 * pi * x * (1 - g(x)) }
   rmax <- reach(model)
