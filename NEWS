@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 3.7-0.008
+        CHANGES IN spatstat.model VERSION 3.7-0.009
 
 OVERVIEW
 
@@ -7,7 +7,7 @@ OVERVIEW
 
     o More methods for 'intensity' and 'repul'.
 
-    o Improved handling of boundary pixels.
+    o Improved handling of boundary pixels in model predictions.
     
     o Bug fixes and minor improvements.
 
@@ -23,11 +23,9 @@ NEW FUNCTIONS
     o intensity.mppm
     Method for 'intensity' for models fitted to multiple point patterns.
 
-    o repul.kppm, repul.ppm, repul.slrm, repul.clusterprocess
+    o repul.kppm, repul.ppm, repul.slrm, repul.mppm, repul.rppm, repul.clusterprocess
     New methods for the generic 'repul' calculate the repulsion index
     for Poisson, Gibbs, Cox and Neyman-Scott point process models.
-    The repulsion index is zero for Poisson processes,
-    and negative for Cox and Neyman-Scott models.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

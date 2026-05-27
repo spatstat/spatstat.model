@@ -817,3 +817,14 @@ model.matrix.mppm <- function(object, ..., keepNA=TRUE, separate=FALSE) {
   return(mm)
 }
 
+repul.mppm <- function(model, ...) {
+  subs <- subfits(model)
+  rs <- lapply(subs, repul)
+  if(all(sapply(rs, is.numeric) & lengths(rs) == 1)) {
+    rs <- as.numeric(rs)
+  } else if(all(sapply(rs, is.im))) {
+    rs <- as.solist(rs)
+  }
+  return(rs)
+}
+

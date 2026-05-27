@@ -6,6 +6,8 @@
 \alias{repul.kppm}
 \alias{repul.ppm}
 \alias{repul.slrm}
+\alias{repul.rppm}
+\alias{repul.mppm}
 \title{
   Repulsiveness Index of a Point Process Model
 }
@@ -27,12 +29,16 @@ repul(model, \dots)
 \method{repul}{ppm}(model, \dots)
 
 \method{repul}{slrm}(model, \dots)
+
+\method{repul}{rppm}(model, \dots)
+
+\method{repul}{mppm}(model, \dots)
 }
 \arguments{
   \item{model}{
     A fitted point process model
     (object of class \code{"dppm"},
-    \code{"kppm"}, \code{"ppm"} or \code{"slrm"})
+    \code{"kppm"}, \code{"ppm"}, \code{"slrm"}, \code{"rppm"} or \code{"mppm"})
     or a point process specified by its
     parameters (object of class \code{"detpointprocfamily"}
     or \code{"clusterprocess"}).
@@ -74,6 +80,10 @@ repul(model, \dots)
   For Gibbs models of class \code{"ppm"} the calculation uses the
   Poisson-saddlepoint approximation to the pair correlation function,
   and is only implemented for stationary unmarked processes.
+
+  For models of class \code{"mppm"} the result is a numeric vector
+  or a list of images, with one entry for each point pattern to which
+  the model was fitted.
 }
 \value{
   A numeric value or a pixel image.
@@ -103,6 +113,8 @@ repul(model, \dots)
 
   m <- dppGauss(lambda=10, alpha=0.1, d=2)
   repul(m)
+
+  repul(kppm(redwood ~ 1))
 }
 \keyword{spatial}
 \keyword{models}
