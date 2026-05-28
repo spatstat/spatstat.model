@@ -1,7 +1,7 @@
 ##
 ##  relrisk.ppm.R
 ##
-##  $Revision: 1.10 $ $Date: 2026/05/17 04:33:56 $
+##  $Revision: 1.11 $ $Date: 2026/05/28 02:37:13 $
 ##
 
 relrisk.ppm <- local({
@@ -9,13 +9,14 @@ relrisk.ppm <- local({
   relrisk.ppm <- function(X, ..., at=c("pixels", "points"),
                           relative=FALSE, se=FALSE, 
                           casecontrol=TRUE, control=1, case,
-                          ngrid=NULL, window=NULL) {
+                          ngrid=NULL, rule.pix=c("sample", "cover"),
+                          window=NULL) {
     stopifnot(is.ppm(X))
     stopifnot(is.multitype(X))
     control.given <- !missing(control)
     case.given <- !missing(case)
     at <- match.arg(at)
-    rule.pix <- list(...)$rule.pix
+    rule.pix <- match.arg(rule.pix)
     if(!relative && (control.given || case.given)) {
       aa <- c("control", "case")[c(control.given, case.given)]
       nn <- length(aa)

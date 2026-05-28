@@ -15,7 +15,8 @@
                      at = c("pixels", "points"),
                      relative = FALSE, se = FALSE,
                      casecontrol = TRUE, control = 1, case,
-                     ngrid = NULL, window = NULL)
+                     ngrid = NULL, rule.pix=c("sample", "cover"),
+                     window = NULL)
 }
 \arguments{
   \item{X}{
@@ -67,6 +68,11 @@
     specifying the number of grid points in the \eqn{y} and \eqn{x}
     directions.
     (Applies only when \code{at="pixels"}.)
+  }
+  \item{rule.pix}{
+    Argument passed to \code{\link[spatstat.geom]{owin2mask}} controlling the
+    discretisation. See section on Boundary Pixels below,
+    or the help for \code{\link[spatstat.geom]{owin2mask}}.
   }
   \item{window}{
     Optional. A window (object of class \code{"owin"})
@@ -140,6 +146,19 @@
   using \code{\link{predict.ppm}}.
   If \code{se=TRUE} then standard errors will also be computed,
   based on asymptotic theory, using \code{\link{vcov.ppm}}.
+}
+\section{Boundary pixels}{
+  When the original point pattern dataset
+  was observed within a rectangular or polygonal window,
+  the default behaviour is to represent the window as the set of pixels
+  whose \emph{centres} fall inside the polygon. A pixel which contains
+  part of the interior of the polygon, but whose centre falls outside
+  the polygon, is excluded by default, for the sake of efficiency.
+
+  To ensure that all pixels which intersect the interior of the
+  polygon are included in the resulting pixel image, use the argument
+  \code{rule.pix="cover"} which will be passed to
+  \code{\link[spatstat.geom]{owin2mask}}.
 }
 \value{
   If \code{se=FALSE} (the default), the format is described below.

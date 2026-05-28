@@ -110,7 +110,8 @@
   }
   \item{rule.pix}{
     Argument passed to \code{\link[spatstat.geom]{owin2mask}} controlling the
-    discretisation. See \code{\link[spatstat.geom]{owin2mask}}.
+    discretisation. See the section on Boundary Pixels below,
+    or the help for \code{\link[spatstat.geom]{owin2mask}}.
   }
   \item{new.coef}{
     Numeric vector of parameter values to replace the 
