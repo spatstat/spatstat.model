@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat.model VERSION 3.7-0.010
+        CHANGES IN spatstat.model VERSION 3.7-1
 
 OVERVIEW
 
@@ -61,6 +61,10 @@ BUG FIXES
    Generated an error about a subscript out of bounds,
    if the package 'formula.tools' was loaded.
    [Spotted by Martin Emons.]
+   Fixed.
+
+   o pcfmodel.ppm
+   Crashed for pairwise interaction models with a hard core component.
    Fixed.
    
         CHANGES IN spatstat.model VERSION 3.7-0
