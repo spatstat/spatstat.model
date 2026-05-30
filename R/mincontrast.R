@@ -3,7 +3,7 @@ c#'
 #'
 #'  Functions for estimation by minimum contrast
 #'
-#'  $Revision: 1.124 $ $Date: 2025/12/07 10:18:23 $
+#'  $Revision: 1.127 $ $Date: 2026/05/30 03:03:35 $
 #' 
 
 ##################  base ################################
@@ -338,7 +338,8 @@ mincontrast <- local({
     ## evaluate the fitted theoretical curve
     fittheo <- theoretical(minimum$par, rvals, ...)
     ## pack it up as an `fv' object
-    label <- fvlab$label %orifnull% "%s[fit](r)"
+    obsfname <- attr(observed, "fname")
+    label <- fvlab$label %orifnull% makefvlabel(sub="fit", fname=obsfname)
     desc  <- fvlab$desc
     fitfv <- bind.fv(observed[sub, ],
                      data.frame(fit=fittheo),
@@ -349,7 +350,7 @@ mincontrast <- local({
 				auxdata=adjustment$auxdata, ...)
       fitfv <- bind.fv(fitfv,
                        data.frame(adjfit=adjtheo),
-		       "%s[adjfit](r)",
+                       makefvlabel(sub="adjfit", fname=obsfname),
 		       paste("adjusted", desc))
     }				
     result <- list(par      = minimum$par,
@@ -617,7 +618,7 @@ thomas.estK <- function(X, startpar=c(kappa=1,scale=1),
   
   result <- mincontrast(K, theoret, startpar,
                         ctrl=list(q=q, p=p,rmin=rmin, rmax=rmax),
-                        fvlab=list(label="%s[fit](r)",
+                        fvlab=list(label=NULL,
                           desc="minimum contrast fit of Thomas process"),
                         explain=list(dataname=dataname,
                           fname=attr(K, "fname"),
@@ -663,7 +664,7 @@ lgcp.estK <- function(X, startpar=c(var=1,scale=1),
 
   result <- mincontrast(K, theoret, startpar,
                         ctrl=list(q=q, p=p, rmin=rmin, rmax=rmax),
-                        fvlab=list(label="%s[fit](r)",
+                        fvlab=list(label=NULL,
                           desc="minimum contrast fit of LGCP"),
                         explain=list(dataname=dataname,
                           fname=attr(K, "fname"),
@@ -709,7 +710,7 @@ matclust.estK <- function(X, startpar=c(kappa=1,scale=1),
   
   result <- mincontrast(K, theoret, startpar,
                         ctrl=list(q=q, p=p,rmin=rmin, rmax=rmax),
-                        fvlab=list(label="%s[fit](r)",
+                        fvlab=list(label=NULL,
                           desc="minimum contrast fit of Matern Cluster process"),
                         explain=list(dataname=dataname,
                           fname=attr(K, "fname"),
@@ -761,7 +762,7 @@ thomas.estpcf <- function(X, startpar=c(kappa=1,scale=1),
   result <- mincontrast(g, theoret, startpar,
                         ctrl=list(q=q, p=p,rmin=rmin, rmax=rmax),
                         fvlab=list(
-                          label="%s[fit](r)",
+                          label=NULL,
                           desc="minimum contrast fit of Thomas process"),
                         explain=list(
                           dataname=dataname,
@@ -810,7 +811,7 @@ matclust.estpcf <- function(X, startpar=c(kappa=1,scale=1),
   }
   result <- mincontrast(g, theoret, startpar,
                         ctrl=list(q=q, p=p,rmin=rmin, rmax=rmax),
-                        fvlab=list(label="%s[fit](r)",
+                        fvlab=list(label=NULL,
                           desc="minimum contrast fit of Matern Cluster process"),
                         explain=list(dataname=dataname,
                           fname=attr(g, "fname"),
@@ -858,7 +859,7 @@ lgcp.estpcf <- function(X, startpar=c(var=1,scale=1),
   
   result <- mincontrast(g, theoret, startpar,
                         ctrl=list(q=q, p=p, rmin=rmin, rmax=rmax),
-                        fvlab=list(label="%s[fit](r)",
+                        fvlab=list(label=NULL,
                           desc="minimum contrast fit of LGCP"),
                         explain=list(dataname=dataname,
                           fname=attr(g, "fname"),
@@ -910,7 +911,7 @@ cauchy.estK <- function(X, startpar=c(kappa=1,scale=1),
   desc <- "minimum contrast fit of Neyman-Scott process with Cauchy kernel"
   result <- mincontrast(K, theoret, startpar,
                         ctrl=list(q=q, p=p,rmin=rmin, rmax=rmax),
-                        fvlab=list(label="%s[fit](r)", desc=desc),
+                        fvlab=list(label=NULL, desc=desc),
                         explain=list(dataname=dataname,
                           fname=attr(K, "fname"),
                           modelname="Cauchy process"), ...)
@@ -964,7 +965,7 @@ cauchy.estpcf <- function(X, startpar=c(kappa=1,scale=1),
   desc <- "minimum contrast fit of Neyman-Scott process with Cauchy kernel"
   result <- mincontrast(g, theoret, startpar,
                         ctrl=list(q=q, p=p,rmin=rmin, rmax=rmax),
-                        fvlab=list(label="%s[fit](r)", desc=desc),
+                        fvlab=list(label=NULL, desc=desc),
                         explain=list(dataname=dataname,
                           fname=attr(g, "fname"),
                           modelname="Cauchy process"), ...)
@@ -1022,7 +1023,7 @@ vargamma.estK <- function(X, startpar=c(kappa=1,scale=1), nu = -1/4,
   desc <- "minimum contrast fit of Neyman-Scott process with Variance Gamma kernel"
   result <- mincontrast(K, theoret, startpar,
                         ctrl=list(q=q, p=p,rmin=rmin, rmax=rmax),
-                        fvlab=list(label="%s[fit](r)", desc=desc),
+                        fvlab=list(label=NULL, desc=desc),
                         explain=list(dataname=dataname,
                           fname=attr(K, "fname"),
                           modelname="Variance Gamma process"),
@@ -1091,7 +1092,7 @@ vargamma.estpcf <- function(X, startpar=c(kappa=1,scale=1), nu=-1/4,
   desc <- "minimum contrast fit of Neyman-Scott process with Variance Gamma kernel"
   result <- mincontrast(g, theoret, startpar,
                         ctrl=list(q=q, p=p,rmin=rmin, rmax=rmax),
-                        fvlab=list(label="%s[fit](r)", desc=desc),
+                        fvlab=list(label=NULL, desc=desc),
                         explain=list(dataname=dataname,
                           fname=attr(g, "fname"),
                           modelname="Variance Gamma process"),

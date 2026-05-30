@@ -1,3 +1,21 @@
+        CHANGES IN spatstat.model VERSION 3.7-1.002
+
+OVERVIEW
+
+    o Package check time reduced, to satisfy CRAN requirements.
+
+    o Minor improvements and bug fixes.
+
+BUG FIXES
+
+   o plot.kppm
+   For inhomogeneous models fitted by minimum contrast,
+   a warning was issued about truncated function labels.
+   Fixed.
+   
+   o plot.minconfit
+   In some cases, a warning was issued about truncated function labels.
+   Fixed.
 
         CHANGES IN spatstat.model VERSION 3.7-1
 

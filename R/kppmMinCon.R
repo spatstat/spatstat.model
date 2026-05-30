@@ -6,7 +6,7 @@
 #'                M  i  n  i  m  u  m       C  o  n  t  r  a  s  t
 #' <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 #' 
-#'  $Revision: 1.2 $ $Date: 2026/01/21 06:26:39 $
+#'  $Revision: 1.3 $ $Date: 2026/05/30 03:06:46 $
 #'
 #'  Copyright (c) 2001-2025 Adrian Baddeley, Rolf Turner, Ege Rubak,
 #'  GNU Public Licence (>= 2.0)
@@ -313,7 +313,7 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
                                   startpar=startpar,
                                   ctrl=ctrl,
                                   method=algorithm,
-                                  fvlab=list(label="%s[fit](r)",
+                                  fvlab=list(label=NULL,
                                       desc=desc),
                                   explain=list(dataname=dataname,
                                       fname=statistic,
