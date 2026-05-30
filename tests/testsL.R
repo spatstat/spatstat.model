@@ -41,7 +41,7 @@ local({
 #'
 #'   leverage and influence for Gibbs models
 #' 
-#'   $Revision: 1.35 $ $Date: 2022/06/18 10:15:17 $
+#'   $Revision: 1.36 $ $Date: 2026/05/29 07:30:58 $
 #' 
 
 if(FULLTEST) {
@@ -53,7 +53,7 @@ if(FULLTEST) {
   spatstat.options(npixel=32, ndummy.min=16)
   Cells <- cells[c(FALSE,TRUE)]
   Redwood <- redwood[c(FALSE, TRUE)]
-  Amacrine <- amacrine[c(FALSE, TRUE)]
+  Amacrine <- amacrine[c(rep(FALSE, 5), TRUE)]
 } 
 
 local({
@@ -76,6 +76,8 @@ local({
     fitA <- ppm(Cells ~ 1, AreaInter(0.06), rbord=0, nd=11)
     levA <- Leverage(fitA)
     infA <- Influence(fitA)
+  }
+  if(FULLTEST) {
     ## pairwise.family$delta2
     fitD <- ppm(Cells ~ 1, DiggleGatesStibbard(0.12), rbord=0)
     levD <- Leverage(fitD)
@@ -100,7 +102,6 @@ local({
     futAm <- ppm(Amacrine ~ x + marks, Strauss(0.07))
     levAm <- leverage(futAm)
   }
-
   if(FULLTEST) {
     ## .........   class support .............................
     ## other methods for classes leverage.ppm and influence.ppm
@@ -202,7 +203,7 @@ local({
     chks(dfbS$density,        dfbSp$density,        "dfbetas$density")
   }
 
-  if(ALWAYS) {
+  if(FULLTEST) {
     #' case of zero cif
     cat("zero cif...", fill=TRUE)
     pmiH <- Everything(fitH, sparseOK=TRUE)
@@ -287,17 +288,18 @@ local({
   gogogo("Offset model (logistic) ...", 
          ippm(X ~ offset(ytoa), start=list(alpha=1),
               method="logi", iterlim=40))
-  gogogo("Offset+x model...", 
-         ippm(X ~ x + offset(ytoa), start=list(alpha=1), iterlim=40))
-  gogogo("Offset+x model (logistic) ...", 
-         ippm(X ~ x + offset(ytoa), start=list(alpha=1),
-              method="logi", iterlim=40))
-  gogogo("Offset model Strauss ...", 
-         ippm(X ~ offset(ytoa), Strauss(0.07), start=list(alpha=1), iterlim=40))
-  gogogo("Offset model Strauss (logistic) ...", 
-         ippm(X ~ offset(ytoa), Strauss(0.07), start=list(alpha=1),
-              method="logi", iterlim=40))
   if(FULLTEST) {
+    gogogo("Offset+x model...", 
+           ippm(X ~ x + offset(ytoa), start=list(alpha=1), iterlim=40))
+    gogogo("Offset+x model (logistic) ...", 
+           ippm(X ~ x + offset(ytoa), start=list(alpha=1),
+                method="logi", iterlim=40))
+    gogogo("Offset model Strauss ...", 
+           ippm(X ~ offset(ytoa), Strauss(0.07),
+                start=list(alpha=1), iterlim=40))
+    gogogo("Offset model Strauss (logistic) ...", 
+           ippm(X ~ offset(ytoa), Strauss(0.07), start=list(alpha=1),
+                method="logi", iterlim=40))
     gogogo("Offset+x model Strauss ...", 
            ippm(X ~ x + offset(ytoa), Strauss(0.07), start=list(alpha=1),
                 iterlim=40))

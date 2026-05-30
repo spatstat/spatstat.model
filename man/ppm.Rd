@@ -370,16 +370,17 @@
  # using the periodic correction.
 
   # Compare Maximum Pseudolikelihood, Huang-Ogata and Variational Bayes fits:
-  if(online) ppm(swedishpines ~ 1, Strauss(9))
+  ND <- if(online) NULL else 10
+  NS <- if(online) 99 else 8
+  if(online) ppm(swedishpines ~ 1, Strauss(9), nd=ND)
 
-  ppm(swedishpines ~ 1, Strauss(9), method="VBlogi")
+  ppm(swedishpines ~ 1, Strauss(9), method="VBlogi", nd=ND)
 
-  ppm(swedishpines ~ 1, Strauss(9), improve.type="ho",
-      nsim=if(!online) 8 else 99)
+  ppm(swedishpines ~ 1, Strauss(9), improve.type="ho", nsim=NS, nd=ND)
 
   # Elastic net fit:
   if(require(glmnet)) {
-    ppm(swedishpines ~ x+y, Strauss(9), improve.type="enet")
+    ppm(swedishpines ~ x+y, Strauss(9), nd=ND, improve.type="enet")
   }
 
  # COVARIATES
@@ -418,7 +419,7 @@ ppm(X ~ x + f, covfunargs=list(a=1/2))
    ppm(lansing ~  marks, Poisson())
  } else {
   ama <- amacrine[square(0.7)]
-  a <- ppm(ama ~  marks, Poisson(), nd=16)
+  a <- ppm(ama ~  marks, Poisson(), nd=ND)
  }
 
  # fit nonstationary marked Poisson process
@@ -426,7 +427,7 @@ ppm(X ~ x + f, covfunargs=list(a=1/2))
  if(online) {
   ppm(lansing ~  marks * polynom(x,y,3), Poisson())
  } else {
-  b <- ppm(ama ~  marks * polynom(x,y,2), Poisson(), nd=16)
+  b <- ppm(ama ~  marks * polynom(x,y,1), Poisson(), nd=ND)
  }
 
 }

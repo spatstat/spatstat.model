@@ -240,15 +240,19 @@ profilepl(s, f, \dots, aic=FALSE, rbord=NULL, verbose = TRUE, fast=TRUE)
     summary(pg)
 
     \donttest{
-    # multitype pattern with a common interaction radius
-    RR <- data.frame(R=seq(0.03,0.05,by=0.01))
-    MS <- function(R) { MultiStrauss(radii=diag(c(R,R))) }
-    pm <- profilepl(RR, MS, amacrine ~marks)
+    if(human) {
+      # multitype pattern with a common interaction radius
+      RR <- data.frame(R=seq(0.03,0.05,by=0.01))
+      MS <- function(R) { MultiStrauss(radii=diag(c(R,R))) }
+      pm <- profilepl(RR, MS, amacrine ~marks)
+    }
     }
 
     ## Easiest way to estimate a threshold
-    tdf <- data.frame(thresh=seq(0, 153, by=if(human) 1 else 3))
-    pt <- profilepl(tdf, Poisson, nztrees ~ I(x < thresh))
+    if(human) {
+      tdf <- data.frame(thresh=seq(0, 153, by=if(human) 1 else 3))
+      pt <- profilepl(tdf, Poisson, nztrees ~ I(x < thresh))
+    }
 }
 \references{
   Baddeley, A. and Turner, R. (2000)
