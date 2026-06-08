@@ -53,9 +53,11 @@
     is not produced for stationary models.}
 
     \item{what="statistic"}{specifies the empirical and fitted summary
-    statistics, which are plotted using \code{\link[spatstat.explore]{plot.fv}}. This is
-    only meaningful if the model has been fitted using the Method of
-    Minimum Contrast, and it is turned off otherwise.}
+      statistics, which are plotted using \code{\link[spatstat.explore]{plot.fv}}.
+      If the model was fitted using Palm likelihood or composite
+      likelihood, the displayed summary statistic is the 
+      pair correlation function.
+    }
 
     \item{what="cluster"}{specifies a fitted cluster, which is computed
     by \code{\link[spatstat.random]{clusterfield}} and plotted by

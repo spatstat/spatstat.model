@@ -1,10 +1,16 @@
-        CHANGES IN spatstat.model VERSION 3.7-1.002
+        CHANGES IN spatstat.model VERSION 3.7-1.003
 
 OVERVIEW
 
     o Package check time reduced, to satisfy CRAN requirements.
 
     o Minor improvements and bug fixes.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o plot.kppm
+    For models fitted by Palm likelihood or composite likelihood, the plot
+    selected by 'what="statistic"' displays the pair correlation function.
 
 BUG FIXES
 

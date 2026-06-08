@@ -3,7 +3,7 @@
 #'
 #'  kluster/kox point process models
 #'
-#'  $Revision: 1.245 $ $Date: 2026/05/27 05:58:31 $
+#'  $Revision: 1.248 $ $Date: 2026/06/08 02:16:57 $
 #'
 #'  Copyright (c) 2001-2025 Adrian Baddeley, Rolf Turner, Ege Rubak,
 #'                Abdollah Jalilian and Rasmus Plenge Waagepetersen
@@ -599,7 +599,6 @@ plot.kppm <- local({
     ## Catch locations for clusters if given
     loc <- list(...)$locations
     inappropriate <- (nochoice & ((what == "intensity") & (x$stationary))) |
-             ((what == "statistic") & (Fit$method != "mincon")) |
              ((what == "cluster") & (identical(x$isPCP, FALSE))) | 
              ((what == "cluster") & (!x$stationary) & is.null(loc))
 
@@ -628,8 +627,20 @@ plot.kppm <- local({
                       how="image", se=FALSE)
              },
              statistic={
-               plotem(Fit$mcfit, ...,
-                      dmain=c(xname, Fit$StatName))
+               if(Fit$method == "mincon") {
+                 ## extract minimum contrast fit
+                 y <- Fit$mcfit
+                 statname <- Fit$StatName
+               } else {
+                 ## calculate empirical pcf/pcfinhom and compare with pcfmodel
+                 y <- as.fv(x)
+                 statname <- if(is.stationary(x)) {
+                               "pair correlation function"
+                             } else {
+                               "inhomogeneous pair correlation function"
+                             }
+               }
+               plotem(y, ..., dmain=c(xname, statname))
              },
              cluster={
                plotem(clusterfield(x, locations = loc, verbose=FALSE), ...,
