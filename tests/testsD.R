@@ -205,6 +205,14 @@ local({
 })
 }
 
+if(FULLTEST) {
+  local({
+    ## Palm diagnostic
+    m <- kppm(redwood ~ 1)
+    p <- palmdiagnose(m, delta=0.04)
+  })
+}
+
 #'
 #'    tests/deepeepee.R
 #'

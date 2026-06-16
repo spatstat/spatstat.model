@@ -1,7 +1,7 @@
 #'
 #'  rhohat.R
 #'
-#'  $Revision: 1.117 $  $Date: 2026/01/21 06:26:39 $
+#'  $Revision: 1.119 $  $Date: 2026/06/16 07:15:53 $
 #'
 #'  Non-parametric estimation of a function rho(z) determining
 #'  the intensity function lambda(u) of a point process in terms of a
@@ -30,7 +30,7 @@ rhohat.ppm <- function(object, covariate, ...,
                        rule.eps = c("adjust.eps","grow.frame","shrink.frame"), 
                        n=512, bw="nrd0", adjust=1, from=NULL, to=NULL, 
                        bwref=bw, covname, confidence=0.95,
-                       positiveCI, breaks=NULL) {
+                       positiveCI, breaks=NULL, delta=NULL) {
   callstring <- short.deparse(sys.call())
   smoother <- match.arg(smoother)
   method <- match.arg(method)
@@ -86,7 +86,7 @@ rhohat.ppm <- function(object, covariate, ...,
                n=n, bw=bw, adjust=adjust, from=from, to=to,
                bwref=bwref, covname=covname, covunits=covunits,
                confidence=confidence, positiveCI=positiveCI,
-               breaks=breaks,
+               breaks=breaks, delta=delta,
                modelcall=modelcall, callstring=callstring)
 }
 

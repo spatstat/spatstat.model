@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.model VERSION 3.7-1.003
+        CHANGES IN spatstat.model VERSION 3.7-1.004
 
 OVERVIEW
 
@@ -12,6 +12,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
     For models fitted by Palm likelihood or composite likelihood, the plot
     selected by 'what="statistic"' displays the pair correlation function.
 
+    o rhohat.ppm, rhohat.slrm
+    Methods for 'rhohat' now recognise the argument 'delta'
+    as an alternative to argument 'breaks' when smoother="piecewise".
+
+    o palmdiagnose
+    New argument 'delta' as an alternative to 'breaks'.
+    
 BUG FIXES
 
    o plot.kppm

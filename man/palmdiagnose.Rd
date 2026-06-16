@@ -9,7 +9,7 @@
   estimates of the Palm intensity.
 }
 \usage{
-palmdiagnose(object, \dots, breaks = 30, trim = 30, rmax=Inf)
+palmdiagnose(object, \dots, breaks = 30, delta=NULL, trim = 30, rmax=Inf)
 }
 \arguments{
   \item{object}{
@@ -25,7 +25,12 @@ palmdiagnose(object, \dots, breaks = 30, trim = 30, rmax=Inf)
     determining the breakpoints of distance values 
     for the nonparametric estimate. Either an integer specifying the
     number of breakpoints, or a numeric vector of distance values to be
-    used as the breakpoints.
+    used as the breakpoints. Incompatible with \code{delta}.
+  }
+  \item{delta}{
+    Spacing between breakpoints of distance values for the nonparametric
+    estimate. A single positive number.
+    Incompatible with \code{breaks}.
   }
   \item{trim}{
     Optional. Maximum value of the translation edge correction weight.

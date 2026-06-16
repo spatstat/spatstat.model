@@ -25,7 +25,7 @@
        rule.eps = c("adjust.eps", "grow.frame", "shrink.frame"),
        n = 512, bw = "nrd0", adjust=1, from = NULL, to = NULL,
        bwref=bw,
-       covname, confidence=0.95, positiveCI, breaks=NULL)
+       covname, confidence=0.95, positiveCI, breaks=NULL, delta=NULL)
 
 \method{rhohat}{slrm}(object, covariate, ...,
        weights=NULL,
@@ -38,7 +38,7 @@
        jitter=TRUE, jitterfactor=1, interpolate=TRUE,
        n = 512, bw = "nrd0", adjust=1, from = NULL, to = NULL,
        bwref=bw,
-       covname, confidence=0.95, positiveCI, breaks=NULL)
+       covname, confidence=0.95, positiveCI, breaks=NULL, delta=NULL)
 
 }
 \arguments{
@@ -155,6 +155,13 @@
     Either a vector of numeric values specifying the breakpoints,
     or a single integer specifying the number of equally-spaced
     breakpoints. There is a sensible default.
+    Incompatible with \code{delta}.
+  }
+  \item{delta}{
+    Spacing between breakpoints for the piecewise-constant function
+    computed when \code{smoother='piecewise'}.
+    A single positive number.
+    Incompatible with \code{breaks}.
   }
 }
 \details{

@@ -1,7 +1,7 @@
 #'
 #'      rhohat.slrm.R
 #'
-#'   $Revision: 1.9 $ $Date: 2022/08/27 05:54:41 $
+#'   $Revision: 1.10 $ $Date: 2026/06/16 06:49:33 $
 #' 
 
 rhohat.slrm <- function(object, covariate, ...,
@@ -17,7 +17,7 @@ rhohat.slrm <- function(object, covariate, ...,
                         jitter=TRUE, jitterfactor=1, interpolate=TRUE,
                         n=512, bw="nrd0", adjust=1, from=NULL, to=NULL, 
                         bwref=bw, covname, confidence=0.95,
-                        positiveCI, breaks=NULL) {
+                        positiveCI, breaks=NULL, delta=NULL) {
   callstring <- short.deparse(sys.call())
   smoother <- match.arg(smoother)
   method <- match.arg(method)
@@ -76,6 +76,6 @@ rhohat.slrm <- function(object, covariate, ...,
                n=n, bw=bw, adjust=adjust, from=from, to=to,
                bwref=bwref, covname=covname, covunits=covunits,
                confidence=confidence, positiveCI=positiveCI,
-               breaks=breaks,
+               breaks=breaks, delta=delta,
                modelcall=modelcall, callstring=callstring)
 }

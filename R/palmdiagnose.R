@@ -6,9 +6,14 @@
 ## Copyright (c) Adrian Baddeley 2022
 ## GNU Public Licence >= 2.0
 ##
-##  $Revision: 1.4 $ $Date: 2024/08/02 07:07:34 $
+##  $Revision: 1.5 $ $Date: 2026/06/16 07:03:01 $
 
-palmdiagnose <- function(object, ..., breaks=30, trim=30, rmax=Inf) {
+palmdiagnose <- function(object, ..., breaks=30, delta=NULL,
+                         trim=30, rmax=Inf) {
+  if(length(delta) > 0) {
+    check.1.real(delta)
+    breaks <- NULL
+  }
   if(missing(object)) {
     models <- list(...)
     if(length(models) == 0) stop("No fitted models were supplied")
@@ -45,7 +50,8 @@ palmdiagnose <- function(object, ..., breaks=30, trim=30, rmax=Inf) {
   r <- function(x,y) { sqrt(x^2 + y^2) }
   Z <- frypoints(X, dmax=rmax)
   R <- rhohat(Z, r, weights=tran, smoother="piecewise",
-              breaks=breaks, from = 0, to = if(is.finite(rmax)) rmax else NULL)
+              breaks=breaks, delta=delta,
+              from = 0, to = if(is.finite(rmax)) rmax else NULL)
   breaks <- attr(R, "stuff")$breaks
   ## replace 'ave' by \bar\lambda (using knowledge of Fry points)
   R$ave <- lamX
