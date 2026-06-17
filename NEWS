@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.model VERSION 3.7-1.004
+        CHANGES IN spatstat.model VERSION 3.7-1.005
 
 OVERVIEW
 
@@ -28,6 +28,10 @@ BUG FIXES
    
    o plot.minconfit
    In some cases, a warning was issued about truncated function labels.
+   Fixed.
+
+   o palmdiagnose
+   Crashed sometimes with a message about a missing polygon.
    Fixed.
 
         CHANGES IN spatstat.model VERSION 3.7-1

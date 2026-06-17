@@ -6,7 +6,7 @@
 ## Copyright (c) Adrian Baddeley 2022
 ## GNU Public Licence >= 2.0
 ##
-##  $Revision: 1.5 $ $Date: 2026/06/16 07:03:01 $
+##  $Revision: 1.6 $ $Date: 2026/06/17 07:13:25 $
 
 palmdiagnose <- function(object, ..., breaks=30, delta=NULL,
                          trim=30, rmax=Inf) {
@@ -120,6 +120,7 @@ plot.palmdiag <- function(x, ..., style=c("intervals", "dots", "bands"),
            if(is.null(xlim)) xlim <- attr(x, "alim")
            rvals <- getElement(x, name=fvnames(x, ".x"))
            xsub <- x[inside.range(rvals, xlim), ]
+           ylim.default <- range(xsub, na.rm=TRUE, finite=TRUE)
            z <- do.call(plot.fv,
                         resolve.defaults(list(quote(x)),
                                          list(fmla,
@@ -127,19 +128,25 @@ plot.palmdiag <- function(x, ..., style=c("intervals", "dots", "bands"),
                                               main=main),
                                          list(...),
                                          list(xlim=xlim,
-                                              ylim=range(xsub, na.rm=TRUE),
+                                              ylim=ylim.default,
                                               legendpos="float")
                                          ))
            b <- attr(x, "breaks")
            rmid <- (b[-1] + b[-length(b)])/2
            f <- as.function(x, value=c("est", "lo", "hi"))
            ymid <- f(rmid)
-           do.call(points, append(list(rmid, ymid), args.dots))
+           do.call(points,
+                   append(list(x=rmid,
+                               y=ymid),
+                          args.dots))
            if(style == "intervals") {
              yhi  <- f(rmid, "hi")
              ylo  <- f(rmid, "lo")
              do.call(segments,
-                     append(list(rmid, ylo, rmid, yhi),
+                     append(list(x0=rmid,
+                                 y0=ylo,
+                                 x1=rmid,
+                                 y1=yhi),
                             args.intervals))
            }
          })
