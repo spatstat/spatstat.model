@@ -1,9 +1,11 @@
-        CHANGES IN spatstat.model VERSION 3.7-1.005
+        CHANGES IN spatstat.model VERSION 3.7-1.006
 
 OVERVIEW
 
     o Package check time reduced, to satisfy CRAN requirements.
 
+    o Palm diagnostic for determinantal models.
+    
     o Minor improvements and bug fixes.
 
 SIGNIFICANT USER-VISIBLE CHANGES
@@ -16,6 +18,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Methods for 'rhohat' now recognise the argument 'delta'
     as an alternative to argument 'breaks' when smoother="piecewise".
 
+    o palmdiagnose
+    Now accepts objects of class 'dppm' as well as 'kppm'.
+    
     o palmdiagnose
     New argument 'delta' as an alternative to 'breaks'.
     
