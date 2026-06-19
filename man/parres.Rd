@@ -2,6 +2,7 @@
 \alias{parres}
 \alias{parres.ppm}
 \alias{parres.kppm}
+\alias{parres.dppm}
 \title{
   Partial Residuals for Point Process Model
 }
@@ -21,11 +22,17 @@ parres(model, covariate, \dots)
        smooth.effect=FALSE, subregion=NULL,
        bw = "nrd0", adjust=1, from = NULL, to = NULL, n = 512,
        bw.input = c("points", "quad"), bw.restrict=FALSE, covname)
+
+\method{parres}{dppm}(model, covariate, \dots,
+       smooth.effect=FALSE, subregion=NULL,
+       bw = "nrd0", adjust=1, from = NULL, to = NULL, n = 512,
+       bw.input = c("points", "quad"), bw.restrict=FALSE, covname)
 }
 \arguments{
   \item{model}{
     Fitted point process model (object of class \code{"ppm"} or
-    \code{"kppm"} or possibly other classes).
+    \code{"kppm"} or \code{"dppm"} or \code{"lppm"}
+    and possibly other classes).
   }
   \item{covariate}{
     The covariate of interest.

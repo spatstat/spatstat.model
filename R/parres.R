@@ -3,7 +3,7 @@
 #
 # code to plot transformation diagnostic
 #
-#   $Revision: 1.23 $  $Date: 2025/11/22 02:35:15 $
+#   $Revision: 1.24 $  $Date: 2026/06/19 08:11:43 $
 #
 
 parres <- function(model, covariate, ...) {
@@ -63,6 +63,49 @@ parres.kppm <- function(model, covariate, ...,
   modelname <- short.deparse(substitute(model))
 
   stopifnot(is.kppm(model))
+
+  if(is.marked(model))
+    stop("Sorry, this is not yet implemented for marked models")
+  
+  if(missing(covariate)) {
+    mc <- model.covariates(model)
+    if(length(mc) == 1) covariate <- mc else stop("covariate must be provided")
+  }
+  if(missing(covname)) 
+    covname <- sensiblevarname(deparse(substitute(covariate)), "X")
+
+  if(is.null(adjust)) adjust <- 1
+
+  bw.input <- match.arg(bw.input)
+  
+  partialResidualEngine(model         = as.ppm(model),
+                        covariate     = covariate,
+                        ...,
+                        smooth.effect = smooth.effect,
+                        subregion     = subregion,
+                        bw            = bw,
+                        adjust        = adjust,
+                        from          = from,
+                        to            = to,
+                        n             = n,
+                        bw.input      = bw.input,
+                        bw.restrict   = bw.restrict,
+                        covname       = covname,
+                        callstring    = callstring,
+                        modelname     = modelname,
+                        do.variance   = FALSE)
+}
+
+parres.dppm <- function(model, covariate, ...,
+                       smooth.effect=FALSE, subregion=NULL,
+                       bw="nrd0", adjust=1, from=NULL,to=NULL, n=512,
+                       bw.input = c("points", "quad"),
+                       bw.restrict = FALSE,
+                       covname) {  
+  callstring <- paste(deparse(sys.call()), collapse = "")
+  modelname <- short.deparse(substitute(model))
+
+  stopifnot(is.dppm(model))
 
   if(is.marked(model))
     stop("Sorry, this is not yet implemented for marked models")

@@ -1,6 +1,7 @@
 \name{auc.ppm}
 \alias{auc.ppm}
 \alias{auc.kppm}
+\alias{auc.dppm}
 \alias{auc.slrm}
 \title{
   Area Under ROC Curve
@@ -14,12 +15,15 @@
 
 \method{auc}{kppm}(X, \dots, subset=NULL)
 
+\method{auc}{dppm}(X, \dots, subset=NULL)
+
 \method{auc}{slrm}(X, \dots, subset=NULL)
 }
 \arguments{
   \item{X}{
     Fitted point process model
-    (object of class \code{"ppm"} or \code{"kppm"} or \code{"lppm"})
+    (object of class \code{"ppm"} or \code{"kppm"}
+    or \code{"dppm"} or \code{"lppm"})
     or fitted spatial logistic regression model
     (object of class \code{"slrm"}).
   }

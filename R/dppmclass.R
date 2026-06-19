@@ -1,6 +1,6 @@
 #' Methods and support for class dppm
 #'
-#' $Revision: 1.5 $ $Date: 2019/10/18 03:41:43 $
+#' $Revision: 1.7 $ $Date: 2026/06/19 08:40:19 $
 
 is.dppm <- function(x) { inherits(x, "dppm") }
 
@@ -30,6 +30,10 @@ intensity.dppm <- function (X, ...){
 reach.dppm <- function(x, ...){
     reach(x$fitted, ...)
 }
+
+is.poisson.dppm <- function(x) { FALSE }
+
+is.poissonclusterprocess.dppm <- function(model) { FALSE }
 
 repul <- function(model, ...) {
   UseMethod("repul")

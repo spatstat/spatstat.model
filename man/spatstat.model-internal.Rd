@@ -94,6 +94,8 @@
 \alias{is.multitype.msr}    
 \alias{is.multitype.rppm}    
 \alias{is.multitype.slrm}    
+\alias{is.poissonclusterprocess.dppm}
+\alias{is.poisson.dppm}
 \alias{is.poisson.mppm}
 \alias{is.poisson.rppm}
 \alias{is.rppm}
@@ -359,6 +361,8 @@ is.mppm(x)
 \method{is.multitype}{msr}(X, \dots)
 \method{is.multitype}{rppm}(X, \dots)
 \method{is.multitype}{slrm}(X, \dots)
+\method{is.poissonclusterprocess}{dppm}(model)
+\method{is.poisson}{dppm}(x)
 \method{is.poisson}{mppm}(x)
 \method{is.poisson}{rppm}(x)
 is.rppm(x)

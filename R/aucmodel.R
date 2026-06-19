@@ -16,6 +16,9 @@
 auc.kppm <- function(X, ..., subset=NULL) {
   auc(as.ppm(X), ..., subset=subset)
 }
+auc.dppm <- function(X, ..., subset=NULL) {
+  auc(as.ppm(X), ..., subset=subset)
+}
 
   auc.ppm <-
   function(X, ..., subset=NULL) {
