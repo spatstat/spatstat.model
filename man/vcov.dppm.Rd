@@ -1,20 +1,20 @@
-\name{vcov.kppm}
-\alias{vcov.kppm}
-\title{Variance-Covariance Matrix for a Fitted Cluster Point Process Model}
+\name{vcov.dppm}
+\alias{vcov.dppm}
+\title{Variance-Covariance Matrix for a Fitted Determinantal Point Process Model}
 \description{
   Returns the variance-covariance matrix of the estimates of the
-  parameters of a fitted cluster point process model.
+  parameters of a fitted determinantal point process model.
 }
 \usage{
-   \method{vcov}{kppm}(object, ...,
+   \method{vcov}{dppm}(object, \dots,
           what=c("vcov", "corr", "fisher"),
           fast = NULL, rmax = NULL, eps.rmax = 0.01,
           verbose = TRUE)
 }
 \arguments{
   \item{object}{
-    A fitted cluster point process model (an object of class
-    \code{"kppm"}.)
+    A fitted determinantal point process model (an object of class
+    \code{"dppm"}.)
   }
   \item{\dots}{
     Ignored.
@@ -41,7 +41,7 @@
     from the tail behaviour of the pair correlation function when fast
     option (\code{fast=TRUE}) is used. Namely
     \code{rmax} is the smallest value of \eqn{r}
-    at which \eqn{(g(r)-1)/(g(0)-1)}
+    at which \eqn{(1 - g(r))/(1 - g(0))}
     falls below \code{eps.rmax}.
     Only used when \code{fast=TRUE}.
     Ignored if \code{rmax} is provided.
@@ -75,15 +75,15 @@
 \author{
   Abdollah Jalilian and Rasmus Waagepetersen.
   Ported to \pkg{spatstat} by \adrian
-  and \ege.
+  and \ege. Adapted for \code{dppm} by \adrian.
 }
 \seealso{
-  \code{\link{kppm}}, 
+  \code{\link{dppm}}, 
   \code{\link{vcov}}, 
   \code{\link{vcov.ppm}}
 }
 \examples{
-   fit <- kppm(redwood ~ x + y)
+   fit <- dppm(japanesepines ~ x, dppGauss)
    vcov(fit)
    vcov(fit, what="corr")
 

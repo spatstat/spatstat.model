@@ -50,4 +50,5 @@ repul.dppm <- function(model, ...) {
 }
 
 #' print.dppm is identical to print.kppm and defined in kppm.R
+#' vcov.dppm is identical to vcov.kppm and defined in vcov.kppm.R
 #' summary.dppm is defined in summary.dppm.R

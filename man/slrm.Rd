@@ -6,8 +6,9 @@
   to a spatial point pattern. 
 }
 \usage{
-slrm(formula, ..., data = NULL, offset = TRUE, link = c("logit", "cloglog"),
-                   ruleAtPoints=c("s", "r"), dataAtPoints=NULL, splitby=NULL)
+slrm(formula, ..., data = NULL, offset = TRUE,
+     link = c("logit", "cloglog"),
+     ruleAtPoints=c("s", "r"), dataAtPoints=NULL, splitby=NULL)
 }
 \arguments{
   \item{formula}{The model formula. See Details.}
@@ -27,13 +28,15 @@ slrm(formula, ..., data = NULL, offset = TRUE, link = c("logit", "cloglog"),
     should be augmented by an offset equal to the logarithm of the
     pixel area.
   }
-  \item{link}{The link function for the regression model.
+  \item{link}{
+    The link function for the regression model.
     A character string (partially matched), specifying the link function
     for binary regression.
   }
   \item{ruleAtPoints}{
-    Rule for obtaining covariate data at the observed point locations.
-    See Details.
+    Rule for obtaining covariate data at the observed point locations
+    (see the section on \emph{Discretisation rule}).
+    A character string, either \code{"s"} or \code{"r"}.
     Ignored if \code{dataAtPoints} is given.
   }
   \item{dataAtPoints}{Optional.
@@ -155,9 +158,9 @@ slrm(formula, ..., data = NULL, offset = TRUE, link = c("logit", "cloglog"),
     the covariate values for pixels which contain a point of the
     spatial point pattern will be determined by the entries of
     \code{dataAtPoints}
-    (and the spatial coordinates \code{x} and \code{y}
-    are overwritten by the exact spatial
-    coordinates of the data points).
+    (and the spatial coordinates \code{x} and \code{y} of the centre
+    of a pixel containing a data point are overwritten by the exact spatial
+    coordinates of the data point).
     \item
     If \code{dataAtPoints} is not given, but \code{ruleAtPoints="r"} is
     specified, then the covariate values for pixels which contain a
@@ -172,16 +175,17 @@ slrm(formula, ..., data = NULL, offset = TRUE, link = c("logit", "cloglog"),
     This is called rule S in Baddeley et al (2025) and is the
     standard practice in many software packages.
   }
-  Rule S and rule R are different if one of the covariates is
+  Rule S and rule R give different results if one of the covariates is
   either a \code{function(x,y)},
   a polygonal window (object of class \code{"owin"}
   representing a polygon or rectangle), or a polygonal tessellation
   (object of class \code{"tess"} whose tiles are polygons or
-  rectangles). In any of these cases, 
+  rectangles). In any of these cases, evaluating the covariate at
   the exact spatial location of a data point
-  and the centre of the pixel that contains the data point
-  may yield different values of the covariate.
-  For a covariate which is a polygonal window or polygonal tessellation,
+  could give a different result from evaluating the covariate
+  at the centre of the pixel that contains the data point.
+  For a covariate which is a polygonal window or polygonal tessellation
+  or a discontinuous function,   
   the discrepancy is enough to cause instability to changes in
   pixel size when rule S is used, and we recommend rule R in these
   cases (Baddeley et al 2025).

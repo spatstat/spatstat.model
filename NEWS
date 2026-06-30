@@ -1,9 +1,11 @@
-        CHANGES IN spatstat.model VERSION 3.7-1.007
+        CHANGES IN spatstat.model VERSION 3.7-1.008
 
 OVERVIEW
 
     o Package check time reduced, to satisfy CRAN requirements.
 
+    o Variance-covariance matrix for determinantal models.
+    
     o More diagnostics for determinantal models.
     
     o Minor improvements and bug fixes.
@@ -17,6 +19,10 @@ NEW FUNCTIONS
     o parres.dppm
     Partial residuals for a fitted determinantal point process model.
     Method for 'parres' for objects of class 'dppm'.
+
+    o vcov.dppm
+    Variance-covariance matrix for the trend parameters in a
+    fitted determinantal point process model.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

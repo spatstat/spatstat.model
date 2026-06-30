@@ -1,21 +1,22 @@
 #
 # vcov.kppm
 #
-#  vcov method for kppm objects
+#  vcov method for kppm and dppm objects
 #
 #   Original code: Abdollah Jalilian
 #
-#   $Revision: 1.16 $  $Date: 2024/01/12 00:50:36 $
+#   $Revision: 1.17 $  $Date: 2026/06/30 02:01:58 $
 #
 
-vcov.kppm <- function(object, ...,
+vcov.dppm <- vcov.kppm <- function(object, ...,
                       what=c("vcov", "corr", "fisher"),
                       fast = NULL, rmax = NULL, eps.rmax = 0.01,
                       verbose = TRUE)
 {
   what <- if(missing(what)) "vcov" else
           match.arg(what, c("vcov", "corr", "fisher", "internals", "all"))
-  verifyclass(object, "kppm")
+  if(!inherits(object, c("kppm", "dppm")))
+    stop("Argument 'object' should have class 'kppm' or 'dppm'", call.=FALSE)
   fast.given <- !is.null(fast)
   #' secret argument (eg for testing)
   splitup <- resolve.1.default(list(splitup=FALSE), list(...))
@@ -70,7 +71,8 @@ vcov.kppm <- function(object, ...,
     } else {
       if(is.null(rmax)){
         diamwin <- diameter(as.owin(U))
-        fnc <- get("fnc", envir = environment(improve.kppm))
+        ## fnc <- get("fnc", envir = environment(improve.kppm))
+        fnc <- function(r, eps, g){ (g(r) - 1)/(g(0) - 1) - eps}
         rmax <- if(fnc(diamwin, eps.rmax, g) >= 0) diamwin else
                   uniroot(fnc, lower = 0, upper = diamwin,
                           eps=eps.rmax, g=g)$root
