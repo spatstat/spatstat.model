@@ -194,18 +194,21 @@
 \examples{
   X <- rpoispp(42)
   fit <- ppm(X ~ x + y)
-  vcov(fit)
+  (v <- vcov(fit))
   vcov(fit, what="Fish")
 
-  # example of singular system
-  m <- ppm(demopat ~polynom(x,y,2))
-  \donttest{
-    try(v <- vcov(m))
+  ## confidence intervals
+  confint(fit)
+
+  # example of a numerically singular system 
+  if(interactive()) {
+    m <- ppm(demopat ~polynom(x,y,2))
+    try(vm <- vcov(m))
   }
   # rescale x, y coordinates to range [0,1] x [0,1] approximately
   demopatScale <- rescale(demopat, 10000)
   m <- ppm(demopatScale ~ polynom(x,y,2))
-  v <- vcov(m)
+  vm <- vcov(m)
 
   # Gibbs example
   fitS <- ppm(swedishpines ~1, Strauss(9))

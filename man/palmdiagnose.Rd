@@ -118,9 +118,14 @@ palmdiagnose(object, \dots, breaks = 30, delta=NULL, trim = 30, rmax=Inf)
    R <- palmdiagnose(fitK)
    plot(R)
 
+   ## compare two fits
    fitg <- kppm(redwood, statistic="pcf")
    R2 <- palmdiagnose(A=fitK, B=fitg)
    plot(R2)
+
+   ## determinantal model
+   m <- dppm(unmark(anemones), dppGauss, method="palm")
+   plot(palmdiagnose(m))
 }
 \seealso{
   \code{\link{plot.palmdiag}}
