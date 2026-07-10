@@ -4,6 +4,9 @@
 #'   Original by Rasmus Waagepetersen, 10 april 2021
 #'
 #'   Tweaks by Adrian Baddeley
+#'
+#'   SUB/model/original-files/ic.kppm.R
+#'   $Revision: 1.5 $ $Date: 2026/06/30 03:22:16 $
 
 ic <- function(object) { UseMethod("ic") }
 
@@ -12,7 +15,7 @@ ic.ppm <- function(object) {
   ll <- as.numeric(loglike)
   df <- attr(loglike, "df")
   ## betahat <- coef(object)
-  n <- npoints(data.ppm(object))
+  n <- npoints(response(object))
   cbic <- -2*ll+df*log(n)
   cic  <- -2*ll+df*2
   ## cbic is BIC and cic is AIC in case of Poisson process
@@ -25,7 +28,7 @@ ic.kppm <- function(object){
   ll <- as.numeric(loglike)
   betahat <- coef(object)
   p <- length(betahat)
-  n <- npoints(data.ppm(po))
+  n <- npoints(response(object))
   co <- vcov(object, what="internals")
   df <- p + sum(diag(as.matrix(co$J.inv %*% co$E))) #compute p_approx
   cbic = -2*loglike+df*log(n)
