@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.model VERSION 3.7-1.009
+        CHANGES IN spatstat.model VERSION 3.7-1.010
 
 OVERVIEW
 
@@ -39,6 +39,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o palmdiagnose
     New argument 'delta' as an alternative to 'breaks'.
+
+    o objsurf.dppm, objsurf.kppm, objsurf.minconfit
+    Arguments 'xlim, ylim' renamed 'par1lim, par2lim'.
     
 BUG FIXES
 

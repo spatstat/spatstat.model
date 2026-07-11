@@ -15,7 +15,7 @@ cat(paste("--------- Executing",
 #
 #  tests/undoc.R
 #
-#   $Revision: 1.17 $   $Date: 2025/07/21 07:35:03 $
+#   $Revision: 1.19 $   $Date: 2026/07/11 06:49:04 $
 #
 #  Test undocumented hacks, experimental code, etc
 
@@ -126,6 +126,15 @@ local({
     intensity(mA)
   }
 
+  if(FULLTEST) {
+    #' objsurf code blocks
+    fit <- kppm(redwood3, trajectory=TRUE)
+    plot(a <- objsurf(fit, ngrid=11))
+    plot(b <- objsurf(fit, ngrid=10, parmap=list(log, exp)))
+    lines(b)
+    plot(d <- objsurf(fit, ngrid=9, parmap=list(log, exp), enclose=FALSE))
+    lines(d)
+  }
 })
   
 

@@ -132,6 +132,7 @@
 \alias{nndcumfun}
 \alias{no.trend.ppm}
 \alias{objsurfEngine}
+\alias{objsurfObject}
 \alias{optimConverged}
 \alias{optimStatus}
 \alias{optimNsteps}
@@ -437,7 +438,9 @@ no.trend.ppm(x)
 objsurfEngine(objfun, optpar, objargs,
               \dots, dotargs, objname,
               new.objargs, parmap, 
-              ngrid, xlim, ylim, ratio, verbose)
+              ngrid, par1lim, par2lim, ratio, verbose)
+objsurfObject(par1, par2, z, \dots, 
+              optpar, optxy, par1lim, par2lim, parmap, x, y, objname)
 optimConverged(x)
 optimStatus(x, call)
 optimNsteps(x)

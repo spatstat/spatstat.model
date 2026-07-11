@@ -14,15 +14,15 @@
 \usage{
 objsurf(x, \dots)
 
-\method{objsurf}{dppm}(x, ..., ngrid = 32, xlim=NULL, ylim=NULL,
+\method{objsurf}{dppm}(x, \dots, ngrid = 32, par1lim=NULL, par2lim=NULL,
                                enclose=FALSE,
                                ratio = 1.5, verbose = TRUE)
 
-\method{objsurf}{kppm}(x, ..., ngrid = 32, xlim=NULL, ylim=NULL,
+\method{objsurf}{kppm}(x, \dots, ngrid = 32, par1lim=NULL, par2lim=NULL,
                                enclose=FALSE,
                                ratio = 1.5, verbose = TRUE)
 
-\method{objsurf}{minconfit}(x, ..., ngrid = 32, xlim=NULL, ylim=NULL,
+\method{objsurf}{minconfit}(x, \dots, ngrid = 32, par1lim=NULL, par2lim=NULL,
                                ratio = 1.5, verbose = TRUE)
 }
 \arguments{
@@ -39,13 +39,13 @@ objsurf(x, \dots)
     Either a single integer, or a pair of integers.
     For example \code{ngrid=32} would mean a \code{32 * 32} grid.
   }
-  \item{xlim,ylim}{
+  \item{par1lim,par2lim}{
     Optional. Numeric vectors of length 2, specifying the
     limits for the two parameters to be considered.
   }
   \item{enclose}{
     Logical value specifying whether the default values of
-    \code{xlim} and \code{ylim} should enclose the history of all
+    \code{par1lim} and \code{par2lim} should enclose the history of all
     function evaluations. See Details.
   }
   \item{ratio}{
@@ -82,19 +82,19 @@ objsurf(x, \dots)
   printed and plotted: see \code{\link{methods.objsurf}}.
 
   The range of parameter values to be considered is determined by
-  \code{xlim} and \code{ylim}. 
-  The default values of \code{xlim} and \code{ylim} are
+  \code{par1lim} and \code{par2lim}. 
+  The default values of \code{par1lim} and \code{par2lim} are
   chosen as follows.
   \itemize{
     \item if \code{enclose=FALSE} (the default), 
-    the default values of \code{xlim} and \code{ylim} are
+    the default values of \code{par1lim} and \code{par2lim} are
     the ranges from \code{opt/ratio} to \code{opt * ratio}
     where \code{opt} is the optimal parameter value on the surface.
     \item 
     If \code{enclose=TRUE}, 
     and if \code{x} contains a trajectory
     (history of function evaluations),
-    then \code{xlim} and \code{ylim} will be the ranges
+    then \code{par1lim} and \code{par2lim} will be the ranges
     of parameter values examined in the trajectory.
   }
 }
