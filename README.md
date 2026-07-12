@@ -88,6 +88,7 @@ adjusted composite likelihood ratio test for Gibbs point process models
 - model compensators of summary functions (`Kcom`, `Gcom`)
 - model residuals of summary functions (`Kres`, `Gres`)
 - Q-Q plots (`qqplot.ppm`)
+- objective function surface (`objsurf`)
 
 ___
 
