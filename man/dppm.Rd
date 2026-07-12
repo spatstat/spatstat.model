@@ -328,19 +328,24 @@
 \seealso{
   methods for \code{dppm} objects:
   \code{\link{plot.dppm}},
+  \code{\link[spatstat.model:methods.dppm]{print.dppm}},
+  \code{\link[spatstat.model:methods.dppm]{coef.dppm}},
   \code{\link{fitted.dppm}},
   \code{\link{predict.dppm}},
+  \code{\link{vcov.dppm}},
   \code{\link{simulate.dppm}},
   \code{\link{methods.dppm}},
   \code{\link{as.ppm.dppm}},
   \code{\link{Kmodel.dppm}},
-  \code{\link{pcfmodel.dppm}}.
+  \code{\link{Lmodel.dppm}},
+  \code{\link{pcfmodel.dppm}},
+  \code{\link[spatstat.model:repul]{repul.dppm}}.
 
   Minimum contrast fitting algorithm:
   higher level interface \code{\link{clusterfit}};
   low-level algorithm \code{\link{mincontrast}}.
 
-  Deterimantal point process models:
+  Deterimantal point process model families (\dQuote{interactions}):
   \code{\link{dppGauss}},
   \code{\link{dppMatern}},
   \code{\link{dppCauchy}},
@@ -353,7 +358,18 @@
   \code{\link[spatstat.explore]{pcf}},
   \code{\link[spatstat.explore]{pcfinhom}}.
 
-  See also \code{\link{ppm}}
+  Model diagnostics:
+  \code{\link[spatstat.model:auc.ppm]{auc.dppm}},
+  \code{\link[spatstat.model:roc.ppm]{roc.dppm}},
+  \code{\link[spatstat.model:objsurf]{objsurf.dppm}},
+  \code{\link[spatstat.model:parres]{parres.dppm}},
+  \code{\link{residuals.dppm}},
+  \code{\link[spatstat.model:envelope.ppm]{envelope.dppm}}.  
+
+  For fitting Poisson or Gibbs point process models, see \code{\link{ppm}}.
+  For fitting Neyman-Scott cluster process models or Cox process models,
+  see \code{\link{kppm}}.
+  For fitting spatial logistic regression models, see \code{\link{slrm}}.
 }
 \references{
   Guan, Y. (2006)

@@ -609,6 +609,8 @@ kppm(X, \dots)
 \seealso{
   Methods for \code{kppm} objects:
   \code{\link{plot.kppm}},
+  \code{\link[spatstat.model:methods.kppm]{print.kppm}},
+  \code{\link[spatstat.model:methods.kppm]{coef.kppm}},
   \code{\link{fitted.kppm}},
   \code{\link{predict.kppm}},
   \code{\link{simulate.kppm}},
@@ -618,7 +620,9 @@ kppm(X, \dots)
   \code{\link{as.ppm.kppm}},
   \code{\link{as.fv.kppm}},
   \code{\link{Kmodel.kppm}},
-  \code{\link{pcfmodel.kppm}}.
+  \code{\link{pcfmodel.kppm}},
+  \code{\link{psib.kppm}},
+  \code{\link{clusterstrength}}.
 
   See also \code{\link{improve.kppm}} for improving the fit of a
   \code{kppm} object.
@@ -645,7 +649,17 @@ kppm(X, \dots)
   \code{\link[spatstat.explore]{pcf}},
   \code{\link[spatstat.explore]{pcfinhom}}.
 
+  Model diagnostics:
+  \code{\link[spatstat.model:auc.ppm]{auc.kppm}},
+  \code{\link[spatstat.model:roc.ppm]{roc.kppm}},
+  \code{\link[spatstat.model:objsurf]{objsurf.kppm}},
+  \code{\link[spatstat.model:parres]{parres.kppm}},
+  \code{\link{residuals.kppm}},
+  \code{\link[spatstat.model:envelope.ppm]{envelope.kppm}}.  
+
   For fitting Poisson or Gibbs point process models, see \code{\link{ppm}}.
+  For fitting determinantal models, see \code{\link{dppm}}.
+  For fitting spatial logistic regression models, see \code{\link{slrm}}.
 }
 \references{
   Baddeley, A., Davies, T.M., Hazelton, M.L., Rakshit, S. and Turner,

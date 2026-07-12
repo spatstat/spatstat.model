@@ -28,6 +28,23 @@
   are in the separate sub-package \pkg{spatstat.linnet}.)
 }
 \section{Structure of the spatstat family}{  
+  The \pkg{spatstat} family of packages
+  is designed to support a complete statistical analysis
+  of spatial data. It supports
+  \itemize{
+    \item creation, manipulation and plotting of point patterns;
+    \item exploratory data analysis;
+    \item spatial random sampling;
+    \item simulation of point process models;
+    \item parametric model-fitting;
+    \item non-parametric smoothing and regression;
+    \item formal inference (hypothesis tests, confidence intervals);
+    \item model diagnostics.
+  }
+  For an overview of all functionality,
+  see the help file for \code{"spatstat-package"}
+  in the \pkg{spatstat} package. 
+
   The orginal \pkg{spatstat} package grew to be very large.
   It has now been divided into several \bold{sub-packages}:
   \itemize{
@@ -71,35 +88,9 @@
   and loaded explicitly if needed. They also have separate documentation.
 }
 \section{Overview of Functionality in \pkg{spatstat.model}}{
-  The \pkg{spatstat} family of packages
-  is designed to support a complete statistical analysis
-  of spatial data. It supports
-  \itemize{
-    \item creation, manipulation and plotting of point patterns;
-    \item exploratory data analysis;
-    \item spatial random sampling;
-    \item simulation of point process models;
-    \item parametric model-fitting;
-    \item non-parametric smoothing and regression;
-    \item formal inference (hypothesis tests, confidence intervals);
-    \item model diagnostics.
-  }
-  For an overview, see the help file for \code{"spatstat-package"}
-  in the \pkg{spatstat} package. 
-
   Following is a list of the functionality provided in the
   \pkg{spatstat.model} package only.
 
-  \bold{To simulate a random point pattern:}
-  
-   Functions for generating random point patterns
-   are now contained in the \pkg{spatstat.random} package.
-
-     \bold{Exploratory analysis}
-
-     Exploratory graphics, 
-     smoothing, and exploratory analysis of spatial data
-     are now provided in the \pkg{spatstat.explore} package.
 
 
  \bold{Model fitting (Cox and cluster models)}
@@ -128,7 +119,10 @@
     \code{\link[spatstat.model]{clusterfield.kppm}} \tab Compute offspring density \cr
     \code{\link[spatstat.model]{clusterradius.kppm}} \tab Radius of support of offspring density \cr
     \code{\link[spatstat.model]{Kmodel.kppm}} \tab \eqn{K} function of fitted model \cr
-    \code{\link[spatstat.model]{pcfmodel.kppm}} \tab Pair correlation of fitted model 
+    \code{\link[spatstat.model]{Lmodel.kppm}} \tab \eqn{L} function of fitted model \cr
+    \code{\link[spatstat.model]{pcfmodel.kppm}} \tab Pair correlation of fitted
+    model \cr
+    \code{\link[spatstat.model]{objsurf.kppm}} \tab Objective function surface 
   }
   
   For model selection, you can also use 
@@ -208,8 +202,9 @@
     \code{\link[spatstat.model]{parameters}} \tab Extract all model parameters\cr
     \code{\link[spatstat.model]{formula.ppm}} \tab Extract the trend formula\cr
     \code{\link[spatstat.model]{intensity.ppm}} \tab Compute fitted intensity \cr
-    \code{\link[spatstat.model]{Kmodel.ppm}} \tab \eqn{K} function of fitted model \cr
-    \code{\link[spatstat.model]{pcfmodel.ppm}} \tab pair correlation of fitted model \cr
+    \code{\link[spatstat.model]{Kmodel.ppm}} \tab (approximate) \eqn{K} function of fitted model \cr
+    \code{\link[spatstat.model]{Lmodel.ppm}} \tab (approximate) \eqn{L} function of fitted model \cr
+    \code{\link[spatstat.model]{pcfmodel.ppm}} \tab (approximate) pair correlation of fitted model \cr
     \code{\link[spatstat.model]{fitted.ppm}} \tab Compute fitted conditional intensity at quadrature points \cr
     \code{\link[spatstat.model]{residuals.ppm}} \tab Compute point process residuals at quadrature points \cr
     \code{\link[spatstat.model]{update.ppm}} \tab Update the fit \cr
@@ -303,9 +298,39 @@
 
   Code for fitting \emph{determinantal point process models} has 
   recently been added to \pkg{spatstat}.
+  A determinantal point process model  
+  can be fitted by the function \code{\link[spatstat.model]{dppm}}.
+  Its result is an object of class \code{"dppm"}.
+  The fitted model can be printed, plotted, predicted, simulated
+  and updated.
 
-  For information, see the help file for \code{\link[spatstat.model]{dppm}}.
-
+  \tabular{ll}{
+    \code{\link[spatstat.model]{dppm}} \tab  Fit model\cr
+    \code{\link[spatstat.model]{plot.dppm}} \tab  Plot the fitted model\cr
+    \code{\link[spatstat.model]{summary.dppm}} \tab  Summarise the fitted model\cr
+    \code{\link[spatstat.model]{fitted.dppm}} \tab Compute fitted intensity \cr
+    \code{\link[spatstat.model]{predict.dppm}} \tab Compute fitted intensity \cr
+    \code{\link[spatstat.model]{update.dppm}} \tab Update the model \cr
+    \code{\link[spatstat.model]{improve.dppm}} \tab Refine the estimate of trend \cr
+    \code{\link[spatstat.model]{simulate.dppm}} \tab Generate simulated realisations \cr
+    \code{\link[spatstat.model]{vcov.dppm}} \tab Variance-covariance matrix of coefficients \cr
+    \code{\link[spatstat.model:methods.dppm]{coef.dppm}}
+    \tab Extract trend coefficients \cr
+    \code{\link[spatstat.model:methods.dppm]{formula.dppm}}
+    \tab Extract trend formula \cr
+    \code{\link[spatstat.model]{parameters}} \tab Extract all model parameters \cr
+    \code{\link[spatstat.model]{Kmodel.dppm}} \tab \eqn{K} function of fitted model \cr
+    \code{\link[spatstat.model]{Lmodel.dppm}} \tab \eqn{L} function of fitted model \cr
+    \code{\link[spatstat.model]{pcfmodel.dppm}} \tab Pair correlation of fitted
+    model \cr
+    \code{\link[spatstat.model]{objsurf.dppm}} \tab Objective function surface 
+  }
+  
+  For model selection, you can also use 
+  the generic functions \code{\link[stats]{step}}, \code{\link[stats]{drop1}} 
+  and \code{\link[stats]{AIC}} on fitted point process models.
+  For variable selection, see \code{\link[spatstat.explore]{sdr}}.
+  
   \bold{Model fitting (spatial logistic regression)}
   
   Pixel-based spatial logistic regression is an alternative

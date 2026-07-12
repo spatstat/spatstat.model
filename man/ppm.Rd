@@ -314,8 +314,9 @@
   ensuring the fitted model is a valid point process.
 
   See \code{\link{kppm}} for fitting Cox point process models
-  and cluster point process models, and \code{\link{dppm}} for fitting
-  determinantal point process models.
+  and cluster point process models, \code{\link{dppm}} for fitting
+  determinantal point process models, and \code{\link{slrm}} for fitting
+  spatial logistic regression models.
 }
 \examples{
  online <- interactive()
