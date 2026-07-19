@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.model VERSION 3.7-1.011
+        CHANGES IN spatstat.model VERSION 3.7-1.012
 
 OVERVIEW
 
@@ -25,6 +25,9 @@ NEW FUNCTIONS
     fitted determinantal point process model.
     
 SIGNIFICANT USER-VISIBLE CHANGES
+
+    o addvar
+    Now accepts point process models of class ppm, kppm, dppm, rppm, lppm.
 
     o plot.kppm
     For models fitted by Palm likelihood or composite likelihood, the plot

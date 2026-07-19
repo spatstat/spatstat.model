@@ -18,7 +18,9 @@ addvar(model, covariate, ...,
 }
 \arguments{
   \item{model}{
-    Fitted point process model (object of class \code{"ppm"}).
+    Fitted point process model (object of class \code{"ppm"},
+    \code{"kppm"}, \code{"dppm"}, \code{"lppm"}, \code{"rppm"} or
+    \code{"profilepl"}).
   }
   \item{covariate}{
     The covariate to be added to the model. Either a
@@ -86,7 +88,8 @@ addvar(model, covariate, ...,
   model (Baddeley et al, 2012).
 
   The argument \code{model} should be a fitted spatial point process
-  model (object of class \code{"ppm"}). 
+  model (object of class \code{"ppm"} or something acceptable to
+  \code{\link{as.ppm}}).   
 
   The argument \code{covariate}
   identifies the covariate that is to be considered for addition to
@@ -101,9 +104,12 @@ addvar(model, covariate, ...,
   to the classes \code{"addvar"} and \code{"fv"}. Plot this object to
   generate the added variable plot. 
   
-  Note that the plot method shows the pointwise significance bands
+  The plot method shows the pointwise significance bands
   for a test of the \emph{null} model, i.e. the null hypothesis
-  that the new covariate has no effect.
+  that the new covariate has no effect. These significance
+  bands are correct if \code{model} is a Poisson point process, and are
+  incorrect otherwise, because they do not account for interpoint
+  interaction.
 
   The smoothing bandwidth is controlled by the arguments
   \code{bw}, \code{adjust}, \code{bw.input} and \code{bw.restrict}.
@@ -165,7 +171,7 @@ addvar(model, covariate, ...,
 \author{
   \adrian,
   \rolf,
-  Ya-Mei Chang and Yong Song.
+  \yamei and Yong Song.
 }
 \seealso{
   \code{\link{parres}},
@@ -174,7 +180,7 @@ addvar(model, covariate, ...,
 }
 \examples{
   X <-  rpoispp(function(x,y){exp(3+3*x)})
-  model <- ppm(X, ~y)
+  model <- ppm(X ~y)
   adv <- addvar(model, "x")
   plot(adv)
   adv <- addvar(model, "x", subregion=square(0.5))

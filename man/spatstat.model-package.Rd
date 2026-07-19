@@ -311,7 +311,6 @@
     \code{\link[spatstat.model]{fitted.dppm}} \tab Compute fitted intensity \cr
     \code{\link[spatstat.model]{predict.dppm}} \tab Compute fitted intensity \cr
     \code{\link[spatstat.model]{update.dppm}} \tab Update the model \cr
-    \code{\link[spatstat.model]{improve.dppm}} \tab Refine the estimate of trend \cr
     \code{\link[spatstat.model]{simulate.dppm}} \tab Generate simulated realisations \cr
     \code{\link[spatstat.model]{vcov.dppm}} \tab Variance-covariance matrix of coefficients \cr
     \code{\link[spatstat.model:methods.dppm]{coef.dppm}}

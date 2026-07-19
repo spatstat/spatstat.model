@@ -1,11 +1,10 @@
-#
-# addvar.R
-#
-# added variable plot
-#
-#   $Revision: 1.14 $  $Date: 2022/05/20 04:12:31 $
-#
-
+#'
+#' addvar.R
+#'
+#' added variable plot
+#'
+#'   $Revision: 1.16 $  $Date: 2026/07/19 05:24:09 $
+#'
 
 addvar <- function(model, covariate, ...,
                    subregion=NULL,
@@ -13,7 +12,7 @@ addvar <- function(model, covariate, ...,
                    from=NULL, to=NULL, n=512,
                    bw.input = c("points", "quad"),
                    bw.restrict = FALSE,
-                   covname, crosscheck=FALSE) {  
+                   covname, crosscheck=FALSE) {
 
   if(missing(covname))
     covname <- sensiblevarname(deparse(substitute(covariate)), "X")
@@ -25,45 +24,47 @@ addvar <- function(model, covariate, ...,
   if(is.null(adjust)) adjust <- 1
   
   bw.input <- match.arg(bw.input)
-  
-  # validate model
-  stopifnot(is.ppm(model))
-  if(is.null(getglmfit(model)))
-    model <- update(model, forcefit=TRUE)
+
+  #' validate model and extract Poisson trend model
+  trendmodel <- as.ppm(model)
+  if(is.null(getglmfit(trendmodel)))
+    trendmodel <- update(trendmodel, forcefit=TRUE)
+
+  #' get string representation of original model call
   modelcall <- model$callstring
   if(is.null(modelcall))
     modelcall <- model$call
+
   
-  # extract spatial locations
-  Q <- quad.ppm(model)
-#  datapoints <- Q$data
+  #' extract spatial locations
+  Q <- quad.ppm(trendmodel)
   quadpoints <- union.quad(Q)
   Z <- is.data(Q)
   wts <- w.quad(Q)
   nQ <- n.quad(Q)
-  # fitted intensity
-  lam <- fitted(model, type="trend")
-  # subset of quadrature points used to fit model
-  subQset <- getglmsubset(model)
+  #' fitted intensity
+  lam <- fitted(trendmodel, type="trend")
+  #' subset of quadrature points used to fit model
+  subQset <- getglmsubset(trendmodel)
   if(is.null(subQset)) subQset <- rep.int(TRUE, nQ)
-  # restriction to subregion
+  #' restriction to subregion
   insubregion <- if(!is.null(subregion)) {
     inside.owin(quadpoints, w=subregion)
   } else rep.int(TRUE, nQ)
 
   ################################################################
-  # Pearson residuals from point process model
+  #' Pearson residuals from point process model
 
-  yr <- residuals(model, type="Pearson")
+  yr <- residuals(trendmodel, type="Pearson")
   yresid <- with(yr, "increment")
-  # averaged (then sum with weight 'wts')
+  #' averaged (then sum with weight 'wts')
   yresid <- yresid/wts
 
   #################################################################
-  # Covariates
+  #' Covariates
   #
-  # covariate data frame
-  df <- getglmdata(model)
+  #' covariate data frame
+  df <- getglmdata(trendmodel)
   if(!all(c("x", "y") %in% names(df))) {
     xy <- as.data.frame(quadpoints)
     notxy <- !(colnames(df) %in% c("x", "y"))
@@ -72,32 +73,32 @@ addvar <- function(model, covariate, ...,
   }
   #
   avail.covars <- names(df)
-  # covariates used in model 
-  used.covars   <- model.covariates(model)
-  fitted.covars <- model.covariates(model, offset=FALSE)
+  #' covariates used in model 
+  used.covars   <- model.covariates(trendmodel)
+  fitted.covars <- model.covariates(trendmodel, offset=FALSE)
   #
   #################################################################
-  # identify the covariate
+  #' identify the covariate
   #
   if(!is.character(covariate)) {
-    # Covariate is some kind of data, treated as external covariate
+    #' Covariate is some kind of data, treated as external covariate
     if(covname %in% fitted.covars)
       stop(paste("covariate named", dQuote(covname),
                  "is already used in model"))
     covvalues <- evaluateCovariate(covariate, quadpoints)
-    # validate covvalues
+    #' validate covvalues
     if(is.null(covvalues))
       stop("Unable to extract covariate values")
     else if(length(covvalues) != npoints(quadpoints))
       stop(paste("Internal error: number of covariate values =",
                  length(covvalues), "!=", npoints(quadpoints),
                  "= number of quadrature points"))
-    # tack onto data frame
+    #' tack onto data frame
     covdf <- data.frame(covvalues)
     names(covdf) <- covname
     df <- cbind(df, covdf)
   } else {
-    # Argument is name of covariate
+    #' Argument is name of covariate
     covname <- covariate
     if(length(covname) > 1)
       stop("Must specify only one covariate")
@@ -107,14 +108,14 @@ addvar <- function(model, covariate, ...,
     #
     if(!(covname %in% avail.covars))
       stop(paste("covariate", dQuote(covname), "not available"))
-    # 
+    #' 
     covvalues <- df[, covname]
   }
   
   ################################################################
-  # Pearson residuals from weighted linear regression of new covariate on others
+  #' Pearson residuals from weighted linear regression of new covariate on others
 
-  rhs <- formula(model)
+  rhs <- formula(trendmodel)
   fo <- as.formula(paste(covname, paste(rhs, collapse=" ")))
 
   fit <- lm(fo, data=df, weights=lam * wts, na.action=na.exclude)
@@ -138,14 +139,14 @@ addvar <- function(model, covariate, ...,
     }
     message("Done.")
   }
-  # experiment suggests residuals(fit, "pearson") == xresid.correct
-  # and residuals(fit) equivalent to
-  # covvalues - X  %*% solve(t(X) %*% V %*% X) %*% t(X) %*% V %*% covvalues
+  #' experiment suggests residuals(fit, "pearson") == xresid.correct
+  #' and residuals(fit) equivalent to
+  #' covvalues - X  %*% solve(t(X) %*% V %*% X) %*% t(X) %*% V %*% covvalues
 
   #################################################################
-  # check for NA's etc
+  #' check for NA's etc
 
-  # locations that must have finite values 
+  #' locations that must have finite values 
   operative <- if(bw.restrict) insubregion & subQset else subQset
  
   nbg <- !is.finite(xresid) |  !is.finite(yresid)
@@ -156,8 +157,8 @@ addvar <- function(model, covariate, ...,
                   "NA or infinite"))
   }
   #################################################################
-  # Restrict data to 'operative' points
-  #                            with finite values
+  #' Restrict data to 'operative' points
+  #'                            with finite values
 
   ok <- !nbg & operative
   Q           <- Q[ok]
@@ -171,7 +172,7 @@ addvar <- function(model, covariate, ...,
   insubregion <- insubregion[ok]
 
   ####################################################
-  # assemble data for smoothing 
+  #' assemble data for smoothing 
   xx <- xresid
   yy <- yresid
   ww <- wts
@@ -181,19 +182,19 @@ addvar <- function(model, covariate, ...,
     to   <- max(xresid)
   
   ####################################################
-  # determine smoothing bandwidth
-  #     from 'operative' data
+  #' determine smoothing bandwidth
+  #'     from 'operative' data
 
   switch(bw.input,
           quad = {
-           # bandwidth selection from covariate values at all quadrature points
+           #' bandwidth selection from covariate values at all quadrature points
            numer <- unnormdensity(xx, weights=yy * ww,
                                   bw=bw, adjust=adjust,
                                   n=n,from=from,to=to, ...)
            sigma <- numer$bw
          },
          points= {
-           # bandwidth selection from covariate values at data points
+           #' bandwidth selection from covariate values at data points
            fake <- unnormdensity(xx[Z], weights=1/lam[Z],
                                  bw=bw, adjust=adjust,
                                  n=n,from=from,to=to, ...)
@@ -204,11 +205,11 @@ addvar <- function(model, covariate, ...,
          })
 
  ####################################################
-  # Restrict data and recompute numerator if required
+  #' Restrict data and recompute numerator if required
 
   if(!is.null(subregion) && !bw.restrict) {
-    # Bandwidth was computed on all data
-    # Restrict to subregion and recompute numerator
+    #' Bandwidth was computed on all data
+    #' Restrict to subregion and recompute numerator
     xx   <- xx[insubregion]
     yy   <- yy[insubregion]
     ww   <- ww[insubregion]
@@ -222,20 +223,20 @@ addvar <- function(model, covariate, ...,
   }
 
  ####################################################
-  # Compute denominator
+  #' Compute denominator
   denom <- unnormdensity(xx,weights=ww,
                            bw=sigma, adjust=1,
                            n=n,from=from,to=to, ...)
 
   ####################################################
-  # Determine recommended plot range
+  #' Determine recommended plot range
 
   xr <- range(xresid[Z], finite=TRUE)
   alim <- xr + 0.1 * diff(xr) * c(-1,1)
   alim <- intersect.ranges(alim, c(from, to))
   
   ####################################################
-  # Compute terms 
+  #' Compute terms 
 
   interpolate <- function(x,y) {
     if(inherits(x, "density") && missing(y))
@@ -248,8 +249,8 @@ addvar <- function(model, covariate, ...,
   xxx <- numer$x
   ratio <- function(y, x) { ifelseXB(x != 0, y/x, NA) }
   yyy <- ratio(numfun(xxx), denfun(xxx))
-  # Null variance estimation
-  # smooth with weight 1 and smaller bandwidth
+  #' Null variance estimation
+  #' smooth with weight 1 and smaller bandwidth
   tau <- sigma/sqrt(2)
   varnumer <- unnormdensity(xx,weights=ww,
                             bw=tau,adjust=1,
@@ -263,7 +264,7 @@ addvar <- function(model, covariate, ...,
     return(y)
   }
   twosd <- 2 * safesqrt(vvv)
-  # pack into fv object
+  #' pack into fv object
   rslt <- data.frame(rcov=xxx, rpts=yyy, theo=0, var=vvv, hi=twosd, lo=-twosd)
   nuc <- length(used.covars)
   if(nuc == 0) {
@@ -299,12 +300,12 @@ addvar <- function(model, covariate, ...,
              desc=desc,
              fname=ylab)
   attr(rslt, "dotnames") <- c("rpts", "theo", "hi", "lo")
-  # data associated with quadrature points
+  #' data associated with quadrature points
   reserved <- (substr(colnames(df), 1L, 4L) == ".mpl")
   isxy <- colnames(df) %in% c("x", "y")
   dfpublic <- cbind(df[, !(reserved | isxy)], data.frame(xresid, yresid))
   attr(rslt, "spatial") <- union.quad(Q) %mark% dfpublic
-  # auxiliary data
+  #' auxiliary data
   attr(rslt, "stuff") <- list(covname     = covname,
                               xresid      = xresid,
                               yresid      = yresid,
@@ -323,7 +324,7 @@ addvar <- function(model, covariate, ...,
                               bw.input    = bw.input,
                               bw.restrict = bw.restrict,
                               restricted  = !is.null(subregion))
-  # finish
+  #' finish
   class(rslt) <- c("addvar", class(rslt))
   return(rslt)
 }
@@ -347,10 +348,9 @@ print.addvar <- function(x, ...) {
 plot.addvar <- function(x, ..., do.points=FALSE) {
   xname <- short.deparse(substitute(x))
   s <- attr(x, "stuff")
-#  covname <- s$covname
   xresid <- s$xresid
   yresid <- s$yresid
-  # adjust y limits if intending to plot points as well
+  #' adjust y limits if intending to plot points as well
   ylimcover <- if(do.points) range(yresid, finite=TRUE) else NULL
   #
   do.call(plot.fv, resolve.defaults(list(quote(x)), list(...),
@@ -358,7 +358,7 @@ plot.addvar <- function(x, ..., do.points=FALSE) {
                                            shade=c("hi", "lo"),
                                            legend=FALSE,
                                            ylim.covers=ylimcover)))
-  # plot points
+  #' plot points
   if(do.points)
     do.call(points,
             resolve.defaults(list(x=xresid, y=yresid),
