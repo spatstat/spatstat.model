@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.model VERSION 3.7-1.012
+        CHANGES IN spatstat.model VERSION 3.7-1.013
 
 OVERVIEW
 
@@ -7,6 +7,8 @@ OVERVIEW
     o Variance-covariance matrix for determinantal models.
     
     o More diagnostics for determinantal models.
+
+    o Added variable plots for all kinds of models.
     
     o Minor improvements and bug fixes.
 
@@ -28,6 +30,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o addvar
     Now accepts point process models of class ppm, kppm, dppm, rppm, lppm.
+
+    o addvar
+    For non-Poisson models, significance bands are computed by simulation.
 
     o plot.kppm
     For models fitted by Palm likelihood or composite likelihood, the plot
