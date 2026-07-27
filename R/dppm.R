@@ -1,7 +1,7 @@
 #'
 #'     dppm.R
 #'
-#'     $Revision: 1.19 $   $Date: 2025/12/07 02:29:17 $
+#'     $Revision: 1.20 $   $Date: 2026/07/27 08:04:52 $
 
 dppm <-
   function(formula, family, data=NULL,
@@ -134,7 +134,7 @@ dppmFixIntensity <- function(DPP, lambda, po){
             "(but no warning or error will be given by predict.dppm).")
   ## Update model object with estimated intensity if it is a free model parameter
   if(lambdaname %in% DPP$freepar){
-    clusters <- update(DPP, structure(list(lambda), .Names=lambdaname))
+    clusters <- update(DPP, structure(list(lambda), names=lambdaname))
   } else{
     clusters <- DPP
     lambda <- intensity(clusters)

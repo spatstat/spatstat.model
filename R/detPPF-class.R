@@ -117,7 +117,7 @@ dppkernel <- function(model, ...){
     stop("Cannot extract the kernel of a partially specified model. Please supply all parameters.")
   firstarg <- names(formals(fun))[1L]
   kernel <- function(x){
-    allargs <- c(structure(list(x), .Names=firstarg), model$fixedpar)
+    allargs <- c(structure(list(x), names=firstarg), model$fixedpar)
     do.call(fun, allargs)
   }
   return(kernel)
@@ -169,7 +169,7 @@ dppDpcf <- function(model, ...){
     stop("Cannot extract the gradient of the pcf of a partially specified model. Please supply all parameters.")
   firstarg <- names(formals(fun))[1L]
   Dg <- function(x){
-    allargs <- c(structure(list(x), .Names=firstarg), model$fixedpar)
+    allargs <- c(structure(list(x), names=firstarg), model$fixedpar)
     do.call(fun, allargs)
   }
   return(Dg)
@@ -205,7 +205,7 @@ Kmodel.detpointprocfamily <- function(model, ...){
   if(!is.null(fun)){
       firstarg <- names(formals(fun))[1L]
       Kfun <- function(r){
-          allargs <- c(structure(list(r), .Names=firstarg), model$fixedpar)
+          allargs <- c(structure(list(r), names=firstarg), model$fixedpar)
           do.call(fun, allargs)
       }
   } else{
@@ -265,7 +265,7 @@ intensity.detpointprocfamily <- function(X, ...){
 parameters.dppm <- parameters.detpointprocfamily <- function(model, ...){
     if(inherits(model, "dppm"))
         model <- model$fitted
-    c(model$fixed, structure(rep(NA,length(model$freepar)), .Names = model$freepar))
+    c(model$fixed, structure(rep(NA,length(model$freepar)), names = model$freepar))
 }
 
 dim.detpointprocfamily <- function(x){

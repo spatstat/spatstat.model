@@ -1,6 +1,6 @@
 ##    detpointprocfamilyfun.R
 ##
-##    $Revision: 1.8 $   $Date: 2021/07/14 09:44:04 $
+##    $Revision: 1.9 $   $Date: 2026/07/27 08:04:25 $
 ##
 ## This file contains the function `detpointprocfamilyfun'
 ## to define new DPP model family functions
@@ -115,7 +115,7 @@ detpointprocfamilyfun <-
     
     ## Code to always fix the dimension to a numeric when calling the function #######
     if(is.character(dim) && !is.element(dim,names(fixedpar))){
-         dimpar <- structure(list(2), .Names=dim)
+         dimpar <- structure(list(2), names=dim)
          fixedpar <- c(fixedpar, dimpar)
     }
     
