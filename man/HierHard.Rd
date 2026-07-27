@@ -23,9 +23,8 @@ which can then be fitted to point pattern data.
 \details{
   This is a hierarchical point process model
   for a multitype point pattern
-  (\ifelse{latex}{\out{H{\"o}gmander}}{Hogmander} and 
-  \ifelse{latex}{\out{S{\"a}rkk{\"a}}}{Sarkka}, 1999;
-  Grabarnik and \ifelse{latex}{\out{S\"{a}rkk\"{a}}}{Sarkka}, 2009).
+  (\Hogmander and \Sarkka, 1999;
+  Grabarnik and \Sarkka, 2009).
   It is appropriate for analysing multitype point pattern data
   in which the types are ordered so that
   the points of type \eqn{j} depend on the points of type
@@ -98,21 +97,14 @@ which can then be fitted to point pattern data.
    ppm(ants ~1, HierHard(h))
    # fit the stationary hierarchical hard core process to ants data
 }
-\author{\adrian
-  
-  ,
-  \rolf
-  
-  and \ege.
-}
+\author{\spatstatAuthors.}
 \references{
-  Grabarnik, P. and \ifelse{latex}{\out{S\"{a}rkk\"{a}}}{Sarkka}, A. (2009)
+  Grabarnik, P. and \Sarkka, A. (2009)
   Modelling the spatial structure of forest stands by
   multivariate point processes with hierarchical interactions.
   \emph{Ecological Modelling} \bold{220}, 1232--1240.
 
-  \ifelse{latex}{\out{H{\"o}gmander}}{Hogmander}, H. and 
-  \ifelse{latex}{\out{S{\"a}rkk{\"a}}}{Sarkka}, A. (1999)
+  \Hogmander, H. and \Sarkka, A. (1999)
   Multitype spatial point patterns with hierarchical interactions.
   \emph{Biometrics} \bold{55}, 1051--1058.
 }

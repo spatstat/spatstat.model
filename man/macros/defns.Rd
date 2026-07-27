@@ -20,26 +20,42 @@
 \newcommand{\tilman}{Tilman Davies \email{Tilman.Davies@otago.ac.nz}}
 \newcommand{\wei}{Ang Qi Wei \email{aqw07398@hotmail.com}}
 \newcommand{\yamei}{Ya-Mei Chang \email{yamei628@gmail.com}}
-% Names with accents (alphabetical order)
+% Names/words with accents (alphabetical order)
+\newcommand{\Autonoma}{\ifelse{latex}{\out{Aut{\`o}noma}}{Autonoma}}
+\newcommand{\Aastrom}{\ifelse{latex}{\out{{\AA}str{\"o}m}}{Astrom}}
+\newcommand{\Birkhauser}{\ifelse{latex}{\out{Birkh{\"a}user}}{Birkhauser}}
 \newcommand{\Bogsted}{\ifelse{latex}{\out{B\o gsted}}{Bogsted}}
+\newcommand{\Cenk}{\ifelse{latex}{\out{\u{C}enk}}{Cenk}}
 \newcommand{\Cramer}{\ifelse{latex}{\out{Cram\'er}}{Cramer}}
+\newcommand{\Dominguez}{\ifelse{latex}{\out{Dom\'{\i}nguez}}{Dominguez}}
+\newcommand{\Electronica}{\ifelse{latex}{\out{Electr{\`o}nica}}{Electronica}}
 \newcommand{\Francois}{\ifelse{latex}{\out{Fran\c{c}ois}}{Francois}}
 \newcommand{\Frederic}{\ifelse{latex}{\out{Fr{\'e}d{\'e}ric}}{Frederic}}
+\newcommand{\Gonzalez}{\ifelse{latex}{\out{Gonz\'{a}lez}}{Gonzalez}}
 \newcommand{\Hogmander}{\ifelse{latex}{\out{H{\"o}gmander}}{Hogmander}}
+\newcommand{\Hoehle}{\ifelse{latex}{\out{H\"{o}hle}}{Hoehle}}
+\newcommand{\Hyytiala}{\ifelse{latex}{\out{Hyyti{\"a}l{\"a}}}{Hyytiala}}
+\newcommand{\Icos}{\ifelse{latex}{\out{I\c{c}\"{o}s}}{Icos}}
+\newcommand{\Issembe}{\ifelse{latex}{\out{Issemb\'e}}{Issembe'}}
+\newcommand{\Jimenez}{\ifelse{latex}{\out{Jim{\'e}nez}}{Jimenez}}
 \newcommand{\Jyvaskyla}{\ifelse{latex}{\out{Jyv\"askyl\"a}}{Jyvaskyla}}
 \newcommand{\Lucia}{\ifelse{latex}{\out{Luc\'{\i{}}a}}{Lucia}}
+\newcommand{\Makela}{\ifelse{latex}{\out{M{\"a}kel{\"a}}}{Makela}}
+\newcommand{\Martin}{\ifelse{latex}{\out{Mart\'{\i}n}}{Martin}}
 \newcommand{\Matern}{\ifelse{latex}{\out{Mat\'ern}}{Matern}}
 \newcommand{\Moller}{\ifelse{latex}{\out{M\o ller}}{Moller}}
+\newcommand{\Mollie}{\ifelse{latex}{\out{Molli{\'e}}}{Mollie}}
 \newcommand{\Oehlschlaegel}{\ifelse{latex}{\out{Oehlschl\"{a}gel}}{Oehlschlaegel}}
 \newcommand{\Prokesova}{\ifelse{latex}{\out{Proke\u{s}ov{\'{a}}}}{Prokesova}}
+\newcommand{\Rodriguez}{\ifelse{latex}{\out{Rodr\'{\i}guez}}{Rodriguez}}
 \newcommand{\Sarkka}{\ifelse{latex}{\out{S\"{a}rkk\"{a}}}{Sarkka}}
 \newcommand{\Sanchez}{\ifelse{latex}{\out{S\'{a}nchez}}{Sanchez}}
-\newcommand{\Martin}{\ifelse{latex}{\out{Mart\'{\i}n}}{Martin}}
-\newcommand{\Dominguez}{\ifelse{latex}{\out{Dom\'{\i}nguez}}{Dominguez}}
-\newcommand{\Rodriguez}{\ifelse{latex}{\out{Rodr\'{\i}guez}}{Rodriguez}}
-\newcommand{\Gonzalez}{\ifelse{latex}{\out{Gonz\'{a}lez}}{Gonzalez}}
-\newcommand{\Jimenez}{\ifelse{latex}{\out{Jim{\'e}nez}}{Jimenez}}
-\newcommand{\Birkhauser}{\ifelse{latex}{\out{Birkh{\"a}user}}{Birkhauser}}
+\newcommand{\Semecurbe}{\ifelse{latex}{\out{S\'{e}m\'{e}curbe}}{Semecurbe}}
+\newcommand{\Suna}{ifelse{latex}{\out{Su{\~n}{\'e}}}{Sune}}
+\newcommand{\Universitaet}{\ifelse{latex}{\out{Universit\"{a}t}}{Universitaet}}
+\newcommand{\Voronoi}{\ifelse{latex}{\out{Vorono\"{\i}}}{Voronoi}}
+\newcommand{\Wuerzburg}{\ifelse{latex}{\out{W\"{u}rzburg}}{Wuerzburg}}
+    
 %% List of all Gibbs interactions 
 \newcommand{\GibbsInteractionsList}{\code{\link[spatstat.model]{AreaInter}}, \code{\link[spatstat.model]{BadGey}}, \code{\link[spatstat.model]{Concom}}, \code{\link[spatstat.model]{DiggleGatesStibbard}}, \code{\link[spatstat.model]{DiggleGratton}}, \code{\link[spatstat.model]{Fiksel}}, \code{\link[spatstat.model]{Geyer}}, \code{\link[spatstat.model]{Hardcore}}, \code{\link[spatstat.model]{HierHard}}, \code{\link[spatstat.model]{HierStrauss}}, \code{\link[spatstat.model]{HierStraussHard}}, \code{\link[spatstat.model]{Hybrid}}, \code{\link[spatstat.model]{LennardJones}}, \code{\link[spatstat.model]{MultiHard}}, \code{\link[spatstat.model]{MultiStrauss}}, \code{\link[spatstat.model]{MultiStraussHard}}, \code{\link[spatstat.model]{OrdThresh}}, \code{\link[spatstat.model]{Ord}}, \code{\link[spatstat.model]{Pairwise}}, \code{\link[spatstat.model]{PairPiece}}, \code{\link[spatstat.model]{Penttinen}}, \code{\link[spatstat.model]{Poisson}}, \code{\link[spatstat.model]{Saturated}}, \code{\link[spatstat.model]{SatPiece}}, \code{\link[spatstat.model]{Softcore}}, \code{\link[spatstat.model]{Strauss}}, \code{\link[spatstat.model]{StraussHard}} and \code{\link[spatstat.model]{Triplets}}}
 %% List of interactions recognised by RMH code

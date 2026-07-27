@@ -7,7 +7,7 @@
   patterns.  The test compares the observed
   and predicted distributions of the values of a spatial covariate,
   using either the Kolmogorov-Smirnov,
-  \ifelse{latex}{\out{Cram\'er}}{Cramer}-von Mises 
+  \Cramer-von Mises 
   or Anderson-Darling test of goodness-of-fit. 
 }
 \usage{
@@ -29,7 +29,7 @@
   \item{test}{
     Character string identifying the test to be performed:
     \code{"ks"} for Kolmogorov-Smirnov test,
-    \code{"cvm"} for \ifelse{latex}{\out{Cram\'er}}{Cramer}-von Mises test
+    \code{"cvm"} for \Cramer-von Mises test
     or \code{"ad"} for Anderson-Darling test.
   }
   \item{\dots}{
@@ -71,7 +71,7 @@
   of the values of a spatial covariate at the data points,
   and the predicted distribution of the same values under the model,
   are compared using the Kolmogorov-Smirnov,
-  \ifelse{latex}{\out{Cram\'er}}{Cramer}-von Mises 
+  \Cramer-von Mises 
   or Anderson-Darling test of goodness-of-fit.
   These are exact tests if the model is Poisson;
   otherwise, for a Gibbs model, a Monte Carlo p-value is computed by
@@ -137,7 +137,7 @@
 
   If \code{model} is a Poisson point process, then the 
   Kolmogorov-Smirnov,
-  \ifelse{latex}{\out{Cram\'er}}{Cramer}-von Mises 
+  \Cramer-von Mises 
   and Anderson-Darling tests are theoretically exact.
   This test was apparently first described (in the context of
   spatial data, and for Kolmogorov-Smirnov) by Berman (1986).
@@ -145,7 +145,7 @@
 
   If \code{model} is not a Poisson point process, then the
   Kolmogorov-Smirnov,
-  \ifelse{latex}{\out{Cram\'er}}{Cramer}-von Mises 
+  \Cramer-von Mises 
   and Anderson-Darling tests are biased.
   Instead they are used as the basis of a Monte Carlo test.
   First \code{nsim} simulated realisations of the model will be generated.

@@ -7,7 +7,7 @@
   The observed and predicted distributions
   of the values of a spatial covariate are compared using either the
   Kolmogorov-Smirnov test,
-  \ifelse{latex}{\out{Cram\'er}}{Cramer}-von Mises test
+  \Cramer-von Mises test
   or Anderson-Darling test.
   For non-Poisson models, a Monte Carlo test is used.
 }
@@ -35,7 +35,7 @@
   \item{test}{
     Character string identifying the test to be performed:
     \code{"ks"} for Kolmogorov-Smirnov test,
-    \code{"cvm"} for \ifelse{latex}{\out{Cram\'er}}{Cramer}-von Mises test
+    \code{"cvm"} for \Cramer-von Mises test
     or \code{"ad"} for Anderson-Darling test.
   }
   \item{\dots}{
@@ -77,7 +77,7 @@
   of the values of a spatial covariate at the data points,
   and the predicted distribution of the same values under the model,
   are compared using the Kolmogorov-Smirnov test,
-  the \ifelse{latex}{\out{Cram\'er}}{Cramer}-von Mises test
+  the \Cramer-von Mises test
   or the Anderson-Darling test. For Gibbs models, a Monte Carlo test is
   performed using these test statistics.
 
