@@ -4,6 +4,7 @@
 
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/spatstat.model)](http://CRAN.R-project.org/package=spatstat.model) 
 [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.model)](https://github.com/spatstat/spatstat.model)
+[![R-universe](https://spatstat.r-universe.dev/spatstat.model/badges/version)](https://spatstat.r-universe.dev/spatstat.model)
 
 You are viewing the GitHub repository which holds
 the latest **development version** of `spatstat.model`.
